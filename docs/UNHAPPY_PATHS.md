@@ -31,3 +31,5 @@ Severity: **P0** = data loss / app unusable, **P1** = stuck or misleading, **P2*
   and saves the recording (U4 behaviour). Recording cannot continue in the background on iOS.
 - Very large pastes (tens of thousands of words) re-count words on every keystroke; fine for
   normal scripts, sluggish for book-length text.
+
+More scenarios — documented, not fixed yet — are in [UNHAPPY_PATHS_BACKLOG.md](UNHAPPY_PATHS_BACKLOG.md).
