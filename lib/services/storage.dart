@@ -23,16 +23,34 @@ class Storage {
   /// Re-read values written by another engine (e.g. the Android overlay).
   Future<void> reload() => _prefs.reload();
 
+  /// Loads the library. Never throws: unreadable entries are skipped and the
+  /// original data is backed up so nothing is silently destroyed.
   List<Script> loadScripts() {
     final raw = _prefs.getString(_scriptsKey);
     if (raw == null) return [_welcomeScript()];
-    final list =
-        (jsonDecode(raw) as List)
-            .map((e) => Script.fromJson(e as Map<String, dynamic>))
-            .toList()
-          ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    return list;
+    final scripts = <Script>[];
+    var damaged = false;
+    try {
+      for (final entry in jsonDecode(raw) as List) {
+        try {
+          scripts.add(Script.fromJson(entry as Map<String, dynamic>));
+        } catch (_) {
+          damaged = true;
+        }
+      }
+    } catch (_) {
+      damaged = true;
+    }
+    if (damaged) {
+      _prefs.setString(
+        '$_scriptsKey$backupSuffix${DateTime.now().millisecondsSinceEpoch}',
+        raw,
+      );
+    }
+    return scripts..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
   }
+
+  static const backupSuffix = '_backup_';
 
   Future<void> saveScripts(List<Script> scripts) => _prefs.setString(
     _scriptsKey,
@@ -42,7 +60,11 @@ class Storage {
   PrompterSettings loadSettings() {
     final raw = _prefs.getString(_settingsKey);
     if (raw == null) return const PrompterSettings();
-    return PrompterSettings.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    try {
+      return PrompterSettings.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } catch (_) {
+      return const PrompterSettings();
+    }
   }
 
   Future<void> saveSettings(PrompterSettings settings) =>
@@ -52,7 +74,11 @@ class Storage {
   Script? loadActiveScript() {
     final raw = _prefs.getString(_activeScriptKey);
     if (raw == null) return null;
-    return Script.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    try {
+      return Script.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> saveActiveScript(Script script) =>

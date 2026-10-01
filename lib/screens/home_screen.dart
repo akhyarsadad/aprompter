@@ -9,6 +9,7 @@ import '../models/templates.dart';
 import '../services/app_state.dart';
 import '../services/floating_prompter.dart';
 import '../services/storage.dart';
+import '../widgets/guards.dart';
 import '../widgets/settings_sheet.dart';
 import 'camera_prompter_screen.dart';
 import 'editor_screen.dart';
@@ -172,6 +173,7 @@ class _ScriptCard extends StatelessWidget {
   final Script script;
 
   Future<void> _float(BuildContext context) async {
+    if (!ensureSpeakable(context, script)) return;
     final l = context.l10n;
     final state = AppScope.read(context);
     final messenger = ScaffoldMessenger.of(context);
@@ -216,6 +218,7 @@ class _ScriptCard extends StatelessWidget {
           ),
         );
       case _Action.caption:
+        if (!ensureSpeakable(context, script)) return;
         await Clipboard.setData(ClipboardData(text: spokenText(script.body)));
         messenger.showSnackBar(SnackBar(content: Text(l.captionCopied)));
       case _Action.draft:
@@ -321,12 +324,8 @@ class _ScriptCard extends StatelessWidget {
                 alignment: MainAxisAlignment.end,
                 children: [
                   TextButton.icon(
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => ReadScreen(script: script),
-                      ),
-                    ),
+                    onPressed: () =>
+                        _open(context, (_) => ReadScreen(script: script)),
                     icon: const Icon(Icons.record_voice_over_outlined),
                     label: Text(l.rehearse),
                   ),
@@ -337,11 +336,9 @@ class _ScriptCard extends StatelessWidget {
                       label: Text(l.float),
                     ),
                   FilledButton.icon(
-                    onPressed: () => Navigator.push(
+                    onPressed: () => _open(
                       context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => CameraPrompterScreen(script: script),
-                      ),
+                      (_) => CameraPrompterScreen(script: script),
                     ),
                     icon: const Icon(Icons.videocam),
                     label: Text(l.record),
@@ -353,6 +350,11 @@ class _ScriptCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _open(BuildContext context, WidgetBuilder builder) {
+    if (!ensureSpeakable(context, script)) return;
+    Navigator.push(context, MaterialPageRoute<void>(builder: builder));
   }
 
   PopupMenuItem<_Action> _item(_Action value, IconData icon, String text) =>

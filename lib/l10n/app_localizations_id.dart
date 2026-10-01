@@ -497,4 +497,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get minimize => 'Perkecil';
+
+  @override
+  String get nothingToSay =>
+      'Tambahkan kalimat yang akan diucapkan dulu — bagian (#) dan catatan (//) tidak dibacakan.';
+
+  @override
+  String get openSettings => 'Buka pengaturan';
+
+  @override
+  String get tryAgain => 'Coba lagi';
+
+  @override
+  String get noMicBanner => 'Tanpa akses mikrofon — merekam tanpa suara';
+
+  @override
+  String get saveFailedTitle => 'Gagal menyimpan ke galeri';
+
+  @override
+  String saveFailedBody(String reason) {
+    return 'Take-mu masih aman. Coba lagi, atau bagikan ke Files, Drive, atau chat agar tidak hilang. ($reason)';
+  }
+
+  @override
+  String get shareVideo => 'Bagikan video';
+
+  @override
+  String get discardTake => 'Buang take ini';
+
+  @override
+  String takeShared(int n) {
+    return 'Take $n dibagikan';
+  }
 }

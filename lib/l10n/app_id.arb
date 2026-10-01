@@ -145,5 +145,14 @@
   "welcomeTitle": "Selamat datang di APrompter",
   "welcomeBody": "# Hook\nMau rekam video tanpa lupa naskah? [pause]\n// lihat langsung ke lensa\n\n# Cara kerja\nTulis naskahmu, pilih *target durasi*, dan lihat timer memberi tahu apakah pas.\nLatihan untuk menemukan tempo bicaramu dalam kata per menit.\nLalu tekan Rekam. Teks bergulir tepat di bawah kamera, jadi kamu tetap *kontak mata* dengan penonton.\n\n# CTA\nKetuk kartu ini untuk mengedit naskah, atau buat naskahmu sendiri dengan tombol plus. [pause] Selamat berkarya!\n",
   "expand": "Perbesar",
-  "minimize": "Perkecil"
+  "minimize": "Perkecil",
+  "nothingToSay": "Tambahkan kalimat yang akan diucapkan dulu — bagian (#) dan catatan (//) tidak dibacakan.",
+  "openSettings": "Buka pengaturan",
+  "tryAgain": "Coba lagi",
+  "noMicBanner": "Tanpa akses mikrofon — merekam tanpa suara",
+  "saveFailedTitle": "Gagal menyimpan ke galeri",
+  "saveFailedBody": "Take-mu masih aman. Coba lagi, atau bagikan ke Files, Drive, atau chat agar tidak hilang. ({reason})",
+  "shareVideo": "Bagikan video",
+  "discardTake": "Buang take ini",
+  "takeShared": "Take {n} dibagikan"
 }

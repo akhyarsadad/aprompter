@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -6,6 +8,7 @@ import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
+import '../widgets/guards.dart';
 import 'camera_prompter_screen.dart';
 import 'read_screen.dart';
 
@@ -19,12 +22,40 @@ class EditorScreen extends StatefulWidget {
   State<EditorScreen> createState() => _EditorScreenState();
 }
 
-class _EditorScreenState extends State<EditorScreen> {
+class _EditorScreenState extends State<EditorScreen>
+    with WidgetsBindingObserver {
   late final _title = TextEditingController(text: widget.script.title);
   late final _body = TextEditingController(text: widget.script.body);
   final _bodyFocus = FocusNode();
   late int? _target = widget.script.targetSeconds;
   late ScriptStatus _status = widget.script.status;
+  Timer? _autosave;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _title.addListener(_scheduleSave);
+    _body.addListener(_scheduleSave);
+  }
+
+  /// Saves shortly after typing stops, so a crash or a killed app loses at
+  /// most a second of writing.
+  void _scheduleSave() {
+    _autosave?.cancel();
+    _autosave = Timer(const Duration(seconds: 1), () {
+      if (mounted) _save();
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused) {
+      _autosave?.cancel();
+      _save();
+    }
+  }
 
   // Based on the stored copy so takes recorded meanwhile are kept.
   Script get _current =>
@@ -56,14 +87,14 @@ class _EditorScreenState extends State<EditorScreen> {
 
   Future<void> _open(Widget Function(Script) builder) async {
     final script = await _save();
-    if (script == null || !mounted) return;
+    if (!mounted || !ensureSpeakable(context, script)) return;
     await Navigator.push(
       context,
-      MaterialPageRoute<void>(builder: (_) => builder(script)),
+      MaterialPageRoute<void>(builder: (_) => builder(script!)),
     );
     // Recording may have changed status/takes.
     if (mounted) {
-      final fresh = AppScope.read(context).byId(script.id);
+      final fresh = AppScope.read(context).byId(script!.id);
       if (fresh != null) setState(() => _status = fresh.status);
     }
   }
@@ -108,6 +139,8 @@ class _EditorScreenState extends State<EditorScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _autosave?.cancel();
     _title.dispose();
     _body.dispose();
     _bodyFocus.dispose();
@@ -161,7 +194,10 @@ class _EditorScreenState extends State<EditorScreen> {
                   children: [
                     _StatusChip(
                       status: _status,
-                      onChanged: (s) => setState(() => _status = s),
+                      onChanged: (s) {
+                        setState(() => _status = s);
+                        _scheduleSave();
+                      },
                     ),
                     const SizedBox(width: 8),
                     const Center(child: Icon(Icons.timer_outlined, size: 18)),
@@ -172,7 +208,10 @@ class _EditorScreenState extends State<EditorScreen> {
                         child: ChoiceChip(
                           label: Text(t == null ? l.noTarget : targetLabel(t)),
                           selected: _target == t,
-                          onSelected: (_) => setState(() => _target = t),
+                          onSelected: (_) {
+                            setState(() => _target = t);
+                            _scheduleSave();
+                          },
                           visualDensity: VisualDensity.compact,
                         ),
                       ),

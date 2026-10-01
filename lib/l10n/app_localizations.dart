@@ -973,6 +973,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minimize'**
   String get minimize;
+
+  /// No description provided for @nothingToSay.
+  ///
+  /// In en, this message translates to:
+  /// **'Add some lines to say first — sections (#) and notes (//) aren\'t read out.'**
+  String get nothingToSay;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get openSettings;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
+
+  /// No description provided for @noMicBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'No microphone access — recording without sound'**
+  String get noMicBanner;
+
+  /// No description provided for @saveFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save to your gallery'**
+  String get saveFailedTitle;
+
+  /// No description provided for @saveFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your take is safe for now. Try again, or share it to Files, Drive or a chat so you don\'t lose it. ({reason})'**
+  String saveFailedBody(String reason);
+
+  /// No description provided for @shareVideo.
+  ///
+  /// In en, this message translates to:
+  /// **'Share video'**
+  String get shareVideo;
+
+  /// No description provided for @discardTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard this take'**
+  String get discardTake;
+
+  /// No description provided for @takeShared.
+  ///
+  /// In en, this message translates to:
+  /// **'Take {n} shared'**
+  String takeShared(int n);
 }
 
 class _AppLocalizationsDelegate

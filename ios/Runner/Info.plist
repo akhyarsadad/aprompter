@@ -17,6 +17,8 @@
 	<string>APrompter uses the camera so you can record videos while reading your script.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>APrompter uses the microphone to record audio with your videos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>APrompter saves your takes into an "APrompter" album in your photo library.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>APrompter saves your recorded videos to your photo library.</string>
 	<key>CFBundleExecutable</key>

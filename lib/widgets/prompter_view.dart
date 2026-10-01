@@ -177,6 +177,13 @@ class _PrompterViewState extends State<PrompterView>
   void _onControllerChanged() {
     final c = widget.controller;
     if (c.playing && !_ticker.isActive) {
+      // Playing again after the end starts over instead of finishing at once.
+      if (_scroll.hasClients &&
+          _scroll.position.maxScrollExtent > 0 &&
+          _scroll.offset >= _scroll.position.maxScrollExtent - 1) {
+        _jumpTo(0);
+        c._readTime.reset();
+      }
       _lastTick = Duration.zero;
       _ticker.start();
     } else if (!c.playing && _ticker.isActive) {

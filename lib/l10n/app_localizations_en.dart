@@ -516,4 +516,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get minimize => 'Minimize';
+
+  @override
+  String get nothingToSay =>
+      'Add some lines to say first — sections (#) and notes (//) aren\'t read out.';
+
+  @override
+  String get openSettings => 'Open settings';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String get noMicBanner => 'No microphone access — recording without sound';
+
+  @override
+  String get saveFailedTitle => 'Couldn\'t save to your gallery';
+
+  @override
+  String saveFailedBody(String reason) {
+    return 'Your take is safe for now. Try again, or share it to Files, Drive or a chat so you don\'t lose it. ($reason)';
+  }
+
+  @override
+  String get shareVideo => 'Share video';
+
+  @override
+  String get discardTake => 'Discard this take';
+
+  @override
+  String takeShared(int n) {
+    return 'Take $n shared';
+  }
 }

@@ -4,6 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../l10n/l10n.dart';
@@ -25,14 +27,24 @@ class CameraPrompterScreen extends StatefulWidget {
   State<CameraPrompterScreen> createState() => _CameraPrompterScreenState();
 }
 
+enum _CameraProblem { none, noCamera, permissionDenied, other }
+
 class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     with WidgetsBindingObserver {
   late final PrompterController _prompter;
   List<CameraDescription> _cameras = [];
   CameraController? _camera;
   int _cameraIndex = 0;
+  _CameraProblem _problem = _CameraProblem.none;
   String? _error;
+
+  /// False when the microphone is denied: we record video without sound.
+  bool _withAudio = true;
+
+  /// The camera was released because the app left the foreground.
+  bool _released = false;
   bool _recording = false;
+  bool _stopping = false;
   bool _counting = false;
   bool _saving = false;
   Duration _elapsed = Duration.zero;
@@ -49,10 +61,18 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
   }
 
   Future<void> _initCameras() async {
+    setState(() {
+      _problem = _CameraProblem.none;
+      _error = null;
+    });
     try {
       _cameras = await availableCameras();
+      if (!mounted) return;
       if (_cameras.isEmpty) {
-        setState(() => _error = context.l10n.noCamera);
+        setState(() {
+          _problem = _CameraProblem.noCamera;
+          _error = context.l10n.noCamera;
+        });
         return;
       }
       final front = _cameras.indexWhere(
@@ -61,11 +81,12 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
       _cameraIndex = front >= 0 ? front : 0;
       await _openCamera();
     } on CameraException catch (e) {
-      setState(() => _error = _describe(e));
+      _showProblem(e);
     }
   }
 
   Future<void> _openCamera() async {
+    if (_cameras.isEmpty) return;
     final old = _camera;
     final quality = AppScope.read(context).settings.videoQuality;
     setState(() => _camera = null);
@@ -77,7 +98,7 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
         VideoQuality.fullHd => ResolutionPreset.veryHigh,
         VideoQuality.uhd => ResolutionPreset.ultraHigh,
       },
-      enableAudio: true,
+      enableAudio: _withAudio,
     );
     try {
       await controller.initialize();
@@ -88,39 +109,60 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
       }
       setState(() {
         _camera = controller;
+        _problem = _CameraProblem.none;
         _error = null;
       });
     } on CameraException catch (e) {
       await controller.dispose();
-      if (mounted) setState(() => _error = _describe(e));
+      if (_withAudio && _isAudioDenied(e)) {
+        // Camera is fine, microphone isn't: keep going without sound.
+        _withAudio = false;
+        return _openCamera();
+      }
+      _showProblem(e);
     }
   }
 
-  String _describe(CameraException e) => switch (e.code) {
-    'CameraAccessDenied' ||
-    'CameraAccessDeniedWithoutPrompt' ||
-    'CameraAccessRestricted' => context.l10n.cameraDenied,
-    'AudioAccessDenied' ||
-    'AudioAccessDeniedWithoutPrompt' ||
-    'AudioAccessRestricted' => context.l10n.micDenied,
-    _ => context.l10n.cameraError(e.description ?? e.code),
-  };
+  static bool _isAudioDenied(CameraException e) => const {
+    'AudioAccessDenied',
+    'AudioAccessDeniedWithoutPrompt',
+    'AudioAccessRestricted',
+  }.contains(e.code);
+
+  void _showProblem(CameraException e) {
+    if (!mounted) return;
+    final l = context.l10n;
+    final denied = const {
+      'CameraAccessDenied',
+      'CameraAccessDeniedWithoutPrompt',
+      'CameraAccessRestricted',
+    }.contains(e.code);
+    setState(() {
+      _problem = denied
+          ? _CameraProblem.permissionDenied
+          : _CameraProblem.other;
+      _error = denied ? l.cameraDenied : l.cameraError(e.description ?? e.code);
+    });
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final camera = _camera;
-    if (camera == null || !camera.value.isInitialized) return;
     if (state == AppLifecycleState.inactive) {
-      _releaseCamera(camera);
-    } else if (state == AppLifecycleState.resumed) {
+      final camera = _camera;
+      if (camera != null && camera.value.isInitialized) _releaseCamera(camera);
+    } else if (state == AppLifecycleState.resumed && _released) {
+      _released = false;
       _openCamera();
     }
   }
 
   Future<void> _releaseCamera(CameraController camera) async {
+    _released = true;
     _prompter.pause();
+    if (_counting) setState(() => _counting = false);
+    // Save what was recorded before the camera goes away.
     if (_recording) await _stopRecording();
-    if (!mounted) return;
+    if (!mounted || _camera != camera) return;
     setState(() => _camera = null);
     await camera.dispose();
   }
@@ -134,7 +176,10 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
   void _onRecordPressed() {
     if (_recording) {
       _stopRecording();
-    } else if (!_counting) {
+    } else if (_counting) {
+      // Changed my mind: cancel the countdown.
+      setState(() => _counting = false);
+    } else {
       final seconds = AppScope.read(context).settings.countdownSeconds;
       if (seconds > 0) {
         setState(() => _counting = true);
@@ -158,11 +203,14 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
       // Keep the position so a retake can start from a chosen section.
       _prompter.play();
     } on CameraException catch (e) {
-      _toast(_describe(e));
+      if (mounted) _toast(context.l10n.cameraError(e.description ?? e.code));
     }
   }
 
   Future<void> _stopRecording() async {
+    // Auto-stop, the stop button and leaving the screen can race.
+    if (!_recording || _stopping) return;
+    _stopping = true;
     final camera = _camera;
     _timer?.cancel();
     _prompter.pause();
@@ -173,20 +221,102 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     try {
       if (camera == null || !camera.value.isRecordingVideo) return;
       final file = await camera.stopVideoRecording();
-      if (!await Gal.hasAccess()) await Gal.requestAccess();
-      await Gal.putVideo(file.path, album: 'APrompter');
-      if (!mounted) return;
-      final state = AppScope.read(context);
-      await state.recordTake(widget.script.id);
-      if (!mounted) return;
-      _toast(context.l10n.takeSaved(state.byId(widget.script.id)?.takes ?? 1));
-    } on GalException catch (e) {
-      if (mounted) _toast(context.l10n.saveFailed(e.type.message));
+      await _keepTake(file);
     } on CameraException catch (e) {
-      _toast(_describe(e));
+      if (mounted) _toast(context.l10n.cameraError(e.description ?? e.code));
     } finally {
+      _stopping = false;
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  /// Saves the take to the gallery. If that fails the take is not thrown
+  /// away: the creator can retry or share the file somewhere else.
+  Future<void> _keepTake(XFile file) async {
+    String? failure;
+    while (mounted) {
+      try {
+        if (!await Gal.hasAccess(toAlbum: true)) {
+          await Gal.requestAccess(toAlbum: true);
+        }
+        await Gal.putVideo(file.path, album: 'APrompter');
+        await _countTake(saved: true);
+        return;
+      } on GalException catch (e) {
+        failure = e.type.message;
+      }
+      if (!mounted) return;
+      final choice = await _askRescue(failure);
+      if (choice == _Rescue.retry) continue;
+      if (choice == _Rescue.share && mounted) {
+        final box = context.findRenderObject() as RenderBox?;
+        final result = await SharePlus.instance.share(
+          ShareParams(
+            files: [file],
+            sharePositionOrigin: box == null
+                ? null
+                : box.localToGlobal(Offset.zero) & box.size,
+          ),
+        );
+        if (result.status == ShareResultStatus.success) {
+          await _countTake(saved: false);
+          return;
+        }
+        continue; // Share sheet dismissed: ask again rather than lose it.
+      }
+      return; // Discarded on purpose.
+    }
+  }
+
+  Future<void> _countTake({required bool saved}) async {
+    if (!mounted) return;
+    final state = AppScope.read(context);
+    await state.recordTake(widget.script.id);
+    if (!mounted) return;
+    final n = state.byId(widget.script.id)?.takes ?? 1;
+    _toast(saved ? context.l10n.takeSaved(n) : context.l10n.takeShared(n));
+  }
+
+  Future<_Rescue?> _askRescue(String? reason) {
+    final l = context.l10n;
+    return showModalBottomSheet<_Rescue>(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                l.saveFailedTitle,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(l.saveFailedBody(reason ?? '')),
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                onPressed: () => Navigator.pop(context, _Rescue.retry),
+                icon: const Icon(Icons.refresh),
+                label: Text(l.tryAgain),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () => Navigator.pop(context, _Rescue.share),
+                icon: const Icon(Icons.ios_share),
+                label: Text(l.shareVideo),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, _Rescue.discard),
+                child: Text(l.discardTake),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Auto-stop: give the creator a beat to finish the last line.
@@ -196,6 +326,14 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     }
     await Future<void>.delayed(const Duration(seconds: 2));
     if (mounted && _recording && !_prompter.playing) await _stopRecording();
+  }
+
+  /// Back gesture / button while recording: save the take, then leave.
+  Future<void> _onPopBlocked() async {
+    if (_saving) return;
+    if (_counting) setState(() => _counting = false);
+    if (_recording) await _stopRecording();
+    if (mounted) Navigator.pop(context);
   }
 
   void _toast(String msg) {
@@ -214,6 +352,51 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     super.dispose();
   }
 
+  Widget _problemView(BuildContext context) {
+    final l = context.l10n;
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.no_photography_outlined,
+            color: Colors.white70,
+            size: 48,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            _error ?? '',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 12,
+            alignment: WrapAlignment.center,
+            children: [
+              if (_problem == _CameraProblem.permissionDenied)
+                FilledButton.icon(
+                  onPressed: openAppSettings,
+                  icon: const Icon(Icons.settings),
+                  label: Text(l.openSettings),
+                ),
+              if (_problem != _CameraProblem.noCamera)
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: _initCameras,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l.tryAgain),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
@@ -221,150 +404,162 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     final size = MediaQuery.sizeOf(context);
     final padding = MediaQuery.paddingOf(context);
     final camera = _camera;
+    final prompterBottom =
+        padding.top + size.height * settings.overlayHeightFraction;
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: camera != null && camera.value.isInitialized
-                ? _CameraPreviewCover(controller: camera)
-                : Center(
-                    child: _error != null
-                        ? Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: Text(
-                              _error!,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          )
-                        : const CircularProgressIndicator(),
-                  ),
-          ),
-          // Prompter sits at the top, close to the front camera lens, so the
-          // eyes stay near the lens while reading.
-          Positioned(
-            top: padding.top,
-            left: 0,
-            right: 0,
-            height: size.height * settings.overlayHeightFraction,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: PrompterView(
-                    text: widget.script.body,
-                    settings: settings,
-                    controller: _prompter,
-                    onFinished: _onScriptFinished,
-                    onFontSizeChanged: (v) =>
-                        state.updateSettings(settings.copyWith(fontSize: v)),
-                  ),
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: PrompterProgressBar(controller: _prompter),
-                ),
-              ],
+    return PopScope<Object?>(
+      canPop: !_recording && !_saving && !_counting,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _onPopBlocked();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: camera != null && camera.value.isInitialized
+                  ? _CameraPreviewCover(controller: camera)
+                  : Center(
+                      child: _error != null
+                          ? _problemView(context)
+                          : const CircularProgressIndicator(),
+                    ),
             ),
-          ),
-          if (_counting)
-            Countdown(
-              seconds: settings.countdownSeconds,
-              onDone: _startRecording,
-            ),
-          if (_recording)
+            // Prompter sits at the top, close to the front camera lens, so
+            // the eyes stay near the lens while reading.
             Positioned(
-              top:
-                  padding.top +
-                  size.height * settings.overlayHeightFraction +
-                  8,
+              top: padding.top,
               left: 0,
               right: 0,
-              child: Center(child: _RecordingBadge(elapsed: _elapsed)),
-            ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: padding.bottom + 16,
-            child: Column(
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.black45,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: PrompterControls(
+              height: size.height * settings.overlayHeightFraction,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: PrompterView(
+                      text: widget.script.body,
+                      settings: settings,
                       controller: _prompter,
-                      wordCount: widget.script.wordCount,
-                      onSections: _recording
-                          ? null
-                          : () => showSectionsSheet(
-                              context,
-                              sections: widget.script.sections,
-                              controller: _prompter,
-                            ),
-                      onWpmChanged: (v) =>
-                          state.updateSettings(settings.copyWith(wpm: v)),
+                      onFinished: _onScriptFinished,
+                      onFontSizeChanged: (v) =>
+                          state.updateSettings(settings.copyWith(fontSize: v)),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _RoundButton(
-                      icon: Icons.close,
-                      tooltip: context.l10n.close,
-                      onPressed: _recording
-                          ? null
-                          : () => Navigator.pop(context),
-                    ),
-                    _RecordButton(
-                      recording: _recording,
-                      busy: _saving || camera == null,
-                      onPressed: _onRecordPressed,
-                    ),
-                    _RoundButton(
-                      icon: Icons.tune,
-                      tooltip: context.l10n.settings,
-                      onPressed: _recording
-                          ? null
-                          : () => showSettingsSheet(
-                              context,
-                              settings: settings,
-                              script: widget.script,
-                              onChanged: (s) async {
-                                final qualityChanged =
-                                    s.videoQuality !=
-                                    state.settings.videoQuality;
-                                await state.updateSettings(s);
-                                _prompter.wpm = s.wpm;
-                                if (qualityChanged) await _openCamera();
-                              },
-                            ),
-                    ),
-                    _RoundButton(
-                      icon: Icons.cameraswitch,
-                      tooltip: context.l10n.switchCamera,
-                      onPressed: _cameras.length > 1 && !_recording
-                          ? _switchCamera
-                          : null,
-                    ),
-                  ],
-                ),
-              ],
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: PrompterProgressBar(controller: _prompter),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            if (_counting)
+              Countdown(
+                seconds: settings.countdownSeconds,
+                onDone: _startRecording,
+              ),
+            Positioned(
+              top: prompterBottom + 8,
+              left: 16,
+              right: 16,
+              child: Column(
+                children: [
+                  if (_recording) _RecordingBadge(elapsed: _elapsed),
+                  if (!_withAudio)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Chip(
+                        avatar: const Icon(Icons.mic_off, size: 18),
+                        label: Text(context.l10n.noMicBanner),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: padding.bottom + 16,
+              child: Column(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black45,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: PrompterControls(
+                        controller: _prompter,
+                        wordCount: widget.script.wordCount,
+                        onSections: _recording
+                            ? null
+                            : () => showSectionsSheet(
+                                context,
+                                sections: widget.script.sections,
+                                controller: _prompter,
+                              ),
+                        onWpmChanged: (v) =>
+                            state.updateSettings(settings.copyWith(wpm: v)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _RoundButton(
+                        icon: Icons.close,
+                        tooltip: context.l10n.close,
+                        onPressed: _recording || _saving
+                            ? null
+                            : () => Navigator.maybePop(context),
+                      ),
+                      _RecordButton(
+                        recording: _recording,
+                        busy: _saving || (camera == null && _error == null),
+                        enabled: camera != null,
+                        onPressed: _onRecordPressed,
+                      ),
+                      _RoundButton(
+                        icon: Icons.tune,
+                        tooltip: context.l10n.settings,
+                        onPressed: _recording
+                            ? null
+                            : () => showSettingsSheet(
+                                context,
+                                settings: settings,
+                                script: widget.script,
+                                onChanged: (s) async {
+                                  final qualityChanged =
+                                      s.videoQuality !=
+                                      state.settings.videoQuality;
+                                  await state.updateSettings(s);
+                                  _prompter.wpm = s.wpm;
+                                  if (qualityChanged) await _openCamera();
+                                },
+                              ),
+                      ),
+                      _RoundButton(
+                        icon: Icons.cameraswitch,
+                        tooltip: context.l10n.switchCamera,
+                        onPressed: _cameras.length > 1 && !_recording
+                            ? _switchCamera
+                            : null,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+enum _Rescue { retry, share, discard }
 
 /// Fills the screen with the camera preview, cropping instead of letterboxing.
 class _CameraPreviewCover extends StatelessWidget {
@@ -420,11 +615,13 @@ class _RecordButton extends StatelessWidget {
   const _RecordButton({
     required this.recording,
     required this.busy,
+    required this.enabled,
     required this.onPressed,
   });
 
   final bool recording;
   final bool busy;
+  final bool enabled;
   final VoidCallback onPressed;
 
   @override
@@ -435,7 +632,7 @@ class _RecordButton extends StatelessWidget {
           ? context.l10n.stopRecording
           : context.l10n.startRecording,
       child: GestureDetector(
-        onTap: busy ? null : onPressed,
+        onTap: busy || !enabled ? null : onPressed,
         child: Container(
           width: 76,
           height: 76,
@@ -451,7 +648,7 @@ class _RecordButton extends StatelessWidget {
                   width: recording ? 30 : 60,
                   height: recording ? 30 : 60,
                   decoration: BoxDecoration(
-                    color: Colors.red,
+                    color: enabled ? Colors.red : Colors.white24,
                     borderRadius: BorderRadius.circular(recording ? 6 : 30),
                   ),
                 ),

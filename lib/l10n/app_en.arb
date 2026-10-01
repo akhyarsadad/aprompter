@@ -309,5 +309,28 @@
   "welcomeTitle": "Welcome to APrompter",
   "welcomeBody": "# Hook\nWant to film without forgetting your lines? [pause]\n// look straight into the lens\n\n# How it works\nWrite your script, pick a *target length*, and watch the timer tell you if it fits.\nRehearse to find your pace in words per minute.\nThen hit Record. The text scrolls right under the camera, so you keep *eye contact* with your audience.\n\n# CTA\nTap this card to edit the script, or create your own with the plus button. [pause] Have fun creating!\n",
   "expand": "Expand",
-  "minimize": "Minimize"
+  "minimize": "Minimize",
+  "nothingToSay": "Add some lines to say first — sections (#) and notes (//) aren't read out.",
+  "openSettings": "Open settings",
+  "tryAgain": "Try again",
+  "noMicBanner": "No microphone access — recording without sound",
+  "saveFailedTitle": "Couldn't save to your gallery",
+  "saveFailedBody": "Your take is safe for now. Try again, or share it to Files, Drive or a chat so you don't lose it. ({reason})",
+  "@saveFailedBody": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "shareVideo": "Share video",
+  "discardTake": "Discard this take",
+  "takeShared": "Take {n} shared",
+  "@takeShared": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  }
 }
