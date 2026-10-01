@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -12,6 +11,7 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
+import '../services/system_settings.dart';
 import '../widgets/prompter_controls.dart';
 import '../widgets/prompter_view.dart';
 import '../widgets/settings_sheet.dart';

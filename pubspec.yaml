@@ -44,8 +44,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
-  permission_handler: ^13.0.2
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
