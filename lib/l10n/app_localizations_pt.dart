@@ -565,4 +565,110 @@ class AppLocalizationsPt extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Não foi possível salvar — o celular pode estar sem espaço. Seu trabalho fica guardado enquanto o app estiver aberto.';
+
+  @override
+  String get versionHistory => 'Histórico de versões';
+
+  @override
+  String get noVersions =>
+      'Ainda não há versões anteriores. Elas são guardadas automaticamente enquanto você escreve.';
+
+  @override
+  String get restore => 'Restaurar';
+
+  @override
+  String get versionRestored => 'Versão anterior restaurada';
+
+  @override
+  String get recentlyDeleted => 'Excluídos recentemente';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Roteiros excluídos ficam aqui por $days dias.',
+      one: 'Roteiros excluídos ficam aqui por 1 dia.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Excluir para sempre';
+
+  @override
+  String deletedOn(String date) {
+    return 'Excluído em $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" restaurado';
+  }
+
+  @override
+  String get backUpScripts => 'Fazer backup de todos os roteiros';
+
+  @override
+  String get restoreBackup => 'Restaurar de um backup';
+
+  @override
+  String get backupShareTitle => 'Backup do APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count roteiros restaurados',
+      one: '1 roteiro restaurado',
+      zero: 'Tudo deste backup já está aqui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Esse arquivo não é um backup do APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Mesmo a $wpm ppm não cabe em $target — corte cerca de $words palavras.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'A câmera não estava pronta, então a gravação não começou. Tente de novo.';
+
+  @override
+  String get previousSection => 'Seção anterior';
+
+  @override
+  String get nextSection => 'Próxima seção';
+
+  @override
+  String get floatingNotificationBody => 'Toque para abrir o APrompter';
+
+  @override
+  String get customTarget => 'Personalizado…';
+
+  @override
+  String get customTargetTitle => 'Duração alvo';
+
+  @override
+  String get customTargetHint => 'Minutos e segundos, ex.: 5:00';
+
+  @override
+  String get saved => 'Salvo';
+
+  @override
+  String get floatNotOnIos =>
+      'O iPhone não deixa apps flutuarem sobre outros apps. Use Gravar para filmar com o roteiro sob a câmera.';
+
+  @override
+  String get hashtagHint =>
+      'Linhas de hashtag (#fyp #ad) aparecem esmaecidas e não contam no tempo. Use \"# \" com espaço para uma seção.';
 }

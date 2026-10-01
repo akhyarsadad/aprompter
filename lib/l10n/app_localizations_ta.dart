@@ -552,4 +552,110 @@ class AppLocalizationsTa extends AppLocalizations {
   String minutesShort(int n) {
     return '$n நி.';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'சேமிக்க முடியவில்லை — ஃபோன் சேமிப்பகம் நிரம்பியிருக்கலாம். ஆப் திறந்திருக்கும் வரை உங்கள் வேலை பாதுகாப்பாக இருக்கும்.';
+
+  @override
+  String get versionHistory => 'பதிப்பு வரலாறு';
+
+  @override
+  String get noVersions =>
+      'முந்தைய பதிப்புகள் இன்னும் இல்லை. நீங்கள் எழுதும்போது தானாகச் சேமிக்கப்படும்.';
+
+  @override
+  String get restore => 'மீட்டமை';
+
+  @override
+  String get versionRestored => 'முந்தைய பதிப்பு மீட்டமைக்கப்பட்டது';
+
+  @override
+  String get recentlyDeleted => 'சமீபத்தில் நீக்கியவை';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'நீக்கிய ஸ்கிரிப்ட்கள் இங்கே $days நாட்கள் இருக்கும்.',
+      one: 'நீக்கிய ஸ்கிரிப்ட்கள் இங்கே 1 நாள் இருக்கும்.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'நிரந்தரமாக நீக்கு';
+
+  @override
+  String deletedOn(String date) {
+    return '$date அன்று நீக்கப்பட்டது';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" மீட்டமைக்கப்பட்டது';
+  }
+
+  @override
+  String get backUpScripts => 'எல்லா ஸ்கிரிப்ட்களையும் காப்புப்பிரதி எடு';
+
+  @override
+  String get restoreBackup => 'காப்புப்பிரதியிலிருந்து மீட்டமை';
+
+  @override
+  String get backupShareTitle => 'APrompter காப்புப்பிரதி';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ஸ்கிரிப்ட்கள் மீட்டமைக்கப்பட்டன',
+      one: '1 ஸ்கிரிப்ட் மீட்டமைக்கப்பட்டது',
+      zero: 'இந்தக் காப்புப்பிரதியில் உள்ளவை அனைத்தும் ஏற்கனவே உள்ளன',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'இந்தக் கோப்பு APrompter காப்புப்பிரதி அல்ல.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm சொ/நி வேகத்திலும் இது $target-க்குள் அடங்காது — சுமார் $words சொற்களைக் குறைக்கவும்.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'கேமரா தயாராக இல்லை, அதனால் பதிவு தொடங்கவில்லை. மீண்டும் முயலவும்.';
+
+  @override
+  String get previousSection => 'முந்தைய பகுதி';
+
+  @override
+  String get nextSection => 'அடுத்த பகுதி';
+
+  @override
+  String get floatingNotificationBody => 'APrompter-ஐத் திறக்க தட்டவும்';
+
+  @override
+  String get customTarget => 'தனிப்பயன்…';
+
+  @override
+  String get customTargetTitle => 'இலக்கு நீளம்';
+
+  @override
+  String get customTargetHint => 'நிமிடம், வினாடி, எ.கா. 5:00';
+
+  @override
+  String get saved => 'சேமிக்கப்பட்டது';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone-இல் ஆப்கள் மற்ற ஆப்களின் மேல் மிதக்க முடியாது. கேமராவுக்குக் கீழே ஸ்கிரிப்டுடன் படம்பிடிக்க பதிவு பயன்படுத்தவும்.';
+
+  @override
+  String get hashtagHint =>
+      'ஹேஷ்டேக் வரிகள் (#fyp #ad) மங்கலாகக் காட்டப்படும், நேரம் கணக்கிடப்படாது. பகுதிக்கு இடைவெளியுடன் \"# \" பயன்படுத்தவும்.';
 }

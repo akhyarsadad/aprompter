@@ -22,6 +22,27 @@ Severity: **P0** = data loss / app unusable, **P1** = stuck or misleading, **P2*
 | U17 | J1 Write | Open a template, look at it, go back without writing | A junk "Untitled" script was autosaved every time | Untouched templates are not saved | P2 | `world_test` |
 | U18 | All | Phone set to a language the app doesn't have (e.g. Norwegian) | App fell back to **Arabic** (Flutter picks the first supported language) | Falls back to English; Chinese without a script (old Android "zh-TW") picks Traditional for TW/HK/MO | P1 | `world_test` |
 | U19 | All | Long translations (German, Tamil…) on a small phone | Setup cards in Settings overflowed | Cards grow with their text; every language is checked on a 360 dp screen | P2 | `world_test` |
+| U20 | J2 Write | Hashtags on their own line (`#fyp #viral`) — backlog W1 | Became a section cue, left out of timing *and* of "Copy as caption" | A section needs `# ` (hash + space) or `##`. Hashtag-only lines are shown dimmed, not timed, and kept in the caption. A lone `#` is ignored (W10) | P1 | `models_test` |
+| U21 | J2 Write | `2*3*4`, `* tip`, `**bold**`, `\*` — W2/W3 | Asterisks vanished or stayed around bold text | Emphasis only when the asterisks hug a word; `**bold**` works; `\*` is a literal star | P2 | `models_test` |
+| U22 | J2/J3 | `[ Pause. ]`, `(pause)` and real pause time — W9/T4 | Only `[pause]` recognised; pauses added no time, takes ran long | Forgiving syntax; each pause adds 0.7 s to estimates, the prompter and Fit to target | P2 | `models_test` |
+| U23 | J2 Write | Select-all + delete, bad paste — W4 | Autosaved over the script after 1 s; no way back | Earlier versions are kept automatically (every 5 min while typing, always before a big deletion). Editor → History → Restore; restoring keeps the current text as a version too | P0 | `backlog_test` |
+| U24 | All | Phone storage full when saving — D2 | Save result ignored → silent data loss | Every write is checked. A banner on every screen says saving failed; work stays in memory; **Try again** writes everything | P0 | `backlog_test` |
+| U25 | J7 Library | Undo snackbar missed — D5 | Deletion permanent | **Recently deleted** (home menu) keeps scripts 30 days: restore or delete forever | P2 | `backlog_test` |
+| U26 | All | Phone lost / reset / new phone — D1 | Scripts only on the device | Home menu → **Back up all scripts** shares one JSON file (Files, Drive, chat); **Restore from a backup** merges it, never overwriting a newer local edit | P0 | `backlog_test` |
+| U27 | J7 Library | Marking Ready or recording a take — D6 | Script jumped to the top | Only writing moves a script up | P3 | `backlog_test` |
+| U28 | J7 Library | Search "cafe" / "istanbul" — D7 | Didn't find "Café" / "İstanbul" | Accent- and Turkish-I-insensitive search | P3 | `backlog_test` |
+| U29 | J3 Rehearse | Many `//` notes and `#` sections — T1 | Whole scroll timed by words, so spoken lines ran faster than the set wpm | Each spoken line gets exactly its words ÷ wpm (+ pauses); notes, sections and blank lines glide by | P1 | `backlog_test` |
+| U30 | J4 Settings | 15 s target that needs > 300 wpm — T2 | "Fit" silently capped at 300 | Fit chip hidden; says "Even at 300 wpm this won't fit 0:15 — cut about N words" | P1 | manual |
+| U31 | J2 Write | 5/10/20-minute videos — W6 | Targets stopped at 3 min | **Custom…** target (`5:00`, `4:30`, `12`) | P1 | `backlog_test` |
+| U32 | J2 Write | "Did it save?" — W11 | No feedback | "✓ Saved" next to the title | P3 | manual |
+| U33 | J5 Record | Countdown ends while the camera is still opening — C1 | Recording silently didn't start | Waits up to 5 s for the camera, otherwise says so | P1 | manual |
+| U34 | J5/J6 | Bluetooth selfie remote (Volume Up), page-turners — K1/K2 | Nothing happened, or system volume changed | Volume keys, `B`, `.` and media play/pause toggle the prompter; next/previous track and rewind/forward jump sections (Android; iOS doesn't pass volume keys to apps) | P1 | `backlog_test` |
+| U35 | J5 Float | Screen recording, screen share, live stream with Float on — F1 | **Floating script visible to the audience** | Floating window is marked secure: recordings and streams show it blank | P0 | device check needed |
+| U36 | J5 Float | Lost place in Float — R5 | Only restart | ⏮ ⏭ section buttons in the floating bar | P1 | manual |
+| U37 | J5 Float | Edits a script that is floating — W8 | Overlay kept the old text | Edits are pushed to the floating window, keeping the place | P2 | manual |
+| U38 | J5 Float | Script title in the notification shade — F13 | Visible to anyone glancing | Generic "Tap to open APrompter" | P3 | manual |
+| U39 | J5 Float | Float on iPhone — O4 | Button missing, no explanation | Greyed-out Float explains it isn't possible on iPhone and points to Record | P2 | manual |
+| U40 | Release | Release APK signed with the debug key — Q1 | Couldn't publish | Release signing from `android/key.properties` (falls back to debug when absent) | P0 | CI build |
 | U14 | J5 Float | "Display over other apps" denied | — | Already handled: explains the permission | — | existing |
 | U15 | J4 Settings | Phone language not English/Indonesian | — | Already handled: falls back to English | — | existing |
 
@@ -31,5 +52,8 @@ Severity: **P0** = data loss / app unusable, **P1** = stuck or misleading, **P2*
   and saves the recording (U4 behaviour). Recording cannot continue in the background on iOS.
 - Very large pastes (tens of thousands of words) re-count words on every keystroke; fine for
   normal scripts, sluggish for book-length text.
+- The floating window's secure flag (U35) is set by reaching into the overlay plugin's window;
+  if a plugin update renames its fields, Float still works but is no longer hidden from
+  recordings. Check on a device after upgrading `flutter_overlay_window`.
 
 More scenarios — documented, not fixed yet — are in [UNHAPPY_PATHS_BACKLOG.md](UNHAPPY_PATHS_BACKLOG.md).

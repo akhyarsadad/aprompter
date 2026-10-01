@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/l10n.dart';
 import '../models/script.dart';
+import '../models/script_markup.dart';
 import 'prompter_view.dart';
 
 /// Play / pace / restart controls plus time remaining for a
@@ -11,6 +12,7 @@ class PrompterControls extends StatelessWidget {
     super.key,
     required this.controller,
     required this.wordCount,
+    this.pauses = 0,
     this.onWpmChanged,
     this.onPlay,
     this.onSections,
@@ -21,6 +23,9 @@ class PrompterControls extends StatelessWidget {
 
   /// Spoken words in the script, used for the time-remaining readout.
   final int wordCount;
+
+  /// `[pause]` beats, which add time.
+  final int pauses;
   final ValueChanged<double>? onWpmChanged;
 
   /// Overrides the play button (e.g. to run a countdown first).
@@ -42,7 +47,7 @@ class PrompterControls extends StatelessWidget {
     return ListenableBuilder(
       listenable: Listenable.merge([controller, controller.progress]),
       builder: (context, _) {
-        final total = wordCount / controller.wpm * 60;
+        final total = wordCount / controller.wpm * 60 + pauses * pauseSeconds;
         final left = Duration(
           seconds: (total * (1 - controller.progress.value)).round(),
         );

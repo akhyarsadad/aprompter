@@ -570,4 +570,110 @@ class AppLocalizationsFil extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Hindi ma-save — baka puno na ang storage ng phone mo. Naka-keep ang gawa mo habang bukas ang app.';
+
+  @override
+  String get versionHistory => 'History ng bersyon';
+
+  @override
+  String get noVersions =>
+      'Wala pang naunang bersyon. Awtomatiko itong sine-save habang nagsusulat ka.';
+
+  @override
+  String get restore => 'I-restore';
+
+  @override
+  String get versionRestored => 'Na-restore ang naunang bersyon';
+
+  @override
+  String get recentlyDeleted => 'Kamakailang binura';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Nananatili rito ang mga binurang script nang $days araw.',
+      one: 'Nananatili rito ang mga binurang script nang 1 araw.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Burahin nang tuluyan';
+
+  @override
+  String deletedOn(String date) {
+    return 'Binura noong $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'Na-restore ang \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'I-back up ang lahat ng script';
+
+  @override
+  String get restoreBackup => 'I-restore mula sa backup';
+
+  @override
+  String get backupShareTitle => 'Backup ng APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Na-restore ang $count script',
+      one: 'Na-restore ang 1 script',
+      zero: 'Nandito na ang lahat ng nasa backup na ito',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Hindi APrompter backup ang file na iyan.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Kahit sa $wpm spm, hindi kakasya ito sa $target — magbawas ng mga $words salita.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Hindi pa handa ang camera kaya hindi nagsimula ang pag-record. Subukan ulit.';
+
+  @override
+  String get previousSection => 'Nakaraang section';
+
+  @override
+  String get nextSection => 'Susunod na section';
+
+  @override
+  String get floatingNotificationBody => 'I-tap para buksan ang APrompter';
+
+  @override
+  String get customTarget => 'Custom…';
+
+  @override
+  String get customTargetTitle => 'Target na haba';
+
+  @override
+  String get customTargetHint => 'Minuto at segundo, hal. 5:00';
+
+  @override
+  String get saved => 'Na-save';
+
+  @override
+  String get floatNotOnIos =>
+      'Hindi pinapayagan ng iPhone na lumutang ang app sa ibabaw ng ibang app. Gamitin ang I-record para mag-film na nasa ilalim ng camera ang script.';
+
+  @override
+  String get hashtagHint =>
+      'Malabo ang mga linyang hashtag (#fyp #ad) at hindi tinitiyempo. Gumamit ng \"# \" na may space para sa section.';
 }

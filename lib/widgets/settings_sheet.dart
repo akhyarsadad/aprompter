@@ -74,11 +74,25 @@ class _SettingsSheetState extends State<_SettingsSheet> {
     final script = widget.script;
     final target = script?.targetSeconds;
     final words = script?.wordCount ?? 0;
-    final fitWpm = target != null && target > 0 && words > 0
+    // Pace that makes the script last exactly the target, pauses included.
+    final speakable = target == null
+        ? 0.0
+        : target - (script?.pauses ?? 0) * pauseSeconds;
+    final neededWpm = target != null && words > 0
+        ? (speakable <= 0 ? double.infinity : words / speakable * 60)
+        : null;
+    final fitWpm =
+        neededWpm != null &&
+            neededWpm <= PrompterSettings.maxWpm + PrompterSettings.wpmStep / 2
         ? PrompterSettings.clampWpm(
-            (words / target * 60 / PrompterSettings.wpmStep).round() *
+            (neededWpm / PrompterSettings.wpmStep).round() *
                 PrompterSettings.wpmStep,
           )
+        : null;
+    // T2: say so when no pace can make it fit, instead of silently capping.
+    final cutWords = neededWpm != null && fitWpm == null
+        ? (words - PrompterSettings.maxWpm * speakable.clamp(0, 1e9) / 60)
+              .ceil()
         : null;
     final previewBlocks = parseScript(
       '# ${l.secHook}\n${l.welcomeBody.split('\n')[1]}\n// ${l.noteHook}',
@@ -209,6 +223,20 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                         ),
                     ],
                   ),
+                  if (cutWords != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        l.fitImpossible(
+                          PrompterSettings.maxWpm.round(),
+                          formatDuration(Duration(seconds: target!)),
+                          cutWords,
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.error,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 8),
                   Row(
                     children: [

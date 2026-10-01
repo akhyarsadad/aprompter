@@ -566,4 +566,110 @@ class AppLocalizationsSw extends AppLocalizations {
   String minutesShort(int n) {
     return 'dak $n';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Imeshindwa kuhifadhi — huenda nafasi ya simu imejaa. Kazi yako inabaki wakati programu iko wazi.';
+
+  @override
+  String get versionHistory => 'Historia ya matoleo';
+
+  @override
+  String get noVersions =>
+      'Bado hakuna matoleo ya awali. Huhifadhiwa kiotomatiki unapoandika.';
+
+  @override
+  String get restore => 'Rejesha';
+
+  @override
+  String get versionRestored => 'Toleo la awali limerejeshwa';
+
+  @override
+  String get recentlyDeleted => 'Zilizofutwa hivi karibuni';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Hati zilizofutwa hukaa hapa kwa siku $days.',
+      one: 'Hati zilizofutwa hukaa hapa kwa siku 1.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Futa kabisa';
+
+  @override
+  String deletedOn(String date) {
+    return 'Imefutwa $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" imerejeshwa';
+  }
+
+  @override
+  String get backUpScripts => 'Hifadhi nakala ya hati zote';
+
+  @override
+  String get restoreBackup => 'Rejesha kutoka nakala rudufu';
+
+  @override
+  String get backupShareTitle => 'Nakala rudufu ya APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hati $count zimerejeshwa',
+      one: 'Hati 1 imerejeshwa',
+      zero: 'Kila kitu katika nakala hii tayari kipo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Faili hiyo si nakala rudufu ya APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Hata kwa $wpm m/d haitatosha $target — punguza takriban maneno $words.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera haikuwa tayari, kwa hiyo kurekodi hakukuanza. Jaribu tena.';
+
+  @override
+  String get previousSection => 'Sehemu iliyotangulia';
+
+  @override
+  String get nextSection => 'Sehemu inayofuata';
+
+  @override
+  String get floatingNotificationBody => 'Gusa ili kufungua APrompter';
+
+  @override
+  String get customTarget => 'Maalum…';
+
+  @override
+  String get customTargetTitle => 'Urefu lengwa';
+
+  @override
+  String get customTargetHint => 'Dakika na sekunde, k.m. 5:00';
+
+  @override
+  String get saved => 'Imehifadhiwa';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone hairuhusu programu kuelea juu ya programu nyingine. Tumia Rekodi kurekodi huku hati ikiwa chini ya kamera.';
+
+  @override
+  String get hashtagHint =>
+      'Mistari ya hashtag (#fyp #ad) huonyeshwa hafifu na haipimwi muda. Tumia \"# \" yenye nafasi kwa sehemu.';
 }

@@ -5,6 +5,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
+import '../models/script_markup.dart';
 import '../services/app_state.dart';
 import '../widgets/prompter_controls.dart';
 import '../widgets/prompter_view.dart';
@@ -60,7 +61,10 @@ class _ReadScreenState extends State<ReadScreen> {
     final time = _prompter.readTime;
     final words = widget.script.wordCount;
     if (time.inSeconds < 5 || words == 0) return;
-    final actualWpm = words / time.inSeconds * 60;
+    // Pauses are part of the run but not of the speaking pace.
+    final speaking =
+        time.inMilliseconds / 1000 - widget.script.pauses * pauseSeconds;
+    final actualWpm = words / (speaking < 1 ? 1 : speaking) * 60;
     final suggested = PrompterSettings.clampWpm(
       (actualWpm / PrompterSettings.wpmStep).round() * PrompterSettings.wpmStep,
     );
@@ -185,6 +189,7 @@ class _ReadScreenState extends State<ReadScreen> {
                       child: PrompterControls(
                         controller: _prompter,
                         wordCount: widget.script.wordCount,
+                        pauses: widget.script.pauses,
                         onPlay: _start,
                         onSections: () => showSectionsSheet(
                           context,

@@ -115,8 +115,10 @@ class _PrompterViewState extends State<PrompterView>
   final _contentKey = GlobalKey();
   late final Ticker _ticker;
   late List<ScriptBlock> _blocks;
-  late int _words;
   List<GlobalKey> _sectionKeys = [];
+  List<GlobalKey> _blockKeys = [];
+  List<_Segment>? _timeline;
+  double _timelineExtent = -1;
   Duration _lastTick = Duration.zero;
   bool _dragging = false;
   double? _pinchStartFontSize;
@@ -132,11 +134,12 @@ class _PrompterViewState extends State<PrompterView>
 
   void _parse() {
     _blocks = parseScript(widget.text);
-    _words = countWords(spokenText(widget.text));
     _sectionKeys = [
       for (final b in _blocks)
         if (b.type == BlockType.section) GlobalKey(),
     ];
+    _blockKeys = [for (final _ in _blocks) GlobalKey()];
+    _timeline = null;
   }
 
   void _attach(PrompterController c) {
@@ -156,6 +159,7 @@ class _PrompterViewState extends State<PrompterView>
     if (oldWidget.text != widget.text) _parse();
     final old = oldWidget.settings;
     final now = widget.settings;
+    _timeline = null;
     if (_scroll.hasClients &&
         (old.fontSize != now.fontSize ||
             old.lineHeight != now.lineHeight ||
@@ -192,14 +196,66 @@ class _PrompterViewState extends State<PrompterView>
     if (mounted) setState(() {});
   }
 
-  /// Pixels per second so that the whole script takes words / wpm minutes,
-  /// whatever the font size.
-  double get _pixelsPerSecond {
-    if (!_scroll.hasClients) return 0;
-    final extent = _scroll.position.maxScrollExtent;
-    if (_words == 0 || extent <= 0) return 40;
-    final seconds = _words / widget.controller.wpm * 60;
-    return extent / seconds;
+  /// Where each block sits and how long it takes to say. Spoken lines take
+  /// their words / wpm (plus pauses), whatever the font size; sections, notes
+  /// and blank lines glide by quickly so they don't eat into spoken time.
+  List<_Segment> _segments(double extent) {
+    if (_timeline != null && _timelineExtent == extent) return _timeline!;
+    final content = _contentKey.currentContext?.findRenderObject();
+    final segments = <_Segment>[];
+    if (content is RenderBox) {
+      for (final (i, key) in _blockKeys.indexed) {
+        final box = key.currentContext?.findRenderObject();
+        if (box is! RenderBox || !box.hasSize) continue;
+        final top = box.localToGlobal(Offset.zero, ancestor: content).dy;
+        final b = _blocks[i];
+        final line = b.type == BlockType.line;
+        segments.add(
+          _Segment(
+            top,
+            top + box.size.height,
+            words: line ? countWords(spokenText(b.text)) : 0,
+            pauses: line
+                ? b.spans.where((s) => s.type == SpanType.pause).length
+                : 0,
+          ),
+        );
+      }
+    }
+    // Right after the text changes, new blocks may not be laid out yet:
+    // measure again next frame instead of keeping a partial timeline.
+    if (segments.length == _blockKeys.length) {
+      _timeline = segments;
+      _timelineExtent = extent;
+    }
+    return segments;
+  }
+
+  /// Scrolls [dt] seconds' worth of text from [from]; returns the new offset.
+  double _advance(double from, double dt, double extent) {
+    final wpm = widget.controller.wpm;
+    final segments = _segments(extent);
+    final spoken = segments.where((s) => s.words + s.pauses > 0);
+    final spokenPx = spoken.fold<double>(0, (a, s) => a + s.height);
+    final spokenSec = spoken.fold<double>(0, (a, s) => a + s.seconds(wpm));
+    // Only markup: keep a steady, readable pace.
+    if (spokenSec <= 0) return from + 40 * dt;
+    final glide = 3 * spokenPx / spokenSec;
+    var offset = from;
+    var left = dt;
+    for (final s in segments) {
+      if (left <= 0) break;
+      if (s.end <= offset) continue;
+      final seconds = s.words + s.pauses > 0
+          ? s.seconds(wpm)
+          : s.height / glide;
+      final speed = seconds <= 0 ? double.infinity : s.height / seconds;
+      final room = s.end - offset;
+      if (room / speed >= left) return offset + speed * left;
+      left -= room / speed;
+      offset = s.end;
+    }
+    return left > 0 ? extent : offset;
   }
 
   void _onTick(Duration elapsed) {
@@ -207,7 +263,7 @@ class _PrompterViewState extends State<PrompterView>
     _lastTick = elapsed;
     if (_dragging || !_scroll.hasClients) return;
     final pos = _scroll.position;
-    final next = pos.pixels + _pixelsPerSecond * dt;
+    final next = _advance(pos.pixels, dt, pos.maxScrollExtent);
     if (next >= pos.maxScrollExtent) {
       _scroll.jumpTo(pos.maxScrollExtent);
       widget.controller.pause();
@@ -266,19 +322,36 @@ class _PrompterViewState extends State<PrompterView>
     }
   }
 
+  /// Keyboards, page-turners (`B` and `.` blank the screen in slide apps)
+  /// and cheap selfie remotes, which send Volume Up.
+  static final _playPauseKeys = {
+    LogicalKeyboardKey.space,
+    LogicalKeyboardKey.enter,
+    LogicalKeyboardKey.pageDown,
+    LogicalKeyboardKey.mediaPlayPause,
+    LogicalKeyboardKey.mediaPlay,
+    LogicalKeyboardKey.mediaPause,
+    LogicalKeyboardKey.audioVolumeUp,
+    LogicalKeyboardKey.audioVolumeDown,
+    LogicalKeyboardKey.keyB,
+    LogicalKeyboardKey.period,
+  };
+
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
       return KeyEventResult.ignored;
     }
     final c = widget.controller;
     final key = event.logicalKey;
-    if (key == LogicalKeyboardKey.space ||
-        key == LogicalKeyboardKey.enter ||
-        key == LogicalKeyboardKey.pageDown ||
-        key == LogicalKeyboardKey.mediaPlayPause) {
+    if (_playPauseKeys.contains(key)) {
       if (event is KeyDownEvent) (widget.onTap ?? c.toggle)();
-    } else if (key == LogicalKeyboardKey.pageUp) {
+    } else if (key == LogicalKeyboardKey.pageUp ||
+        key == LogicalKeyboardKey.mediaTrackPrevious ||
+        key == LogicalKeyboardKey.mediaRewind) {
       c.previousSection();
+    } else if (key == LogicalKeyboardKey.mediaTrackNext ||
+        key == LogicalKeyboardKey.mediaFastForward) {
+      c.nextSection();
     } else if (key == LogicalKeyboardKey.arrowUp) {
       c.faster();
     } else if (key == LogicalKeyboardKey.arrowDown) {
@@ -340,6 +413,7 @@ class _PrompterViewState extends State<PrompterView>
             blocks: _blocks,
             settings: s,
             sectionKeys: _sectionKeys,
+            blockKeys: _blockKeys,
           );
           if (s.mirror) content = Transform.flip(flipX: true, child: content);
           return Stack(
@@ -442,11 +516,15 @@ class ScriptText extends StatelessWidget {
     required this.blocks,
     required this.settings,
     this.sectionKeys = const [],
+    this.blockKeys = const [],
   });
 
   final List<ScriptBlock> blocks;
   final PrompterSettings settings;
   final List<GlobalKey> sectionKeys;
+
+  /// One key per block, so the prompter can measure where each one sits.
+  final List<GlobalKey> blockKeys;
 
   static const emphasisColor = Color(0xFFFFD54F);
 
@@ -473,76 +551,77 @@ class ScriptText extends StatelessWidget {
         isRtlText(text) ? TextDirection.rtl : TextDirection.ltr;
 
     var sectionIndex = 0;
-    final children = <Widget>[];
-    for (final b in blocks) {
+    Widget block(ScriptBlock b) {
       switch (b.type) {
         case BlockType.blank:
-          children.add(SizedBox(height: s.fontSize * 0.5));
+          return SizedBox(height: s.fontSize * 0.5);
         case BlockType.section:
           final key = sectionIndex < sectionKeys.length
               ? sectionKeys[sectionIndex]
               : null;
           sectionIndex++;
-          children.add(
-            Padding(
-              key: key,
-              padding: EdgeInsets.only(bottom: s.fontSize * 0.2),
-              child: Text(
-                b.text.toUpperCase(),
-                textAlign: align,
-                textDirection: dir(b.text),
-                style: base.copyWith(
-                  fontSize: s.fontSize * 0.5,
-                  letterSpacing: 2,
-                  color: accent.withValues(alpha: 0.9),
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-          );
-        case BlockType.note:
-          children.add(
-            Text(
-              b.text,
+          return Padding(
+            key: key,
+            padding: EdgeInsets.only(bottom: s.fontSize * 0.2),
+            child: Text(
+              b.text.toUpperCase(),
               textAlign: align,
               textDirection: dir(b.text),
               style: base.copyWith(
                 fontSize: s.fontSize * 0.5,
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w400,
-                color: color.withValues(alpha: 0.55),
+                letterSpacing: 2,
+                color: accent.withValues(alpha: 0.9),
+                fontWeight: FontWeight.w800,
               ),
+            ),
+          );
+        case BlockType.note:
+        case BlockType.tags:
+          return Text(
+            b.text,
+            textAlign: align,
+            textDirection: dir(b.text),
+            style: base.copyWith(
+              fontSize: s.fontSize * 0.5,
+              fontStyle: b.type == BlockType.note ? FontStyle.italic : null,
+              fontWeight: FontWeight.w400,
+              color: color.withValues(alpha: 0.55),
             ),
           );
         case BlockType.line:
-          children.add(
-            Text.rich(
-              TextSpan(
-                style: base,
-                children: [
-                  for (final span in b.spans)
-                    switch (span.type) {
-                      SpanType.text => TextSpan(text: span.text),
-                      SpanType.emphasis => TextSpan(
-                        text: span.text,
-                        style: TextStyle(
-                          color: accent,
-                          fontWeight: FontWeight.w900,
-                        ),
+          return Text.rich(
+            TextSpan(
+              style: base,
+              children: [
+                for (final span in b.spans)
+                  switch (span.type) {
+                    SpanType.text => TextSpan(text: span.text),
+                    SpanType.emphasis => TextSpan(
+                      text: span.text,
+                      style: TextStyle(
+                        color: accent,
+                        fontWeight: FontWeight.w900,
                       ),
-                      SpanType.pause => TextSpan(
-                        text: ' ‖ ',
-                        style: TextStyle(color: accent.withValues(alpha: 0.8)),
-                      ),
-                    },
-                ],
-              ),
-              textAlign: align,
-              textDirection: dir(b.text),
+                    ),
+                    SpanType.pause => TextSpan(
+                      text: ' ‖ ',
+                      style: TextStyle(color: accent.withValues(alpha: 0.8)),
+                    ),
+                  },
+              ],
             ),
+            textAlign: align,
+            textDirection: dir(b.text),
           );
       }
     }
+
+    final children = <Widget>[
+      for (final (i, b) in blocks.indexed)
+        i < blockKeys.length
+            ? KeyedSubtree(key: blockKeys[i], child: block(b))
+            : block(b),
+    ];
     if (children.isEmpty) {
       children.add(Text(context.l10n.emptyScript, style: base));
     }
@@ -603,4 +682,18 @@ class _CountdownState extends State<Countdown> {
       ),
     );
   }
+}
+
+/// A block's place in the scroll and what is said in it.
+class _Segment {
+  const _Segment(this.start, this.end, {this.words = 0, this.pauses = 0});
+
+  final double start;
+  final double end;
+  final int words;
+  final int pauses;
+
+  double get height => end - start;
+
+  double seconds(double wpm) => words / wpm * 60 + pauses * pauseSeconds;
 }

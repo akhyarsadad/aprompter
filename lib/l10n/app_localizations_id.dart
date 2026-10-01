@@ -546,4 +546,110 @@ class AppLocalizationsId extends AppLocalizations {
   String minutesShort(int n) {
     return '$n mnt';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Gagal menyimpan — mungkin penyimpanan ponsel penuh. Pekerjaan tetap aman selama aplikasi masih terbuka.';
+
+  @override
+  String get versionHistory => 'Riwayat versi';
+
+  @override
+  String get noVersions =>
+      'Belum ada versi sebelumnya. Versi disimpan otomatis selama kamu menulis.';
+
+  @override
+  String get restore => 'Pulihkan';
+
+  @override
+  String get versionRestored => 'Versi sebelumnya dipulihkan';
+
+  @override
+  String get recentlyDeleted => 'Baru dihapus';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Naskah yang dihapus disimpan di sini selama $days hari.',
+      one: 'Naskah yang dihapus disimpan di sini selama 1 hari.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Hapus permanen';
+
+  @override
+  String deletedOn(String date) {
+    return 'Dihapus $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" dipulihkan';
+  }
+
+  @override
+  String get backUpScripts => 'Cadangkan semua naskah';
+
+  @override
+  String get restoreBackup => 'Pulihkan dari cadangan';
+
+  @override
+  String get backupShareTitle => 'Cadangan APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count naskah dipulihkan',
+      one: '1 naskah dipulihkan',
+      zero: 'Semua isi cadangan ini sudah ada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'File itu bukan cadangan APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Bahkan pada $wpm kpm, ini tidak muat dalam $target — pangkas sekitar $words kata.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera belum siap, jadi rekaman tidak dimulai. Coba lagi.';
+
+  @override
+  String get previousSection => 'Bagian sebelumnya';
+
+  @override
+  String get nextSection => 'Bagian berikutnya';
+
+  @override
+  String get floatingNotificationBody => 'Ketuk untuk membuka APrompter';
+
+  @override
+  String get customTarget => 'Kustom…';
+
+  @override
+  String get customTargetTitle => 'Durasi target';
+
+  @override
+  String get customTargetHint => 'Menit dan detik, mis. 5:00';
+
+  @override
+  String get saved => 'Tersimpan';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone tidak mengizinkan aplikasi melayang di atas aplikasi lain. Gunakan Rekam untuk merekam dengan naskah di bawah kamera.';
+
+  @override
+  String get hashtagHint =>
+      'Baris hashtag (#fyp #ad) ditampilkan redup dan tidak dihitung waktunya. Gunakan \"# \" dengan spasi untuk bagian.';
 }

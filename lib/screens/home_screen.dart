@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,6 +11,7 @@ import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
+import '../services/backup.dart';
 import '../services/floating_prompter.dart';
 import '../services/storage.dart';
 import '../widgets/guards.dart';
@@ -14,6 +19,7 @@ import '../widgets/settings_sheet.dart';
 import 'camera_prompter_screen.dart';
 import 'editor_screen.dart';
 import 'read_screen.dart';
+import 'trash_screen.dart';
 
 /// Script library (journey J7).
 class HomeScreen extends StatefulWidget {
@@ -31,14 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final state = AppScope.of(context);
-    final q = _query.toLowerCase();
+    final q = foldForSearch(_query);
     final scripts = state.scripts
         .where((s) => _filter == null || s.status == _filter)
         .where(
           (s) =>
               q.isEmpty ||
-              s.title.toLowerCase().contains(q) ||
-              s.body.toLowerCase().contains(q),
+              foldForSearch(s.title).contains(q) ||
+              foldForSearch(s.body).contains(q),
         )
         .toList();
 
@@ -54,6 +60,24 @@ class _HomeScreenState extends State<HomeScreen> {
               settings: state.settings,
               onChanged: state.updateSettings,
             ),
+          ),
+          PopupMenuButton<_LibraryAction>(
+            onSelected: (a) => _onLibraryAction(context, a),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                value: _LibraryAction.trash,
+                child: _MenuRow(Icons.delete_sweep_outlined, l.recentlyDeleted),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                value: _LibraryAction.backup,
+                child: _MenuRow(Icons.backup_outlined, l.backUpScripts),
+              ),
+              PopupMenuItem(
+                value: _LibraryAction.restore,
+                child: _MenuRow(Icons.settings_backup_restore, l.restoreBackup),
+              ),
+            ],
           ),
         ],
       ),
@@ -118,6 +142,109 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+enum _LibraryAction { trash, backup, restore }
+
+Future<void> _onLibraryAction(
+  BuildContext context,
+  _LibraryAction action,
+) async {
+  final l = context.l10n;
+  final state = AppScope.read(context);
+  final messenger = ScaffoldMessenger.of(context);
+  switch (action) {
+    case _LibraryAction.trash:
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(builder: (_) => const TrashScreen()),
+      );
+    case _LibraryAction.backup:
+      final now = DateTime.now();
+      final box = context.findRenderObject() as RenderBox?;
+      await SharePlus.instance.share(
+        ShareParams(
+          title: l.backupShareTitle,
+          files: [
+            XFile.fromData(
+              utf8.encode(Backup.encode(state.scripts, now: now)),
+              mimeType: 'application/json',
+              name: Backup.fileName(now),
+            ),
+          ],
+          fileNameOverrides: [Backup.fileName(now)],
+          sharePositionOrigin: box == null
+              ? null
+              : box.localToGlobal(Offset.zero) & box.size,
+        ),
+      );
+    case _LibraryAction.restore:
+      final file = await FilePicker.pickFile();
+      if (file == null) return;
+      String? text;
+      try {
+        text = utf8.decode(await file.readAsBytes(), allowMalformed: true);
+      } catch (_) {
+        text = null;
+      }
+      final scripts = text == null ? null : Backup.decode(text);
+      if (scripts == null) {
+        messenger.showSnackBar(SnackBar(content: Text(l.notABackup)));
+        return;
+      }
+      final count = await state.importScripts(scripts);
+      messenger.showSnackBar(SnackBar(content: Text(l.importedScripts(count))));
+  }
+}
+
+class _MenuRow extends StatelessWidget {
+  const _MenuRow(this.icon, this.text);
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Icon(icon, size: 20),
+      const SizedBox(width: 12),
+      Expanded(child: Text(text)),
+    ],
+  );
+}
+
+/// Lower-cases and strips accents so "cafe" finds "Café" and "istanbul"
+/// finds "İstanbul".
+String foldForSearch(String text) {
+  final lower = text.replaceAll('İ', 'i').replaceAll('I', 'ı').toLowerCase();
+  final out = StringBuffer();
+  for (final rune in lower.runes) {
+    final c = String.fromCharCode(rune);
+    out.write(_accents[c] ?? c);
+  }
+  // Dotless ı only differs from i in Turkish casing; search treats them alike.
+  return out.toString().replaceAll('ı', 'i');
+}
+
+// dart format off
+const _accents = {
+  'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'ā': 'a',
+  'ă': 'a', 'ą': 'a', 'ç': 'c', 'ć': 'c', 'č': 'c', 'ď': 'd', 'đ': 'd',
+  'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'ē': 'e', 'ę': 'e', 'ě': 'e',
+  'ğ': 'g', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ī': 'i', 'ł': 'l',
+  'ñ': 'n', 'ń': 'n', 'ň': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o',
+  'ö': 'o', 'ø': 'o', 'ō': 'o', 'ő': 'o', 'ř': 'r', 'ś': 's', 'š': 's',
+  'ş': 's', 'ș': 's', 'ß': 'ss', 'ť': 't', 'ț': 't', 'ù': 'u', 'ú': 'u',
+  'û': 'u', 'ü': 'u', 'ū': 'u', 'ů': 'u', 'ű': 'u', 'ý': 'y', 'ÿ': 'y',
+  'ź': 'z', 'ż': 'z', 'ž': 'z', 'ơ': 'o', 'ư': 'u', 'ạ': 'a', 'ả': 'a',
+  'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a', 'ắ': 'a', 'ằ': 'a',
+  'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a', 'ẹ': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ế': 'e',
+  'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e', 'ỉ': 'i', 'ị': 'i', 'ọ': 'o',
+  'ỏ': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o', 'ớ': 'o',
+  'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o', 'ụ': 'u', 'ủ': 'u', 'ứ': 'u',
+  'ừ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u', 'ỳ': 'y', 'ỵ': 'y', 'ỷ': 'y',
+  'ỹ': 'y',
+};
+// dart format on
 
 /// J1: pick a template, then open the editor.
 Future<void> _newScript(BuildContext context) async {
@@ -219,7 +346,7 @@ class _ScriptCard extends StatelessWidget {
         );
       case _Action.caption:
         if (!ensureSpeakable(context, script)) return;
-        await Clipboard.setData(ClipboardData(text: spokenText(script.body)));
+        await Clipboard.setData(ClipboardData(text: captionText(script.body)));
         messenger.showSnackBar(SnackBar(content: Text(l.captionCopied)));
       case _Action.draft:
         await state.upsert(script.copyWith(status: ScriptStatus.draft));
@@ -332,6 +459,19 @@ class _ScriptCard extends StatelessWidget {
                   if (FloatingPrompter.isSupported)
                     TextButton.icon(
                       onPressed: () => _float(context),
+                      icon: const Icon(Icons.picture_in_picture_alt_outlined),
+                      label: Text(l.float),
+                    )
+                  else if (defaultTargetPlatform == TargetPlatform.iOS)
+                    // Shown greyed out so people learn why, instead of
+                    // hunting for a feature they read about.
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        foregroundColor: theme.disabledColor,
+                      ),
+                      onPressed: () => ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(l.floatNotOnIos))),
                       icon: const Icon(Icons.picture_in_picture_alt_outlined),
                       label: Text(l.float),
                     ),

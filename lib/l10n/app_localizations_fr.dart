@@ -570,4 +570,110 @@ class AppLocalizationsFr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Échec de l\'enregistrement — votre téléphone manque peut-être d\'espace. Votre travail est conservé tant que l\'app reste ouverte.';
+
+  @override
+  String get versionHistory => 'Historique des versions';
+
+  @override
+  String get noVersions =>
+      'Aucune version antérieure pour l\'instant. Elles sont conservées automatiquement pendant que vous écrivez.';
+
+  @override
+  String get restore => 'Restaurer';
+
+  @override
+  String get versionRestored => 'Version antérieure restaurée';
+
+  @override
+  String get recentlyDeleted => 'Supprimés récemment';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Les scripts supprimés restent ici $days jours.',
+      one: 'Les scripts supprimés restent ici 1 jour.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Supprimer définitivement';
+
+  @override
+  String deletedOn(String date) {
+    return 'Supprimé le $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '« $title » restauré';
+  }
+
+  @override
+  String get backUpScripts => 'Sauvegarder tous les scripts';
+
+  @override
+  String get restoreBackup => 'Restaurer une sauvegarde';
+
+  @override
+  String get backupShareTitle => 'Sauvegarde APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts restaurés',
+      one: '1 script restauré',
+      zero: 'Tout le contenu de cette sauvegarde est déjà là',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Ce fichier n\'est pas une sauvegarde APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Même à $wpm mpm, ça ne tiendra pas en $target — coupez environ $words mots.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'La caméra n\'était pas prête, l\'enregistrement n\'a pas démarré. Réessayez.';
+
+  @override
+  String get previousSection => 'Section précédente';
+
+  @override
+  String get nextSection => 'Section suivante';
+
+  @override
+  String get floatingNotificationBody => 'Touchez pour ouvrir APrompter';
+
+  @override
+  String get customTarget => 'Personnalisé…';
+
+  @override
+  String get customTargetTitle => 'Durée cible';
+
+  @override
+  String get customTargetHint => 'Minutes et secondes, ex. 5:00';
+
+  @override
+  String get saved => 'Enregistré';
+
+  @override
+  String get floatNotOnIos =>
+      'L\'iPhone ne permet pas aux apps de flotter sur d\'autres apps. Utilisez Filmer pour tourner avec le script sous la caméra.';
+
+  @override
+  String get hashtagHint =>
+      'Les lignes de hashtags (#fyp #ad) sont atténuées et non chronométrées. Pour une section, utilisez # suivi d\'une espace.';
 }

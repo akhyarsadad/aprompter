@@ -548,4 +548,110 @@ class AppLocalizationsMs extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Gagal menyimpan — storan telefon mungkin penuh. Kerja anda kekal selagi apl dibuka.';
+
+  @override
+  String get versionHistory => 'Sejarah versi';
+
+  @override
+  String get noVersions =>
+      'Belum ada versi terdahulu. Ia disimpan secara automatik semasa anda menulis.';
+
+  @override
+  String get restore => 'Pulihkan';
+
+  @override
+  String get versionRestored => 'Versi terdahulu dipulihkan';
+
+  @override
+  String get recentlyDeleted => 'Dipadam baru-baru ini';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Skrip yang dipadam kekal di sini selama $days hari.',
+      one: 'Skrip yang dipadam kekal di sini selama 1 hari.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Padam selama-lamanya';
+
+  @override
+  String deletedOn(String date) {
+    return 'Dipadam $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" dipulihkan';
+  }
+
+  @override
+  String get backUpScripts => 'Sandarkan semua skrip';
+
+  @override
+  String get restoreBackup => 'Pulihkan daripada sandaran';
+
+  @override
+  String get backupShareTitle => 'Sandaran APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count skrip dipulihkan',
+      one: '1 skrip dipulihkan',
+      zero: 'Semua dalam sandaran ini sudah ada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Fail itu bukan sandaran APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Walaupun pada $wpm ppm, ini tidak muat dalam $target — potong kira-kira $words perkataan.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera belum sedia, jadi rakaman tidak bermula. Cuba lagi.';
+
+  @override
+  String get previousSection => 'Bahagian sebelumnya';
+
+  @override
+  String get nextSection => 'Bahagian seterusnya';
+
+  @override
+  String get floatingNotificationBody => 'Ketik untuk membuka APrompter';
+
+  @override
+  String get customTarget => 'Tersuai…';
+
+  @override
+  String get customTargetTitle => 'Panjang sasaran';
+
+  @override
+  String get customTargetHint => 'Minit dan saat, cth. 5:00';
+
+  @override
+  String get saved => 'Disimpan';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone tidak membenarkan apl terapung di atas apl lain. Gunakan Rakam untuk merakam dengan skrip di bawah kamera.';
+
+  @override
+  String get hashtagHint =>
+      'Baris hashtag (#fyp #ad) dipaparkan malap dan tidak dikira masa. Gunakan \"# \" dengan ruang untuk bahagian.';
 }

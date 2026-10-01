@@ -564,4 +564,110 @@ class AppLocalizationsHi extends AppLocalizations {
   String minutesShort(int n) {
     return '$n मि.';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'सेव नहीं हो सका — शायद फ़ोन की स्टोरेज भर गई है। ऐप खुला रहने तक आपका काम सुरक्षित है।';
+
+  @override
+  String get versionHistory => 'वर्ज़न इतिहास';
+
+  @override
+  String get noVersions =>
+      'अभी कोई पुराना वर्ज़न नहीं है। लिखते समय ये अपने-आप सेव होते हैं।';
+
+  @override
+  String get restore => 'रीस्टोर करें';
+
+  @override
+  String get versionRestored => 'पुराना वर्ज़न रीस्टोर हो गया';
+
+  @override
+  String get recentlyDeleted => 'हाल ही में हटाई गई';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'हटाई गई स्क्रिप्ट यहाँ $days दिन तक रहती हैं।',
+      one: 'हटाई गई स्क्रिप्ट यहाँ 1 दिन तक रहती हैं।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'हमेशा के लिए हटाएँ';
+
+  @override
+  String deletedOn(String date) {
+    return '$date को हटाई गई';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" रीस्टोर हो गई';
+  }
+
+  @override
+  String get backUpScripts => 'सभी स्क्रिप्ट का बैकअप लें';
+
+  @override
+  String get restoreBackup => 'बैकअप से रीस्टोर करें';
+
+  @override
+  String get backupShareTitle => 'APrompter बैकअप';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count स्क्रिप्ट रीस्टोर हुईं',
+      one: '1 स्क्रिप्ट रीस्टोर हुई',
+      zero: 'इस बैकअप की सारी चीज़ें पहले से मौजूद हैं',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'यह फ़ाइल APrompter बैकअप नहीं है।';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm श/मि पर भी यह $target में नहीं आएगी — लगभग $words शब्द कम करें।';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'कैमरा तैयार नहीं था, इसलिए रिकॉर्डिंग शुरू नहीं हुई। फिर से कोशिश करें।';
+
+  @override
+  String get previousSection => 'पिछला सेक्शन';
+
+  @override
+  String get nextSection => 'अगला सेक्शन';
+
+  @override
+  String get floatingNotificationBody => 'APrompter खोलने के लिए टैप करें';
+
+  @override
+  String get customTarget => 'कस्टम…';
+
+  @override
+  String get customTargetTitle => 'लक्ष्य अवधि';
+
+  @override
+  String get customTargetHint => 'मिनट और सेकंड, जैसे 5:00';
+
+  @override
+  String get saved => 'सेव हो गया';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone ऐप्स को दूसरे ऐप्स के ऊपर फ़्लोट नहीं करने देता। कैमरे के नीचे स्क्रिप्ट के साथ शूट करने के लिए रिकॉर्ड इस्तेमाल करें।';
+
+  @override
+  String get hashtagHint =>
+      'हैशटैग वाली लाइनें (#fyp #ad) धुंधली दिखती हैं और उनका समय नहीं गिना जाता। सेक्शन के लिए स्पेस के साथ \"# \" लिखें।';
 }

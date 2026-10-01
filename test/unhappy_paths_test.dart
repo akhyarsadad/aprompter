@@ -155,7 +155,12 @@ void main() {
       },
     );
     await pumpApp(tester);
-    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(Card),
+        matching: find.byIcon(Icons.more_vert),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Copy as caption'));
     await tester.pumpAndSettle();

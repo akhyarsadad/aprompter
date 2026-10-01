@@ -575,4 +575,114 @@ class AppLocalizationsRu extends AppLocalizations {
   String minutesShort(int n) {
     return '$n мин';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Не удалось сохранить — возможно, в телефоне закончилось место. Работа сохранится, пока приложение открыто.';
+
+  @override
+  String get versionHistory => 'История версий';
+
+  @override
+  String get noVersions =>
+      'Прежних версий пока нет. Они сохраняются автоматически, пока вы пишете.';
+
+  @override
+  String get restore => 'Восстановить';
+
+  @override
+  String get versionRestored => 'Прежняя версия восстановлена';
+
+  @override
+  String get recentlyDeleted => 'Недавно удалённые';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Удалённые сценарии хранятся здесь $days дня.',
+      many: 'Удалённые сценарии хранятся здесь $days дней.',
+      few: 'Удалённые сценарии хранятся здесь $days дня.',
+      one: 'Удалённые сценарии хранятся здесь $days день.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Удалить навсегда';
+
+  @override
+  String deletedOn(String date) {
+    return 'Удалено $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '«$title» восстановлен';
+  }
+
+  @override
+  String get backUpScripts => 'Резервная копия всех сценариев';
+
+  @override
+  String get restoreBackup => 'Восстановить из копии';
+
+  @override
+  String get backupShareTitle => 'Резервная копия APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Восстановлено $count сценария',
+      many: 'Восстановлено $count сценариев',
+      few: 'Восстановлено $count сценария',
+      one: 'Восстановлен $count сценарий',
+      zero: 'Всё из этой копии уже здесь',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Этот файл не является резервной копией APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Даже при $wpm сл/мин не уложиться в $target — сократите примерно на $words сл.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Камера не была готова, запись не началась. Попробуйте ещё раз.';
+
+  @override
+  String get previousSection => 'Предыдущий раздел';
+
+  @override
+  String get nextSection => 'Следующий раздел';
+
+  @override
+  String get floatingNotificationBody => 'Нажмите, чтобы открыть APrompter';
+
+  @override
+  String get customTarget => 'Своё…';
+
+  @override
+  String get customTargetTitle => 'Целевая длительность';
+
+  @override
+  String get customTargetHint => 'Минуты и секунды, напр. 5:00';
+
+  @override
+  String get saved => 'Сохранено';
+
+  @override
+  String get floatNotOnIos =>
+      'На iPhone приложения не могут отображаться поверх других. Используйте «Запись», чтобы снимать со сценарием под камерой.';
+
+  @override
+  String get hashtagHint =>
+      'Строки с хештегами (#fyp #ad) приглушены и не учитываются по времени. Для раздела используйте «# » с пробелом.';
 }

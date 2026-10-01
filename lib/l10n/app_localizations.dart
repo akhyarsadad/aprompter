@@ -1108,6 +1108,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{n} min'**
   String minutesShort(int n);
+
+  /// No description provided for @storageSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save — your phone may be out of storage. Your work is kept while the app stays open.'**
+  String get storageSaveFailed;
+
+  /// No description provided for @versionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Version history'**
+  String get versionHistory;
+
+  /// No description provided for @noVersions.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier versions yet. They are kept automatically while you write.'**
+  String get noVersions;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @versionRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier version restored'**
+  String get versionRestored;
+
+  /// No description provided for @recentlyDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently deleted'**
+  String get recentlyDeleted;
+
+  /// No description provided for @trashHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{Deleted scripts stay here for 1 day.} other{Deleted scripts stay here for {days} days.}}'**
+  String trashHint(int days);
+
+  /// No description provided for @deleteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever'**
+  String get deleteForever;
+
+  /// No description provided for @deletedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {date}'**
+  String deletedOn(String date);
+
+  /// No description provided for @restoredScript.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored \"{title}\"'**
+  String restoredScript(String title);
+
+  /// No description provided for @backUpScripts.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up all scripts'**
+  String get backUpScripts;
+
+  /// No description provided for @restoreBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a backup'**
+  String get restoreBackup;
+
+  /// No description provided for @backupShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'APrompter backup'**
+  String get backupShareTitle;
+
+  /// No description provided for @importedScripts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Everything in this backup is already here} =1{1 script restored} other{{count} scripts restored}}'**
+  String importedScripts(int count);
+
+  /// No description provided for @notABackup.
+  ///
+  /// In en, this message translates to:
+  /// **'That file isn\'t an APrompter backup.'**
+  String get notABackup;
+
+  /// No description provided for @fitImpossible.
+  ///
+  /// In en, this message translates to:
+  /// **'Even at {wpm} wpm this won\'t fit {target} — cut about {words} words.'**
+  String fitImpossible(int wpm, String target, int words);
+
+  /// No description provided for @cameraNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera wasn\'t ready, so recording didn\'t start. Try again.'**
+  String get cameraNotReady;
+
+  /// No description provided for @previousSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous section'**
+  String get previousSection;
+
+  /// No description provided for @nextSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Next section'**
+  String get nextSection;
+
+  /// No description provided for @floatingNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open APrompter'**
+  String get floatingNotificationBody;
+
+  /// No description provided for @customTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom…'**
+  String get customTarget;
+
+  /// No description provided for @customTargetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Target length'**
+  String get customTargetTitle;
+
+  /// No description provided for @customTargetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes and seconds, e.g. 5:00'**
+  String get customTargetHint;
+
+  /// No description provided for @saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved;
+
+  /// No description provided for @floatNotOnIos.
+  ///
+  /// In en, this message translates to:
+  /// **'iPhone doesn\'t let apps float over other apps. Use Record to film with the script under the camera.'**
+  String get floatNotOnIos;
+
+  /// No description provided for @hashtagHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hashtag lines (#fyp #ad) are shown dimmed and not timed. Use \"# \" with a space for a section.'**
+  String get hashtagHint;
 }
 
 class _AppLocalizationsDelegate

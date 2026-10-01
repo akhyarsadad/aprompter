@@ -545,4 +545,110 @@ class AppLocalizationsBn extends AppLocalizations {
   String minutesShort(int n) {
     return '$n মি.';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'সেভ করা যায়নি — ফোনের স্টোরেজ হয়তো ভরে গেছে। অ্যাপ খোলা থাকা পর্যন্ত আপনার কাজ রাখা থাকবে।';
+
+  @override
+  String get versionHistory => 'ভার্সন ইতিহাস';
+
+  @override
+  String get noVersions =>
+      'এখনো কোনো আগের ভার্সন নেই। লেখার সময় এগুলো স্বয়ংক্রিয়ভাবে রাখা হয়।';
+
+  @override
+  String get restore => 'পুনরুদ্ধার';
+
+  @override
+  String get versionRestored => 'আগের ভার্সন পুনরুদ্ধার হয়েছে';
+
+  @override
+  String get recentlyDeleted => 'সম্প্রতি মোছা';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'মোছা স্ক্রিপ্ট এখানে $days দিন থাকে।',
+      one: 'মোছা স্ক্রিপ্ট এখানে ১ দিন থাকে।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'চিরতরে মুছুন';
+
+  @override
+  String deletedOn(String date) {
+    return '$date তারিখে মোছা হয়েছে';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" পুনরুদ্ধার হয়েছে';
+  }
+
+  @override
+  String get backUpScripts => 'সব স্ক্রিপ্ট ব্যাকআপ করুন';
+
+  @override
+  String get restoreBackup => 'ব্যাকআপ থেকে পুনরুদ্ধার';
+
+  @override
+  String get backupShareTitle => 'APrompter ব্যাকআপ';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি স্ক্রিপ্ট পুনরুদ্ধার হয়েছে',
+      one: '১টি স্ক্রিপ্ট পুনরুদ্ধার হয়েছে',
+      zero: 'এই ব্যাকআপের সবকিছু আগে থেকেই আছে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'এই ফাইলটি APrompter ব্যাকআপ নয়।';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm শ/মি-তেও এটি $target-এ আঁটবে না — প্রায় $wordsটি শব্দ বাদ দিন।';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'ক্যামেরা প্রস্তুত ছিল না, তাই রেকর্ডিং শুরু হয়নি। আবার চেষ্টা করুন।';
+
+  @override
+  String get previousSection => 'আগের অংশ';
+
+  @override
+  String get nextSection => 'পরের অংশ';
+
+  @override
+  String get floatingNotificationBody => 'APrompter খুলতে ট্যাপ করুন';
+
+  @override
+  String get customTarget => 'কাস্টম…';
+
+  @override
+  String get customTargetTitle => 'লক্ষ্য দৈর্ঘ্য';
+
+  @override
+  String get customTargetHint => 'মিনিট ও সেকেন্ড, যেমন 5:00';
+
+  @override
+  String get saved => 'সেভ হয়েছে';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone অ্যাপকে অন্য অ্যাপের উপরে ভাসতে দেয় না। ক্যামেরার নিচে স্ক্রিপ্ট রেখে শুট করতে রেকর্ড ব্যবহার করুন।';
+
+  @override
+  String get hashtagHint =>
+      'হ্যাশট্যাগ লাইন (#fyp #ad) ঝাপসা দেখায় এবং সময় গোনা হয় না। অংশের জন্য স্পেসসহ \"# \" ব্যবহার করুন।';
 }

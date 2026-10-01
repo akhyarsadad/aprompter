@@ -546,4 +546,110 @@ class AppLocalizationsFa extends AppLocalizations {
   String minutesShort(int n) {
     return '$n د';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'ذخیره نشد — شاید حافظهٔ گوشی پر باشد. تا وقتی برنامه باز است، کارتان حفظ می‌شود.';
+
+  @override
+  String get versionHistory => 'تاریخچهٔ نسخه‌ها';
+
+  @override
+  String get noVersions =>
+      'هنوز نسخهٔ قبلی‌ای نیست. هنگام نوشتن خودکار ذخیره می‌شوند.';
+
+  @override
+  String get restore => 'بازگردانی';
+
+  @override
+  String get versionRestored => 'نسخهٔ قبلی بازگردانده شد';
+
+  @override
+  String get recentlyDeleted => 'اخیراً حذف‌شده';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'متن‌های حذف‌شده $days روز اینجا می‌مانند.',
+      one: 'متن‌های حذف‌شده ۱ روز اینجا می‌مانند.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'حذف برای همیشه';
+
+  @override
+  String deletedOn(String date) {
+    return 'حذف‌شده در $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '«$title» بازگردانده شد';
+  }
+
+  @override
+  String get backUpScripts => 'پشتیبان‌گیری از همهٔ متن‌ها';
+
+  @override
+  String get restoreBackup => 'بازگردانی از پشتیبان';
+
+  @override
+  String get backupShareTitle => 'پشتیبان APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count متن بازگردانده شد',
+      one: '۱ متن بازگردانده شد',
+      zero: 'همهٔ محتوای این پشتیبان از قبل اینجاست',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'این فایل پشتیبان APrompter نیست.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'حتی با $wpm ک/د هم در $target جا نمی‌شود — حدود $words کلمه کم کنید.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'دوربین آماده نبود، برای همین ضبط شروع نشد. دوباره امتحان کنید.';
+
+  @override
+  String get previousSection => 'بخش قبلی';
+
+  @override
+  String get nextSection => 'بخش بعدی';
+
+  @override
+  String get floatingNotificationBody => 'برای باز کردن APrompter بزنید';
+
+  @override
+  String get customTarget => 'سفارشی…';
+
+  @override
+  String get customTargetTitle => 'مدت هدف';
+
+  @override
+  String get customTargetHint => 'دقیقه و ثانیه، مثلاً 5:00';
+
+  @override
+  String get saved => 'ذخیره شد';
+
+  @override
+  String get floatNotOnIos =>
+      'آیفون اجازه نمی‌دهد برنامه‌ها روی برنامه‌های دیگر شناور شوند. از «ضبط» استفاده کنید تا با متن زیر دوربین فیلم بگیرید.';
+
+  @override
+  String get hashtagHint =>
+      'خط‌های هشتگ (#fyp #ad) کم‌رنگ نمایش داده می‌شوند و زمان‌بندی نمی‌شوند. برای بخش از «# » با فاصله استفاده کنید.';
 }

@@ -570,4 +570,110 @@ class AppLocalizationsNl extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Opslaan mislukt — misschien is je telefoon vol. Je werk blijft bewaard zolang de app open is.';
+
+  @override
+  String get versionHistory => 'Versiegeschiedenis';
+
+  @override
+  String get noVersions =>
+      'Nog geen eerdere versies. Ze worden automatisch bewaard terwijl je schrijft.';
+
+  @override
+  String get restore => 'Herstellen';
+
+  @override
+  String get versionRestored => 'Eerdere versie hersteld';
+
+  @override
+  String get recentlyDeleted => 'Recent verwijderd';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Verwijderde scripts blijven hier $days dagen.',
+      one: 'Verwijderde scripts blijven hier 1 dag.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Definitief verwijderen';
+
+  @override
+  String deletedOn(String date) {
+    return 'Verwijderd op $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" hersteld';
+  }
+
+  @override
+  String get backUpScripts => 'Back-up van alle scripts';
+
+  @override
+  String get restoreBackup => 'Herstellen uit back-up';
+
+  @override
+  String get backupShareTitle => 'APrompter-back-up';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts hersteld',
+      one: '1 script hersteld',
+      zero: 'Alles uit deze back-up staat er al',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Dat bestand is geen APrompter-back-up.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Zelfs met $wpm wpm past dit niet in $target — schrap ongeveer $words woorden.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'De camera was niet klaar, dus de opname is niet gestart. Probeer het opnieuw.';
+
+  @override
+  String get previousSection => 'Vorige sectie';
+
+  @override
+  String get nextSection => 'Volgende sectie';
+
+  @override
+  String get floatingNotificationBody => 'Tik om APrompter te openen';
+
+  @override
+  String get customTarget => 'Aangepast…';
+
+  @override
+  String get customTargetTitle => 'Doellengte';
+
+  @override
+  String get customTargetHint => 'Minuten en seconden, bijv. 5:00';
+
+  @override
+  String get saved => 'Opgeslagen';
+
+  @override
+  String get floatNotOnIos =>
+      'Op iPhone kunnen apps niet over andere apps zweven. Gebruik Opnemen om te filmen met het script onder de camera.';
+
+  @override
+  String get hashtagHint =>
+      'Hashtagregels (#fyp #ad) worden gedimd en niet getimed. Gebruik \"# \" met een spatie voor een sectie.';
 }

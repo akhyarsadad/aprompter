@@ -570,4 +570,116 @@ class AppLocalizationsAr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n د';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'تعذّر الحفظ — قد تكون مساحة هاتفك ممتلئة. يبقى عملك محفوظًا ما دام التطبيق مفتوحًا.';
+
+  @override
+  String get versionHistory => 'سجل النسخ';
+
+  @override
+  String get noVersions =>
+      'لا توجد نسخ سابقة بعد. تُحفظ تلقائيًا أثناء الكتابة.';
+
+  @override
+  String get restore => 'استعادة';
+
+  @override
+  String get versionRestored => 'تمت استعادة النسخة السابقة';
+
+  @override
+  String get recentlyDeleted => 'المحذوفة مؤخرًا';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'تبقى النصوص المحذوفة هنا $days يوم.',
+      many: 'تبقى النصوص المحذوفة هنا $days يومًا.',
+      few: 'تبقى النصوص المحذوفة هنا $days أيام.',
+      two: 'تبقى النصوص المحذوفة هنا ليومين.',
+      one: 'تبقى النصوص المحذوفة هنا ليوم واحد.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'حذف نهائي';
+
+  @override
+  String deletedOn(String date) {
+    return 'حُذف في $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'تمت استعادة \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'نسخ احتياطي لكل النصوص';
+
+  @override
+  String get restoreBackup => 'استعادة من نسخة احتياطية';
+
+  @override
+  String get backupShareTitle => 'نسخة APrompter الاحتياطية';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تمت استعادة $count نص',
+      many: 'تمت استعادة $count نصًا',
+      few: 'تمت استعادة $count نصوص',
+      two: 'تمت استعادة نصين',
+      one: 'تمت استعادة نص واحد',
+      zero: 'كل ما في هذه النسخة الاحتياطية موجود بالفعل',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'هذا الملف ليس نسخة احتياطية من APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'حتى بسرعة $wpm ك/د لن يتسع في $target — احذف نحو $words كلمة.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'لم تكن الكاميرا جاهزة، لذا لم يبدأ التسجيل. حاول مرة أخرى.';
+
+  @override
+  String get previousSection => 'القسم السابق';
+
+  @override
+  String get nextSection => 'القسم التالي';
+
+  @override
+  String get floatingNotificationBody => 'اضغط لفتح APrompter';
+
+  @override
+  String get customTarget => 'مخصص…';
+
+  @override
+  String get customTargetTitle => 'المدة المستهدفة';
+
+  @override
+  String get customTargetHint => 'دقائق وثوانٍ، مثل 5:00';
+
+  @override
+  String get saved => 'تم الحفظ';
+
+  @override
+  String get floatNotOnIos =>
+      'لا يسمح iPhone للتطبيقات بالظهور فوق تطبيقات أخرى. استخدم \"تسجيل\" للتصوير والنص أسفل الكاميرا.';
+
+  @override
+  String get hashtagHint =>
+      'تظهر أسطر الوسوم (#fyp #ad) باهتة ولا تُحتسب في التوقيت. استخدم \"# \" مع مسافة لبدء قسم.';
 }

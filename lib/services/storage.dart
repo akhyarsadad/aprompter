@@ -8,6 +8,59 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 
+/// A write to the phone's storage did not go through (usually: full).
+class SaveFailed implements Exception {
+  const SaveFailed(this.key);
+  final String key;
+
+  @override
+  String toString() => 'SaveFailed($key)';
+}
+
+/// A script as it was earlier, kept so edits can be undone.
+class ScriptVersion {
+  const ScriptVersion({
+    required this.title,
+    required this.body,
+    required this.savedAt,
+  });
+
+  final String title;
+  final String body;
+  final DateTime savedAt;
+
+  Map<String, dynamic> toJson() => {
+    'title': title,
+    'body': body,
+    'savedAt': savedAt.toIso8601String(),
+  };
+
+  factory ScriptVersion.fromJson(Map<String, dynamic> json) => ScriptVersion(
+    title: json['title'] as String? ?? '',
+    body: json['body'] as String? ?? '',
+    savedAt:
+        DateTime.tryParse(json['savedAt'] as String? ?? '') ?? DateTime(2000),
+  );
+}
+
+/// A deleted script, kept for [Storage.trashDays] days.
+class TrashedScript {
+  const TrashedScript(this.script, this.deletedAt);
+
+  final Script script;
+  final DateTime deletedAt;
+
+  Map<String, dynamic> toJson() => {
+    'script': script.toJson(),
+    'deletedAt': deletedAt.toIso8601String(),
+  };
+
+  factory TrashedScript.fromJson(Map<String, dynamic> json) => TrashedScript(
+    Script.fromJson(json['script'] as Map<String, dynamic>),
+    DateTime.tryParse(json['deletedAt'] as String? ?? '') ?? DateTime.now(),
+  );
+}
+
 /// Persists scripts and prompter settings on the device.
 class Storage {
   Storage._(this._prefs);
@@ -17,6 +70,18 @@ class Storage {
   static const _activeScriptKey = 'active_script';
   static const _floatPositionKey = 'float_position';
   static const _localeKey = 'app_locale';
+  static const _trashKey = 'trash';
+  static const _versionsPrefix = 'versions_';
+  static const _schemaKey = 'schema_version';
+
+  /// Bumped when the stored format changes, so later versions can migrate.
+  static const schemaVersion = 1;
+
+  /// How long deleted scripts stay in "Recently deleted".
+  static const trashDays = 30;
+
+  /// Earlier versions kept per script.
+  static const maxVersions = 30;
 
   final SharedPreferences _prefs;
 
@@ -55,10 +120,78 @@ class Storage {
 
   static const backupSuffix = '_backup_';
 
-  Future<void> saveScripts(List<Script> scripts) => _prefs.setString(
-    _scriptsKey,
-    jsonEncode(scripts.map((s) => s.toJson()).toList()),
-  );
+  /// Writes [value] and throws [SaveFailed] if the phone refused it.
+  Future<void> _write(String key, String value) async {
+    bool ok;
+    try {
+      ok = await _prefs.setString(key, value);
+    } catch (_) {
+      ok = false;
+    }
+    if (!ok) throw SaveFailed(key);
+  }
+
+  Future<void> saveScripts(List<Script> scripts) async {
+    await _write(
+      _scriptsKey,
+      jsonEncode(scripts.map((s) => s.toJson()).toList()),
+    );
+    if (_prefs.getInt(_schemaKey) != schemaVersion) {
+      await _prefs.setInt(_schemaKey, schemaVersion);
+    }
+  }
+
+  /// Backups made when saved data could not be read (see [loadScripts]).
+  List<String> damagedBackupKeys() =>
+      _prefs
+          .getKeys()
+          .where((k) => k.startsWith('$_scriptsKey$backupSuffix'))
+          .toList()
+        ..sort();
+
+  /// Earlier versions of script [id], newest first.
+  List<ScriptVersion> loadVersions(String id) {
+    final raw = _prefs.getString('$_versionsPrefix$id');
+    if (raw == null) return [];
+    try {
+      return [
+        for (final v in jsonDecode(raw) as List)
+          ScriptVersion.fromJson(v as Map<String, dynamic>),
+      ];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveVersions(String id, List<ScriptVersion> versions) =>
+      versions.isEmpty
+      ? _prefs.remove('$_versionsPrefix$id')
+      : _write(
+          '$_versionsPrefix$id',
+          jsonEncode(
+            versions.take(maxVersions).map((v) => v.toJson()).toList(),
+          ),
+        );
+
+  /// Recently deleted scripts, newest first; older than [trashDays] dropped.
+  List<TrashedScript> loadTrash() {
+    final raw = _prefs.getString(_trashKey);
+    if (raw == null) return [];
+    final cutoff = DateTime.now().subtract(const Duration(days: trashDays));
+    try {
+      return [
+          for (final t in jsonDecode(raw) as List)
+            TrashedScript.fromJson(t as Map<String, dynamic>),
+        ].where((t) => t.deletedAt.isAfter(cutoff)).toList()
+        ..sort((a, b) => b.deletedAt.compareTo(a.deletedAt));
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveTrash(List<TrashedScript> trash) => trash.isEmpty
+      ? _prefs.remove(_trashKey)
+      : _write(_trashKey, jsonEncode(trash.map((t) => t.toJson()).toList()));
 
   PrompterSettings loadSettings() {
     final raw = _prefs.getString(_settingsKey);
@@ -71,7 +204,7 @@ class Storage {
   }
 
   Future<void> saveSettings(PrompterSettings settings) =>
-      _prefs.setString(_settingsKey, jsonEncode(settings.toJson()));
+      _write(_settingsKey, jsonEncode(settings.toJson()));
 
   /// The script currently shown in the floating overlay.
   Script? loadActiveScript() {

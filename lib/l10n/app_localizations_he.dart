@@ -560,4 +560,111 @@ class AppLocalizationsHe extends AppLocalizations {
   String minutesShort(int n) {
     return '$n דק׳';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'השמירה נכשלה — ייתכן שאין מקום בטלפון. העבודה נשמרת כל עוד האפליקציה פתוחה.';
+
+  @override
+  String get versionHistory => 'היסטוריית גרסאות';
+
+  @override
+  String get noVersions =>
+      'אין עדיין גרסאות קודמות. הן נשמרות אוטומטית בזמן הכתיבה.';
+
+  @override
+  String get restore => 'שחזור';
+
+  @override
+  String get versionRestored => 'גרסה קודמת שוחזרה';
+
+  @override
+  String get recentlyDeleted => 'נמחקו לאחרונה';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'תסריטים שנמחקו נשמרים כאן $days ימים.',
+      two: 'תסריטים שנמחקו נשמרים כאן יומיים.',
+      one: 'תסריטים שנמחקו נשמרים כאן יום אחד.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'מחיקה לצמיתות';
+
+  @override
+  String deletedOn(String date) {
+    return 'נמחק ב־$date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" שוחזר';
+  }
+
+  @override
+  String get backUpScripts => 'גיבוי כל התסריטים';
+
+  @override
+  String get restoreBackup => 'שחזור מגיבוי';
+
+  @override
+  String get backupShareTitle => 'גיבוי APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count תסריטים שוחזרו',
+      one: 'תסריט אחד שוחזר',
+      zero: 'כל מה שבגיבוי הזה כבר כאן',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'הקובץ הזה אינו גיבוי של APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'גם ב־$wpm מ/ד זה לא ייכנס ב־$target — קצרו בערך $words מילים.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'המצלמה לא הייתה מוכנה, ולכן הצילום לא התחיל. נסו שוב.';
+
+  @override
+  String get previousSection => 'הקטע הקודם';
+
+  @override
+  String get nextSection => 'הקטע הבא';
+
+  @override
+  String get floatingNotificationBody => 'הקישו כדי לפתוח את APrompter';
+
+  @override
+  String get customTarget => 'מותאם אישית…';
+
+  @override
+  String get customTargetTitle => 'אורך יעד';
+
+  @override
+  String get customTargetHint => 'דקות ושניות, למשל 5:00';
+
+  @override
+  String get saved => 'נשמר';
+
+  @override
+  String get floatNotOnIos =>
+      'ב־iPhone אפליקציות לא יכולות לצוף מעל אפליקציות אחרות. השתמשו ב\"צילום\" כדי לצלם עם התסריט מתחת למצלמה.';
+
+  @override
+  String get hashtagHint =>
+      'שורות האשטגים (#fyp #ad) מוצגות מעומעמות ולא נכללות בתזמון. לקטע השתמשו ב־\"# \" עם רווח.';
 }

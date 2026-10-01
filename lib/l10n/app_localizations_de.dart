@@ -567,4 +567,110 @@ class AppLocalizationsDe extends AppLocalizations {
   String minutesShort(int n) {
     return '$n Min.';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Speichern fehlgeschlagen – vielleicht ist der Speicher voll. Deine Arbeit bleibt erhalten, solange die App offen ist.';
+
+  @override
+  String get versionHistory => 'Versionsverlauf';
+
+  @override
+  String get noVersions =>
+      'Noch keine früheren Versionen. Sie werden beim Schreiben automatisch gesichert.';
+
+  @override
+  String get restore => 'Wiederherstellen';
+
+  @override
+  String get versionRestored => 'Frühere Version wiederhergestellt';
+
+  @override
+  String get recentlyDeleted => 'Zuletzt gelöscht';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Gelöschte Skripte bleiben $days Tage hier.',
+      one: 'Gelöschte Skripte bleiben 1 Tag hier.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Endgültig löschen';
+
+  @override
+  String deletedOn(String date) {
+    return 'Gelöscht am $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '„$title“ wiederhergestellt';
+  }
+
+  @override
+  String get backUpScripts => 'Alle Skripte sichern';
+
+  @override
+  String get restoreBackup => 'Aus Backup wiederherstellen';
+
+  @override
+  String get backupShareTitle => 'APrompter-Backup';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Skripte wiederhergestellt',
+      one: '1 Skript wiederhergestellt',
+      zero: 'Alles aus diesem Backup ist schon da',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Diese Datei ist kein APrompter-Backup.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Selbst mit $wpm WpM passt das nicht in $target – kürze etwa $words Wörter.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Die Kamera war nicht bereit, daher startete die Aufnahme nicht. Versuch es noch mal.';
+
+  @override
+  String get previousSection => 'Vorheriger Abschnitt';
+
+  @override
+  String get nextSection => 'Nächster Abschnitt';
+
+  @override
+  String get floatingNotificationBody => 'Tippen, um APrompter zu öffnen';
+
+  @override
+  String get customTarget => 'Eigene…';
+
+  @override
+  String get customTargetTitle => 'Ziellänge';
+
+  @override
+  String get customTargetHint => 'Minuten und Sekunden, z. B. 5:00';
+
+  @override
+  String get saved => 'Gespeichert';
+
+  @override
+  String get floatNotOnIos =>
+      'Auf dem iPhone können Apps nicht über anderen Apps schweben. Nutze „Aufnehmen“, um mit dem Skript unter der Kamera zu filmen.';
+
+  @override
+  String get hashtagHint =>
+      'Hashtag-Zeilen (#fyp #ad) werden abgeblendet und nicht getimt. Für einen Abschnitt „# “ mit Leerzeichen verwenden.';
 }

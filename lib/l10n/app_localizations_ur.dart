@@ -547,4 +547,110 @@ class AppLocalizationsUr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n منٹ';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'محفوظ نہیں ہو سکا — شاید فون کی اسٹوریج بھر گئی ہے۔ ایپ کھلی رہنے تک آپ کا کام محفوظ ہے۔';
+
+  @override
+  String get versionHistory => 'ورژن کی تاریخ';
+
+  @override
+  String get noVersions =>
+      'ابھی کوئی پرانا ورژن نہیں۔ لکھتے وقت یہ خود بخود محفوظ ہوتے ہیں۔';
+
+  @override
+  String get restore => 'بحال کریں';
+
+  @override
+  String get versionRestored => 'پرانا ورژن بحال ہو گیا';
+
+  @override
+  String get recentlyDeleted => 'حال ہی میں حذف شدہ';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'حذف شدہ اسکرپٹ یہاں $days دن رہتے ہیں۔',
+      one: 'حذف شدہ اسکرپٹ یہاں 1 دن رہتے ہیں۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'ہمیشہ کے لیے حذف کریں';
+
+  @override
+  String deletedOn(String date) {
+    return '$date کو حذف ہوا';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" بحال ہو گیا';
+  }
+
+  @override
+  String get backUpScripts => 'تمام اسکرپٹس کا بیک اپ لیں';
+
+  @override
+  String get restoreBackup => 'بیک اپ سے بحال کریں';
+
+  @override
+  String get backupShareTitle => 'APrompter بیک اپ';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اسکرپٹس بحال ہوئے',
+      one: '1 اسکرپٹ بحال ہوا',
+      zero: 'اس بیک اپ کی ہر چیز پہلے سے موجود ہے',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'یہ فائل APrompter بیک اپ نہیں ہے۔';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm ل/م پر بھی یہ $target میں نہیں آئے گا — تقریباً $words الفاظ کم کریں۔';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'کیمرا تیار نہیں تھا، اس لیے ریکارڈنگ شروع نہیں ہوئی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get previousSection => 'پچھلا حصہ';
+
+  @override
+  String get nextSection => 'اگلا حصہ';
+
+  @override
+  String get floatingNotificationBody => 'APrompter کھولنے کے لیے ٹیپ کریں';
+
+  @override
+  String get customTarget => 'حسبِ ضرورت…';
+
+  @override
+  String get customTargetTitle => 'ہدف دورانیہ';
+
+  @override
+  String get customTargetHint => 'منٹ اور سیکنڈ، مثلاً 5:00';
+
+  @override
+  String get saved => 'محفوظ ہو گیا';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone ایپس کو دوسری ایپس کے اوپر تیرنے نہیں دیتا۔ کیمرے کے نیچے اسکرپٹ کے ساتھ فلم بنانے کے لیے ریکارڈ استعمال کریں۔';
+
+  @override
+  String get hashtagHint =>
+      'ہیش ٹیگ والی لائنیں (#fyp #ad) مدھم دکھتی ہیں اور ان کا وقت نہیں گنا جاتا۔ حصے کے لیے اسپیس کے ساتھ \"# \" استعمال کریں۔';
 }

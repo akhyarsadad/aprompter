@@ -13,21 +13,26 @@ for personas, journeys and scope.
 
 **Write (J1–J2)**
 - Templates: *Hook → Value → CTA*, *Tutorial*, *Product review*, *Storytime*, or blank.
-- Target length (15 s · 30 s · 60 s · 90 s · 3 min) with a live bar:
+- Target length (15 s · 30 s · 60 s · 90 s · 3 min, or any custom length) with a live bar:
   words · spoken time vs. target, "8 s over · cut ~20 words".
 - Hint for long sentences that are hard to say in one breath.
 - Toolbar for prompter markup:
 
   | Markup | Meaning on the prompter |
   |---|---|
-  | `# Hook` | Section cue — jump to it for retakes |
-  | `*word*` | Emphasis (highlighted) |
-  | `[pause]` | Visible beat marker |
+  | `# Hook` | Section cue — jump to it for retakes (`#` + space, or `##`) |
+  | `*word*` / `**word**` | Emphasis (highlighted); `\*` is a literal star |
+  | `[pause]` | Visible beat marker, adds 0.7 s (also `(pause)`, `[ Pause. ]`) |
   | `// smile` | Note to yourself — dimmed, not counted as spoken |
+  | `#fyp #ad` | Hashtag line — dimmed, not timed, kept in the caption |
 
 - Status: Draft → Ready → Recorded, with take count. Search and filter on home.
 - Duplicate a script, share it, or **copy as caption** (spoken text without markup —
-  ready to paste as the post caption). Deleting can be undone.
+  ready to paste as the post caption, hashtags included).
+- Nothing is lost by accident: autosave with a "Saved" hint, **version history** per
+  script, **Recently deleted** for 30 days, a warning banner if the phone refuses to
+  save (storage full), and **Back up all scripts** / **Restore from a backup** as one
+  JSON file.
 
 **Rehearse & pace (J3)**
 - Speed is in **words per minute**, so changing the text size never changes the pace.
@@ -55,8 +60,10 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
   *Settings → Layout → Reset position* puts it back at the top.
 - Video quality 720p / 1080p / 4K, and **auto-stop** 2 s after the last line.
 - Haptic ticks during the countdown.
-- Bluetooth remote / keyboard: Space · Enter · PageDown = play/pause, PageUp / ← = previous
-  section, → = next section, ↑ / ↓ = faster / slower.
+- Bluetooth remote / keyboard: Space · Enter · PageDown · `B` · `.` = play/pause, PageUp / ←
+  = previous section, → = next section, ↑ / ↓ = faster / slower. Cheap selfie remotes
+  (Volume Up) and media keys (play/pause, next/previous track) work too (Android).
+- The floating window is hidden from screen recordings and live streams (Android).
 
 > **Why no floating mode on iOS?** iOS does not let apps draw over other apps, so on
 > iPhone use **Record** — the built-in camera with the prompter overlaid.
@@ -115,8 +122,20 @@ flutter build apk --release      # or: flutter build appbundle
 flutter build ipa --release      # needs an Apple developer account / signing team
 ```
 
-Before publishing, set your own signing config in `android/app/build.gradle.kts`
-and your team in Xcode (`ios/Runner.xcworkspace`).
+Android release signing reads `android/key.properties` (git-ignored):
+
+```properties
+storeFile=/absolute/path/to/upload-keystore.jks
+storePassword=…
+keyAlias=upload
+keyPassword=…
+```
+
+Create the keystore once with
+`keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload`
+and keep it safe — Play updates must be signed with it. Without `key.properties`,
+release builds fall back to the debug key (fine for testing, not for the store).
+For iOS, set your team in Xcode (`ios/Runner.xcworkspace`).
 
 ### Permissions
 

@@ -542,4 +542,110 @@ class AppLocalizationsTh extends AppLocalizations {
   String minutesShort(int n) {
     return '$n นาที';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'บันทึกไม่ได้ — พื้นที่ในโทรศัพท์อาจเต็ม งานของคุณยังอยู่ตราบที่แอปยังเปิดอยู่';
+
+  @override
+  String get versionHistory => 'ประวัติเวอร์ชัน';
+
+  @override
+  String get noVersions =>
+      'ยังไม่มีเวอร์ชันก่อนหน้า ระบบจะเก็บไว้อัตโนมัติขณะที่คุณเขียน';
+
+  @override
+  String get restore => 'กู้คืน';
+
+  @override
+  String get versionRestored => 'กู้คืนเวอร์ชันก่อนหน้าแล้ว';
+
+  @override
+  String get recentlyDeleted => 'ที่ลบล่าสุด';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'สคริปต์ที่ลบจะอยู่ที่นี่ $days วัน',
+      one: 'สคริปต์ที่ลบจะอยู่ที่นี่ 1 วัน',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'ลบถาวร';
+
+  @override
+  String deletedOn(String date) {
+    return 'ลบเมื่อ $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'กู้คืน \"$title\" แล้ว';
+  }
+
+  @override
+  String get backUpScripts => 'สำรองสคริปต์ทั้งหมด';
+
+  @override
+  String get restoreBackup => 'กู้คืนจากข้อมูลสำรอง';
+
+  @override
+  String get backupShareTitle => 'ข้อมูลสำรอง APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'กู้คืน $count สคริปต์แล้ว',
+      one: 'กู้คืน 1 สคริปต์แล้ว',
+      zero: 'ทุกอย่างในข้อมูลสำรองนี้มีอยู่แล้ว',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'ไฟล์นี้ไม่ใช่ข้อมูลสำรองของ APrompter';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'แม้ที่ $wpm คำ/นาที ก็ยังไม่พอดี $target — ตัดออกราว $words คำ';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'กล้องยังไม่พร้อม จึงไม่ได้เริ่มถ่าย ลองอีกครั้ง';
+
+  @override
+  String get previousSection => 'ส่วนก่อนหน้า';
+
+  @override
+  String get nextSection => 'ส่วนถัดไป';
+
+  @override
+  String get floatingNotificationBody => 'แตะเพื่อเปิด APrompter';
+
+  @override
+  String get customTarget => 'กำหนดเอง…';
+
+  @override
+  String get customTargetTitle => 'ความยาวเป้าหมาย';
+
+  @override
+  String get customTargetHint => 'นาทีและวินาที เช่น 5:00';
+
+  @override
+  String get saved => 'บันทึกแล้ว';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone ไม่อนุญาตให้แอปลอยเหนือแอปอื่น ใช้ \"ถ่าย\" เพื่อถ่ายโดยมีสคริปต์อยู่ใต้กล้อง';
+
+  @override
+  String get hashtagHint =>
+      'บรรทัดแฮชแท็ก (#fyp #ad) จะแสดงจางและไม่นับเวลา ใช้ \"# \" ตามด้วยเว้นวรรคเพื่อสร้างส่วน';
 }

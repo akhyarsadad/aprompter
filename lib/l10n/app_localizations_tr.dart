@@ -548,4 +548,110 @@ class AppLocalizationsTr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n dk';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Kaydedilemedi — telefonunda yer kalmamış olabilir. Uygulama açık kaldıkça çalışman korunur.';
+
+  @override
+  String get versionHistory => 'Sürüm geçmişi';
+
+  @override
+  String get noVersions =>
+      'Henüz önceki sürüm yok. Sen yazarken otomatik olarak saklanır.';
+
+  @override
+  String get restore => 'Geri yükle';
+
+  @override
+  String get versionRestored => 'Önceki sürüm geri yüklendi';
+
+  @override
+  String get recentlyDeleted => 'Son silinenler';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Silinen senaryolar burada $days gün kalır.',
+      one: 'Silinen senaryolar burada 1 gün kalır.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Kalıcı olarak sil';
+
+  @override
+  String deletedOn(String date) {
+    return 'Silinme: $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" geri yüklendi';
+  }
+
+  @override
+  String get backUpScripts => 'Tüm senaryoları yedekle';
+
+  @override
+  String get restoreBackup => 'Yedekten geri yükle';
+
+  @override
+  String get backupShareTitle => 'APrompter yedeği';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count senaryo geri yüklendi',
+      one: '1 senaryo geri yüklendi',
+      zero: 'Bu yedekteki her şey zaten burada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Bu dosya bir APrompter yedeği değil.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm kdk hızda bile $target süresine sığmaz — yaklaşık $words kelime kısalt.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera hazır değildi, bu yüzden kayıt başlamadı. Tekrar dene.';
+
+  @override
+  String get previousSection => 'Önceki bölüm';
+
+  @override
+  String get nextSection => 'Sonraki bölüm';
+
+  @override
+  String get floatingNotificationBody => 'APrompter\'ı açmak için dokun';
+
+  @override
+  String get customTarget => 'Özel…';
+
+  @override
+  String get customTargetTitle => 'Hedef süre';
+
+  @override
+  String get customTargetHint => 'Dakika ve saniye, ör. 5:00';
+
+  @override
+  String get saved => 'Kaydedildi';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone, uygulamaların diğer uygulamaların üzerinde durmasına izin vermez. Senaryo kameranın altındayken çekmek için Kaydet\'i kullan.';
+
+  @override
+  String get hashtagHint =>
+      'Hashtag satırları (#fyp #ad) soluk gösterilir ve süreye sayılmaz. Bölüm için boşluklu \"# \" kullan.';
 }

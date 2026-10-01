@@ -36,7 +36,14 @@ void main() {
 
   testWidgets('delete can be undone', (tester) async {
     final state = await pumpApp(tester);
-    await tester.tap(find.byIcon(Icons.more_vert).first);
+    await tester.tap(
+      find
+          .descendant(
+            of: find.byType(Card),
+            matching: find.byIcon(Icons.more_vert),
+          )
+          .first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
@@ -51,7 +58,14 @@ void main() {
 
   testWidgets('duplicate creates a fresh draft copy', (tester) async {
     final state = await pumpApp(tester);
-    await tester.tap(find.byIcon(Icons.more_vert).first);
+    await tester.tap(
+      find
+          .descendant(
+            of: find.byType(Card),
+            matching: find.byIcon(Icons.more_vert),
+          )
+          .first,
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Duplicate'));
     await tester.pumpAndSettle();

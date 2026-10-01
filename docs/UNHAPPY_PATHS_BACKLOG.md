@@ -1,7 +1,7 @@
 # APrompter — Unhappy-path backlog (all personas)
 
-**Status: documented only — nothing in this file has been fixed yet.**
-Already-fixed scenarios live in [`UNHAPPY_PATHS.md`](UNHAPPY_PATHS.md) (U1–U19).
+**Status:** rows marked ✅ are fixed — see [`UNHAPPY_PATHS.md`](UNHAPPY_PATHS.md)
+(U20 onwards) for what changed and how it is verified. Everything else is still open.
 
 How to read the tables:
 
@@ -42,7 +42,7 @@ How to read the tables:
 | O1 | P4 | Taps **Record** first; OS asks for camera + mic with no context | Reflex "Don't allow" → error view; second ask needs system Settings on iOS | P1 | Code | Explain why before the OS prompt |
 | O2 | P4 | Doesn't know `#`, `//`, `*`, `[pause]` | Only discoverable via toolbar and editor hint | P2 | Gap | 20-second interactive tour / sample script |
 | O3 | P4 | "wpm" / "words per minute" jargon | Unclear what number to choose | P3 | Gap | Plain labels ("slow · normal · fast") first, numbers second |
-| O4 | P4, P1 | Taps **Float** expecting it to work on iPhone | Button hidden on iOS with no explanation | P2 | Code | Show it disabled with "Not possible on iPhone — use Record" |
+| ✅ O4 | P4, P1 | Taps **Float** expecting it to work on iPhone | Button hidden on iOS with no explanation | P2 | Code | Show it disabled with "Not possible on iPhone — use Record" |
 | O5 | P4 | Welcome script is in the phone's language at first run; user later switches app language | Welcome script stays in the old language | P3 | Code | Offer to re-create sample in new language |
 | O6 | P10 | Float tapped on **Android Go** | Overlay permission doesn't exist on Go devices; settings screen may not open or permission never granted | P1 | Device | Detect low-RAM/Go and explain Float is unavailable |
 
@@ -50,17 +50,17 @@ How to read the tables:
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| W1 | P1, P3 | Writes **hashtags** on their own line (`#fyp #viral`) | Line becomes a **section cue**, is excluded from timing and from "Copy as caption" | P1 | Code | Only treat `# ` (hash + space) as a section; or `##` |
-| W2 | P1 | Uses `*` as bullets or in maths (`2*3`, `* tip`) | Text between asterisks turns into emphasis; asterisks vanish | P2 | Code | Require word boundaries; escape `\*` |
-| W3 | P4 | Types Markdown `**bold**` | Renders with stray `*` on both sides | P3 | Code | Accept `**…**` as emphasis |
-| W4 | P1, P4 | Select-all + delete by accident (or bad paste) | **Autosave overwrites after 1 s**; no undo history, no versions | P0 | Code | Keep last N versions per script / undo across saves |
+| ✅ W1 | P1, P3 | Writes **hashtags** on their own line (`#fyp #viral`) | Line becomes a **section cue**, is excluded from timing and from "Copy as caption" | P1 | Code | Only treat `# ` (hash + space) as a section; or `##` |
+| ✅ W2 | P1 | Uses `*` as bullets or in maths (`2*3`, `* tip`) | Text between asterisks turns into emphasis; asterisks vanish | P2 | Code | Require word boundaries; escape `\*` |
+| ✅ W3 | P4 | Types Markdown `**bold**` | Renders with stray `*` on both sides | P3 | Code | Accept `**…**` as emphasis |
+| ✅ W4 | P1, P4 | Select-all + delete by accident (or bad paste) | **Autosave overwrites after 1 s**; no undo history, no versions | P0 | Code | Keep last N versions per script / undo across saves |
 | W5 | P2 | Pastes a 20–50k-word script | Word count, long-sentence scan and JSON save run on every keystroke → typing lag; whole library rewritten each second | P1 | Code | Debounce analysis, isolate parsing, per-script storage |
-| W6 | P2 | Needs a 5/10/20-minute target | Targets stop at 3 min | P1 | Code | Custom target input |
+| ✅ W6 | P2 | Needs a 5/10/20-minute target | Targets stop at 3 min | P1 | Code | Custom target input |
 | W7 | P3 | Pastes from Google Docs/Word/WhatsApp | Bullets, numbering, tabs, smart quotes, zero-width chars come through as-is; WhatsApp `*bold*` becomes emphasis | P2 | Code | Clean-paste option |
-| W8 | P3 | Edits a script that is **currently floating** | Overlay keeps showing the old text until Float is pressed again | P2 | Code | Push updates to the overlay |
-| W9 | P4 | `[ pause ]`, `[Pause.]`, `(pause)` | Not recognised; read out as words and timed | P3 | Code | Looser pause syntax |
-| W10 | P1 | Empty `#` line | Section titled "Section n" appears in the list | P3 | Code | Ignore empty headings |
-| W11 | P4 | Leaves the editor via the home gesture mid-sentence | Saved by autosave/lifecycle — OK; but **no "saved" feedback** so users worry | P3 | Code | Subtle "Saved" indicator |
+| ✅ W8 | P3 | Edits a script that is **currently floating** | Overlay keeps showing the old text until Float is pressed again | P2 | Code | Push updates to the overlay |
+| ✅ W9 | P4 | `[ pause ]`, `[Pause.]`, `(pause)` | Not recognised; read out as words and timed | P3 | Code | Looser pause syntax |
+| ✅ W10 | P1 | Empty `#` line | Section titled "Section n" appears in the list | P3 | Code | Ignore empty headings |
+| ✅ W11 | P4 | Leaves the editor via the home gesture mid-sentence | Saved by autosave/lifecycle — OK; but **no "saved" feedback** so users worry | P3 | Code | Subtle "Saved" indicator |
 | W12 | P12 | Writer edits on laptop, talent reads on phone | No import/export, no sync; copy-paste through chat | P1 | Gap | Import .txt/.docx, share link, cloud sync |
 | W13 | P3 | Client wants tracked changes / approval | No versions or comments | P2 | Gap | Version history |
 | W14 | P6 | Writes in one language, UI in another, spell-check underlines everything | Uses system keyboard language; no per-script language | P3 | Device | Per-script language hint for keyboard/timing |
@@ -69,10 +69,10 @@ How to read the tables:
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| T1 | P3 | Many `//` notes, `#` headings and blank lines | Total scroll time = spoken words ÷ wpm, but notes also take scroll height → **spoken lines scroll faster than the set wpm** | P1 | Code | Time-weight only spoken lines; skip notes at speed |
-| T2 | P3 | 15 s ad: "Fit to 0:15" needs > 300 wpm | Fit silently clamps to 300; timing bar still says over | P1 | Code | Say "can't fit — cut N words" instead |
+| ✅ T1 | P3 | Many `//` notes, `#` headings and blank lines | Total scroll time = spoken words ÷ wpm, but notes also take scroll height → **spoken lines scroll faster than the set wpm** | P1 | Code | Time-weight only spoken lines; skip notes at speed |
+| ✅ T2 | P3 | 15 s ad: "Fit to 0:15" needs > 300 wpm | Fit silently clamps to 300; timing bar still says over | P1 | Code | Say "can't fit — cut N words" instead |
 | T3 | P3 | Numbers, dates, URLs, prices ("$1,299", "2025", "@brand") | Count as one word; spoken as several → estimate too short | P2 | Code | Expand numbers/symbols for timing |
-| T4 | P1 | `[pause]` markers | Add no time; real pauses make takes run long | P2 | Code | Give a pause ~0.7 s |
+| ✅ T4 | P1 | `[pause]` markers | Add no time; real pauses make takes run long | P2 | Code | Give a pause ~0.7 s |
 | T5 | P5, P8 | Pace changed with **remote arrow keys** | Not saved; next session reverts | P2 | Code | Persist from keyboard too |
 | T6 | P6 | Chinese/Japanese/Thai estimates use fixed weights | Off for fast/slow speakers or dense kanji; Rehearse calibrates wpm but weights stay | P2 | Code | Per-language calibration |
 | T7 | P6 | Thai/Lao text with no `.` | Whole paragraph flagged as one "long sentence" | P3 | Code | Split on spaces for those scripts |
@@ -89,7 +89,7 @@ How to read the tables:
 | R2 | P4 | Picks **black text** colour | Black text on dark background/camera = invisible | P2 | Code | Auto-contrast or disable unsafe combos |
 | R3 | P1 | Filming outdoors in sunlight | No brightness boost; low contrast | P2 | Gap | Max-brightness while prompting |
 | R4 | P2, P5, P8 | Wants **landscape** (tripod, rig, tablet) | App is locked to portrait | P1 | Code | Landscape support for Rehearse/Record |
-| R5 | P7 | Loses place in **Float** | Drags move the window; no manual scroll and **no section jump** in Float — only restart | P1 | Code | Scroll buttons + sections in overlay |
+| ✅ R5 | P7 | Loses place in **Float** | Drags move the window; no manual scroll and **no section jump** in Float — only restart | P1 | Code | Scroll buttons + sections in overlay |
 | R6 | P5 | Section names upper-cased | Turkish `i` → `I` (should be `İ`); other casing quirks | P3 | Code | Locale-aware upper-case or none |
 | R7 | P6 | Line starts with an English brand then Arabic ("iPhone الجديد…") | Direction taken from first letter → laid out left-to-right | P2 | Code | Majority-direction detection |
 | R8 | P9 | Dyslexia | No dyslexia font, letter spacing, line focus/dimming | P2 | Gap | Reading-comfort options |
@@ -102,7 +102,7 @@ How to read the tables:
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| C1 | P1 | Countdown ends while the camera is still opening/switching | **Recording silently doesn't start** | P1 | Code | Wait for camera, or show a message |
+| ✅ C1 | P1 | Countdown ends while the camera is still opening/switching | **Recording silently doesn't start** | P1 | Code | Wait for camera, or show a message |
 | C2 | P1 | Preview is cropped to fill the screen | **What you see ≠ what is recorded** (extra area recorded at the sides/top) | P1 | Code | Show the true recording frame / 9:16 guides |
 | C3 | P1, P3 | Wants to watch the take before keeping it | No in-app playback; every take goes to the gallery | P1 | Gap | Review screen: keep / retake / delete |
 | C4 | P3 | Which take belongs to which script? | Takes only counted, not linked or listed | P2 | Gap | Takes list per script |
@@ -124,7 +124,7 @@ How to read the tables:
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| F1 | P7, P11 | Screen recording / screen share / live stream | **The floating script is captured** and visible to the audience | P0 | Code | Mark the overlay window secure |
+| ✅ F1 | P7, P11 | Screen recording / screen share / live stream | **The floating script is captured** and visible to the audience | P0 | Code | Mark the overlay window secure |
 | F2 | P10, P1 | Xiaomi/Huawei/Oppo/Vivo/Samsung battery & "pop-up" restrictions | Overlay doesn't show or is killed mid-take | P1 | Device | OEM-specific guidance screen |
 | F3 | P1 | Overlay covers the other app's record button | Touches on the overlay area don't reach the app below | P2 | Code | Click-through mode toggle |
 | F4 | P1 | Other app shows a permission dialog while overlay is up | Android may block "screen overlay detected" or hide the dialog | P2 | Device | Auto-minimise on detection |
@@ -136,14 +136,14 @@ How to read the tables:
 | F10 | P4 | Can't find how to stop the overlay | Only the ✕ in the window; notification has no action | P2 | Code | "Stop" action in the notification |
 | F11 | P10 | Notification permission denied (Android 13+) | Foreground service may be killed sooner on some OEMs | P2 | Device | Ask with explanation |
 | F12 | P8 | Reading over a notes/slides app | No wakelock in the overlay → screen may dim/lock | P2 | Code | Keep-awake while playing |
-| F13 | P14, P11 | Notification shows the script title | Visible in the notification shade (hidden on lock screen) | P3 | Code | Generic title option |
+| ✅ F13 | P14, P11 | Notification shows the script title | Visible in the notification shade (hidden on lock screen) | P3 | Code | Generic title option |
 
 ## 8. Remotes & keyboards
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| K1 | P1, P5 | Cheap Bluetooth **selfie remote** sends Volume Up | Not handled → nothing happens (or system volume changes) | P1 | Code | Map volume keys while prompting |
-| K2 | P5 | Page-turner sends Next/Previous track, `B`, `.` (presentation keys) | Not handled | P2 | Code | Configurable key mapping |
+| ✅ K1 | P1, P5 | Cheap Bluetooth **selfie remote** sends Volume Up | Not handled → nothing happens (or system volume changes) | P1 | Code | Map volume keys while prompting |
+| ✅ K2 | P5 | Page-turner sends Next/Previous track, `B`, `.` (presentation keys) | Not handled | P2 | Code | Configurable key mapping |
 | K3 | P5 | Opens a sheet (settings/sections), closes it | Keyboard focus may not return to the prompter until a tap | P2 | Device | Restore focus |
 | K4 | P5 | Remote connected as keyboard | On some phones the on-screen keyboard hides in the editor | P3 | Device | Document / toggle |
 
@@ -151,14 +151,14 @@ How to read the tables:
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| D1 | All | Phone lost / reset / app uninstalled | Scripts only on device; OS backup may or may not restore them | P0 | Code/Device | Export/backup, optional cloud sync |
-| D2 | All | Storage full when saving | Save result ignored → **silent data loss** | P0 | Code | Check write result, warn |
+| ✅ D1 | All | Phone lost / reset / app uninstalled | Scripts only on device; OS backup may or may not restore them | P0 | Code/Device | Export/backup, optional cloud sync |
+| ✅ D2 | All | Storage full when saving | Save result ignored → **silent data loss** | P0 | Code | Check write result, warn |
 | D3 | P2, P3 | Hundreds of long scripts | Whole library is one JSON value rewritten on every change; slow start and saves | P1 | Code | Per-script storage / database |
 | D4 | All | Corrupt-data backups created | Kept forever, never cleaned, **no way to restore** from the app | P2 | Code | Recovery screen + cleanup |
-| D5 | P4 | Undo-delete snackbar disappears | Deletion permanent | P2 | Code | Recently-deleted bin |
-| D6 | P3 | Marking status / recording a take | Bumps the script to the top (order changes unexpectedly) | P3 | Code | Separate "edited" from "touched" |
-| D7 | P6 | Search "cafe" doesn't find "café"; Turkish İ/i | Plain lower-case match | P3 | Code | Accent/locale-insensitive search |
-| D8 | All | Future data-format change | No schema version → migrations ad hoc | P2 | Code | Versioned storage |
+| ✅ D5 | P4 | Undo-delete snackbar disappears | Deletion permanent | P2 | Code | Recently-deleted bin |
+| ✅ D6 | P3 | Marking status / recording a take | Bumps the script to the top (order changes unexpectedly) | P3 | Code | Separate "edited" from "touched" |
+| ✅ D7 | P6 | Search "cafe" doesn't find "café"; Turkish İ/i | Plain lower-case match | P3 | Code | Accent/locale-insensitive search |
+| ✅ D8 | All | Future data-format change | No schema version → migrations ad hoc | P2 | Code | Versioned storage |
 
 ## 10. Settings & personalisation
 
@@ -213,14 +213,14 @@ How to read the tables:
 | Y2 | P11 | Device cloud backup (Android Auto Backup, iCloud) | Scripts may be uploaded to backups automatically | P2 | Code/Device | Let user opt out / exclude |
 | Y3 | P3, P11 | Takes saved to the shared gallery | Google Photos/iCloud auto-upload unreleased brand content | P1 | Code | Option to keep takes inside the app |
 | Y4 | P11 | "Copy as caption" | Text lands in clipboard history / cloud keyboards | P3 | Code | Note in UI |
-| Y5 | P7 | Float captured in streams | See **F1** | P0 | Code | — |
+| ✅ Y5 | P7 | Float captured in streams | See **F1** | P0 | Code | — |
 | Y6 | P14 | Teens sharing scripts/videos | No guardrails; store age rating & privacy policy needed | P2 | Gap | Policy work |
 
 ## 15. Distribution & compliance
 
 | ID | Who | What goes wrong | What happens today | Sev | Evidence | Direction |
 |---|---|---|---|---|---|---|
-| Q1 | — | Release APK signed with the **debug key** | Can't publish; installs can't be updated by a Play build | P0 | Code | Release keystore + Play App Signing |
+| ✅ Q1 | — | Release APK signed with the **debug key** | Can't publish; installs can't be updated by a Play build | P0 | Code | Release keystore + Play App Signing |
 | Q2 | — | Play review of `SYSTEM_ALERT_WINDOW` + `specialUse` foreground service | Rejection risk without a declaration/video | P1 | Code | Prepare declaration |
 | Q3 | — | No privacy policy | Required by both stores for camera/mic apps | P0 | Gap | Write and host one |
 | Q4 | — | Full photo-library access on iOS (album saving) | Reviewer may question; users may refuse | P2 | Code | Consider add-only without album |

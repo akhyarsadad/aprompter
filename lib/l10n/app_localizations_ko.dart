@@ -538,4 +538,108 @@ class AppLocalizationsKo extends AppLocalizations {
   String minutesShort(int n) {
     return '$n분';
   }
+
+  @override
+  String get storageSaveFailed =>
+      '저장하지 못했어요. 휴대폰 저장 공간이 부족할 수 있어요. 앱이 열려 있는 동안 작업 내용은 유지돼요.';
+
+  @override
+  String get versionHistory => '버전 기록';
+
+  @override
+  String get noVersions => '아직 이전 버전이 없어요. 작성하는 동안 자동으로 저장돼요.';
+
+  @override
+  String get restore => '복원';
+
+  @override
+  String get versionRestored => '이전 버전을 복원했어요';
+
+  @override
+  String get recentlyDeleted => '최근 삭제됨';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '삭제한 대본은 $days일 동안 여기에 보관돼요.',
+      one: '삭제한 대본은 1일 동안 여기에 보관돼요.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '영구 삭제';
+
+  @override
+  String deletedOn(String date) {
+    return '$date 삭제됨';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\'$title\' 복원됨';
+  }
+
+  @override
+  String get backUpScripts => '모든 대본 백업';
+
+  @override
+  String get restoreBackup => '백업에서 복원';
+
+  @override
+  String get backupShareTitle => 'APrompter 백업';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '대본 $count개 복원됨',
+      one: '대본 1개 복원됨',
+      zero: '이 백업의 내용은 이미 모두 있어요',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'APrompter 백업 파일이 아니에요.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm 단어/분으로도 $target에 맞출 수 없어요. 약 $words단어를 줄이세요.';
+  }
+
+  @override
+  String get cameraNotReady => '카메라가 준비되지 않아 촬영이 시작되지 않았어요. 다시 시도해 주세요.';
+
+  @override
+  String get previousSection => '이전 섹션';
+
+  @override
+  String get nextSection => '다음 섹션';
+
+  @override
+  String get floatingNotificationBody => '탭하여 APrompter 열기';
+
+  @override
+  String get customTarget => '직접 설정…';
+
+  @override
+  String get customTargetTitle => '목표 길이';
+
+  @override
+  String get customTargetHint => '분과 초, 예: 5:00';
+
+  @override
+  String get saved => '저장됨';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone에서는 앱을 다른 앱 위에 띄울 수 없어요. \'촬영\'을 사용하면 카메라 아래에 대본을 두고 찍을 수 있어요.';
+
+  @override
+  String get hashtagHint =>
+      '해시태그 줄(#fyp #ad)은 흐리게 표시되고 시간에 포함되지 않아요. 섹션은 \'# \'처럼 공백을 넣어 쓰세요.';
 }

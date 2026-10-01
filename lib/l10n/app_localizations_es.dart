@@ -564,4 +564,111 @@ class AppLocalizationsEs extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'No se pudo guardar: puede que tu teléfono no tenga espacio. Tu trabajo se conserva mientras la app siga abierta.';
+
+  @override
+  String get versionHistory => 'Historial de versiones';
+
+  @override
+  String get noVersions =>
+      'Aún no hay versiones anteriores. Se guardan automáticamente mientras escribes.';
+
+  @override
+  String get restore => 'Restaurar';
+
+  @override
+  String get versionRestored => 'Versión anterior restaurada';
+
+  @override
+  String get recentlyDeleted => 'Eliminados recientemente';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Los guiones eliminados se quedan aquí $days días.',
+      one: 'Los guiones eliminados se quedan aquí 1 día.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Eliminar para siempre';
+
+  @override
+  String deletedOn(String date) {
+    return 'Eliminado el $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '«$title» restaurado';
+  }
+
+  @override
+  String get backUpScripts => 'Copia de seguridad de todos los guiones';
+
+  @override
+  String get restoreBackup => 'Restaurar desde una copia';
+
+  @override
+  String get backupShareTitle => 'Copia de seguridad de APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count guiones restaurados',
+      one: '1 guion restaurado',
+      zero: 'Todo lo de esta copia ya está aquí',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup =>
+      'Ese archivo no es una copia de seguridad de APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Ni a $wpm ppm cabe en $target: recorta unas $words palabras.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'La cámara no estaba lista y no empezó la grabación. Inténtalo de nuevo.';
+
+  @override
+  String get previousSection => 'Sección anterior';
+
+  @override
+  String get nextSection => 'Sección siguiente';
+
+  @override
+  String get floatingNotificationBody => 'Toca para abrir APrompter';
+
+  @override
+  String get customTarget => 'Personalizado…';
+
+  @override
+  String get customTargetTitle => 'Duración objetivo';
+
+  @override
+  String get customTargetHint => 'Minutos y segundos, p. ej. 5:00';
+
+  @override
+  String get saved => 'Guardado';
+
+  @override
+  String get floatNotOnIos =>
+      'El iPhone no permite que las apps floten sobre otras. Usa Grabar para filmar con el guion bajo la cámara.';
+
+  @override
+  String get hashtagHint =>
+      'Las líneas de hashtags (#fyp #ad) se ven atenuadas y no se cronometran. Usa «# » con un espacio para una sección.';
 }

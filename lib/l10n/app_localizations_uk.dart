@@ -573,4 +573,114 @@ class AppLocalizationsUk extends AppLocalizations {
   String minutesShort(int n) {
     return '$n хв';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Не вдалося зберегти — можливо, у телефоні закінчилося місце. Роботу збережено, доки застосунок відкритий.';
+
+  @override
+  String get versionHistory => 'Історія версій';
+
+  @override
+  String get noVersions =>
+      'Попередніх версій ще немає. Вони зберігаються автоматично, поки ви пишете.';
+
+  @override
+  String get restore => 'Відновити';
+
+  @override
+  String get versionRestored => 'Попередню версію відновлено';
+
+  @override
+  String get recentlyDeleted => 'Нещодавно видалені';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Видалені сценарії зберігаються тут $days дня.',
+      many: 'Видалені сценарії зберігаються тут $days днів.',
+      few: 'Видалені сценарії зберігаються тут $days дні.',
+      one: 'Видалені сценарії зберігаються тут $days день.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Видалити назавжди';
+
+  @override
+  String deletedOn(String date) {
+    return 'Видалено $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '«$title» відновлено';
+  }
+
+  @override
+  String get backUpScripts => 'Резервна копія всіх сценаріїв';
+
+  @override
+  String get restoreBackup => 'Відновити з копії';
+
+  @override
+  String get backupShareTitle => 'Резервна копія APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Відновлено $count сценарію',
+      many: 'Відновлено $count сценаріїв',
+      few: 'Відновлено $count сценарії',
+      one: 'Відновлено $count сценарій',
+      zero: 'Усе з цієї копії вже тут',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Цей файл не є резервною копією APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Навіть при $wpm сл/хв не вміститься в $target — скоротіть приблизно на $words сл.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Камера не була готова, запис не почався. Спробуйте ще раз.';
+
+  @override
+  String get previousSection => 'Попередній розділ';
+
+  @override
+  String get nextSection => 'Наступний розділ';
+
+  @override
+  String get floatingNotificationBody => 'Торкніться, щоб відкрити APrompter';
+
+  @override
+  String get customTarget => 'Своя…';
+
+  @override
+  String get customTargetTitle => 'Цільова тривалість';
+
+  @override
+  String get customTargetHint => 'Хвилини й секунди, напр. 5:00';
+
+  @override
+  String get saved => 'Збережено';
+
+  @override
+  String get floatNotOnIos =>
+      'На iPhone застосунки не можуть бути поверх інших. Використовуйте «Запис», щоб знімати зі сценарієм під камерою.';
+
+  @override
+  String get hashtagHint =>
+      'Рядки з хештегами (#fyp #ad) приглушені й не враховуються в часі. Для розділу використовуйте «# » із пробілом.';
 }

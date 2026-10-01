@@ -546,4 +546,110 @@ class AppLocalizationsVi extends AppLocalizations {
   String minutesShort(int n) {
     return '$n phút';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Không lưu được — có thể điện thoại đã hết dung lượng. Nội dung vẫn được giữ khi ứng dụng còn mở.';
+
+  @override
+  String get versionHistory => 'Lịch sử phiên bản';
+
+  @override
+  String get noVersions =>
+      'Chưa có phiên bản cũ. Chúng được tự động lưu khi bạn viết.';
+
+  @override
+  String get restore => 'Khôi phục';
+
+  @override
+  String get versionRestored => 'Đã khôi phục phiên bản cũ';
+
+  @override
+  String get recentlyDeleted => 'Đã xóa gần đây';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Kịch bản đã xóa được giữ ở đây $days ngày.',
+      one: 'Kịch bản đã xóa được giữ ở đây 1 ngày.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Xóa vĩnh viễn';
+
+  @override
+  String deletedOn(String date) {
+    return 'Đã xóa $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'Đã khôi phục \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'Sao lưu tất cả kịch bản';
+
+  @override
+  String get restoreBackup => 'Khôi phục từ bản sao lưu';
+
+  @override
+  String get backupShareTitle => 'Bản sao lưu APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã khôi phục $count kịch bản',
+      one: 'Đã khôi phục 1 kịch bản',
+      zero: 'Mọi thứ trong bản sao lưu này đã có sẵn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Tệp này không phải bản sao lưu APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Dù ở $wpm từ/phút vẫn không vừa $target — hãy cắt khoảng $words từ.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Camera chưa sẵn sàng nên chưa bắt đầu quay. Hãy thử lại.';
+
+  @override
+  String get previousSection => 'Phần trước';
+
+  @override
+  String get nextSection => 'Phần tiếp theo';
+
+  @override
+  String get floatingNotificationBody => 'Chạm để mở APrompter';
+
+  @override
+  String get customTarget => 'Tùy chỉnh…';
+
+  @override
+  String get customTargetTitle => 'Thời lượng mục tiêu';
+
+  @override
+  String get customTargetHint => 'Phút và giây, vd: 5:00';
+
+  @override
+  String get saved => 'Đã lưu';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone không cho ứng dụng nổi trên ứng dụng khác. Dùng Quay để quay với kịch bản ngay dưới camera.';
+
+  @override
+  String get hashtagHint =>
+      'Dòng hashtag (#fyp #ad) được làm mờ và không tính giờ. Dùng \"# \" có dấu cách để tạo phần.';
 }

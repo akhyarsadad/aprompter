@@ -191,9 +191,22 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
   }
 
   Future<void> _startRecording() async {
-    final camera = _camera;
     setState(() => _counting = false);
-    if (camera == null || !camera.value.isInitialized) return;
+    // C1: the countdown can end while the camera is still opening or
+    // switching. Wait a little for it instead of silently not recording.
+    final deadline = DateTime.now().add(const Duration(seconds: 5));
+    while (mounted &&
+        _problem == _CameraProblem.none &&
+        !(_camera?.value.isInitialized ?? false) &&
+        DateTime.now().isBefore(deadline)) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    if (!mounted) return;
+    final camera = _camera;
+    if (camera == null || !camera.value.isInitialized) {
+      if (_problem == _CameraProblem.none) _toast(context.l10n.cameraNotReady);
+      return;
+    }
     try {
       await camera.startVideoRecording();
       _elapsed = Duration.zero;
@@ -497,6 +510,7 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                       child: PrompterControls(
                         controller: _prompter,
                         wordCount: widget.script.wordCount,
+                        pauses: widget.script.pauses,
                         onSections: _recording
                             ? null
                             : () => showSectionsSheet(

@@ -537,6 +537,107 @@ class AppLocalizationsZh extends AppLocalizations {
   String minutesShort(int n) {
     return '$n 分钟';
   }
+
+  @override
+  String get storageSaveFailed => '无法保存——手机存储空间可能已满。应用保持打开时，你的内容会一直保留。';
+
+  @override
+  String get versionHistory => '版本历史';
+
+  @override
+  String get noVersions => '暂无早期版本。你写作时会自动保存。';
+
+  @override
+  String get restore => '恢复';
+
+  @override
+  String get versionRestored => '已恢复早期版本';
+
+  @override
+  String get recentlyDeleted => '最近删除';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '已删除的脚本会在此保留 $days 天。',
+      one: '已删除的脚本会在此保留 1 天。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '永久删除';
+
+  @override
+  String deletedOn(String date) {
+    return '删除于 $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '已恢复“$title”';
+  }
+
+  @override
+  String get backUpScripts => '备份所有脚本';
+
+  @override
+  String get restoreBackup => '从备份恢复';
+
+  @override
+  String get backupShareTitle => 'APrompter 备份';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已恢复 $count 个脚本',
+      one: '已恢复 1 个脚本',
+      zero: '此备份中的内容都已存在',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => '该文件不是 APrompter 备份。';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '即使 $wpm 词/分也无法控制在 $target 内——请删减约 $words 个词。';
+  }
+
+  @override
+  String get cameraNotReady => '相机尚未就绪，未开始录制。请重试。';
+
+  @override
+  String get previousSection => '上一段';
+
+  @override
+  String get nextSection => '下一段';
+
+  @override
+  String get floatingNotificationBody => '点按打开 APrompter';
+
+  @override
+  String get customTarget => '自定义…';
+
+  @override
+  String get customTargetTitle => '目标时长';
+
+  @override
+  String get customTargetHint => '分和秒，例如 5:00';
+
+  @override
+  String get saved => '已保存';
+
+  @override
+  String get floatNotOnIos => 'iPhone 不允许应用悬浮在其他应用上方。请使用“拍摄”，在镜头下方显示脚本进行录制。';
+
+  @override
+  String get hashtagHint => '话题标签行（#fyp #ad）会变暗显示且不计时。段落请使用带空格的“# ”。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1071,4 +1172,106 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String minutesShort(int n) {
     return '$n 分鐘';
   }
+
+  @override
+  String get storageSaveFailed => '無法儲存——手機儲存空間可能已滿。App 保持開啟時，你的內容會一直保留。';
+
+  @override
+  String get versionHistory => '版本記錄';
+
+  @override
+  String get noVersions => '尚無較早版本。你撰寫時會自動保存。';
+
+  @override
+  String get restore => '復原';
+
+  @override
+  String get versionRestored => '已復原較早版本';
+
+  @override
+  String get recentlyDeleted => '最近刪除';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '已刪除的腳本會在此保留 $days 天。',
+      one: '已刪除的腳本會在此保留 1 天。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '永久刪除';
+
+  @override
+  String deletedOn(String date) {
+    return '刪除於 $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '已復原「$title」';
+  }
+
+  @override
+  String get backUpScripts => '備份所有腳本';
+
+  @override
+  String get restoreBackup => '從備份復原';
+
+  @override
+  String get backupShareTitle => 'APrompter 備份';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已復原 $count 個腳本',
+      one: '已復原 1 個腳本',
+      zero: '此備份中的內容皆已存在',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => '此檔案不是 APrompter 備份。';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '即使 $wpm 詞/分也無法控制在 $target 內——請刪減約 $words 個詞。';
+  }
+
+  @override
+  String get cameraNotReady => '相機尚未就緒，未開始錄影。請再試一次。';
+
+  @override
+  String get previousSection => '上一段';
+
+  @override
+  String get nextSection => '下一段';
+
+  @override
+  String get floatingNotificationBody => '點一下以開啟 APrompter';
+
+  @override
+  String get customTarget => '自訂…';
+
+  @override
+  String get customTargetTitle => '目標長度';
+
+  @override
+  String get customTargetHint => '分和秒，例如 5:00';
+
+  @override
+  String get saved => '已儲存';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone 不允許 App 懸浮在其他 App 上方。請使用「拍攝」，在鏡頭下方顯示腳本進行錄影。';
+
+  @override
+  String get hashtagHint => '主題標籤行（#fyp #ad）會變暗顯示且不計時。段落請使用帶空格的「# 」。';
 }

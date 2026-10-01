@@ -572,4 +572,114 @@ class AppLocalizationsPl extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Nie udało się zapisać — w telefonie może brakować miejsca. Praca jest zachowana, dopóki aplikacja jest otwarta.';
+
+  @override
+  String get versionHistory => 'Historia wersji';
+
+  @override
+  String get noVersions =>
+      'Brak wcześniejszych wersji. Są zapisywane automatycznie podczas pisania.';
+
+  @override
+  String get restore => 'Przywróć';
+
+  @override
+  String get versionRestored => 'Przywrócono wcześniejszą wersję';
+
+  @override
+  String get recentlyDeleted => 'Ostatnio usunięte';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Usunięte scenariusze są tu przez $days dnia.',
+      many: 'Usunięte scenariusze są tu przez $days dni.',
+      few: 'Usunięte scenariusze są tu przez $days dni.',
+      one: 'Usunięte scenariusze są tu przez 1 dzień.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Usuń na zawsze';
+
+  @override
+  String deletedOn(String date) {
+    return 'Usunięto $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'Przywrócono „$title”';
+  }
+
+  @override
+  String get backUpScripts => 'Kopia zapasowa wszystkich scenariuszy';
+
+  @override
+  String get restoreBackup => 'Przywróć z kopii zapasowej';
+
+  @override
+  String get backupShareTitle => 'Kopia zapasowa APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Przywrócono $count scenariusza',
+      many: 'Przywrócono $count scenariuszy',
+      few: 'Przywrócono $count scenariusze',
+      one: 'Przywrócono 1 scenariusz',
+      zero: 'Wszystko z tej kopii już tu jest',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Ten plik nie jest kopią zapasową APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Nawet przy $wpm sł/min to się nie zmieści w $target — skróć o ok. $words sł.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Aparat nie był gotowy, więc nagrywanie się nie rozpoczęło. Spróbuj ponownie.';
+
+  @override
+  String get previousSection => 'Poprzednia sekcja';
+
+  @override
+  String get nextSection => 'Następna sekcja';
+
+  @override
+  String get floatingNotificationBody => 'Stuknij, aby otworzyć APrompter';
+
+  @override
+  String get customTarget => 'Własny…';
+
+  @override
+  String get customTargetTitle => 'Docelowa długość';
+
+  @override
+  String get customTargetHint => 'Minuty i sekundy, np. 5:00';
+
+  @override
+  String get saved => 'Zapisano';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone nie pozwala aplikacjom wyświetlać się nad innymi. Użyj „Nagraj”, by filmować ze scenariuszem pod kamerą.';
+
+  @override
+  String get hashtagHint =>
+      'Linie z hashtagami (#fyp #ad) są przygaszone i nie liczą się do czasu. Dla sekcji użyj „# ” ze spacją.';
 }

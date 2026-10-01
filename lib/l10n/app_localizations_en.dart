@@ -565,4 +565,110 @@ class AppLocalizationsEn extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Couldn\'t save — your phone may be out of storage. Your work is kept while the app stays open.';
+
+  @override
+  String get versionHistory => 'Version history';
+
+  @override
+  String get noVersions =>
+      'No earlier versions yet. They are kept automatically while you write.';
+
+  @override
+  String get restore => 'Restore';
+
+  @override
+  String get versionRestored => 'Earlier version restored';
+
+  @override
+  String get recentlyDeleted => 'Recently deleted';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Deleted scripts stay here for $days days.',
+      one: 'Deleted scripts stay here for 1 day.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Delete forever';
+
+  @override
+  String deletedOn(String date) {
+    return 'Deleted $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'Restored \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'Back up all scripts';
+
+  @override
+  String get restoreBackup => 'Restore from a backup';
+
+  @override
+  String get backupShareTitle => 'APrompter backup';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts restored',
+      one: '1 script restored',
+      zero: 'Everything in this backup is already here',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'That file isn\'t an APrompter backup.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Even at $wpm wpm this won\'t fit $target — cut about $words words.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'The camera wasn\'t ready, so recording didn\'t start. Try again.';
+
+  @override
+  String get previousSection => 'Previous section';
+
+  @override
+  String get nextSection => 'Next section';
+
+  @override
+  String get floatingNotificationBody => 'Tap to open APrompter';
+
+  @override
+  String get customTarget => 'Custom…';
+
+  @override
+  String get customTargetTitle => 'Target length';
+
+  @override
+  String get customTargetHint => 'Minutes and seconds, e.g. 5:00';
+
+  @override
+  String get saved => 'Saved';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone doesn\'t let apps float over other apps. Use Record to film with the script under the camera.';
+
+  @override
+  String get hashtagHint =>
+      'Hashtag lines (#fyp #ad) are shown dimmed and not timed. Use \"# \" with a space for a section.';
 }

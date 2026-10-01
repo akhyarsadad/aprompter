@@ -539,4 +539,108 @@ class AppLocalizationsJa extends AppLocalizations {
   String minutesShort(int n) {
     return '$n分';
   }
+
+  @override
+  String get storageSaveFailed =>
+      '保存できませんでした。端末の空き容量が不足している可能性があります。アプリを開いている間は内容が保持されます。';
+
+  @override
+  String get versionHistory => 'バージョン履歴';
+
+  @override
+  String get noVersions => '以前のバージョンはまだありません。書いている間に自動で保存されます。';
+
+  @override
+  String get restore => '復元';
+
+  @override
+  String get versionRestored => '以前のバージョンを復元しました';
+
+  @override
+  String get recentlyDeleted => '最近削除した項目';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '削除した台本はここに$days日間保管されます。',
+      one: '削除した台本はここに1日間保管されます。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '完全に削除';
+
+  @override
+  String deletedOn(String date) {
+    return '$dateに削除';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '「$title」を復元しました';
+  }
+
+  @override
+  String get backUpScripts => 'すべての台本をバックアップ';
+
+  @override
+  String get restoreBackup => 'バックアップから復元';
+
+  @override
+  String get backupShareTitle => 'APrompter バックアップ';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count件の台本を復元しました',
+      one: '1件の台本を復元しました',
+      zero: 'このバックアップの内容はすべて復元済みです',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'このファイルは APrompter のバックアップではありません。';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm 語/分でも $target に収まりません。約$words語削ってください。';
+  }
+
+  @override
+  String get cameraNotReady => 'カメラの準備ができていなかったため、撮影を開始できませんでした。もう一度お試しください。';
+
+  @override
+  String get previousSection => '前のセクション';
+
+  @override
+  String get nextSection => '次のセクション';
+
+  @override
+  String get floatingNotificationBody => 'タップして APrompter を開く';
+
+  @override
+  String get customTarget => 'カスタム…';
+
+  @override
+  String get customTargetTitle => '目標の長さ';
+
+  @override
+  String get customTargetHint => '分と秒（例：5:00）';
+
+  @override
+  String get saved => '保存しました';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone ではアプリを他のアプリの上に表示できません。「撮影」なら台本をカメラの下に表示して撮影できます。';
+
+  @override
+  String get hashtagHint =>
+      'ハッシュタグの行（#fyp #ad）は薄く表示され、時間に含まれません。セクションには「# 」（スペース付き）を使います。';
 }
