@@ -4,8 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('floating prompter fits a narrow phone without overflow',
-      (tester) async {
+  testWidgets('floating prompter fits a narrow phone without overflow', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({});
     tester.view.physicalSize = const Size(320, 260);
     tester.view.devicePixelRatio = 1;

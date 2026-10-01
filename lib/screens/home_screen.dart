@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/script.dart';
+import '../models/templates.dart';
 import '../services/app_state.dart';
 import '../services/floating_prompter.dart';
 import '../services/storage.dart';
@@ -9,13 +10,32 @@ import 'camera_prompter_screen.dart';
 import 'editor_screen.dart';
 import 'read_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+/// Script library (journey J7).
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  ScriptStatus? _filter;
+  String _query = '';
 
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
-    final scripts = state.scripts;
+    final q = _query.toLowerCase();
+    final scripts = state.scripts
+        .where((s) => _filter == null || s.status == _filter)
+        .where(
+          (s) =>
+              q.isEmpty ||
+              s.title.toLowerCase().contains(q) ||
+              s.body.toLowerCase().contains(q),
+        )
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('APrompter'),
@@ -32,20 +52,97 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _edit(context, Storage.newScript()),
+        onPressed: () => _newScript(context),
         icon: const Icon(Icons.add),
         label: const Text('New script'),
       ),
-      body: scripts.isEmpty
-          ? const _EmptyState()
-          : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
-              itemCount: scripts.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (context, i) => _ScriptCard(script: scripts[i]),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+            child: SearchBar(
+              hintText: 'Search scripts',
+              leading: const Icon(Icons.search),
+              elevation: const WidgetStatePropertyAll(0),
+              onChanged: (v) => setState(() => _query = v),
             ),
+          ),
+          SizedBox(
+            height: 52,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Row(
+                children: [
+                  for (final f in [null, ...ScriptStatus.values])
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: FilterChip(
+                        label: Text(
+                          '${f?.label ?? 'All'} (${state.scripts.where((s) => f == null || s.status == f).length})',
+                        ),
+                        selected: _filter == f,
+                        onSelected: (_) => setState(() => _filter = f),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: scripts.isEmpty
+                ? _EmptyState(filtered: state.scripts.isNotEmpty)
+                : ListView.separated(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
+                    itemCount: scripts.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    itemBuilder: (context, i) =>
+                        _ScriptCard(script: scripts[i]),
+                  ),
+          ),
+        ],
+      ),
     );
   }
+}
+
+/// J1: pick a template, then open the editor.
+Future<void> _newScript(BuildContext context) async {
+  final template = await showModalBottomSheet<ScriptTemplate>(
+    context: context,
+    showDragHandle: true,
+    builder: (context) => SafeArea(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Text(
+              'Start from a template',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ),
+          for (final t in scriptTemplates)
+            ListTile(
+              leading: Icon(
+                t.body.isEmpty
+                    ? Icons.note_add_outlined
+                    : Icons.view_agenda_outlined,
+              ),
+              title: Text(t.name),
+              subtitle: Text(t.description),
+              onTap: () => Navigator.pop(context, t),
+            ),
+        ],
+      ),
+    ),
+  );
+  if (template == null || !context.mounted) return;
+  final script = Storage.newScript().copyWith(
+    body: template.body,
+    targetSeconds: () => template.body.isEmpty ? null : 60,
+  );
+  _edit(context, script);
 }
 
 void _edit(BuildContext context, Script script) => Navigator.push(
@@ -112,7 +209,15 @@ class _ScriptCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final d = script.estimatedDuration;
+    final wpm = AppScope.of(context).settings.wpm;
+    final target = script.targetSeconds;
+    final meta = [
+      '${script.wordCount} words',
+      '~${formatDuration(script.durationAt(wpm))}'
+          '${target != null ? ' / ${targetLabel(target)}' : ''}',
+      if (script.takes > 0)
+        '${script.takes} take${script.takes == 1 ? '' : 's'}',
+    ].join(' · ');
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -124,6 +229,12 @@ class _ScriptCard extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  Icon(
+                    statusIcon(script.status),
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       script.title.isEmpty ? 'Untitled' : script.title,
@@ -135,16 +246,34 @@ class _ScriptCard extends StatelessWidget {
                     onSelected: (v) {
                       if (v == 'edit') _edit(context, script);
                       if (v == 'delete') _delete(context);
+                      for (final s in ScriptStatus.values) {
+                        if (v == s.name) {
+                          AppScope.read(context)
+                              .upsert(script.copyWith(status: s));
+                        }
+                      }
                     },
-                    itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'edit', child: Text('Edit')),
-                      PopupMenuItem(value: 'delete', child: Text('Delete')),
+                    itemBuilder: (_) => [
+                      const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                      for (final s in ScriptStatus.values)
+                        if (s != script.status)
+                          PopupMenuItem(
+                            value: s.name,
+                            child: Text('Mark as ${s.label}'),
+                          ),
+                      const PopupMenuItem(
+                        value: 'delete',
+                        child: Text('Delete'),
+                      ),
                     ],
                   ),
                 ],
               ),
               Text(
-                script.body,
+                script.body.replaceAll(
+                  RegExp(r'^(#|//).*$\n?', multiLine: true),
+                  '',
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -152,10 +281,7 @@ class _ScriptCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '${script.wordCount} words · ~${d.inMinutes}m ${d.inSeconds % 60}s',
-                style: theme.textTheme.bodySmall,
-              ),
+              Text(meta, style: theme.textTheme.bodySmall),
               OverflowBar(
                 alignment: MainAxisAlignment.end,
                 children: [
@@ -166,8 +292,8 @@ class _ScriptCard extends StatelessWidget {
                         builder: (_) => ReadScreen(script: script),
                       ),
                     ),
-                    icon: const Icon(Icons.chrome_reader_mode_outlined),
-                    label: const Text('Read'),
+                    icon: const Icon(Icons.record_voice_over_outlined),
+                    label: const Text('Rehearse'),
                   ),
                   if (FloatingPrompter.isSupported)
                     TextButton.icon(
@@ -196,7 +322,9 @@ class _ScriptCard extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState();
+  const _EmptyState({required this.filtered});
+
+  final bool filtered;
 
   @override
   Widget build(BuildContext context) {
@@ -212,10 +340,15 @@ class _EmptyState extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 16),
-            const Text('No scripts yet', style: TextStyle(fontSize: 18)),
+            Text(
+              filtered ? 'Nothing here' : 'No scripts yet',
+              style: const TextStyle(fontSize: 18),
+            ),
             const SizedBox(height: 8),
-            const Text(
-              'Tap "New script" to write what you want to say.',
+            Text(
+              filtered
+                  ? 'Try another filter or search.'
+                  : 'Tap "New script" and pick a template to get started.',
               textAlign: TextAlign.center,
             ),
           ],

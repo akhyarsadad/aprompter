@@ -8,19 +8,46 @@ Built with Flutter.
 
 ## Features
 
-| Mode | Android | iOS | What it does |
-|------|:------:|:---:|--------------|
-| **Record** | ✅ | ✅ | Opens the camera (front by default) with your script scrolling on top of the preview, right under the lens. Records video + audio and saves it to the gallery (album "APrompter"). |
-| **Float** | ✅ | — | Shows the prompter as a draggable floating window **over any other app** (TikTok, Instagram, YouTube, CapCut, Zoom, the stock camera…). Minimize, play/pause, speed, close. |
-| **Read** | ✅ | ✅ | Full-screen prompter without camera — for a second device or beam-splitter glass (turn on *Mirror text*). |
+Built around the creator workflow — see [`docs/USER_JOURNEYS.md`](docs/USER_JOURNEYS.md)
+for personas, journeys and scope.
 
-Prompter controls:
+**Write (J1–J2)**
+- Templates: *Hook → Value → CTA*, *Tutorial*, *Product review*, *Storytime*, or blank.
+- Target length (15 s · 30 s · 60 s · 90 s · 3 min) with a live bar:
+  words · spoken time vs. target, "8 s over · cut ~20 words".
+- Hint for long sentences that are hard to say in one breath.
+- Toolbar for prompter markup:
 
-- Tap the text to pause / resume, drag to scroll by hand (Record & Read).
-- Speed −/+ buttons, restart, countdown before start (off / 3 / 5 / 10 s).
-- Settings: text size, scroll speed, line spacing, text color, background opacity,
-  prompter height, left/center alignment, mirror mode, reading guide line.
-- Script library with word count and estimated reading time, stored on the device.
+  | Markup | Meaning on the prompter |
+  |---|---|
+  | `# Hook` | Section cue — jump to it for retakes |
+  | `*word*` | Emphasis (highlighted) |
+  | `[pause]` | Visible beat marker |
+  | `// smile` | Note to yourself — dimmed, not counted as spoken |
+
+- Status: Draft → Ready → Recorded, with take count. Search and filter on home.
+
+**Rehearse & pace (J3)**
+- Speed is in **words per minute**, so changing the text size never changes the pace.
+- Pace presets *Calm 120 · Natural 150 · Energetic 180*, ±10 steps, and **Fit to target**.
+- Progress bar and time remaining while reading.
+- After a run: "You took 1:04 → 133 wpm. Use 130 wpm?"
+
+**Set up (J4)** — settings sheet with live preview and one-tap setups:
+*Handheld selfie*, *Tripod / distance*, *Teleprompter glass* (mirrored). Fine-tune pace,
+countdown, text size, spacing, color, alignment, prompter height, background, guide line.
+
+**Record & retake (J5–J6)**
+
+| Mode | Android | iOS | |
+|------|:------:|:---:|---|
+| **Record** | ✅ | ✅ | Camera with the script under the lens; saves to the gallery and counts the take. |
+| **Float** | ✅ | — | Draggable prompter over any app (TikTok, Instagram, CapCut, camera…). |
+| **Rehearse** | ✅ | ✅ | Full-screen prompter, no camera. |
+
+- Jump to any section to retake just that part.
+- Bluetooth remote / keyboard: Space · Enter · PageDown = play/pause, PageUp / ← = previous
+  section, → = next section, ↑ / ↓ = faster / slower.
 
 > **Why no floating mode on iOS?** iOS does not let apps draw over other apps, so on
 > iPhone use **Record** — the built-in camera with the prompter overlaid.
@@ -30,10 +57,10 @@ Prompter controls:
 ```
 lib/
   main.dart                     app entry + `overlayMain` (Android floating window entry)
-  models/                       Script, PrompterSettings
+  models/                       Script, markup parser, settings & presets, templates
   services/                     storage (shared_preferences), app state, floating prompter
   widgets/                      PrompterView (auto-scrolling text), controls, settings sheet
-  screens/                      home, editor, camera recorder, full-screen reader
+  screens/                      home, editor, camera recorder, rehearse
   overlay/overlay_app.dart      UI of the floating window over other apps
 ```
 

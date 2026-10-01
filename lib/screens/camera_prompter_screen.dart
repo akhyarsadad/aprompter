@@ -39,9 +39,7 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
   @override
   void initState() {
     super.initState();
-    _prompter = PrompterController(
-      speed: AppScope.read(context).settings.speed,
-    );
+    _prompter = PrompterController(wpm: AppScope.read(context).settings.wpm);
     WidgetsBinding.instance.addObserver(this);
     WakelockPlus.enable();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -152,7 +150,7 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
         if (mounted) setState(() => _elapsed += const Duration(seconds: 1));
       });
       setState(() => _recording = true);
-      _prompter.restart();
+      // Keep the position so a retake can start from a chosen section.
       _prompter.play();
     } on CameraException catch (e) {
       _toast(_describe(e));
@@ -172,7 +170,8 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
       final file = await camera.stopVideoRecording();
       if (!await Gal.hasAccess()) await Gal.requestAccess();
       await Gal.putVideo(file.path, album: 'APrompter');
-      _toast('Video saved to your gallery');
+      if (mounted) await AppScope.read(context).recordTake(widget.script.id);
+      _toast('Take saved to your gallery');
     } on GalException catch (e) {
       _toast('Could not save video: ${e.type.message}');
     } on CameraException catch (e) {
@@ -233,10 +232,22 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
             left: 0,
             right: 0,
             height: size.height * settings.overlayHeightFraction,
-            child: PrompterView(
-              text: widget.script.body,
-              settings: settings,
-              controller: _prompter,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: PrompterView(
+                    text: widget.script.body,
+                    settings: settings,
+                    controller: _prompter,
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: PrompterProgressBar(controller: _prompter),
+                ),
+              ],
             ),
           ),
           if (_counting)
@@ -265,10 +276,21 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                     color: Colors.black45,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: PrompterControls(
-                    controller: _prompter,
-                    onSpeedChanged: (v) =>
-                        state.updateSettings(settings.copyWith(speed: v)),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: PrompterControls(
+                      controller: _prompter,
+                      wordCount: widget.script.wordCount,
+                      onSections: _recording
+                          ? null
+                          : () => showSectionsSheet(
+                              context,
+                              sections: widget.script.sections,
+                              controller: _prompter,
+                            ),
+                      onWpmChanged: (v) =>
+                          state.updateSettings(settings.copyWith(wpm: v)),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -290,14 +312,17 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                     _RoundButton(
                       icon: Icons.tune,
                       tooltip: 'Settings',
-                      onPressed: () => showSettingsSheet(
-                        context,
-                        settings: settings,
-                        onChanged: (s) {
-                          state.updateSettings(s);
-                          _prompter.speed = s.speed;
-                        },
-                      ),
+                      onPressed: _recording
+                          ? null
+                          : () => showSettingsSheet(
+                              context,
+                              settings: settings,
+                              script: widget.script,
+                              onChanged: (s) {
+                                state.updateSettings(s);
+                                _prompter.wpm = s.wpm;
+                              },
+                            ),
                     ),
                     _RoundButton(
                       icon: Icons.cameraswitch,

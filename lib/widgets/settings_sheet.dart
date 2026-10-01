@@ -1,27 +1,45 @@
 import 'package:flutter/material.dart';
 
 import '../models/prompter_settings.dart';
+import '../models/script.dart';
+import '../models/script_markup.dart';
+import 'prompter_view.dart';
 
-/// Bottom sheet for tweaking prompter appearance and behaviour.
+const _previewText =
+    '# Hook\n'
+    'Stop scrolling — this *one trick* saves you hours. [pause]\n'
+    '// smile, lean in\n'
+    'Here is how it works.';
+
+/// Bottom sheet for tuning the prompter: setups, pace, text and layout,
+/// with a live preview.
+///
+/// Pass [script] to enable "fit to target length".
 Future<void> showSettingsSheet(
   BuildContext context, {
   required PrompterSettings settings,
   required ValueChanged<PrompterSettings> onChanged,
+  Script? script,
 }) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
     builder: (context) =>
-        _SettingsSheet(initial: settings, onChanged: onChanged),
+        _SettingsSheet(initial: settings, onChanged: onChanged, script: script),
   );
 }
 
 class _SettingsSheet extends StatefulWidget {
-  const _SettingsSheet({required this.initial, required this.onChanged});
+  const _SettingsSheet({
+    required this.initial,
+    required this.onChanged,
+    this.script,
+  });
 
   final PrompterSettings initial;
   final ValueChanged<PrompterSettings> onChanged;
+  final Script? script;
 
   @override
   State<_SettingsSheet> createState() => _SettingsSheetState();
@@ -29,6 +47,7 @@ class _SettingsSheet extends StatefulWidget {
 
 class _SettingsSheetState extends State<_SettingsSheet> {
   late PrompterSettings _s = widget.initial;
+  final _previewBlocks = parseScript(_previewText);
 
   void _update(PrompterSettings s) {
     setState(() => _s = s);
@@ -37,132 +56,272 @@ class _SettingsSheetState extends State<_SettingsSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final script = widget.script;
+    final target = script?.targetSeconds;
+    final words = script?.wordCount ?? 0;
+    final fitWpm = target != null && target > 0 && words > 0
+        ? PrompterSettings.clampWpm(
+            (words / target * 60 / PrompterSettings.wpmStep).round() *
+                PrompterSettings.wpmStep,
+          )
+        : null;
+
     return SafeArea(
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.sizeOf(context).height * 0.8,
+          maxHeight: MediaQuery.sizeOf(context).height * 0.85,
         ),
-        child: ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Prompter settings',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: 8),
-            _slider(
-              label: 'Text size',
-              value: _s.fontSize,
-              min: PrompterSettings.minFontSize,
-              max: PrompterSettings.maxFontSize,
-              display: _s.fontSize.round().toString(),
-              onChanged: (v) => _update(_s.copyWith(fontSize: v)),
-            ),
-            _slider(
-              label: 'Scroll speed',
-              value: _s.speed,
-              min: PrompterSettings.minSpeed,
-              max: PrompterSettings.maxSpeed,
-              display: _s.speed.round().toString(),
-              onChanged: (v) => _update(_s.copyWith(speed: v)),
-            ),
-            _slider(
-              label: 'Line spacing',
-              value: _s.lineHeight,
-              min: 1.0,
-              max: 2.5,
-              display: _s.lineHeight.toStringAsFixed(1),
-              onChanged: (v) => _update(_s.copyWith(lineHeight: v)),
-            ),
-            _slider(
-              label: 'Background',
-              value: _s.backgroundOpacity,
-              min: 0,
-              max: 1,
-              display: '${(_s.backgroundOpacity * 100).round()}%',
-              onChanged: (v) => _update(_s.copyWith(backgroundOpacity: v)),
-            ),
-            _slider(
-              label: 'Prompter height',
-              value: _s.overlayHeightFraction,
-              min: 0.15,
-              max: 1,
-              display: '${(_s.overlayHeightFraction * 100).round()}%',
-              onChanged: (v) => _update(_s.copyWith(overlayHeightFraction: v)),
-            ),
-            const SizedBox(height: 8),
-            const Text('Text color'),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 12,
-              children: [
-                for (final c in PrompterSettings.textColors)
-                  GestureDetector(
-                    onTap: () => _update(_s.copyWith(textColor: c)),
-                    child: CircleAvatar(
-                      radius: 18,
-                      backgroundColor: Colors.grey,
-                      child: CircleAvatar(
-                        radius: _s.textColor == c ? 13 : 16,
-                        backgroundColor: Color(c),
+            // Live preview.
+            Container(
+              height: 150,
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF455A64), Color(0xFF263238)],
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: ColoredBox(
+                      color: Colors.black.withValues(
+                        alpha: _s.backgroundOpacity,
                       ),
                     ),
                   ),
-              ],
+                  Positioned.fill(
+                    child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(12),
+                      child: Transform.flip(
+                        flipX: _s.mirror,
+                        child: ScriptText(blocks: _previewBlocks, settings: _s),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 8,
+                    top: 6,
+                    child: Text(
+                      'Preview',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: Colors.white54,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            SegmentedButton<TextAlign>(
-              segments: const [
-                ButtonSegment(
-                  value: TextAlign.left,
-                  icon: Icon(Icons.format_align_left),
-                ),
-                ButtonSegment(
-                  value: TextAlign.center,
-                  icon: Icon(Icons.format_align_center),
-                ),
-              ],
-              selected: {_s.textAlign},
-              onSelectionChanged: (v) =>
-                  _update(_s.copyWith(textAlign: v.first)),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Expanded(child: Text('Countdown')),
-                DropdownButton<int>(
-                  value: _s.countdownSeconds,
-                  items: const [0, 3, 5, 10]
-                      .map(
-                        (s) => DropdownMenuItem(
-                          value: s,
-                          child: Text(s == 0 ? 'Off' : '${s}s'),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                children: [
+                  _header(context, 'Setup'),
+                  SizedBox(
+                    height: 124,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        for (final p in setupPresets)
+                          _PresetCard(
+                            preset: p,
+                            onTap: () => _update(p.apply(_s)),
+                          ),
+                      ],
+                    ),
+                  ),
+                  _header(context, 'Pace'),
+                  Row(
+                    children: [
+                      Text(
+                        '${_s.wpm.round()}',
+                        style: theme.textTheme.headlineSmall,
+                      ),
+                      const SizedBox(width: 4),
+                      const Text('words / min'),
+                      const Spacer(),
+                      if (script != null)
+                        Text(
+                          '≈ ${formatDuration(script.durationAt(_s.wpm))}'
+                          '${target != null ? ' / ${formatDuration(Duration(seconds: target))}' : ''}',
+                          style: theme.textTheme.bodyMedium,
                         ),
-                      )
-                      .toList(),
-                  onChanged: (v) => _update(_s.copyWith(countdownSeconds: v)),
-                ),
-              ],
-            ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Mirror text'),
-              subtitle: const Text('For teleprompter glass / beam splitter'),
-              value: _s.mirror,
-              onChanged: (v) => _update(_s.copyWith(mirror: v)),
-            ),
-            SwitchListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Reading guide line'),
-              value: _s.showGuide,
-              onChanged: (v) => _update(_s.copyWith(showGuide: v)),
+                    ],
+                  ),
+                  Slider(
+                    value: _s.wpm,
+                    min: PrompterSettings.minWpm,
+                    max: PrompterSettings.maxWpm,
+                    divisions:
+                        ((PrompterSettings.maxWpm - PrompterSettings.minWpm) /
+                                PrompterSettings.wpmStep)
+                            .round(),
+                    label: '${_s.wpm.round()} wpm',
+                    onChanged: (v) => _update(_s.copyWith(wpm: v)),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      for (final (name, wpm) in pacePresets)
+                        ChoiceChip(
+                          label: Text('$name ${wpm.round()}'),
+                          selected: _s.wpm == wpm,
+                          onSelected: (_) => _update(_s.copyWith(wpm: wpm)),
+                        ),
+                      if (fitWpm != null)
+                        ActionChip(
+                          avatar: const Icon(Icons.timer_outlined, size: 18),
+                          label: Text(
+                            'Fit to ${formatDuration(Duration(seconds: target!))}',
+                          ),
+                          onPressed: () => _update(_s.copyWith(wpm: fitWpm)),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Expanded(child: Text('Countdown before start')),
+                      DropdownButton<int>(
+                        value: _s.countdownSeconds,
+                        items: const [0, 3, 5, 10]
+                            .map(
+                              (s) => DropdownMenuItem(
+                                value: s,
+                                child: Text(s == 0 ? 'Off' : '${s}s'),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (v) =>
+                            _update(_s.copyWith(countdownSeconds: v)),
+                      ),
+                    ],
+                  ),
+                  _header(context, 'Text'),
+                  _slider(
+                    label: 'Size',
+                    value: _s.fontSize,
+                    min: PrompterSettings.minFontSize,
+                    max: PrompterSettings.maxFontSize,
+                    display: _s.fontSize.round().toString(),
+                    onChanged: (v) => _update(_s.copyWith(fontSize: v)),
+                  ),
+                  _slider(
+                    label: 'Line spacing',
+                    value: _s.lineHeight,
+                    min: 1.0,
+                    max: 2.5,
+                    display: _s.lineHeight.toStringAsFixed(1),
+                    onChanged: (v) => _update(_s.copyWith(lineHeight: v)),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          spacing: 10,
+                          runSpacing: 8,
+                          children: [
+                            for (final c in PrompterSettings.textColors)
+                              Semantics(
+                                button: true,
+                                selected: _s.textColor == c,
+                                label: 'Text color',
+                                child: GestureDetector(
+                                  onTap: () =>
+                                      _update(_s.copyWith(textColor: c)),
+                                  child: CircleAvatar(
+                                    radius: 16,
+                                    backgroundColor: theme.colorScheme.outline,
+                                    child: CircleAvatar(
+                                      radius: _s.textColor == c ? 11 : 14,
+                                      backgroundColor: Color(c),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      SegmentedButton<TextAlign>(
+                        showSelectedIcon: false,
+                        segments: const [
+                          ButtonSegment(
+                            value: TextAlign.left,
+                            icon: Icon(Icons.format_align_left),
+                          ),
+                          ButtonSegment(
+                            value: TextAlign.center,
+                            icon: Icon(Icons.format_align_center),
+                          ),
+                        ],
+                        selected: {_s.textAlign},
+                        onSelectionChanged: (v) =>
+                            _update(_s.copyWith(textAlign: v.first)),
+                      ),
+                    ],
+                  ),
+                  _header(context, 'Layout'),
+                  _slider(
+                    label: 'Prompter height',
+                    value: _s.overlayHeightFraction,
+                    min: 0.15,
+                    max: 1,
+                    display: '${(_s.overlayHeightFraction * 100).round()}%',
+                    onChanged: (v) =>
+                        _update(_s.copyWith(overlayHeightFraction: v)),
+                  ),
+                  _slider(
+                    label: 'Background',
+                    value: _s.backgroundOpacity,
+                    min: 0,
+                    max: 1,
+                    display: '${(_s.backgroundOpacity * 100).round()}%',
+                    onChanged: (v) =>
+                        _update(_s.copyWith(backgroundOpacity: v)),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Reading guide line'),
+                    value: _s.showGuide,
+                    onChanged: (v) => _update(_s.copyWith(showGuide: v)),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Mirror text'),
+                    subtitle: const Text(
+                      'For teleprompter glass / beam splitter',
+                    ),
+                    value: _s.mirror,
+                    onChanged: (v) => _update(_s.copyWith(mirror: v)),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
+
+  Widget _header(BuildContext context, String text) => Padding(
+    padding: const EdgeInsets.only(top: 16, bottom: 8),
+    child: Text(
+      text.toUpperCase(),
+      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+        color: Theme.of(context).colorScheme.primary,
+        letterSpacing: 1.2,
+      ),
+    ),
+  );
 
   Widget _slider({
     required String label,
@@ -185,6 +344,48 @@ class _SettingsSheetState extends State<_SettingsSheet> {
         ),
         SizedBox(width: 44, child: Text(display, textAlign: TextAlign.end)),
       ],
+    );
+  }
+}
+
+class _PresetCard extends StatelessWidget {
+  const _PresetCard({required this.preset, required this.onTap});
+
+  final SetupPreset preset;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: SizedBox(
+        width: 150,
+        child: Card.outlined(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(preset.icon, size: 20, color: theme.colorScheme.primary),
+                  const SizedBox(height: 4),
+                  Text(preset.name, style: theme.textTheme.labelLarge),
+                  Text(
+                    preset.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

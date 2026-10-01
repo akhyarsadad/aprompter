@@ -31,6 +31,15 @@ class AppState extends ChangeNotifier {
     return storage.saveScripts(_scripts);
   }
 
+  /// Count a finished recording and mark the script as recorded.
+  Future<void> recordTake(String id) async {
+    final script = byId(id);
+    if (script == null) return;
+    await upsert(
+      script.copyWith(takes: script.takes + 1, status: ScriptStatus.recorded),
+    );
+  }
+
   Future<void> delete(String id) {
     _scripts = _scripts.where((s) => s.id != id).toList();
     notifyListeners();

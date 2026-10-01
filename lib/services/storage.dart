@@ -67,16 +67,23 @@ class Storage {
   static Script _welcomeScript() => Script(
     id: const Uuid().v4(),
     title: 'Welcome to APrompter',
+    status: ScriptStatus.ready,
+    targetSeconds: 60,
     body:
-        'Hi there! This is your teleprompter.\n\n'
-        'Tap the pencil to edit this script, or create a new one with the '
-        '+ button.\n\n'
-        'Use "Record" to film yourself with the text floating right under '
-        'the front camera, so you keep eye contact with your audience.\n\n'
-        'On Android you can also use "Float" to show this text on top of '
-        'any other app — TikTok, Instagram, YouTube, Zoom and more.\n\n'
-        'Tap the text to pause, drag it to scroll, and use the speed '
-        'buttons to find your pace. Have fun creating!',
+        '# Hook\n'
+        'Want to film without forgetting your lines? [pause]\n'
+        '// look straight into the lens\n'
+        '\n'
+        '# How it works\n'
+        'Write your script, pick a *target length*, and watch the timer '
+        'tell you if it fits.\n'
+        'Rehearse to find your pace in words per minute.\n'
+        'Then hit Record. The text scrolls right under the camera, so you '
+        'keep *eye contact* with your audience.\n'
+        '\n'
+        '# CTA\n'
+        'Tap the pencil to edit this script, or create your own with '
+        'the plus button. [pause] Have fun creating!\n',
     updatedAt: DateTime.now(),
   );
 }

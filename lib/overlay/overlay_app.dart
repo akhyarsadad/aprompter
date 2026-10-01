@@ -75,7 +75,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
     setState(() {
       _script = script;
       _settings = settings;
-      _controller.speed = settings.speed;
+      _controller.wpm = settings.wpm;
       _counting = false;
     });
     _controller.restart();
@@ -130,7 +130,18 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
             ),
           ),
           if (!_minimized)
-            PrompterControls(controller: _controller, dense: true),
+            Flexible(
+              flex: 4,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: PrompterControls(
+                  controller: _controller,
+                  wordCount: _script?.wordCount ?? 0,
+                  onPlay: _start,
+                  dense: true,
+                ),
+              ),
+            ),
           IconButton(
             tooltip: _minimized ? 'Expand' : 'Minimize',
             visualDensity: VisualDensity.compact,
@@ -177,6 +188,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
                             settings: _settings,
                             controller: _controller,
                             manualScroll: false,
+                            autofocus: false,
                             onTap: _start,
                           ),
                   ),

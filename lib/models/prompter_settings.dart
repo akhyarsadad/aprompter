@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class PrompterSettings {
   const PrompterSettings({
     this.fontSize = 32,
-    this.speed = 40,
+    this.wpm = 150,
     this.lineHeight = 1.4,
     this.mirror = false,
     this.textColor = 0xFFFFFFFF,
@@ -18,8 +18,8 @@ class PrompterSettings {
   /// Font size in logical pixels.
   final double fontSize;
 
-  /// Scroll speed in logical pixels per second.
-  final double speed;
+  /// Reading pace in spoken words per minute. Independent of font size.
+  final double wpm;
 
   final double lineHeight;
 
@@ -42,8 +42,9 @@ class PrompterSettings {
 
   static const minFontSize = 16.0;
   static const maxFontSize = 96.0;
-  static const minSpeed = 5.0;
-  static const maxSpeed = 300.0;
+  static const minWpm = 60.0;
+  static const maxWpm = 300.0;
+  static const wpmStep = 10.0;
 
   static const textColors = <int>[
     0xFFFFFFFF,
@@ -54,9 +55,11 @@ class PrompterSettings {
     0xFF000000,
   ];
 
+  static double clampWpm(double wpm) => wpm.clamp(minWpm, maxWpm).toDouble();
+
   PrompterSettings copyWith({
     double? fontSize,
-    double? speed,
+    double? wpm,
     double? lineHeight,
     bool? mirror,
     int? textColor,
@@ -67,7 +70,7 @@ class PrompterSettings {
     double? overlayHeightFraction,
   }) => PrompterSettings(
     fontSize: fontSize ?? this.fontSize,
-    speed: speed ?? this.speed,
+    wpm: wpm != null ? clampWpm(wpm) : this.wpm,
     lineHeight: lineHeight ?? this.lineHeight,
     mirror: mirror ?? this.mirror,
     textColor: textColor ?? this.textColor,
@@ -80,7 +83,7 @@ class PrompterSettings {
 
   Map<String, dynamic> toJson() => {
     'fontSize': fontSize,
-    'speed': speed,
+    'wpm': wpm,
     'lineHeight': lineHeight,
     'mirror': mirror,
     'textColor': textColor,
@@ -100,8 +103,8 @@ class PrompterSettings {
         'fontSize',
         d.fontSize,
       ).clamp(minFontSize, maxFontSize).toDouble(),
-      speed: n('speed', d.speed).clamp(minSpeed, maxSpeed).toDouble(),
-      lineHeight: n('lineHeight', d.lineHeight),
+      wpm: clampWpm(n('wpm', d.wpm)),
+      lineHeight: n('lineHeight', d.lineHeight).clamp(1.0, 2.5),
       mirror: json['mirror'] as bool? ?? d.mirror,
       textColor: json['textColor'] as int? ?? d.textColor,
       backgroundOpacity: n(
@@ -121,3 +124,58 @@ class PrompterSettings {
     );
   }
 }
+
+/// Named reading paces.
+const pacePresets = <(String, double)>[
+  ('Calm', 120),
+  ('Natural', 150),
+  ('Energetic', 180),
+];
+
+/// One-tap setups for common filming situations. Pace is kept as is.
+class SetupPreset {
+  const SetupPreset(this.name, this.description, this.icon, this.apply);
+  final String name;
+  final String description;
+  final IconData icon;
+  final PrompterSettings Function(PrompterSettings) apply;
+}
+
+final setupPresets = <SetupPreset>[
+  SetupPreset(
+    'Handheld selfie',
+    'Medium text close to the lens',
+    Icons.phone_android,
+    (s) => s.copyWith(
+      fontSize: 30,
+      overlayHeightFraction: 0.3,
+      backgroundOpacity: 0.45,
+      mirror: false,
+      textAlign: TextAlign.center,
+    ),
+  ),
+  SetupPreset(
+    'Tripod / distance',
+    'Big text you can read from 1–2 m',
+    Icons.videocam_outlined,
+    (s) => s.copyWith(
+      fontSize: 56,
+      lineHeight: 1.3,
+      overlayHeightFraction: 0.55,
+      backgroundOpacity: 0.6,
+      mirror: false,
+    ),
+  ),
+  SetupPreset(
+    'Teleprompter glass',
+    'Mirrored, full screen, solid background',
+    Icons.flip,
+    (s) => s.copyWith(
+      fontSize: 48,
+      overlayHeightFraction: 1,
+      backgroundOpacity: 1,
+      mirror: true,
+      textColor: 0xFFFFFFFF,
+    ),
+  ),
+];
