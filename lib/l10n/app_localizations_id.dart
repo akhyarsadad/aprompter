@@ -529,4 +529,20 @@ class AppLocalizationsId extends AppLocalizations {
   String takeShared(int n) {
     return 'Take $n dibagikan';
   }
+
+  @override
+  String get movePrompter => 'Seret untuk memindahkan prompter';
+
+  @override
+  String get resizePrompter => 'Seret untuk mengubah ukuran prompter';
+
+  @override
+  String get prompterWidth => 'Lebar prompter';
+
+  @override
+  String get resetPosition => 'Atur ulang posisi (atas, lebar penuh)';
+
+  @override
+  String get positionHint =>
+      'Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
 }

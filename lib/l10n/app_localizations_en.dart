@@ -548,4 +548,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String takeShared(int n) {
     return 'Take $n shared';
   }
+
+  @override
+  String get movePrompter => 'Drag to move the prompter';
+
+  @override
+  String get resizePrompter => 'Drag to resize the prompter';
+
+  @override
+  String get prompterWidth => 'Prompter width';
+
+  @override
+  String get resetPosition => 'Reset position (top, full width)';
+
+  @override
+  String get positionHint =>
+      'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.';
 }

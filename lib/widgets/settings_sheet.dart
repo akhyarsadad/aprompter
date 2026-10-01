@@ -4,6 +4,7 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
+import '../services/app_state.dart';
 import 'prompter_view.dart';
 
 /// Bottom sheet for tuning the prompter: setups, pace, text, layout and
@@ -287,14 +288,41 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     ],
                   ),
                   _header(context, l.layout),
+                  Text(l.positionHint, style: theme.textTheme.bodySmall),
+                  _slider(
+                    label: l.prompterWidth,
+                    value: _s.prompterWidthFraction,
+                    min: PrompterSettings.minWidthFraction,
+                    max: 1,
+                    display: '${(_s.prompterWidthFraction * 100).round()}%',
+                    onChanged: (v) =>
+                        _update(_s.copyWith(prompterWidthFraction: v)),
+                  ),
                   _slider(
                     label: l.prompterHeight,
                     value: _s.overlayHeightFraction,
-                    min: 0.15,
+                    min: PrompterSettings.minHeightFraction,
                     max: 1,
                     display: '${(_s.overlayHeightFraction * 100).round()}%',
                     onChanged: (v) =>
                         _update(_s.copyWith(overlayHeightFraction: v)),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextButton.icon(
+                      onPressed: () {
+                        _update(
+                          _s.copyWith(
+                            prompterWidthFraction: 1,
+                            prompterLeft: 0,
+                            prompterTop: 0,
+                          ),
+                        );
+                        AppScope.read(context).storage.saveFloatPosition(null);
+                      },
+                      icon: const Icon(Icons.vertical_align_top),
+                      label: Text(l.resetPosition),
+                    ),
                   ),
                   _slider(
                     label: l.background,

@@ -154,5 +154,10 @@
   "saveFailedBody": "Take-mu masih aman. Coba lagi, atau bagikan ke Files, Drive, atau chat agar tidak hilang. ({reason})",
   "shareVideo": "Bagikan video",
   "discardTake": "Buang take ini",
-  "takeShared": "Take {n} dibagikan"
+  "takeShared": "Take {n} dibagikan",
+  "movePrompter": "Seret untuk memindahkan prompter",
+  "resizePrompter": "Seret untuk mengubah ukuran prompter",
+  "prompterWidth": "Lebar prompter",
+  "resetPosition": "Atur ulang posisi (atas, lebar penuh)",
+  "positionHint": "Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya."
 }

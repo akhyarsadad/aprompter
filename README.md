@@ -49,6 +49,10 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
 
 - Jump to any section to retake just that part.
 - **Pinch** the prompter text to resize it on the fly; you stay on the same line.
+- **Put the prompter anywhere:** in Record, drag the bar on top of the prompter to move
+  it and the corner handle to resize it. On Android, the floating window can be dragged
+  anywhere over other apps, its width is adjustable, and it reopens where you left it.
+  *Settings → Layout → Reset position* puts it back at the top.
 - Video quality 720p / 1080p / 4K, and **auto-stop** 2 s after the last line.
 - Haptic ticks during the countdown.
 - Bluetooth remote / keyboard: Space · Enter · PageDown = play/pause, PageUp / ← = previous

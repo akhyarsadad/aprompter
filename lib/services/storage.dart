@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/painting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -14,6 +15,7 @@ class Storage {
   static const _scriptsKey = 'scripts';
   static const _settingsKey = 'settings';
   static const _activeScriptKey = 'active_script';
+  static const _floatPositionKey = 'float_position';
 
   final SharedPreferences _prefs;
 
@@ -83,6 +85,25 @@ class Storage {
 
   Future<void> saveActiveScript(Script script) =>
       _prefs.setString(_activeScriptKey, jsonEncode(script.toJson()));
+
+  /// Last position of the Android floating window, in logical pixels.
+  Offset? loadFloatPosition() {
+    final raw = _prefs.getString(_floatPositionKey);
+    if (raw == null) return null;
+    try {
+      final m = jsonDecode(raw) as Map<String, dynamic>;
+      return Offset((m['x'] as num).toDouble(), (m['y'] as num).toDouble());
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> saveFloatPosition(Offset? position) => position == null
+      ? _prefs.remove(_floatPositionKey)
+      : _prefs.setString(
+          _floatPositionKey,
+          jsonEncode({'x': position.dx, 'y': position.dy}),
+        );
 
   static Script newScript() => Script(
     id: const Uuid().v4(),

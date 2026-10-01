@@ -15,6 +15,9 @@ class PrompterSettings {
     this.overlayHeightFraction = 0.35,
     this.videoQuality = VideoQuality.fullHd,
     this.autoStopRecording = true,
+    this.prompterWidthFraction = 1.0,
+    this.prompterLeft = 0.0,
+    this.prompterTop = 0.0,
   });
 
   /// Font size in logical pixels.
@@ -47,6 +50,44 @@ class PrompterSettings {
   /// Stop recording shortly after the last line has scrolled past.
   final bool autoStopRecording;
 
+  /// Width of the camera / floating prompter as a fraction of the screen.
+  final double prompterWidthFraction;
+
+  /// Where the camera prompter sits, as a fraction of the free space around
+  /// it (0 = left/top edge, 1 = right/bottom edge). Keeps the box on screen
+  /// whatever its size.
+  final double prompterLeft;
+  final double prompterTop;
+
+  static const minWidthFraction = 0.4;
+  static const minHeightFraction = 0.15;
+
+  /// The camera prompter's rectangle inside [area].
+  Rect prompterRect(Size area) {
+    final w = area.width * prompterWidthFraction;
+    final h = area.height * overlayHeightFraction;
+    return Rect.fromLTWH(
+      (area.width - w) * prompterLeft,
+      (area.height - h) * prompterTop,
+      w,
+      h,
+    );
+  }
+
+  /// Inverse of [prompterRect]: stores [rect] (clamped to [area]).
+  PrompterSettings withPrompterRect(Rect rect, Size area) {
+    final wf = (rect.width / area.width).clamp(minWidthFraction, 1.0);
+    final hf = (rect.height / area.height).clamp(minHeightFraction, 1.0);
+    final freeX = area.width * (1 - wf);
+    final freeY = area.height * (1 - hf);
+    return copyWith(
+      prompterWidthFraction: wf,
+      overlayHeightFraction: hf,
+      prompterLeft: freeX <= 0 ? 0 : (rect.left / freeX).clamp(0.0, 1.0),
+      prompterTop: freeY <= 0 ? 0 : (rect.top / freeY).clamp(0.0, 1.0),
+    );
+  }
+
   static const minFontSize = 16.0;
   static const maxFontSize = 96.0;
   static const minWpm = 60.0;
@@ -77,6 +118,9 @@ class PrompterSettings {
     double? overlayHeightFraction,
     VideoQuality? videoQuality,
     bool? autoStopRecording,
+    double? prompterWidthFraction,
+    double? prompterLeft,
+    double? prompterTop,
   }) => PrompterSettings(
     fontSize: fontSize ?? this.fontSize,
     wpm: wpm != null ? clampWpm(wpm) : this.wpm,
@@ -90,6 +134,9 @@ class PrompterSettings {
     overlayHeightFraction: overlayHeightFraction ?? this.overlayHeightFraction,
     videoQuality: videoQuality ?? this.videoQuality,
     autoStopRecording: autoStopRecording ?? this.autoStopRecording,
+    prompterWidthFraction: prompterWidthFraction ?? this.prompterWidthFraction,
+    prompterLeft: prompterLeft ?? this.prompterLeft,
+    prompterTop: prompterTop ?? this.prompterTop,
   );
 
   Map<String, dynamic> toJson() => {
@@ -105,6 +152,9 @@ class PrompterSettings {
     'overlayHeightFraction': overlayHeightFraction,
     'videoQuality': videoQuality.name,
     'autoStopRecording': autoStopRecording,
+    'prompterWidthFraction': prompterWidthFraction,
+    'prompterLeft': prompterLeft,
+    'prompterTop': prompterTop,
   };
 
   factory PrompterSettings.fromJson(Map<String, dynamic> json) {
@@ -140,6 +190,12 @@ class PrompterSettings {
       ),
       autoStopRecording:
           json['autoStopRecording'] as bool? ?? d.autoStopRecording,
+      prompterWidthFraction: n(
+        'prompterWidthFraction',
+        d.prompterWidthFraction,
+      ).clamp(minWidthFraction, 1.0),
+      prompterLeft: n('prompterLeft', d.prompterLeft).clamp(0.0, 1.0),
+      prompterTop: n('prompterTop', d.prompterTop).clamp(0.0, 1.0),
     );
   }
 }
@@ -175,6 +231,9 @@ enum SetupPreset {
     SetupPreset.handheld => s.copyWith(
       fontSize: 30,
       overlayHeightFraction: 0.3,
+      prompterWidthFraction: 1,
+      prompterLeft: 0,
+      prompterTop: 0,
       backgroundOpacity: 0.45,
       mirror: false,
       textAlign: TextAlign.center,
@@ -183,12 +242,18 @@ enum SetupPreset {
       fontSize: 56,
       lineHeight: 1.3,
       overlayHeightFraction: 0.55,
+      prompterWidthFraction: 1,
+      prompterLeft: 0,
+      prompterTop: 0,
       backgroundOpacity: 0.6,
       mirror: false,
     ),
     SetupPreset.glass => s.copyWith(
       fontSize: 48,
       overlayHeightFraction: 1,
+      prompterWidthFraction: 1,
+      prompterLeft: 0,
+      prompterTop: 0,
       backgroundOpacity: 1,
       mirror: true,
       textColor: 0xFFFFFFFF,

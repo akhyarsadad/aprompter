@@ -1027,6 +1027,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take {n} shared'**
   String takeShared(int n);
+
+  /// No description provided for @movePrompter.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to move the prompter'**
+  String get movePrompter;
+
+  /// No description provided for @resizePrompter.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to resize the prompter'**
+  String get resizePrompter;
+
+  /// No description provided for @prompterWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'Prompter width'**
+  String get prompterWidth;
+
+  /// No description provided for @resetPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset position (top, full width)'**
+  String get resetPosition;
+
+  /// No description provided for @positionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.'**
+  String get positionHint;
 }
 
 class _AppLocalizationsDelegate

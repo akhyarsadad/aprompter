@@ -12,6 +12,7 @@ import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
 import '../services/system_settings.dart';
+import '../widgets/movable_box.dart';
 import '../widgets/prompter_controls.dart';
 import '../widgets/prompter_view.dart';
 import '../widgets/settings_sheet.dart';
@@ -404,8 +405,6 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     final size = MediaQuery.sizeOf(context);
     final padding = MediaQuery.paddingOf(context);
     final camera = _camera;
-    final prompterBottom =
-        padding.top + size.height * settings.overlayHeightFraction;
 
     return PopScope<Object?>(
       canPop: !_recording && !_saving && !_counting,
@@ -425,13 +424,19 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                           : const CircularProgressIndicator(),
                     ),
             ),
-            // Prompter sits at the top, close to the front camera lens, so
-            // the eyes stay near the lens while reading.
-            Positioned(
-              top: padding.top,
-              left: 0,
-              right: 0,
-              height: size.height * settings.overlayHeightFraction,
+            // Starts at the top, close to the front camera lens, so the eyes
+            // stay near the lens; the creator can drag and resize it.
+            MovablePrompterBox(
+              area: Rect.fromLTWH(
+                0,
+                padding.top,
+                size.width,
+                size.height - padding.top - padding.bottom,
+              ),
+              settings: settings,
+              onChanged: state.updateSettings,
+              moveTooltip: context.l10n.movePrompter,
+              resizeTooltip: context.l10n.resizePrompter,
               child: Stack(
                 children: [
                   Positioned.fill(
@@ -459,10 +464,10 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                 onDone: _startRecording,
               ),
             Positioned(
-              top: prompterBottom + 8,
-              left: 16,
+              top: padding.top + 28,
               right: 16,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (_recording) _RecordingBadge(elapsed: _elapsed),
                   if (!_withAudio)

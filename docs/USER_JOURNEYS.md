@@ -113,6 +113,7 @@
 | J5 Pinch-to-resize text while reading, video quality, auto-stop at script end, haptic countdown | ✅ |
 | J7 Duplicate, share, copy as caption, undo delete | ✅ |
 | Bahasa Indonesia + English UI and templates | ✅ |
+| J4/J5 Prompter can be moved and resized anywhere (camera, both platforms) and the Android floating window can be dragged anywhere, resized and remembers its position | ✅ |
 | CI builds an installable Android APK on every push | ✅ |
 
 **Later:** voice-follow scrolling (speech recognition), cloud sync, import from Google Docs, AI rewrite to fit time, per-script settings.

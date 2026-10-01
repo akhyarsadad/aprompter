@@ -8,6 +8,7 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
+import '../services/floating_prompter.dart';
 import '../services/storage.dart';
 import '../widgets/prompter_controls.dart';
 import '../widgets/prompter_view.dart';
@@ -96,17 +97,23 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
 
   Future<void> _toggleMinimize() async {
     final display = PlatformDispatcher.instance.displays.first;
-    final screenDp = display.size.height / display.devicePixelRatio;
-    final height = _minimized
-        ? (screenDp * _settings.overlayHeightFraction).round()
-        : 56;
+    final screen = display.size / display.devicePixelRatio;
+    final window = FloatingPrompter.windowSize(screen, _settings);
     _controller.pause();
+    await FloatingPrompter.rememberPosition();
+    // resizeOverlay takes logical pixels.
     await FlutterOverlayWindow.resizeOverlay(
-      WindowSize.matchParent,
-      height,
+      window.width.round(),
+      _minimized ? window.height.round() : 56,
       true,
     );
     setState(() => _minimized = !_minimized);
+  }
+
+  Future<void> _close() async {
+    _controller.pause();
+    await FloatingPrompter.rememberPosition();
+    await FlutterOverlayWindow.closeOverlay();
   }
 
   @override
@@ -156,10 +163,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
             tooltip: context.l10n.close,
             visualDensity: VisualDensity.compact,
             color: Colors.white,
-            onPressed: () {
-              _controller.pause();
-              FlutterOverlayWindow.closeOverlay();
-            },
+            onPressed: _close,
             icon: const Icon(Icons.close),
           ),
         ],

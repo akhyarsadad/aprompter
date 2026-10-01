@@ -332,5 +332,10 @@
         "type": "int"
       }
     }
-  }
+  },
+  "movePrompter": "Drag to move the prompter",
+  "resizePrompter": "Drag to resize the prompter",
+  "prompterWidth": "Prompter width",
+  "resetPosition": "Reset position (top, full width)",
+  "positionHint": "Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot."
 }
