@@ -26,7 +26,9 @@ for personas, journeys and scope.
   | `// smile` | Note to yourself — dimmed, not counted as spoken |
   | `#fyp #ad` | Hashtag line — dimmed, not timed, kept in the caption |
 
-- Status: Draft → Ready → Recorded, with take count. Search and filter on home.
+- Status: Draft → Ready → Recorded, with take count. Search (accent-insensitive) and
+  filter on home. **Import a text file** (.txt / .md) as a new script; Paste cleans up
+  text from Docs, Word and chats.
 - Duplicate a script, share it, or **copy as caption** (spoken text without markup —
   ready to paste as the post caption, hashtags included).
 - Nothing is lost by accident: autosave with a "Saved" hint, **version history** per
@@ -35,7 +37,9 @@ for personas, journeys and scope.
   JSON file.
 
 **Rehearse & pace (J3)**
-- Speed is in **words per minute**, so changing the text size never changes the pace.
+- Speed is in **words per minute** (40–400), so changing the text size never changes the
+  pace. Only spoken lines take time; notes and sections glide by.
+- **Line by line** mode: each tap or remote press moves one line, nothing scrolls by itself.
 - Pace presets *Calm 120 · Natural 150 · Energetic 180*, ±10 steps, and **Fit to target**.
 - Progress bar and time remaining while reading.
 - After a run: "You took 1:04 → 133 wpm. Use 130 wpm?"
@@ -58,7 +62,14 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
   it and the corner handle to resize it. On Android, the floating window can be dragged
   anywhere over other apps, its width is adjustable, and it reopens where you left it.
   *Settings → Layout → Reset position* puts it back at the top.
-- Video quality 720p / 1080p / 4K, and **auto-stop** 2 s after the last line.
+- Video quality 720p / 1080p / 4K, and **auto-stop** 2, 5 or 10 s after the last line.
+- **Review each take** (keep or retake), keep takes in the gallery or **inside the app**
+  (out of Google Photos / iCloud) with a *Takes* list per script.
+- Warns before recording if storage or battery may not last; tap to focus, long-press to
+  lock focus/exposure, pinch to zoom. The preview shows exactly what is recorded.
+- Rehearse and Record work in **landscape** too; tablets rotate everywhere.
+- Reading comfort: letter spacing, focus on the current line, full brightness, reduce
+  effects. Optional **app lock** (fingerprint / face / PIN).
 - Haptic ticks during the countdown.
 - Bluetooth remote / keyboard: Space · Enter · PageDown · `B` · `.` = play/pause, PageUp / ←
   = previous section, → = next section, ↑ / ↓ = faster / slower. Cheap selfie remotes
@@ -147,3 +158,6 @@ For iOS, set your team in Xcode (`ios/Runner.xcworkspace`).
 
 The Android floating window uses a `specialUse` foreground service. Google Play asks you to
 justify this in the Play Console (the reason is already described in the manifest).
+
+Release checklist, Play declarations and review notes: [`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md).
+Privacy policy (host it and link it in both stores): [`docs/PRIVACY.md`](docs/PRIVACY.md).

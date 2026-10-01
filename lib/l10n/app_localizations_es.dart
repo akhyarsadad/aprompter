@@ -671,4 +671,197 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Las líneas de hashtags (#fyp #ad) se ven atenuadas y no se cronometran. Usa «# » con un espacio para una sección.';
+
+  @override
+  String get appLock => 'Bloqueo de la app';
+
+  @override
+  String get appLockHint =>
+      'Pide huella, rostro o PIN del teléfono para abrir APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Primero configura un bloqueo de pantalla en este teléfono.';
+
+  @override
+  String get unlock => 'Desbloquear';
+
+  @override
+  String get unlockReason => 'Desbloquea APrompter para ver tus guiones';
+
+  @override
+  String get autoStopWait => 'Espera tras la última línea';
+
+  @override
+  String get beforeYouRecord => 'Antes de grabar';
+
+  @override
+  String get recordAnyway => 'Grabar igualmente';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Solo caben unos $minutes min de vídeo en tu espacio libre. Libera espacio o baja la calidad de vídeo.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Batería al $level %: una toma larga podría cortarse. Conecta el cargador si puedes.';
+  }
+
+  @override
+  String get brightScreen => 'Brillo máximo al usar el prompter';
+
+  @override
+  String get brightScreenHint => 'Más fácil de leer al aire libre';
+
+  @override
+  String get cameraBusy =>
+      'Otra app está usando la cámara. Ciérrala y vuelve a intentarlo.';
+
+  @override
+  String get cameraIntroTitle => 'Cámara y micrófono';
+
+  @override
+  String get cameraIntroBody =>
+      'Para grabarte con el guion en pantalla, APrompter necesita tu cámara y micrófono. Tu teléfono te lo pedirá ahora. Los vídeos se quedan en tu teléfono.';
+
+  @override
+  String get continueLabel => 'Continuar';
+
+  @override
+  String get notNow => 'Ahora no';
+
+  @override
+  String get colorWhite => 'Blanco';
+
+  @override
+  String get colorYellow => 'Amarillo';
+
+  @override
+  String get colorGreen => 'Verde';
+
+  @override
+  String get colorBlue => 'Azul';
+
+  @override
+  String get colorPink => 'Rosa';
+
+  @override
+  String get colorBlack => 'Negro';
+
+  @override
+  String get damagedData => 'Datos ilegibles';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Apartado el $date · $size caracteres';
+  }
+
+  @override
+  String get tryToRecover => 'Intentar recuperar';
+
+  @override
+  String get nothingRecovered => 'No se pudo leer ningún guion.';
+
+  @override
+  String get floatLowRam =>
+      'Este teléfono no puede mostrar apps sobre otras apps (poca memoria o Android Go). Usa Grabar en su lugar.';
+
+  @override
+  String get oemTipsTitle => 'Mantén activo el prompter flotante';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Los teléfonos $brand pueden cerrar ventanas flotantes para ahorrar batería. En Ajustes → Aplicaciones → APrompter: permite mostrar sobre otras apps (y ventanas emergentes), pon la batería en «Sin restricciones» y permite las notificaciones.';
+  }
+
+  @override
+  String get focusLine => 'Resaltar la línea actual';
+
+  @override
+  String get focusLineHint => 'Atenúa las demás líneas';
+
+  @override
+  String get stepByLine => 'Línea a línea';
+
+  @override
+  String get stepByLineHint =>
+      'Cada toque o pulsación del mando avanza una línea, sin desplazamiento automático';
+
+  @override
+  String get reduceEffects => 'Reducir efectos';
+
+  @override
+  String get reduceEffectsHint =>
+      'Sin fundidos ni sombras: más fluido en teléfonos antiguos y ahorra batería';
+
+  @override
+  String get letterSpacing => 'Espaciado de letras';
+
+  @override
+  String get importTextFile => 'Importar archivo de texto';
+
+  @override
+  String get importTextFileHint =>
+      'Un guion .txt o .md desde Archivos, Drive o el correo';
+
+  @override
+  String get importTextFailed =>
+      'No se pudo leer el archivo. Elige un archivo de texto plano (.txt).';
+
+  @override
+  String get mySetup => 'Mi configuración';
+
+  @override
+  String get mySetupHint => 'La configuración que guardaste';
+
+  @override
+  String get saveMySetup => 'Guardar como mi configuración';
+
+  @override
+  String get resetAllSettings => 'Restablecer todos los ajustes';
+
+  @override
+  String get runHadJumps =>
+      'Saltaste partes en esta pasada, así que no puede sugerir un ritmo.';
+
+  @override
+  String get keepTake => 'Conservar';
+
+  @override
+  String get retake => 'Repetir';
+
+  @override
+  String get reviewTakes => 'Revisar cada toma';
+
+  @override
+  String get reviewTakesHint => 'Mírala y luego consérvala o repítela';
+
+  @override
+  String get takesToGallery => 'Guardar tomas en la galería';
+
+  @override
+  String get takesToGalleryHint =>
+      'Desactivado: las tomas se quedan en la app, fuera de Google Photos e iCloud';
+
+  @override
+  String get takesTitle => 'Tomas';
+
+  @override
+  String get takesEmpty =>
+      'Aquí aparecen las tomas guardadas en la app. Desactiva «Guardar tomas en la galería» en los ajustes para guardarlas aquí.';
+
+  @override
+  String get saveToGallery => 'Guardar en la galería';
+
+  @override
+  String get savedToGallery => 'Guardado en tu galería';
+
+  @override
+  String get deleteTake => 'Eliminar toma';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Toma $n guardada en la app';
+  }
 }

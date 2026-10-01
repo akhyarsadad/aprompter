@@ -109,6 +109,14 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
     }
   }
 
+  /// F9: pace set in the window is kept for the app and the next float.
+  Future<void> _savePace(double wpm) async {
+    _settings = _settings.copyWith(wpm: wpm);
+    final storage = await Storage.open();
+    await storage.reload();
+    await storage.saveSettings(storage.loadSettings().copyWith(wpm: wpm));
+  }
+
   Future<void> _toggleMinimize() async {
     final display = PlatformDispatcher.instance.displays.first;
     final screen = display.size / display.devicePixelRatio;
@@ -182,6 +190,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
                       wordCount: _script?.wordCount ?? 0,
                       pauses: _script?.pauses ?? 0,
                       onPlay: _start,
+                      onWpmChanged: _savePace,
                       dense: true,
                     ),
                   ],

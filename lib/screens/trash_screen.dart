@@ -28,6 +28,41 @@ class TrashScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),
+          // D4: data that couldn't be read is never thrown away silently.
+          for (final MapEntry(key: key, value: raw)
+              in state.damagedData.entries)
+            ListTile(
+              leading: const Icon(Icons.report_problem_outlined),
+              title: Text(l.damagedData),
+              subtitle: Text(
+                l.damagedDataHint(_backupDate(key, locale), raw.length),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: l.tryToRecover,
+                    icon: const Icon(Icons.healing),
+                    onPressed: () async {
+                      final n = await state.recoverDamaged(key);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            n == 0 ? l.nothingRecovered : l.importedScripts(n),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    tooltip: l.deleteForever,
+                    icon: const Icon(Icons.delete_forever_outlined),
+                    onPressed: () => state.discardDamaged(key),
+                  ),
+                ],
+              ),
+            ),
           for (final t in trash)
             ListTile(
               title: Text(
@@ -72,4 +107,14 @@ class TrashScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Backup keys end in a timestamp (microseconds or milliseconds).
+String _backupDate(String key, String locale) {
+  final n = int.tryParse(key.split('_').last);
+  if (n == null) return '';
+  final date = DateTime.fromMicrosecondsSinceEpoch(
+    n > 100000000000000 ? n : n * 1000,
+  );
+  return DateFormat.yMMMd(locale).add_jm().format(date);
 }

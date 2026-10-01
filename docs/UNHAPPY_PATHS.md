@@ -43,6 +43,24 @@ Severity: **P0** = data loss / app unusable, **P1** = stuck or misleading, **P2*
 | U38 | J5 Float | Script title in the notification shade — F13 | Visible to anyone glancing | Generic "Tap to open APrompter" | P3 | manual |
 | U39 | J5 Float | Float on iPhone — O4 | Button missing, no explanation | Greyed-out Float explains it isn't possible on iPhone and points to Record | P2 | manual |
 | U40 | Release | Release APK signed with the debug key — Q1 | Couldn't publish | Release signing from `android/key.properties` (falls back to debug when absent) | P0 | CI build |
+| U41 | All | Library of hundreds of long scripts — D3 | One JSON value rewritten on every keystroke-save | Each script has its own storage entry; old libraries are moved over on first start (the old copy is removed only after the move succeeds) | P1 | `backlog2_test` |
+| U42 | All | Unreadable saved data — D4 | Backed up but no way to get it back; never cleaned | *Recently deleted* lists unreadable data: **Try to recover** salvages what it can, or delete it | P2 | `backlog2_test` |
+| U43 | J5 Record | First tap on Record — O1 | System camera/mic prompt with no context → reflex "Don't allow" | A short explanation first; "Not now" leaves without asking | P1 | manual |
+| U44 | J5 Record | Long take with little storage or battery — C6/C7/C15 | Recording failed late or phone died mid-take | Before recording: warns if the expected length won't fit in free space (by quality) or battery ≤ 15 % and not charging; *Record anyway* | P1 | manual |
+| U45 | J5/J6 | Wants to watch a take before keeping it; takes per script; brand content in Google Photos — C3/C4/Y3 | Every take went straight to the gallery | **Review each take** (keep / retake — retake starts where the take started). **Save takes to the gallery** off keeps them inside the app; *Takes* on each script lists, plays, shares, saves or deletes them | P1 | manual |
+| U46 | J5 Record | Preview cropped to fill the screen — C2 | What you saw ≠ what was recorded | Preview shows the true recorded frame | P1 | manual |
+| U47 | J5 Record | Exposure hunting, framing — C10 | No controls | Tap to focus/expose, long-press to lock (amber), pinch to zoom | P2 | manual |
+| U48 | J5 Record | Ad-libs, retakes mid-take, camera busy, pinch while filming — C12/C13/C14/R12 | Cut after 2 s; sections locked; raw error; font jumped | Auto-stop waits 2/5/10 s; sections can be jumped during a take; "another app is using the camera"; pinch resize off while recording | P2 | manual |
+| U49 | J3/J5 | Tripod, rig, tablet, long-form — R4/X1 | Portrait only; iPad plist said all orientations | Rehearse and Record turn to landscape on phones; tablets allow every orientation everywhere | P1 | manual |
+| U50 | J3/J5 | Edge grip, black text, sunlight, Turkish/German casing, brand name before Arabic — R1/R2/R3/R6/R7 | Paused by the grip; invisible text; dim; wrong casing; wrong direction | 24 dp edge dead-zone; dark text gets a light backdrop; optional full brightness; section titles keep their casing; direction follows most letters | P2 | `backlog2_test` |
+| U51 | J3/J5 | Dyslexia, stutter, reduced motion, old phones, glass rig — R8/A4/A5/R10/R11/R9 | One fixed style; continuous scroll only; fade on every frame; controls behind glass | Letter spacing, **focus on the current line**, **line by line** (each tap/remote press = next line), **reduce effects**; controls hide while reading in mirror mode | P2 | `backlog2_test` |
+| U52 | J3 Rehearse | Pace from remote, early stop, jumps, extreme readers — T5/T8/T9/T10 | Remote pace lost; no summary; jumps skewed the suggestion; 60–300 wpm only | Remote pace is saved; leaving mid-run shows a partial summary; runs with jumps don't suggest a pace; 40–400 wpm | P2 | `backlog2_test` |
+| U53 | J2 Write | Numbers, Thai, long pastes, Docs/WhatsApp paste, text files — T3/T7/W5/W7/W12 | Estimates short; Thai flagged as one sentence; typing lag; invisible clutter; no import | Long numbers count as more words; Thai/Lao/Khmer/Burmese split on spaces; analysis waits for a pause on very long scripts; Paste cleans text; **Import a text file** | P2 | `backlog2_test` |
+| U54 | J5 Float | Android Go, Xiaomi/Samsung/Oppo battery limits, pace sync, screen sleep — O6/F2/F9/F12 | Float silently failed or was killed; pace not kept; screen dimmed | Low-RAM phones are told to use Record; one-time per-brand tips with *Open settings*; pace set in the window reaches the app; screen stays on while floating | P1 | manual |
+| U55 | All | Settings — S1/S2/S3/O5 | No own preset; no reset; "phone language" unexplained; welcome script stuck in the old language | **Save as my setup**; **Reset all settings** (keeps pace); "Phone language · Español"; untouched welcome script follows the app language | P3 | `backlog2_test` |
+| U56 | All | Large text, small targets, colour names — A1/A3/A6 | Untested at 200 %; 24 dp grips; swatches all "Text colour" | Checked on a 360 dp phone at 200 %; 48 dp grips; colours are named for screen readers | P1 | `backlog2_test` |
+| U57 | All | Confidential client scripts — Y1 | Anyone with the phone could open them | Optional **App lock** (fingerprint, face or phone PIN) on open and after 30 s away | P1 | `backlog2_test` |
+| U58 | Release | Play declarations, privacy policy, crash reports, QA — Q2/Q3/Q5/Q6 | Nothing written | `docs/STORE_RELEASE.md` and `docs/PRIVACY.md` | P0 | docs |
 | U14 | J5 Float | "Display over other apps" denied | — | Already handled: explains the permission | — | existing |
 | U15 | J4 Settings | Phone language not English/Indonesian | — | Already handled: falls back to English | — | existing |
 
@@ -50,8 +68,11 @@ Severity: **P0** = data loss / app unusable, **P1** = stuck or misleading, **P2*
 
 - Pulling down the iOS Control Center during a take makes the app *inactive*, which stops
   and saves the recording (U4 behaviour). Recording cannot continue in the background on iOS.
-- Very large pastes (tens of thousands of words) re-count words on every keystroke; fine for
-  normal scripts, sluggish for book-length text.
+- App lock (U57) hides the app; scripts are not encrypted on disk.
+- Free-space and battery checks (U44) estimate size per minute by quality; real bitrates vary
+  by phone.
+- Tap-to-focus (U47) maps the tap over the whole screen, so with a letterboxed preview the
+  point is approximate near the bars.
 - The floating window's secure flag (U35) is set by reaching into the overlay plugin's window;
   if a plugin update renames its fields, Float still works but is no longer hidden from
   recordings. Check on a device after upgrading `flutter_overlay_window`.

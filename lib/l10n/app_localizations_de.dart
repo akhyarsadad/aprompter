@@ -673,4 +673,197 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Hashtag-Zeilen (#fyp #ad) werden abgeblendet und nicht getimt. Für einen Abschnitt „# “ mit Leerzeichen verwenden.';
+
+  @override
+  String get appLock => 'App-Sperre';
+
+  @override
+  String get appLockHint =>
+      'Fingerabdruck, Gesicht oder Handy-PIN zum Öffnen von APrompter verlangen';
+
+  @override
+  String get appLockUnavailable =>
+      'Richte zuerst eine Displaysperre auf diesem Handy ein.';
+
+  @override
+  String get unlock => 'Entsperren';
+
+  @override
+  String get unlockReason => 'Entsperre APrompter, um deine Skripte zu sehen';
+
+  @override
+  String get autoStopWait => 'Wartezeit nach der letzten Zeile';
+
+  @override
+  String get beforeYouRecord => 'Bevor du aufnimmst';
+
+  @override
+  String get recordAnyway => 'Trotzdem aufnehmen';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Dein freier Speicher reicht nur für etwa $minutes Min. Video. Gib Speicher frei oder senke die Videoqualität.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Akku bei $level % – ein langer Take könnte abbrechen. Schließ das Ladegerät an, wenn möglich.';
+  }
+
+  @override
+  String get brightScreen => 'Volle Helligkeit beim Prompten';
+
+  @override
+  String get brightScreenHint => 'Draußen besser lesbar';
+
+  @override
+  String get cameraBusy =>
+      'Eine andere App nutzt die Kamera. Schließ sie und versuch es erneut.';
+
+  @override
+  String get cameraIntroTitle => 'Kamera und Mikrofon';
+
+  @override
+  String get cameraIntroBody =>
+      'Um dich mit dem Skript auf dem Bildschirm zu filmen, braucht APrompter Kamera und Mikrofon. Dein Handy fragt gleich danach. Videos bleiben auf deinem Handy.';
+
+  @override
+  String get continueLabel => 'Weiter';
+
+  @override
+  String get notNow => 'Nicht jetzt';
+
+  @override
+  String get colorWhite => 'Weiß';
+
+  @override
+  String get colorYellow => 'Gelb';
+
+  @override
+  String get colorGreen => 'Grün';
+
+  @override
+  String get colorBlue => 'Blau';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorBlack => 'Schwarz';
+
+  @override
+  String get damagedData => 'Unlesbare Daten';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Beiseitegelegt am $date · $size Zeichen';
+  }
+
+  @override
+  String get tryToRecover => 'Wiederherstellen versuchen';
+
+  @override
+  String get nothingRecovered => 'Daraus konnten keine Skripte gelesen werden.';
+
+  @override
+  String get floatLowRam =>
+      'Dieses Handy kann keine Apps über anderen Apps anzeigen (wenig Speicher oder Android Go). Nutze stattdessen Aufnehmen.';
+
+  @override
+  String get oemTipsTitle => 'Schwebenden Prompter aktiv halten';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand-Handys schließen schwebende Fenster oft, um Akku zu sparen. Unter Einstellungen → Apps → APrompter: Über anderen Apps einblenden (und Pop-up-Fenster) erlauben, Akku auf „Nicht eingeschränkt“ stellen und Benachrichtigungen erlauben.';
+  }
+
+  @override
+  String get focusLine => 'Auf aktuelle Zeile fokussieren';
+
+  @override
+  String get focusLineHint => 'Blendet die anderen Zeilen ab';
+
+  @override
+  String get stepByLine => 'Zeile für Zeile';
+
+  @override
+  String get stepByLineHint =>
+      'Jedes Tippen oder jeder Fernbedienungsdruck geht eine Zeile weiter – kein automatisches Scrollen';
+
+  @override
+  String get reduceEffects => 'Effekte reduzieren';
+
+  @override
+  String get reduceEffectsHint =>
+      'Keine Überblendungen oder Schatten: flüssiger auf älteren Handys, spart Akku';
+
+  @override
+  String get letterSpacing => 'Zeichenabstand';
+
+  @override
+  String get importTextFile => 'Textdatei importieren';
+
+  @override
+  String get importTextFileHint =>
+      'Ein .txt- oder .md-Skript aus Dateien, Drive oder E-Mail';
+
+  @override
+  String get importTextFailed =>
+      'Die Datei konnte nicht gelesen werden. Wähle eine reine Textdatei (.txt).';
+
+  @override
+  String get mySetup => 'Mein Setup';
+
+  @override
+  String get mySetupHint => 'Dein gespeichertes Setup';
+
+  @override
+  String get saveMySetup => 'Als mein Setup speichern';
+
+  @override
+  String get resetAllSettings => 'Alle Einstellungen zurücksetzen';
+
+  @override
+  String get runHadJumps =>
+      'Du bist in diesem Durchlauf gesprungen, daher gibt es keinen Tempovorschlag.';
+
+  @override
+  String get keepTake => 'Behalten';
+
+  @override
+  String get retake => 'Neu aufnehmen';
+
+  @override
+  String get reviewTakes => 'Jeden Take prüfen';
+
+  @override
+  String get reviewTakesHint => 'Ansehen, dann behalten oder neu aufnehmen';
+
+  @override
+  String get takesToGallery => 'Takes in der Galerie speichern';
+
+  @override
+  String get takesToGalleryHint =>
+      'Aus: Takes bleiben in der App, nicht in Google Photos und iCloud';
+
+  @override
+  String get takesTitle => 'Takes';
+
+  @override
+  String get takesEmpty =>
+      'In der App behaltene Takes erscheinen hier. Schalte „Takes in der Galerie speichern“ in den Einstellungen aus, um sie hier zu behalten.';
+
+  @override
+  String get saveToGallery => 'In Galerie speichern';
+
+  @override
+  String get savedToGallery => 'In deiner Galerie gespeichert';
+
+  @override
+  String get deleteTake => 'Take löschen';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Take $n in der App behalten';
+  }
 }

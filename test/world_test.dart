@@ -39,7 +39,9 @@ void main() {
       expect(longSentenceCount('$hindi। छोटा।'), 1);
     });
 
-    test('right-to-left detection uses the first letter', () {
+    test('right-to-left detection follows most letters (R7)', () {
+      expect(isRtlText('iPhone الجديد رائع جدا'), isTrue);
+      expect(isRtlText('Read this: שלום'), isFalse);
       expect(isRtlText('שלום עולם'), isTrue);
       expect(isRtlText('2025 مرحبا'), isTrue);
       expect(isRtlText('سلام دنیا'), isTrue);

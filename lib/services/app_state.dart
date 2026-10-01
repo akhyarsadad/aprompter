@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/widgets.dart';
 
 import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
+import 'backup.dart';
 import 'storage.dart';
 
 /// App-wide state: the script library and prompter settings.
@@ -54,10 +57,37 @@ class AppState extends ChangeNotifier {
   /// App language chosen in the app; null follows the phone.
   Locale? get locale => _locale;
 
-  Future<void> setLocale(Locale? locale) {
+  Future<void> setLocale(Locale? locale) async {
+    final before = deviceLocalizations(_locale);
     _locale = locale;
+    // O5: an untouched welcome script follows the new language.
+    final after = deviceLocalizations(locale);
+    _scripts = [
+      for (final s in _scripts)
+        s.title == before.welcomeTitle && s.body == before.welcomeBody
+            ? s.copyWith(title: after.welcomeTitle, body: after.welcomeBody)
+            : s,
+    ];
     notifyListeners();
-    return storage.saveLocale(locale == null ? null : localeTag(locale));
+    await _persist(() => storage.saveScripts(_scripts));
+    await storage.saveLocale(locale == null ? null : localeTag(locale));
+  }
+
+  bool get appLock => storage.appLock;
+
+  Future<void> setAppLock(bool on) async {
+    await storage.setAppLock(on);
+    notifyListeners();
+  }
+
+  /// Picks up settings changed by the floating window (its own engine).
+  Future<void> reloadSettings() async {
+    await storage.reload();
+    final fresh = storage.loadSettings();
+    if (fresh.wpm != _settings.wpm) {
+      _settings = _settings.copyWith(wpm: fresh.wpm);
+      notifyListeners();
+    }
   }
 
   List<Script> get scripts => List.unmodifiable(_scripts);
@@ -87,7 +117,7 @@ class AppState extends ChangeNotifier {
       _scripts = [for (final s in _scripts) s.id == script.id ? kept : s];
     }
     notifyListeners();
-    await _persist(() => storage.saveScripts(_scripts));
+    await _persist(() => storage.saveScript(byId(script.id)!));
     if (stored != null && stored.body != script.body) {
       await _keepVersion(stored, newBody: script.body);
     }
@@ -145,7 +175,7 @@ class AppState extends ChangeNotifier {
     );
     _scripts = [restored, ..._scripts.where((s) => s.id != id)];
     notifyListeners();
-    await _persist(() => storage.saveScripts(_scripts));
+    await _persist(() => storage.saveScript(restored));
     return restored;
   }
 
@@ -181,7 +211,7 @@ class AppState extends ChangeNotifier {
       ..._trash.where((t) => t.script.id != id),
     ];
     notifyListeners();
-    await _persist(() => storage.saveScripts(_scripts));
+    await _persist(() => storage.removeScript(id));
     await _persist(() => storage.saveTrash(_trash));
     return removed;
   }
@@ -192,7 +222,7 @@ class AppState extends ChangeNotifier {
       ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     _trash = _trash.where((t) => t.script.id != script.id).toList();
     notifyListeners();
-    await _persist(() => storage.saveScripts(_scripts));
+    await _persist(() => storage.saveScript(script));
     await _persist(() => storage.saveTrash(_trash));
   }
 
@@ -202,6 +232,56 @@ class AppState extends ChangeNotifier {
     notifyListeners();
     await _persist(() => storage.saveTrash(_trash));
     await _persist(() => storage.saveVersions(id, const []));
+    // Takes kept in the app belong to the script.
+    for (final take in takesOf(id)) {
+      await removeTake(take);
+      try {
+        await File(take.path).delete();
+      } catch (_) {
+        // Already gone.
+      }
+    }
+  }
+
+  /// Takes of script [id] kept inside the app (C4), newest first.
+  List<Take> takesOf(String id) =>
+      storage.loadTakes().where((t) => t.scriptId == id).toList();
+
+  Future<void> addTake(Take take) async {
+    await _persist(() => storage.saveTakes([take, ...storage.loadTakes()]));
+    notifyListeners();
+  }
+
+  /// Forgets a take; the caller deletes the file.
+  Future<void> removeTake(Take take) async {
+    await _persist(
+      () => storage.saveTakes([
+        for (final t in storage.loadTakes())
+          if (t.path != take.path) t,
+      ]),
+    );
+    notifyListeners();
+  }
+
+  /// D4: unreadable data kept aside, by storage key.
+  Map<String, String> get damagedData => storage.damagedBackups();
+
+  /// Tries to get scripts back from unreadable data; on success the
+  /// damaged copy is removed. Returns how many scripts were recovered.
+  Future<int> recoverDamaged(String key) async {
+    final raw = storage.damagedBackups()[key];
+    if (raw == null) return 0;
+    final found = salvageScripts(raw);
+    if (found.isEmpty) return 0;
+    final count = await importScripts(found);
+    await storage.deleteBackup(key);
+    notifyListeners();
+    return count == 0 ? found.length : count;
+  }
+
+  Future<void> discardDamaged(String key) async {
+    await storage.deleteBackup(key);
+    notifyListeners();
   }
 
   /// Adds scripts from a backup. A script that already exists is replaced

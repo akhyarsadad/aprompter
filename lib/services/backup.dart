@@ -36,3 +36,36 @@ class Backup {
     }
   }
 }
+
+/// Whatever scripts can still be read from damaged data: a list or a single
+/// script, with missing ids, titles or dates filled in.
+List<Script> salvageScripts(String raw) {
+  Object? json;
+  try {
+    json = jsonDecode(raw);
+  } catch (_) {
+    return const [];
+  }
+  final entries = json is List
+      ? json
+      : json is Map && json['scripts'] is List
+      ? json['scripts'] as List
+      : [json];
+  final out = <Script>[];
+  for (final (i, e) in entries.indexed) {
+    if (e is! Map || e['body'] is! String) continue;
+    out.add(
+      Script(
+        id: e['id'] is String
+            ? e['id'] as String
+            : 'recovered-$i-${raw.hashCode}',
+        title: e['title'] is String ? e['title'] as String : '',
+        body: e['body'] as String,
+        updatedAt:
+            DateTime.tryParse(e['updatedAt']?.toString() ?? '') ??
+            DateTime.now(),
+      ),
+    );
+  }
+  return out;
+}

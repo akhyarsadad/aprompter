@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'l10n/l10n.dart';
 import 'overlay/overlay_app.dart';
 import 'screens/home_screen.dart';
 import 'services/app_state.dart';
+import 'services/orientation.dart';
 import 'services/storage.dart';
+import 'widgets/app_lock.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Content is filmed vertically (Reels, TikTok, Shorts).
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // Content is filmed vertically (Reels, TikTok, Shorts); prompting screens
+  // also allow landscape, tablets allow everything.
+  await Orientations.app();
   final storage = await Storage.open();
   runApp(AprompterApp(state: AppState(storage)));
 }
@@ -57,7 +59,7 @@ class AprompterApp extends StatelessWidget {
                 child: MediaQuery.removePadding(
                   context: context,
                   removeTop: state.saveFailed,
-                  child: child!,
+                  child: AppLockGate(child: child!),
                 ),
               ),
             ],

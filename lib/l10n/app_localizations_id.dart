@@ -652,4 +652,196 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Baris hashtag (#fyp #ad) ditampilkan redup dan tidak dihitung waktunya. Gunakan \"# \" dengan spasi untuk bagian.';
+
+  @override
+  String get appLock => 'Kunci aplikasi';
+
+  @override
+  String get appLockHint =>
+      'Minta sidik jari, wajah, atau PIN HP untuk membuka APrompter';
+
+  @override
+  String get appLockUnavailable => 'Atur kunci layar di HP ini dulu.';
+
+  @override
+  String get unlock => 'Buka kunci';
+
+  @override
+  String get unlockReason => 'Buka kunci APrompter untuk melihat naskahmu';
+
+  @override
+  String get autoStopWait => 'Jeda setelah baris terakhir';
+
+  @override
+  String get beforeYouRecord => 'Sebelum merekam';
+
+  @override
+  String get recordAnyway => 'Tetap rekam';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Ruang kosongmu hanya cukup untuk sekitar $minutes mnt video. Kosongkan ruang atau turunkan kualitas video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Baterai $level% — take panjang bisa terpotong. Colokkan charger kalau bisa.';
+  }
+
+  @override
+  String get brightScreen => 'Kecerahan penuh saat prompter jalan';
+
+  @override
+  String get brightScreenHint => 'Lebih mudah dibaca di luar ruangan';
+
+  @override
+  String get cameraBusy =>
+      'Aplikasi lain sedang memakai kamera. Tutup lalu coba lagi.';
+
+  @override
+  String get cameraIntroTitle => 'Kamera dan mikrofon';
+
+  @override
+  String get cameraIntroBody =>
+      'Untuk merekammu dengan naskah di layar, APrompter butuh kamera dan mikrofon. HP-mu akan meminta izin berikutnya. Video tetap di HP-mu.';
+
+  @override
+  String get continueLabel => 'Lanjut';
+
+  @override
+  String get notNow => 'Nanti saja';
+
+  @override
+  String get colorWhite => 'Putih';
+
+  @override
+  String get colorYellow => 'Kuning';
+
+  @override
+  String get colorGreen => 'Hijau';
+
+  @override
+  String get colorBlue => 'Biru';
+
+  @override
+  String get colorPink => 'Merah muda';
+
+  @override
+  String get colorBlack => 'Hitam';
+
+  @override
+  String get damagedData => 'Data tak terbaca';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Disisihkan pada $date · $size karakter';
+  }
+
+  @override
+  String get tryToRecover => 'Coba pulihkan';
+
+  @override
+  String get nothingRecovered => 'Tidak ada naskah yang bisa dibaca.';
+
+  @override
+  String get floatLowRam =>
+      'HP ini tidak bisa menampilkan aplikasi di atas aplikasi lain (memori rendah atau Android Go). Pakai Rekam saja.';
+
+  @override
+  String get oemTipsTitle => 'Jaga prompter melayang tetap aktif';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'HP $brand bisa menutup jendela melayang untuk hemat baterai. Di Pengaturan → Aplikasi → APrompter: izinkan tampil di atas aplikasi lain (dan jendela pop-up), atur baterai ke \"Tidak dibatasi\", dan izinkan notifikasi.';
+  }
+
+  @override
+  String get focusLine => 'Fokus ke baris saat ini';
+
+  @override
+  String get focusLineHint => 'Meredupkan baris lainnya';
+
+  @override
+  String get stepByLine => 'Baris demi baris';
+
+  @override
+  String get stepByLineHint =>
+      'Setiap ketukan atau tombol remote maju satu baris — tanpa gulir otomatis';
+
+  @override
+  String get reduceEffects => 'Kurangi efek';
+
+  @override
+  String get reduceEffectsHint =>
+      'Tanpa fade atau bayangan: lebih lancar di HP lama, hemat baterai';
+
+  @override
+  String get letterSpacing => 'Jarak huruf';
+
+  @override
+  String get importTextFile => 'Impor file teks';
+
+  @override
+  String get importTextFileHint =>
+      'Naskah .txt atau .md dari Files, Drive, atau email';
+
+  @override
+  String get importTextFailed =>
+      'File itu tidak bisa dibaca. Pilih file teks biasa (.txt).';
+
+  @override
+  String get mySetup => 'Setelanku';
+
+  @override
+  String get mySetupHint => 'Setelan yang kamu simpan';
+
+  @override
+  String get saveMySetup => 'Simpan sebagai setelanku';
+
+  @override
+  String get resetAllSettings => 'Reset semua pengaturan';
+
+  @override
+  String get runHadJumps =>
+      'Kamu melompat-lompat di sesi ini, jadi tempo tidak bisa disarankan.';
+
+  @override
+  String get keepTake => 'Simpan';
+
+  @override
+  String get retake => 'Ulangi';
+
+  @override
+  String get reviewTakes => 'Tinjau setiap take';
+
+  @override
+  String get reviewTakesHint => 'Tonton, lalu simpan atau ulangi';
+
+  @override
+  String get takesToGallery => 'Simpan take ke galeri';
+
+  @override
+  String get takesToGalleryHint =>
+      'Mati: take tetap di aplikasi, tidak masuk Google Photos dan iCloud';
+
+  @override
+  String get takesTitle => 'Take';
+
+  @override
+  String get takesEmpty =>
+      'Take yang disimpan di aplikasi muncul di sini. Matikan \"Simpan take ke galeri\" di pengaturan agar tersimpan di sini.';
+
+  @override
+  String get saveToGallery => 'Simpan ke galeri';
+
+  @override
+  String get savedToGallery => 'Disimpan ke galerimu';
+
+  @override
+  String get deleteTake => 'Hapus take';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Take $n disimpan di aplikasi';
+  }
 }

@@ -653,4 +653,196 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get hashtagHint =>
       'ہیش ٹیگ والی لائنیں (#fyp #ad) مدھم دکھتی ہیں اور ان کا وقت نہیں گنا جاتا۔ حصے کے لیے اسپیس کے ساتھ \"# \" استعمال کریں۔';
+
+  @override
+  String get appLock => 'ایپ لاک';
+
+  @override
+  String get appLockHint =>
+      'APrompter کھولنے کے لیے فنگر پرنٹ، چہرہ یا فون کا PIN مانگیں';
+
+  @override
+  String get appLockUnavailable => 'پہلے اس فون پر اسکرین لاک سیٹ کریں۔';
+
+  @override
+  String get unlock => 'ان لاک کریں';
+
+  @override
+  String get unlockReason => 'اپنے اسکرپٹ دیکھنے کے لیے APrompter ان لاک کریں';
+
+  @override
+  String get autoStopWait => 'آخری لائن کے بعد انتظار';
+
+  @override
+  String get beforeYouRecord => 'ریکارڈ کرنے سے پہلے';
+
+  @override
+  String get recordAnyway => 'پھر بھی ریکارڈ کریں';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'خالی جگہ میں صرف تقریباً $minutes منٹ کی ویڈیو آئے گی۔ جگہ خالی کریں یا ویڈیو کا معیار کم کریں۔';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'بیٹری $level% پر ہے — لمبا ٹیک بیچ میں کٹ سکتا ہے۔ ہو سکے تو چارجر لگائیں۔';
+  }
+
+  @override
+  String get brightScreen => 'پرامپٹنگ کے دوران پوری چمک';
+
+  @override
+  String get brightScreenHint => 'باہر پڑھنا آسان';
+
+  @override
+  String get cameraBusy =>
+      'کوئی اور ایپ کیمرہ استعمال کر رہی ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔';
+
+  @override
+  String get cameraIntroTitle => 'کیمرہ اور مائیکروفون';
+
+  @override
+  String get cameraIntroBody =>
+      'اسکرین پر اسکرپٹ کے ساتھ آپ کو فلمانے کے لیے APrompter کو کیمرہ اور مائیکروفون چاہیے۔ آپ کا فون اب اجازت مانگے گا۔ ویڈیوز آپ کے فون پر ہی رہتی ہیں۔';
+
+  @override
+  String get continueLabel => 'جاری رکھیں';
+
+  @override
+  String get notNow => 'ابھی نہیں';
+
+  @override
+  String get colorWhite => 'سفید';
+
+  @override
+  String get colorYellow => 'پیلا';
+
+  @override
+  String get colorGreen => 'سبز';
+
+  @override
+  String get colorBlue => 'نیلا';
+
+  @override
+  String get colorPink => 'گلابی';
+
+  @override
+  String get colorBlack => 'سیاہ';
+
+  @override
+  String get damagedData => 'ناقابلِ پڑھائی ڈیٹا';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date کو الگ رکھا گیا · $size حروف';
+  }
+
+  @override
+  String get tryToRecover => 'بحال کرنے کی کوشش کریں';
+
+  @override
+  String get nothingRecovered => 'اس میں سے کوئی اسکرپٹ نہیں پڑھا جا سکا۔';
+
+  @override
+  String get floatLowRam =>
+      'یہ فون ایپس کو دوسری ایپس کے اوپر نہیں دکھا سکتا (کم میموری یا Android Go فون)۔ اس کی بجائے ریکارڈ استعمال کریں۔';
+
+  @override
+  String get oemTipsTitle => 'تیرتا پرامپٹر چلتا رکھیں';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand فون بیٹری بچانے کے لیے تیرتی ونڈوز بند کر سکتے ہیں۔ ترتیبات → ایپس → APrompter میں: دوسری ایپس کے اوپر دکھانے (اور پاپ اپ ونڈوز) کی اجازت دیں، بیٹری کو \"غیر محدود\" پر رکھیں اور اطلاعات کی اجازت دیں۔';
+  }
+
+  @override
+  String get focusLine => 'موجودہ لائن پر فوکس';
+
+  @override
+  String get focusLineHint => 'باقی لائنیں مدھم کرتا ہے';
+
+  @override
+  String get stepByLine => 'لائن بہ لائن';
+
+  @override
+  String get stepByLineHint =>
+      'ہر ٹیپ یا ریموٹ دبانے پر ایک لائن آگے — خودکار اسکرول نہیں';
+
+  @override
+  String get reduceEffects => 'ایفیکٹس کم کریں';
+
+  @override
+  String get reduceEffectsHint =>
+      'فیڈ یا سائے نہیں: پرانے فونز پر ہموار، بیٹری کی بچت';
+
+  @override
+  String get letterSpacing => 'حروف کا فاصلہ';
+
+  @override
+  String get importTextFile => 'ٹیکسٹ فائل درآمد کریں';
+
+  @override
+  String get importTextFileHint =>
+      'فائلز، Drive یا ای میل سے .txt یا .md اسکرپٹ';
+
+  @override
+  String get importTextFailed =>
+      'یہ فائل نہیں پڑھی جا سکی۔ سادہ ٹیکسٹ (.txt) فائل چنیں۔';
+
+  @override
+  String get mySetup => 'میرا سیٹ اپ';
+
+  @override
+  String get mySetupHint => 'آپ کا محفوظ کیا ہوا سیٹ اپ';
+
+  @override
+  String get saveMySetup => 'میرے سیٹ اپ کے طور پر محفوظ کریں';
+
+  @override
+  String get resetAllSettings => 'تمام ترتیبات ری سیٹ کریں';
+
+  @override
+  String get runHadJumps =>
+      'اس رن میں آپ آگے پیچھے گئے، اس لیے رفتار تجویز نہیں کی جا سکتی۔';
+
+  @override
+  String get keepTake => 'رکھیں';
+
+  @override
+  String get retake => 'دوبارہ لیں';
+
+  @override
+  String get reviewTakes => 'ہر ٹیک کا جائزہ لیں';
+
+  @override
+  String get reviewTakesHint => 'دیکھیں، پھر رکھیں یا دوبارہ لیں';
+
+  @override
+  String get takesToGallery => 'ٹیکس گیلری میں محفوظ کریں';
+
+  @override
+  String get takesToGalleryHint =>
+      'بند: ٹیکس ایپ میں رہتے ہیں، Google Photos اور iCloud سے باہر';
+
+  @override
+  String get takesTitle => 'ٹیکس';
+
+  @override
+  String get takesEmpty =>
+      'ایپ میں رکھے گئے ٹیکس یہاں دکھتے ہیں۔ انہیں یہاں رکھنے کے لیے ترتیبات میں \"ٹیکس گیلری میں محفوظ کریں\" بند کریں۔';
+
+  @override
+  String get saveToGallery => 'گیلری میں محفوظ کریں';
+
+  @override
+  String get savedToGallery => 'گیلری میں محفوظ ہو گیا';
+
+  @override
+  String get deleteTake => 'ٹیک حذف کریں';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'ٹیک $n ایپ میں رکھ لیا گیا';
+  }
 }

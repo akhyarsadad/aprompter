@@ -667,4 +667,194 @@ class AppLocalizationsHe extends AppLocalizations {
   @override
   String get hashtagHint =>
       'שורות האשטגים (#fyp #ad) מוצגות מעומעמות ולא נכללות בתזמון. לקטע השתמשו ב־\"# \" עם רווח.';
+
+  @override
+  String get appLock => 'נעילת האפליקציה';
+
+  @override
+  String get appLockHint =>
+      'דרישת טביעת אצבע, פנים או קוד PIN של הטלפון לפתיחת APrompter';
+
+  @override
+  String get appLockUnavailable => 'קודם צריך להגדיר נעילת מסך בטלפון הזה.';
+
+  @override
+  String get unlock => 'ביטול נעילה';
+
+  @override
+  String get unlockReason => 'בטלו את נעילת APrompter כדי לראות את התסריטים';
+
+  @override
+  String get autoStopWait => 'המתנה אחרי השורה האחרונה';
+
+  @override
+  String get beforeYouRecord => 'לפני הצילום';
+
+  @override
+  String get recordAnyway => 'לצלם בכל זאת';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'בשטח הפנוי נכנסים רק כ-$minutes דק׳ וידאו. פנו מקום או הורידו את איכות הווידאו.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'הסוללה ב-$level% — טייק ארוך עלול להיקטע. חברו למטען אם אפשר.';
+  }
+
+  @override
+  String get brightScreen => 'בהירות מלאה בזמן הפרומפטר';
+
+  @override
+  String get brightScreenHint => 'קל יותר לקרוא בחוץ';
+
+  @override
+  String get cameraBusy => 'אפליקציה אחרת משתמשת במצלמה. סגרו אותה ונסו שוב.';
+
+  @override
+  String get cameraIntroTitle => 'מצלמה ומיקרופון';
+
+  @override
+  String get cameraIntroBody =>
+      'כדי לצלם אתכם עם התסריט על המסך, APrompter צריכה גישה למצלמה ולמיקרופון. הטלפון יבקש אישור מיד. הסרטונים נשארים בטלפון שלכם.';
+
+  @override
+  String get continueLabel => 'המשך';
+
+  @override
+  String get notNow => 'לא עכשיו';
+
+  @override
+  String get colorWhite => 'לבן';
+
+  @override
+  String get colorYellow => 'צהוב';
+
+  @override
+  String get colorGreen => 'ירוק';
+
+  @override
+  String get colorBlue => 'כחול';
+
+  @override
+  String get colorPink => 'ורוד';
+
+  @override
+  String get colorBlack => 'שחור';
+
+  @override
+  String get damagedData => 'נתונים שלא ניתן לקרוא';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'נשמרו בצד ב-$date · $size תווים';
+  }
+
+  @override
+  String get tryToRecover => 'ניסיון שחזור';
+
+  @override
+  String get nothingRecovered => 'לא ניתן היה לקרוא מהם אף תסריט.';
+
+  @override
+  String get floatLowRam =>
+      'הטלפון הזה לא יכול להציג אפליקציות מעל אפליקציות אחרות (זיכרון נמוך או Android Go). השתמשו בצילום במקום.';
+
+  @override
+  String get oemTipsTitle => 'שמירה על הפרומפטר הצף פעיל';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'טלפונים של $brand עלולים לסגור חלונות צפים כדי לחסוך בסוללה. בהגדרות → אפליקציות → APrompter: אשרו הצגה מעל אפליקציות אחרות (וחלונות קופצים), הגדירו את הסוללה ל\"ללא הגבלה\" ואשרו התראות.';
+  }
+
+  @override
+  String get focusLine => 'התמקדות בשורה הנוכחית';
+
+  @override
+  String get focusLineHint => 'מעמעם את שאר השורות';
+
+  @override
+  String get stepByLine => 'שורה אחרי שורה';
+
+  @override
+  String get stepByLineHint =>
+      'כל הקשה או לחיצה בשלט מתקדמת שורה אחת — בלי גלילה אוטומטית';
+
+  @override
+  String get reduceEffects => 'הפחתת אפקטים';
+
+  @override
+  String get reduceEffectsHint =>
+      'בלי מעברים או צללים: חלק יותר בטלפונים ישנים וחוסך סוללה';
+
+  @override
+  String get letterSpacing => 'ריווח אותיות';
+
+  @override
+  String get importTextFile => 'ייבוא קובץ טקסט';
+
+  @override
+  String get importTextFileHint =>
+      'תסריט ‎.txt או ‎.md מהקבצים, מ-Drive או מהמייל';
+
+  @override
+  String get importTextFailed =>
+      'לא ניתן לקרוא את הקובץ. בחרו קובץ טקסט פשוט (.txt).';
+
+  @override
+  String get mySetup => 'ההגדרה שלי';
+
+  @override
+  String get mySetupHint => 'ההגדרה ששמרתם';
+
+  @override
+  String get saveMySetup => 'שמירה כהגדרה שלי';
+
+  @override
+  String get resetAllSettings => 'איפוס כל ההגדרות';
+
+  @override
+  String get runHadJumps => 'היו קפיצות בתסריט במהלך ההרצה, לכן אין הצעת קצב.';
+
+  @override
+  String get keepTake => 'לשמור';
+
+  @override
+  String get retake => 'טייק חוזר';
+
+  @override
+  String get reviewTakes => 'צפייה בכל טייק';
+
+  @override
+  String get reviewTakesHint => 'צפו בו, ואז שמרו או צלמו שוב';
+
+  @override
+  String get takesToGallery => 'שמירת טייקים בגלריה';
+
+  @override
+  String get takesToGalleryHint =>
+      'כבוי: הטייקים נשארים באפליקציה, מחוץ ל-Google Photos ול-iCloud';
+
+  @override
+  String get takesTitle => 'טייקים';
+
+  @override
+  String get takesEmpty =>
+      'טייקים שנשמרו באפליקציה יופיעו כאן. כבו את \"שמירת טייקים בגלריה\" בהגדרות כדי לשמור אותם כאן.';
+
+  @override
+  String get saveToGallery => 'שמירה בגלריה';
+
+  @override
+  String get savedToGallery => 'נשמר בגלריה';
+
+  @override
+  String get deleteTake => 'מחיקת הטייק';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'טייק $n נשמר באפליקציה';
+  }
 }

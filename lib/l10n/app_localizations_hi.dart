@@ -670,4 +670,196 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get hashtagHint =>
       'हैशटैग वाली लाइनें (#fyp #ad) धुंधली दिखती हैं और उनका समय नहीं गिना जाता। सेक्शन के लिए स्पेस के साथ \"# \" लिखें।';
+
+  @override
+  String get appLock => 'ऐप लॉक';
+
+  @override
+  String get appLockHint =>
+      'APrompter खोलने के लिए फ़िंगरप्रिंट, चेहरा या फ़ोन का PIN माँगें';
+
+  @override
+  String get appLockUnavailable => 'पहले इस फ़ोन पर स्क्रीन लॉक सेट करें।';
+
+  @override
+  String get unlock => 'अनलॉक करें';
+
+  @override
+  String get unlockReason => 'अपनी स्क्रिप्ट देखने के लिए APrompter अनलॉक करें';
+
+  @override
+  String get autoStopWait => 'आख़िरी लाइन के बाद रुकें';
+
+  @override
+  String get beforeYouRecord => 'रिकॉर्ड करने से पहले';
+
+  @override
+  String get recordAnyway => 'फिर भी रिकॉर्ड करें';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'खाली जगह में सिर्फ़ लगभग $minutes मि. का वीडियो आएगा। जगह खाली करें या वीडियो क्वालिटी कम करें।';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'बैटरी $level% है — लंबा टेक बीच में कट सकता है। हो सके तो चार्जर लगाएँ।';
+  }
+
+  @override
+  String get brightScreen => 'प्रॉम्प्टिंग के दौरान पूरी ब्राइटनेस';
+
+  @override
+  String get brightScreenHint => 'बाहर पढ़ना आसान';
+
+  @override
+  String get cameraBusy =>
+      'कोई दूसरा ऐप कैमरा इस्तेमाल कर रहा है। उसे बंद करके फिर कोशिश करें।';
+
+  @override
+  String get cameraIntroTitle => 'कैमरा और माइक्रोफ़ोन';
+
+  @override
+  String get cameraIntroBody =>
+      'स्क्रीन पर स्क्रिप्ट के साथ आपको फ़िल्माने के लिए APrompter को कैमरा और माइक्रोफ़ोन चाहिए। आपका फ़ोन अब अनुमति माँगेगा। वीडियो आपके फ़ोन पर ही रहते हैं।';
+
+  @override
+  String get continueLabel => 'जारी रखें';
+
+  @override
+  String get notNow => 'अभी नहीं';
+
+  @override
+  String get colorWhite => 'सफ़ेद';
+
+  @override
+  String get colorYellow => 'पीला';
+
+  @override
+  String get colorGreen => 'हरा';
+
+  @override
+  String get colorBlue => 'नीला';
+
+  @override
+  String get colorPink => 'गुलाबी';
+
+  @override
+  String get colorBlack => 'काला';
+
+  @override
+  String get damagedData => 'पढ़ने लायक नहीं डेटा';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date को अलग रखा गया · $size अक्षर';
+  }
+
+  @override
+  String get tryToRecover => 'रिकवर करके देखें';
+
+  @override
+  String get nothingRecovered => 'इसमें से कोई स्क्रिप्ट नहीं पढ़ी जा सकी।';
+
+  @override
+  String get floatLowRam =>
+      'यह फ़ोन ऐप्स को दूसरे ऐप्स के ऊपर नहीं दिखा सकता (कम मेमोरी या Android Go फ़ोन)। इसके बजाय रिकॉर्ड इस्तेमाल करें।';
+
+  @override
+  String get oemTipsTitle => 'फ़्लोटिंग प्रॉम्प्टर चालू रखें';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand फ़ोन बैटरी बचाने के लिए फ़्लोटिंग विंडो बंद कर सकते हैं। सेटिंग → ऐप्लिकेशन → APrompter में: दूसरे ऐप्स के ऊपर दिखाने (और पॉप-अप विंडो) की अनुमति दें, बैटरी को \"पाबंदी नहीं है\" पर सेट करें और सूचनाओं की अनुमति दें।';
+  }
+
+  @override
+  String get focusLine => 'मौजूदा लाइन पर फ़ोकस';
+
+  @override
+  String get focusLineHint => 'बाकी लाइनों को धुंधला करता है';
+
+  @override
+  String get stepByLine => 'लाइन दर लाइन';
+
+  @override
+  String get stepByLineHint =>
+      'हर टैप या रिमोट दबाने पर एक लाइन आगे — अपने-आप स्क्रॉल नहीं';
+
+  @override
+  String get reduceEffects => 'इफ़ेक्ट कम करें';
+
+  @override
+  String get reduceEffectsHint =>
+      'फ़ेड या शैडो नहीं: पुराने फ़ोन पर स्मूद, बैटरी बचती है';
+
+  @override
+  String get letterSpacing => 'अक्षरों के बीच जगह';
+
+  @override
+  String get importTextFile => 'टेक्स्ट फ़ाइल इंपोर्ट करें';
+
+  @override
+  String get importTextFileHint =>
+      'Files, Drive या ईमेल से .txt या .md स्क्रिप्ट';
+
+  @override
+  String get importTextFailed =>
+      'यह फ़ाइल नहीं पढ़ी जा सकी। सादी टेक्स्ट (.txt) फ़ाइल चुनें।';
+
+  @override
+  String get mySetup => 'मेरा सेटअप';
+
+  @override
+  String get mySetupHint => 'आपका सेव किया सेटअप';
+
+  @override
+  String get saveMySetup => 'मेरे सेटअप के रूप में सेव करें';
+
+  @override
+  String get resetAllSettings => 'सभी सेटिंग रीसेट करें';
+
+  @override
+  String get runHadJumps =>
+      'इस रन में आप आगे-पीछे गए, इसलिए रफ़्तार नहीं सुझाई जा सकती।';
+
+  @override
+  String get keepTake => 'रखें';
+
+  @override
+  String get retake => 'फिर से लें';
+
+  @override
+  String get reviewTakes => 'हर टेक देखें';
+
+  @override
+  String get reviewTakesHint => 'देखें, फिर रखें या दोबारा लें';
+
+  @override
+  String get takesToGallery => 'टेक गैलरी में सेव करें';
+
+  @override
+  String get takesToGalleryHint =>
+      'बंद: टेक ऐप में ही रहते हैं, Google Photos और iCloud से बाहर';
+
+  @override
+  String get takesTitle => 'टेक';
+
+  @override
+  String get takesEmpty =>
+      'ऐप में रखे टेक यहाँ दिखते हैं। उन्हें यहाँ रखने के लिए सेटिंग में \"टेक गैलरी में सेव करें\" बंद करें।';
+
+  @override
+  String get saveToGallery => 'गैलरी में सेव करें';
+
+  @override
+  String get savedToGallery => 'गैलरी में सेव हो गया';
+
+  @override
+  String get deleteTake => 'टेक हटाएँ';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'टेक $n ऐप में रखा गया';
+  }
 }

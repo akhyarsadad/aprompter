@@ -685,4 +685,197 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Строки с хештегами (#fyp #ad) приглушены и не учитываются по времени. Для раздела используйте «# » с пробелом.';
+
+  @override
+  String get appLock => 'Блокировка приложения';
+
+  @override
+  String get appLockHint =>
+      'Запрашивать отпечаток, лицо или PIN телефона при открытии APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Сначала настройте блокировку экрана на этом телефоне.';
+
+  @override
+  String get unlock => 'Разблокировать';
+
+  @override
+  String get unlockReason => 'Разблокируйте APrompter, чтобы увидеть сценарии';
+
+  @override
+  String get autoStopWait => 'Пауза после последней строки';
+
+  @override
+  String get beforeYouRecord => 'Перед записью';
+
+  @override
+  String get recordAnyway => 'Всё равно записать';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Свободного места хватит лишь примерно на $minutes мин видео. Освободите место или снизьте качество видео.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Заряд $level% — длинный дубль может оборваться. Подключите зарядку, если можете.';
+  }
+
+  @override
+  String get brightScreen => 'Полная яркость во время суфлёра';
+
+  @override
+  String get brightScreenHint => 'Легче читать на улице';
+
+  @override
+  String get cameraBusy =>
+      'Камера занята другим приложением. Закройте его и повторите.';
+
+  @override
+  String get cameraIntroTitle => 'Камера и микрофон';
+
+  @override
+  String get cameraIntroBody =>
+      'Чтобы снимать вас со сценарием на экране, APrompter нужны камера и микрофон. Сейчас телефон спросит разрешение. Видео остаются на вашем телефоне.';
+
+  @override
+  String get continueLabel => 'Продолжить';
+
+  @override
+  String get notNow => 'Не сейчас';
+
+  @override
+  String get colorWhite => 'Белый';
+
+  @override
+  String get colorYellow => 'Жёлтый';
+
+  @override
+  String get colorGreen => 'Зелёный';
+
+  @override
+  String get colorBlue => 'Синий';
+
+  @override
+  String get colorPink => 'Розовый';
+
+  @override
+  String get colorBlack => 'Чёрный';
+
+  @override
+  String get damagedData => 'Нечитаемые данные';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Отложено $date · $size символов';
+  }
+
+  @override
+  String get tryToRecover => 'Попробовать восстановить';
+
+  @override
+  String get nothingRecovered => 'Не удалось прочитать ни одного сценария.';
+
+  @override
+  String get floatLowRam =>
+      'Этот телефон не может показывать приложения поверх других (мало памяти или Android Go). Используйте Запись.';
+
+  @override
+  String get oemTipsTitle => 'Чтобы плавающий суфлёр не закрывался';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Телефоны $brand могут закрывать плавающие окна ради экономии заряда. В Настройки → Приложения → APrompter: разрешите показ поверх других приложений (и всплывающие окна), для батареи выберите «Без ограничений» и разрешите уведомления.';
+  }
+
+  @override
+  String get focusLine => 'Фокус на текущей строке';
+
+  @override
+  String get focusLineHint => 'Затемняет остальные строки';
+
+  @override
+  String get stepByLine => 'По строке';
+
+  @override
+  String get stepByLineHint =>
+      'Каждое касание или нажатие пульта — одна строка, без автопрокрутки';
+
+  @override
+  String get reduceEffects => 'Меньше эффектов';
+
+  @override
+  String get reduceEffectsHint =>
+      'Без затуханий и теней: плавнее на старых телефонах, экономит заряд';
+
+  @override
+  String get letterSpacing => 'Межбуквенный интервал';
+
+  @override
+  String get importTextFile => 'Импорт текстового файла';
+
+  @override
+  String get importTextFileHint =>
+      'Сценарий .txt или .md из Файлов, Диска или почты';
+
+  @override
+  String get importTextFailed =>
+      'Не удалось прочитать файл. Выберите обычный текстовый файл (.txt).';
+
+  @override
+  String get mySetup => 'Мои настройки';
+
+  @override
+  String get mySetupHint => 'Сохранённый вами набор настроек';
+
+  @override
+  String get saveMySetup => 'Сохранить как мои настройки';
+
+  @override
+  String get resetAllSettings => 'Сбросить все настройки';
+
+  @override
+  String get runHadJumps =>
+      'В этом прогоне были переходы по тексту, поэтому темп не предложить.';
+
+  @override
+  String get keepTake => 'Оставить';
+
+  @override
+  String get retake => 'Переснять';
+
+  @override
+  String get reviewTakes => 'Просматривать каждый дубль';
+
+  @override
+  String get reviewTakesHint => 'Посмотрите, затем оставьте или переснимите';
+
+  @override
+  String get takesToGallery => 'Сохранять дубли в галерею';
+
+  @override
+  String get takesToGalleryHint =>
+      'Выкл.: дубли остаются в приложении, не попадая в Google Photos и iCloud';
+
+  @override
+  String get takesTitle => 'Дубли';
+
+  @override
+  String get takesEmpty =>
+      'Здесь появляются дубли, сохранённые в приложении. Отключите «Сохранять дубли в галерею» в настройках, чтобы хранить их здесь.';
+
+  @override
+  String get saveToGallery => 'Сохранить в галерею';
+
+  @override
+  String get savedToGallery => 'Сохранено в галерею';
+
+  @override
+  String get deleteTake => 'Удалить дубль';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Дубль $n сохранён в приложении';
+  }
 }

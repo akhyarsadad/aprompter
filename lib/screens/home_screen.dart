@@ -14,11 +14,13 @@ import '../services/app_state.dart';
 import '../services/backup.dart';
 import '../services/floating_prompter.dart';
 import '../services/storage.dart';
+import '../services/system_settings.dart';
 import '../widgets/guards.dart';
 import '../widgets/settings_sheet.dart';
 import 'camera_prompter_screen.dart';
 import 'editor_screen.dart';
 import 'read_screen.dart';
+import 'takes_screen.dart';
 import 'trash_screen.dart';
 
 /// Script library (journey J7).
@@ -32,6 +34,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ScriptStatus? _filter;
   String _query = '';
+
+  // F9: pace changed in the floating window is picked up on return.
+  late final _lifecycle = AppLifecycleListener(
+    onResume: () => AppScope.read(context).reloadSettings(),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle;
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,6 +283,13 @@ Future<void> _newScript(BuildContext context) async {
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
+          // W12: bring in a script written elsewhere.
+          ListTile(
+            leading: const Icon(Icons.upload_file),
+            title: Text(l.importTextFile),
+            subtitle: Text(l.importTextFileHint),
+            onTap: () => Navigator.pop(context, _importMarker),
+          ),
           for (final t in scriptTemplates(l))
             ListTile(
               leading: Icon(
@@ -280,6 +306,7 @@ Future<void> _newScript(BuildContext context) async {
     ),
   );
   if (template == null || !context.mounted) return;
+  if (identical(template, _importMarker)) return _importTextFile(context);
   final script = Storage.newScript().copyWith(
     body: template.body,
     targetSeconds: () => template.body.isEmpty ? null : 60,
@@ -287,12 +314,115 @@ Future<void> _newScript(BuildContext context) async {
   _edit(context, script);
 }
 
+const _importMarker = ScriptTemplate('', '', '');
+
+/// F2: phone makers that close floating windows to save battery.
+const _aggressiveOems = {
+  'xiaomi',
+  'redmi',
+  'poco',
+  'huawei',
+  'honor',
+  'oppo',
+  'realme',
+  'vivo',
+  'iqoo',
+  'oneplus',
+  'samsung',
+  'meizu',
+  'tecno',
+  'infinix',
+  'itel',
+};
+
+/// Explains, once, what to allow on phones that kill floating windows.
+Future<void> _oemTipsOnce(BuildContext context, String manufacturer) async {
+  final storage = AppScope.read(context).storage;
+  if (!_aggressiveOems.contains(manufacturer) || storage.oemTipsSeen) return;
+  await storage.setOemTipsSeen();
+  if (!context.mounted) return;
+  final l = context.l10n;
+  final brand = manufacturer.isEmpty
+      ? ''
+      : manufacturer[0].toUpperCase() + manufacturer.substring(1);
+  await showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    builder: (context) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l.oemTipsTitle, style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(l.oemTipsBody(brand)),
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: openAppSettings,
+              icon: const Icon(Icons.settings),
+              label: Text(l.openSettings),
+            ),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l.continueLabel),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+/// Opens a .txt / .md file as a new script.
+Future<void> _importTextFile(BuildContext context) async {
+  final l = context.l10n;
+  final messenger = ScaffoldMessenger.of(context);
+  final file = await FilePicker.pickFile(
+    type: FileType.custom,
+    allowedExtensions: const ['txt', 'md', 'text'],
+  );
+  if (file == null || !context.mounted) return;
+  String? text;
+  try {
+    final bytes = await file.readAsBytes();
+    text = bytes.length > 2000000
+        ? null
+        : utf8.decode(bytes, allowMalformed: true);
+  } catch (_) {
+    text = null;
+  }
+  if (text == null || text.trim().isEmpty || !context.mounted) {
+    messenger.showSnackBar(SnackBar(content: Text(l.importTextFailed)));
+    return;
+  }
+  final name = file.name.replaceFirst(RegExp(r'\.[^.]*$'), '');
+  final script = Storage.newScript().copyWith(
+    title: name,
+    body: cleanPastedText(text),
+  );
+  await AppScope.read(context).upsert(script);
+  if (context.mounted) _edit(context, script);
+}
+
 void _edit(BuildContext context, Script script) => Navigator.push(
   context,
   MaterialPageRoute<void>(builder: (_) => EditorScreen(script: script)),
 );
 
-enum _Action { edit, duplicate, share, caption, draft, ready, recorded, delete }
+enum _Action {
+  edit,
+  duplicate,
+  share,
+  caption,
+  takes,
+  draft,
+  ready,
+  recorded,
+  delete,
+}
 
 class _ScriptCard extends StatelessWidget {
   const _ScriptCard({super.key, required this.script});
@@ -304,6 +434,15 @@ class _ScriptCard extends StatelessWidget {
     final l = context.l10n;
     final state = AppScope.read(context);
     final messenger = ScaffoldMessenger.of(context);
+    final device = await deviceInfo();
+    // O6: Android Go / low-RAM phones can't draw over other apps.
+    if (device.lowRam) {
+      messenger.showSnackBar(SnackBar(content: Text(l.floatLowRam)));
+      return;
+    }
+    if (!context.mounted) return;
+    await _oemTipsOnce(context, device.manufacturer);
+    if (!context.mounted) return;
     if (!await FloatingPrompter.ensurePermission()) {
       messenger.showSnackBar(
         SnackBar(content: Text(l.overlayPermissionNeeded)),
@@ -348,6 +487,11 @@ class _ScriptCard extends StatelessWidget {
         if (!ensureSpeakable(context, script)) return;
         await Clipboard.setData(ClipboardData(text: captionText(script.body)));
         messenger.showSnackBar(SnackBar(content: Text(l.captionCopied)));
+      case _Action.takes:
+        await Navigator.push(
+          context,
+          MaterialPageRoute<void>(builder: (_) => TakesScreen(script: script)),
+        );
       case _Action.draft:
         await state.upsert(script.copyWith(status: ScriptStatus.draft));
       case _Action.ready:
@@ -421,6 +565,11 @@ class _ScriptCard extends StatelessWidget {
                         _Action.caption,
                         Icons.closed_caption_outlined,
                         l.copyAsCaption,
+                      ),
+                      _item(
+                        _Action.takes,
+                        Icons.video_library_outlined,
+                        l.takesTitle,
                       ),
                       const PopupMenuDivider(),
                       for (final MapEntry(key: status, value: action)

@@ -676,4 +676,198 @@ class AppLocalizationsFil extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Malabo ang mga linyang hashtag (#fyp #ad) at hindi tinitiyempo. Gumamit ng \"# \" na may space para sa section.';
+
+  @override
+  String get appLock => 'Lock ng app';
+
+  @override
+  String get appLockHint =>
+      'Humingi ng fingerprint, mukha o PIN ng phone para buksan ang APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Mag-set up muna ng screen lock sa phone na ito.';
+
+  @override
+  String get unlock => 'I-unlock';
+
+  @override
+  String get unlockReason =>
+      'I-unlock ang APrompter para makita ang mga script mo';
+
+  @override
+  String get autoStopWait => 'Hintay pagkatapos ng huling linya';
+
+  @override
+  String get beforeYouRecord => 'Bago ka mag-record';
+
+  @override
+  String get recordAnyway => 'I-record pa rin';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Mga $minutes min lang ng video ang kasya sa libreng space mo. Magbakante ng space o ibaba ang kalidad ng video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Nasa $level% ang baterya — baka maputol ang mahabang take. Mag-charge kung kaya.';
+  }
+
+  @override
+  String get brightScreen => 'Full brightness habang nagpo-prompt';
+
+  @override
+  String get brightScreenHint => 'Mas madaling basahin sa labas';
+
+  @override
+  String get cameraBusy =>
+      'May ibang app na gumagamit ng camera. Isara ito at subukan ulit.';
+
+  @override
+  String get cameraIntroTitle => 'Camera at mikropono';
+
+  @override
+  String get cameraIntroBody =>
+      'Para ma-film ka habang nasa screen ang script, kailangan ng APrompter ang camera at mikropono mo. Magtatanong ang phone mo sa susunod. Nananatili sa phone mo ang mga video.';
+
+  @override
+  String get continueLabel => 'Magpatuloy';
+
+  @override
+  String get notNow => 'Hindi muna';
+
+  @override
+  String get colorWhite => 'Puti';
+
+  @override
+  String get colorYellow => 'Dilaw';
+
+  @override
+  String get colorGreen => 'Berde';
+
+  @override
+  String get colorBlue => 'Asul';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorBlack => 'Itim';
+
+  @override
+  String get damagedData => 'Hindi mabasang data';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Itinabi noong $date · $size character';
+  }
+
+  @override
+  String get tryToRecover => 'Subukang i-recover';
+
+  @override
+  String get nothingRecovered => 'Walang script na nabasa mula rito.';
+
+  @override
+  String get floatLowRam =>
+      'Hindi kayang magpakita ng phone na ito ng app sa ibabaw ng ibang app (low-memory o Android Go). Gamitin na lang ang I-record.';
+
+  @override
+  String get oemTipsTitle => 'Panatilihing gumagana ang lumulutang na prompter';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Puwedeng isara ng mga $brand phone ang mga lumulutang na window para makatipid sa baterya. Sa Settings → Apps → APrompter: payagan ang pagpapakita sa ibabaw ng ibang app (at mga pop-up window), itakda ang baterya sa \"Hindi pinaghihigpitan\", at payagan ang mga notification.';
+  }
+
+  @override
+  String get focusLine => 'Mag-focus sa kasalukuyang linya';
+
+  @override
+  String get focusLineHint => 'Pinalalabo ang ibang linya';
+
+  @override
+  String get stepByLine => 'Linya-linya';
+
+  @override
+  String get stepByLineHint =>
+      'Bawat tap o pindot sa remote ay isang linya — walang auto-scroll';
+
+  @override
+  String get reduceEffects => 'Bawasan ang effects';
+
+  @override
+  String get reduceEffectsHint =>
+      'Walang fade o anino: mas smooth sa lumang phone, tipid sa baterya';
+
+  @override
+  String get letterSpacing => 'Pagitan ng letra';
+
+  @override
+  String get importTextFile => 'Mag-import ng text file';
+
+  @override
+  String get importTextFileHint =>
+      'Script na .txt o .md mula sa Files, Drive o email';
+
+  @override
+  String get importTextFailed =>
+      'Hindi mabasa ang file na iyon. Pumili ng plain text (.txt) file.';
+
+  @override
+  String get mySetup => 'Setup ko';
+
+  @override
+  String get mySetupHint => 'Ang setup na na-save mo';
+
+  @override
+  String get saveMySetup => 'I-save bilang setup ko';
+
+  @override
+  String get resetAllSettings => 'I-reset lahat ng settings';
+
+  @override
+  String get runHadJumps =>
+      'Tumalon-talon ka sa run na ito, kaya hindi ito makapagmungkahi ng pace.';
+
+  @override
+  String get keepTake => 'Itago';
+
+  @override
+  String get retake => 'Ulitin';
+
+  @override
+  String get reviewTakes => 'I-review ang bawat take';
+
+  @override
+  String get reviewTakesHint => 'Panoorin, tapos itago o ulitin';
+
+  @override
+  String get takesToGallery => 'I-save ang mga take sa gallery';
+
+  @override
+  String get takesToGalleryHint =>
+      'Naka-off: nasa loob ng app ang mga take, wala sa Google Photos at iCloud';
+
+  @override
+  String get takesTitle => 'Mga take';
+
+  @override
+  String get takesEmpty =>
+      'Dito lalabas ang mga take na itinago sa app. I-off ang \"I-save ang mga take sa gallery\" sa settings para dito sila itago.';
+
+  @override
+  String get saveToGallery => 'I-save sa gallery';
+
+  @override
+  String get savedToGallery => 'Na-save sa gallery mo';
+
+  @override
+  String get deleteTake => 'Burahin ang take';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Itinago sa app ang take $n';
+  }
 }

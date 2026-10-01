@@ -1264,6 +1264,348 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hashtag lines (#fyp #ad) are shown dimmed and not timed. Use \"# \" with a space for a section.'**
   String get hashtagHint;
+
+  /// No description provided for @appLock.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock'**
+  String get appLock;
+
+  /// No description provided for @appLockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for fingerprint, face or phone PIN to open APrompter'**
+  String get appLockHint;
+
+  /// No description provided for @appLockUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up a screen lock on this phone first.'**
+  String get appLockUnavailable;
+
+  /// No description provided for @unlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get unlock;
+
+  /// No description provided for @unlockReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock APrompter to see your scripts'**
+  String get unlockReason;
+
+  /// No description provided for @autoStopWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait after the last line'**
+  String get autoStopWait;
+
+  /// No description provided for @beforeYouRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you record'**
+  String get beforeYouRecord;
+
+  /// No description provided for @recordAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Record anyway'**
+  String get recordAnyway;
+
+  /// No description provided for @lowStorageWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Only about {minutes} min of video fits in your free space. Free up space or lower the video quality.'**
+  String lowStorageWarning(int minutes);
+
+  /// No description provided for @lowBatteryWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery is at {level}% — a long take may get cut off. Plug in if you can.'**
+  String lowBatteryWarning(int level);
+
+  /// No description provided for @brightScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full brightness while prompting'**
+  String get brightScreen;
+
+  /// No description provided for @brightScreenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Easier to read outdoors'**
+  String get brightScreenHint;
+
+  /// No description provided for @cameraBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Another app is using the camera. Close it and try again.'**
+  String get cameraBusy;
+
+  /// No description provided for @cameraIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera and microphone'**
+  String get cameraIntroTitle;
+
+  /// No description provided for @cameraIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To film you with the script on screen, APrompter needs your camera and microphone. Your phone will ask next. Videos stay on your phone.'**
+  String get cameraIntroBody;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNow;
+
+  /// No description provided for @colorWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get colorWhite;
+
+  /// No description provided for @colorYellow.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get colorYellow;
+
+  /// No description provided for @colorGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get colorGreen;
+
+  /// No description provided for @colorBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get colorBlue;
+
+  /// No description provided for @colorPink.
+  ///
+  /// In en, this message translates to:
+  /// **'Pink'**
+  String get colorPink;
+
+  /// No description provided for @colorBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'Black'**
+  String get colorBlack;
+
+  /// No description provided for @damagedData.
+  ///
+  /// In en, this message translates to:
+  /// **'Unreadable data'**
+  String get damagedData;
+
+  /// No description provided for @damagedDataHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept aside on {date} · {size} characters'**
+  String damagedDataHint(String date, int size);
+
+  /// No description provided for @tryToRecover.
+  ///
+  /// In en, this message translates to:
+  /// **'Try to recover'**
+  String get tryToRecover;
+
+  /// No description provided for @nothingRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'No scripts could be read from it.'**
+  String get nothingRecovered;
+
+  /// No description provided for @floatLowRam.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone can\'t show apps over other apps (low-memory or Android Go phone). Use Record instead.'**
+  String get floatLowRam;
+
+  /// No description provided for @oemTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the floating prompter alive'**
+  String get oemTipsTitle;
+
+  /// No description provided for @oemTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{brand} phones may close floating windows to save battery. In Settings → Apps → APrompter: allow display over other apps (and pop-up windows), set battery to \"No restrictions\", and allow notifications.'**
+  String oemTipsBody(String brand);
+
+  /// No description provided for @focusLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on the current line'**
+  String get focusLine;
+
+  /// No description provided for @focusLineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dims the other lines'**
+  String get focusLineHint;
+
+  /// No description provided for @stepByLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line by line'**
+  String get stepByLine;
+
+  /// No description provided for @stepByLineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Each tap or remote press moves one line — no automatic scrolling'**
+  String get stepByLineHint;
+
+  /// No description provided for @reduceEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce effects'**
+  String get reduceEffects;
+
+  /// No description provided for @reduceEffectsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No fades or shadows: smoother on older phones, saves battery'**
+  String get reduceEffectsHint;
+
+  /// No description provided for @letterSpacing.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter spacing'**
+  String get letterSpacing;
+
+  /// No description provided for @importTextFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a text file'**
+  String get importTextFile;
+
+  /// No description provided for @importTextFileHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A .txt or .md script from Files, Drive or email'**
+  String get importTextFileHint;
+
+  /// No description provided for @importTextFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read that file. Pick a plain text (.txt) file.'**
+  String get importTextFailed;
+
+  /// No description provided for @mySetup.
+  ///
+  /// In en, this message translates to:
+  /// **'My setup'**
+  String get mySetup;
+
+  /// No description provided for @mySetupHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The setup you saved'**
+  String get mySetupHint;
+
+  /// No description provided for @saveMySetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as my setup'**
+  String get saveMySetup;
+
+  /// No description provided for @resetAllSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all settings'**
+  String get resetAllSettings;
+
+  /// No description provided for @runHadJumps.
+  ///
+  /// In en, this message translates to:
+  /// **'You skipped around during this run, so it can\'t suggest a pace.'**
+  String get runHadJumps;
+
+  /// No description provided for @keepTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get keepTake;
+
+  /// No description provided for @retake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get retake;
+
+  /// No description provided for @reviewTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Review each take'**
+  String get reviewTakes;
+
+  /// No description provided for @reviewTakesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch it, then keep it or go again'**
+  String get reviewTakesHint;
+
+  /// No description provided for @takesToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Save takes to the gallery'**
+  String get takesToGallery;
+
+  /// No description provided for @takesToGalleryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: takes stay inside the app, out of Google Photos and iCloud'**
+  String get takesToGalleryHint;
+
+  /// No description provided for @takesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes'**
+  String get takesTitle;
+
+  /// No description provided for @takesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes kept inside the app show up here. Turn off \"Save takes to the gallery\" in settings to keep them here.'**
+  String get takesEmpty;
+
+  /// No description provided for @saveToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to gallery'**
+  String get saveToGallery;
+
+  /// No description provided for @savedToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your gallery'**
+  String get savedToGallery;
+
+  /// No description provided for @deleteTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete take'**
+  String get deleteTake;
+
+  /// No description provided for @takeKeptInApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Take {n} kept in the app'**
+  String takeKeptInApp(int n);
 }
 
 class _AppLocalizationsDelegate

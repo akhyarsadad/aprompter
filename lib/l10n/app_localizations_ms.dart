@@ -654,4 +654,197 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Baris hashtag (#fyp #ad) dipaparkan malap dan tidak dikira masa. Gunakan \"# \" dengan ruang untuk bahagian.';
+
+  @override
+  String get appLock => 'Kunci apl';
+
+  @override
+  String get appLockHint =>
+      'Minta cap jari, wajah atau PIN telefon untuk membuka APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Sediakan kunci skrin pada telefon ini dahulu.';
+
+  @override
+  String get unlock => 'Buka kunci';
+
+  @override
+  String get unlockReason => 'Buka kunci APrompter untuk melihat skrip anda';
+
+  @override
+  String get autoStopWait => 'Tunggu selepas baris terakhir';
+
+  @override
+  String get beforeYouRecord => 'Sebelum anda merakam';
+
+  @override
+  String get recordAnyway => 'Rakam juga';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Ruang kosong anda hanya muat kira-kira $minutes min video. Kosongkan ruang atau turunkan kualiti video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Bateri pada $level% — rakaman panjang mungkin terputus. Cas jika boleh.';
+  }
+
+  @override
+  String get brightScreen => 'Kecerahan penuh semasa prompter';
+
+  @override
+  String get brightScreenHint => 'Lebih mudah dibaca di luar';
+
+  @override
+  String get cameraBusy =>
+      'Apl lain sedang menggunakan kamera. Tutup apl itu dan cuba lagi.';
+
+  @override
+  String get cameraIntroTitle => 'Kamera dan mikrofon';
+
+  @override
+  String get cameraIntroBody =>
+      'Untuk merakam anda dengan skrip di skrin, APrompter memerlukan kamera dan mikrofon. Telefon anda akan bertanya selepas ini. Video kekal dalam telefon anda.';
+
+  @override
+  String get continueLabel => 'Teruskan';
+
+  @override
+  String get notNow => 'Bukan sekarang';
+
+  @override
+  String get colorWhite => 'Putih';
+
+  @override
+  String get colorYellow => 'Kuning';
+
+  @override
+  String get colorGreen => 'Hijau';
+
+  @override
+  String get colorBlue => 'Biru';
+
+  @override
+  String get colorPink => 'Merah jambu';
+
+  @override
+  String get colorBlack => 'Hitam';
+
+  @override
+  String get damagedData => 'Data tidak boleh dibaca';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Diasingkan pada $date · $size aksara';
+  }
+
+  @override
+  String get tryToRecover => 'Cuba pulihkan';
+
+  @override
+  String get nothingRecovered => 'Tiada skrip yang dapat dibaca daripadanya.';
+
+  @override
+  String get floatLowRam =>
+      'Telefon ini tidak dapat memaparkan apl di atas apl lain (memori rendah atau Android Go). Gunakan Rakam.';
+
+  @override
+  String get oemTipsTitle => 'Kekalkan prompter terapung aktif';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Telefon $brand mungkin menutup tetingkap terapung untuk menjimatkan bateri. Dalam Tetapan → Apl → APrompter: benarkan paparan di atas apl lain (dan tetingkap timbul), tetapkan bateri kepada \"Tiada sekatan\" dan benarkan pemberitahuan.';
+  }
+
+  @override
+  String get focusLine => 'Fokus pada baris semasa';
+
+  @override
+  String get focusLineHint => 'Malapkan baris lain';
+
+  @override
+  String get stepByLine => 'Baris demi baris';
+
+  @override
+  String get stepByLineHint =>
+      'Setiap ketikan atau tekanan alat kawalan jauh maju satu baris — tiada tatal automatik';
+
+  @override
+  String get reduceEffects => 'Kurangkan kesan';
+
+  @override
+  String get reduceEffectsHint =>
+      'Tiada pudar atau bayang: lebih lancar pada telefon lama, jimat bateri';
+
+  @override
+  String get letterSpacing => 'Jarak huruf';
+
+  @override
+  String get importTextFile => 'Import fail teks';
+
+  @override
+  String get importTextFileHint =>
+      'Skrip .txt atau .md daripada Fail, Drive atau e-mel';
+
+  @override
+  String get importTextFailed =>
+      'Fail itu tidak dapat dibaca. Pilih fail teks biasa (.txt).';
+
+  @override
+  String get mySetup => 'Persediaan saya';
+
+  @override
+  String get mySetupHint => 'Persediaan yang anda simpan';
+
+  @override
+  String get saveMySetup => 'Simpan sebagai persediaan saya';
+
+  @override
+  String get resetAllSettings => 'Tetapkan semula semua tetapan';
+
+  @override
+  String get runHadJumps =>
+      'Anda melompat-lompat semasa larian ini, jadi rentak tidak dapat dicadangkan.';
+
+  @override
+  String get keepTake => 'Simpan';
+
+  @override
+  String get retake => 'Rakam semula';
+
+  @override
+  String get reviewTakes => 'Semak setiap rakaman';
+
+  @override
+  String get reviewTakesHint => 'Tonton, kemudian simpan atau rakam semula';
+
+  @override
+  String get takesToGallery => 'Simpan rakaman ke galeri';
+
+  @override
+  String get takesToGalleryHint =>
+      'Mati: rakaman kekal dalam apl, di luar Google Photos dan iCloud';
+
+  @override
+  String get takesTitle => 'Rakaman';
+
+  @override
+  String get takesEmpty =>
+      'Rakaman yang disimpan dalam apl dipaparkan di sini. Matikan \"Simpan rakaman ke galeri\" dalam tetapan untuk menyimpannya di sini.';
+
+  @override
+  String get saveToGallery => 'Simpan ke galeri';
+
+  @override
+  String get savedToGallery => 'Disimpan ke galeri anda';
+
+  @override
+  String get deleteTake => 'Padam rakaman';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Rakaman $n disimpan dalam apl';
+  }
 }

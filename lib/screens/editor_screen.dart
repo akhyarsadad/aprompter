@@ -43,6 +43,7 @@ class _EditorScreenState extends State<EditorScreen>
     WidgetsBinding.instance.addObserver(this);
     _title.addListener(_scheduleSave);
     _body.addListener(_scheduleSave);
+    _body.addListener(_scheduleAnalysis);
     _title.addListener(_updateDirection);
     _body.addListener(_updateDirection);
   }
@@ -54,11 +55,32 @@ class _EditorScreenState extends State<EditorScreen>
 
   static TextDirection? _directionOf(String text) => text.trim().isEmpty
       ? null
-      : (isRtlText(text) ? TextDirection.rtl : TextDirection.ltr);
+      // The start of the text decides; scanning a whole book per keystroke
+      // would make typing lag.
+      : (isRtlText(text.length > 2000 ? text.substring(0, 2000) : text)
+            ? TextDirection.rtl
+            : TextDirection.ltr);
 
   void _updateDirection() {
     _titleDir.value = _directionOf(_title.text);
     _bodyDir.value = _directionOf(_body.text);
+  }
+
+  /// What the timing bar analyses. Updated on every keystroke for normal
+  /// scripts; for very long ones only once typing pauses (W5), so typing
+  /// stays smooth.
+  late final _analysed = ValueNotifier(_body.text);
+  Timer? _analysis;
+
+  void _scheduleAnalysis() {
+    _analysis?.cancel();
+    if (_body.text.length < 8000) {
+      _analysed.value = _body.text;
+    } else {
+      _analysis = Timer(const Duration(milliseconds: 500), () {
+        if (mounted) _analysed.value = _body.text;
+      });
+    }
   }
 
   /// Saves shortly after typing stops, so a crash or a killed app loses at
@@ -281,9 +303,12 @@ class _EditorScreenState extends State<EditorScreen>
     _wrap('${needsNewline ? '\n' : ''}$prefix');
   }
 
+  /// W7: pastes from Docs, Word or chats without their invisible clutter.
   Future<void> _paste() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data?.text case final String text when text.isNotEmpty) _wrap(text);
+    if (data?.text case final String text when text.isNotEmpty) {
+      _wrap(cleanPastedText(text));
+    }
   }
 
   @override
@@ -291,6 +316,8 @@ class _EditorScreenState extends State<EditorScreen>
     WidgetsBinding.instance.removeObserver(this);
     _autosave?.cancel();
     _titleDir.dispose();
+    _analysis?.cancel();
+    _analysed.dispose();
     _saved.dispose();
     _bodyDir.dispose();
     _title.dispose();
@@ -431,10 +458,10 @@ class _EditorScreenState extends State<EditorScreen>
                 ),
               ),
             ),
-            ListenableBuilder(
-              listenable: _body,
-              builder: (context, _) => _TimingBar(
-                body: _body.text,
+            ValueListenableBuilder(
+              valueListenable: _analysed,
+              builder: (context, body, _) => _TimingBar(
+                body: body,
                 targetSeconds: _target,
                 wpm: AppScope.of(context).settings.wpm,
               ),
@@ -658,3 +685,13 @@ class _MarkupToolbar extends StatelessWidget {
     ),
   );
 }
+
+/// Removes what pasting from Google Docs, Word, Notes or WhatsApp brings
+/// along: zero-width characters, non-breaking spaces, tabs, Windows line
+/// ends and list bullets.
+String cleanPastedText(String text) => text
+    .replaceAll('\r\n', '\n')
+    .replaceAll('\r', '\n')
+    .replaceAll(RegExp('[\u200B-\u200D\u2060\uFEFF\u00AD]'), '')
+    .replaceAll(RegExp('[\u00A0\u202F\t]'), ' ')
+    .replaceAll(RegExp(r'^[ ]*[•◦▪▫●○■□‣⁃–—-][ ]+', multiLine: true), '');

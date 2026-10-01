@@ -658,4 +658,200 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get hashtagHint =>
       'ஹேஷ்டேக் வரிகள் (#fyp #ad) மங்கலாகக் காட்டப்படும், நேரம் கணக்கிடப்படாது. பகுதிக்கு இடைவெளியுடன் \"# \" பயன்படுத்தவும்.';
+
+  @override
+  String get appLock => 'ஆப் பூட்டு';
+
+  @override
+  String get appLockHint =>
+      'APrompter-ஐத் திறக்க கைரேகை, முகம் அல்லது ஃபோன் PIN கேட்கும்';
+
+  @override
+  String get appLockUnavailable =>
+      'முதலில் இந்த ஃபோனில் திரைப் பூட்டை அமைக்கவும்.';
+
+  @override
+  String get unlock => 'திற';
+
+  @override
+  String get unlockReason =>
+      'உங்கள் ஸ்கிரிப்ட்களைப் பார்க்க APrompter-ஐத் திறக்கவும்';
+
+  @override
+  String get autoStopWait => 'கடைசி வரிக்குப் பின் காத்திருப்பு';
+
+  @override
+  String get beforeYouRecord => 'பதிவு செய்யும் முன்';
+
+  @override
+  String get recordAnyway => 'இருந்தாலும் பதிவுசெய்';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'காலி இடத்தில் சுமார் $minutes நி. வீடியோ மட்டுமே பொருந்தும். இடத்தைக் காலி செய்யவும் அல்லது வீடியோ தரத்தைக் குறைக்கவும்.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'பேட்டரி $level% — நீண்ட டேக் இடையில் நின்றுவிடலாம். முடிந்தால் சார்ஜரை இணைக்கவும்.';
+  }
+
+  @override
+  String get brightScreen => 'ப்ராம்ப்டிங்கின்போது முழு ஒளிர்வு';
+
+  @override
+  String get brightScreenHint => 'வெளியே படிக்க எளிது';
+
+  @override
+  String get cameraBusy =>
+      'வேறொரு ஆப் கேமராவைப் பயன்படுத்துகிறது. அதை மூடிவிட்டு மீண்டும் முயலவும்.';
+
+  @override
+  String get cameraIntroTitle => 'கேமரா மற்றும் மைக்ரோஃபோன்';
+
+  @override
+  String get cameraIntroBody =>
+      'திரையில் ஸ்கிரிப்டுடன் உங்களைப் படம்பிடிக்க APrompter-க்கு கேமராவும் மைக்ரோஃபோனும் தேவை. அடுத்து உங்கள் ஃபோன் அனுமதி கேட்கும். வீடியோக்கள் உங்கள் ஃபோனிலேயே இருக்கும்.';
+
+  @override
+  String get continueLabel => 'தொடர்';
+
+  @override
+  String get notNow => 'இப்போது வேண்டாம்';
+
+  @override
+  String get colorWhite => 'வெள்ளை';
+
+  @override
+  String get colorYellow => 'மஞ்சள்';
+
+  @override
+  String get colorGreen => 'பச்சை';
+
+  @override
+  String get colorBlue => 'நீலம்';
+
+  @override
+  String get colorPink => 'இளஞ்சிவப்பு';
+
+  @override
+  String get colorBlack => 'கருப்பு';
+
+  @override
+  String get damagedData => 'படிக்க முடியாத தரவு';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date அன்று தனியாக வைக்கப்பட்டது · $size எழுத்துகள்';
+  }
+
+  @override
+  String get tryToRecover => 'மீட்க முயல்';
+
+  @override
+  String get nothingRecovered =>
+      'இதிலிருந்து எந்த ஸ்கிரிப்டையும் படிக்க முடியவில்லை.';
+
+  @override
+  String get floatLowRam =>
+      'இந்த ஃபோனால் பிற ஆப்களின் மேல் ஆப்களைக் காட்ட முடியாது (குறைந்த நினைவகம் அல்லது Android Go ஃபோன்). பதிலாக பதிவு-ஐப் பயன்படுத்தவும்.';
+
+  @override
+  String get oemTipsTitle => 'மிதக்கும் ப்ராம்ப்டரை இயக்கத்தில் வைக்க';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'பேட்டரியைச் சேமிக்க $brand ஃபோன்கள் மிதக்கும் சாளரங்களை மூடலாம். அமைப்புகள் → ஆப்ஸ் → APrompter-இல்: பிற ஆப்களின் மேல் காட்ட (மற்றும் பாப்-அப் சாளரங்கள்) அனுமதிக்கவும், பேட்டரியை \"கட்டுப்பாடற்றது\" என அமைக்கவும், அறிவிப்புகளை அனுமதிக்கவும்.';
+  }
+
+  @override
+  String get focusLine => 'தற்போதைய வரியில் கவனம்';
+
+  @override
+  String get focusLineHint => 'மற்ற வரிகளை மங்கச் செய்யும்';
+
+  @override
+  String get stepByLine => 'வரி வரியாக';
+
+  @override
+  String get stepByLineHint =>
+      'ஒவ்வொரு தட்டலும் ரிமோட் அழுத்தமும் ஒரு வரி நகர்த்தும் — தானியங்கு உருட்டல் இல்லை';
+
+  @override
+  String get reduceEffects => 'எஃபெக்ட்களைக் குறை';
+
+  @override
+  String get reduceEffectsHint =>
+      'மங்கல், நிழல் இல்லை: பழைய ஃபோன்களில் சீராக, பேட்டரி மிச்சம்';
+
+  @override
+  String get letterSpacing => 'எழுத்து இடைவெளி';
+
+  @override
+  String get importTextFile => 'உரைக் கோப்பை இறக்கு';
+
+  @override
+  String get importTextFileHint =>
+      'Files, Drive அல்லது மின்னஞ்சலிலிருந்து .txt அல்லது .md ஸ்கிரிப்ட்';
+
+  @override
+  String get importTextFailed =>
+      'அந்தக் கோப்பைப் படிக்க முடியவில்லை. சாதாரண உரை (.txt) கோப்பைத் தேர்வுசெய்யவும்.';
+
+  @override
+  String get mySetup => 'என் அமைப்பு';
+
+  @override
+  String get mySetupHint => 'நீங்கள் சேமித்த அமைப்பு';
+
+  @override
+  String get saveMySetup => 'என் அமைப்பாகச் சேமி';
+
+  @override
+  String get resetAllSettings => 'எல்லா அமைப்புகளையும் மீட்டமை';
+
+  @override
+  String get runHadJumps =>
+      'இந்த ஓட்டத்தில் முன்னும் பின்னும் தாவினீர்கள், அதனால் வேகத்தைப் பரிந்துரைக்க முடியாது.';
+
+  @override
+  String get keepTake => 'வைத்திரு';
+
+  @override
+  String get retake => 'மீண்டும் எடு';
+
+  @override
+  String get reviewTakes => 'ஒவ்வொரு டேக்கையும் பார்';
+
+  @override
+  String get reviewTakesHint =>
+      'பார்த்துவிட்டு வைத்திருக்கவும் அல்லது மீண்டும் எடுக்கவும்';
+
+  @override
+  String get takesToGallery => 'டேக்குகளை கேலரியில் சேமி';
+
+  @override
+  String get takesToGalleryHint =>
+      'ஆஃப்: டேக்குகள் ஆப்பிலேயே இருக்கும், Google Photos, iCloud-க்குச் செல்லாது';
+
+  @override
+  String get takesTitle => 'டேக்குகள்';
+
+  @override
+  String get takesEmpty =>
+      'ஆப்பில் வைத்த டேக்குகள் இங்கே தெரியும். இங்கே வைக்க அமைப்புகளில் \"டேக்குகளை கேலரியில் சேமி\"-ஐ ஆஃப் செய்யவும்.';
+
+  @override
+  String get saveToGallery => 'கேலரியில் சேமி';
+
+  @override
+  String get savedToGallery => 'கேலரியில் சேமிக்கப்பட்டது';
+
+  @override
+  String get deleteTake => 'டேக்கை நீக்கு';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'டேக் $n ஆப்பில் வைக்கப்பட்டது';
+  }
 }

@@ -652,4 +652,197 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get hashtagHint =>
       'Dòng hashtag (#fyp #ad) được làm mờ và không tính giờ. Dùng \"# \" có dấu cách để tạo phần.';
+
+  @override
+  String get appLock => 'Khóa ứng dụng';
+
+  @override
+  String get appLockHint =>
+      'Yêu cầu vân tay, khuôn mặt hoặc mã PIN điện thoại để mở APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Hãy thiết lập khóa màn hình trên điện thoại này trước.';
+
+  @override
+  String get unlock => 'Mở khóa';
+
+  @override
+  String get unlockReason => 'Mở khóa APrompter để xem kịch bản của bạn';
+
+  @override
+  String get autoStopWait => 'Chờ sau dòng cuối';
+
+  @override
+  String get beforeYouRecord => 'Trước khi quay';
+
+  @override
+  String get recordAnyway => 'Vẫn quay';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Dung lượng trống chỉ đủ cho khoảng $minutes phút video. Hãy giải phóng dung lượng hoặc giảm chất lượng video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Pin còn $level% — lần quay dài có thể bị ngắt. Hãy cắm sạc nếu được.';
+  }
+
+  @override
+  String get brightScreen => 'Độ sáng tối đa khi nhắc chữ';
+
+  @override
+  String get brightScreenHint => 'Dễ đọc hơn ngoài trời';
+
+  @override
+  String get cameraBusy =>
+      'Ứng dụng khác đang dùng camera. Hãy đóng ứng dụng đó và thử lại.';
+
+  @override
+  String get cameraIntroTitle => 'Camera và micrô';
+
+  @override
+  String get cameraIntroBody =>
+      'Để quay bạn khi kịch bản hiện trên màn hình, APrompter cần camera và micrô. Điện thoại sẽ hỏi bạn ngay sau đây. Video được giữ trên điện thoại của bạn.';
+
+  @override
+  String get continueLabel => 'Tiếp tục';
+
+  @override
+  String get notNow => 'Để sau';
+
+  @override
+  String get colorWhite => 'Trắng';
+
+  @override
+  String get colorYellow => 'Vàng';
+
+  @override
+  String get colorGreen => 'Xanh lá';
+
+  @override
+  String get colorBlue => 'Xanh dương';
+
+  @override
+  String get colorPink => 'Hồng';
+
+  @override
+  String get colorBlack => 'Đen';
+
+  @override
+  String get damagedData => 'Dữ liệu không đọc được';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Để riêng ngày $date · $size ký tự';
+  }
+
+  @override
+  String get tryToRecover => 'Thử khôi phục';
+
+  @override
+  String get nothingRecovered => 'Không đọc được kịch bản nào từ dữ liệu này.';
+
+  @override
+  String get floatLowRam =>
+      'Điện thoại này không thể hiển thị ứng dụng trên ứng dụng khác (ít bộ nhớ hoặc Android Go). Hãy dùng Quay.';
+
+  @override
+  String get oemTipsTitle => 'Giữ máy nhắc chữ nổi luôn chạy';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Điện thoại $brand có thể đóng cửa sổ nổi để tiết kiệm pin. Trong Cài đặt → Ứng dụng → APrompter: cho phép hiển thị trên ứng dụng khác (và cửa sổ bật lên), đặt pin thành \"Không hạn chế\" và cho phép thông báo.';
+  }
+
+  @override
+  String get focusLine => 'Làm nổi dòng hiện tại';
+
+  @override
+  String get focusLineHint => 'Làm mờ các dòng khác';
+
+  @override
+  String get stepByLine => 'Từng dòng';
+
+  @override
+  String get stepByLineHint =>
+      'Mỗi lần nhấn hoặc bấm điều khiển chuyển một dòng — không tự cuộn';
+
+  @override
+  String get reduceEffects => 'Giảm hiệu ứng';
+
+  @override
+  String get reduceEffectsHint =>
+      'Không mờ dần hay đổ bóng: mượt hơn trên máy cũ, tiết kiệm pin';
+
+  @override
+  String get letterSpacing => 'Khoảng cách chữ';
+
+  @override
+  String get importTextFile => 'Nhập tệp văn bản';
+
+  @override
+  String get importTextFileHint =>
+      'Kịch bản .txt hoặc .md từ Tệp, Drive hoặc email';
+
+  @override
+  String get importTextFailed =>
+      'Không đọc được tệp này. Hãy chọn tệp văn bản thuần (.txt).';
+
+  @override
+  String get mySetup => 'Thiết lập của tôi';
+
+  @override
+  String get mySetupHint => 'Thiết lập bạn đã lưu';
+
+  @override
+  String get saveMySetup => 'Lưu làm thiết lập của tôi';
+
+  @override
+  String get resetAllSettings => 'Đặt lại mọi cài đặt';
+
+  @override
+  String get runHadJumps =>
+      'Bạn đã nhảy qua lại trong lần chạy này nên không thể gợi ý tốc độ.';
+
+  @override
+  String get keepTake => 'Giữ';
+
+  @override
+  String get retake => 'Quay lại';
+
+  @override
+  String get reviewTakes => 'Xem lại từng lần quay';
+
+  @override
+  String get reviewTakesHint => 'Xem rồi giữ lại hoặc quay lần nữa';
+
+  @override
+  String get takesToGallery => 'Lưu lần quay vào thư viện';
+
+  @override
+  String get takesToGalleryHint =>
+      'Tắt: lần quay nằm trong ứng dụng, không vào Google Photos và iCloud';
+
+  @override
+  String get takesTitle => 'Các lần quay';
+
+  @override
+  String get takesEmpty =>
+      'Lần quay giữ trong ứng dụng sẽ hiện ở đây. Tắt \"Lưu lần quay vào thư viện\" trong cài đặt để giữ chúng ở đây.';
+
+  @override
+  String get saveToGallery => 'Lưu vào thư viện';
+
+  @override
+  String get savedToGallery => 'Đã lưu vào thư viện';
+
+  @override
+  String get deleteTake => 'Xóa lần quay';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Đã giữ lần quay $n trong ứng dụng';
+  }
 }

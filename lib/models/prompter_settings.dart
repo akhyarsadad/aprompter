@@ -18,6 +18,14 @@ class PrompterSettings {
     this.prompterWidthFraction = 1.0,
     this.prompterLeft = 0.0,
     this.prompterTop = 0.0,
+    this.letterSpacing = 0.0,
+    this.focusLine = false,
+    this.reduceEffects = false,
+    this.stepByLine = false,
+    this.autoStopDelay = 2,
+    this.brightScreen = false,
+    this.takesToGallery = true,
+    this.reviewTakes = true,
   });
 
   /// Font size in logical pixels.
@@ -59,6 +67,33 @@ class PrompterSettings {
   final double prompterLeft;
   final double prompterTop;
 
+  /// Extra space between letters, in logical pixels (reading comfort).
+  final double letterSpacing;
+
+  /// Dim every line except the one at the reading guide.
+  final bool focusLine;
+
+  /// No fades or text shadows: smoother on old phones, less battery.
+  final bool reduceEffects;
+
+  /// Move one line per tap / remote press instead of scrolling.
+  final bool stepByLine;
+
+  /// Seconds auto-stop waits after the last line, for ad-libs.
+  final int autoStopDelay;
+
+  /// Turn screen brightness up while prompting (sunlight).
+  final bool brightScreen;
+
+  /// Save takes to the phone gallery; otherwise they stay inside the app.
+  final bool takesToGallery;
+
+  /// Show each take for keep / retake before saving it.
+  final bool reviewTakes;
+
+  static const autoStopDelays = <int>[2, 5, 10];
+  static const maxLetterSpacing = 4.0;
+
   static const minWidthFraction = 0.4;
   static const minHeightFraction = 0.15;
 
@@ -90,8 +125,8 @@ class PrompterSettings {
 
   static const minFontSize = 16.0;
   static const maxFontSize = 96.0;
-  static const minWpm = 60.0;
-  static const maxWpm = 300.0;
+  static const minWpm = 40.0;
+  static const maxWpm = 400.0;
   static const wpmStep = 10.0;
 
   static const textColors = <int>[
@@ -102,6 +137,9 @@ class PrompterSettings {
     0xFFFF80AB,
     0xFF000000,
   ];
+
+  /// Whether [color] is dark, so it needs a light backdrop to be readable.
+  static bool isDark(int color) => Color(color).computeLuminance() < 0.3;
 
   static double clampWpm(double wpm) => wpm.clamp(minWpm, maxWpm).toDouble();
 
@@ -121,6 +159,14 @@ class PrompterSettings {
     double? prompterWidthFraction,
     double? prompterLeft,
     double? prompterTop,
+    double? letterSpacing,
+    bool? focusLine,
+    bool? reduceEffects,
+    bool? stepByLine,
+    int? autoStopDelay,
+    bool? brightScreen,
+    bool? takesToGallery,
+    bool? reviewTakes,
   }) => PrompterSettings(
     fontSize: fontSize ?? this.fontSize,
     wpm: wpm != null ? clampWpm(wpm) : this.wpm,
@@ -137,6 +183,14 @@ class PrompterSettings {
     prompterWidthFraction: prompterWidthFraction ?? this.prompterWidthFraction,
     prompterLeft: prompterLeft ?? this.prompterLeft,
     prompterTop: prompterTop ?? this.prompterTop,
+    letterSpacing: letterSpacing ?? this.letterSpacing,
+    focusLine: focusLine ?? this.focusLine,
+    reduceEffects: reduceEffects ?? this.reduceEffects,
+    stepByLine: stepByLine ?? this.stepByLine,
+    autoStopDelay: autoStopDelay ?? this.autoStopDelay,
+    brightScreen: brightScreen ?? this.brightScreen,
+    takesToGallery: takesToGallery ?? this.takesToGallery,
+    reviewTakes: reviewTakes ?? this.reviewTakes,
   );
 
   Map<String, dynamic> toJson() => {
@@ -155,6 +209,14 @@ class PrompterSettings {
     'prompterWidthFraction': prompterWidthFraction,
     'prompterLeft': prompterLeft,
     'prompterTop': prompterTop,
+    'letterSpacing': letterSpacing,
+    'focusLine': focusLine,
+    'reduceEffects': reduceEffects,
+    'stepByLine': stepByLine,
+    'autoStopDelay': autoStopDelay,
+    'brightScreen': brightScreen,
+    'takesToGallery': takesToGallery,
+    'reviewTakes': reviewTakes,
   };
 
   factory PrompterSettings.fromJson(Map<String, dynamic> json) {
@@ -196,6 +258,20 @@ class PrompterSettings {
       ).clamp(minWidthFraction, 1.0),
       prompterLeft: n('prompterLeft', d.prompterLeft).clamp(0.0, 1.0),
       prompterTop: n('prompterTop', d.prompterTop).clamp(0.0, 1.0),
+      letterSpacing: n(
+        'letterSpacing',
+        d.letterSpacing,
+      ).clamp(0.0, maxLetterSpacing),
+      focusLine: json['focusLine'] as bool? ?? d.focusLine,
+      reduceEffects: json['reduceEffects'] as bool? ?? d.reduceEffects,
+      stepByLine: json['stepByLine'] as bool? ?? d.stepByLine,
+      autoStopDelay: (json['autoStopDelay'] as int? ?? d.autoStopDelay).clamp(
+        0,
+        60,
+      ),
+      brightScreen: json['brightScreen'] as bool? ?? d.brightScreen,
+      takesToGallery: json['takesToGallery'] as bool? ?? d.takesToGallery,
+      reviewTakes: json['reviewTakes'] as bool? ?? d.reviewTakes,
     );
   }
 }

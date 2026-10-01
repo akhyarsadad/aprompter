@@ -112,10 +112,12 @@ class _MovablePrompterBoxState extends State<MovablePrompterBox> {
                   behavior: HitTestBehavior.opaque,
                   onPanUpdate: _move,
                   onPanEnd: _commit,
+                  // A3: 48 dp touch target (accessibility minimum).
                   child: Container(
-                    width: 72,
-                    height: 24,
-                    alignment: Alignment.center,
+                    width: 96,
+                    height: 48,
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.only(top: 10),
                     child: Container(
                       width: 40,
                       height: 5,
@@ -141,8 +143,8 @@ class _MovablePrompterBoxState extends State<MovablePrompterBox> {
                 onPanUpdate: _resize,
                 onPanEnd: _commit,
                 child: const SizedBox(
-                  width: 36,
-                  height: 36,
+                  width: 48,
+                  height: 48,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(

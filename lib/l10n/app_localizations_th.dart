@@ -648,4 +648,194 @@ class AppLocalizationsTh extends AppLocalizations {
   @override
   String get hashtagHint =>
       'บรรทัดแฮชแท็ก (#fyp #ad) จะแสดงจางและไม่นับเวลา ใช้ \"# \" ตามด้วยเว้นวรรคเพื่อสร้างส่วน';
+
+  @override
+  String get appLock => 'ล็อกแอป';
+
+  @override
+  String get appLockHint =>
+      'ขอลายนิ้วมือ ใบหน้า หรือ PIN ของโทรศัพท์ก่อนเปิด APrompter';
+
+  @override
+  String get appLockUnavailable => 'ตั้งค่าล็อกหน้าจอในโทรศัพท์เครื่องนี้ก่อน';
+
+  @override
+  String get unlock => 'ปลดล็อก';
+
+  @override
+  String get unlockReason => 'ปลดล็อก APrompter เพื่อดูสคริปต์ของคุณ';
+
+  @override
+  String get autoStopWait => 'รอหลังบรรทัดสุดท้าย';
+
+  @override
+  String get beforeYouRecord => 'ก่อนเริ่มถ่าย';
+
+  @override
+  String get recordAnyway => 'ถ่ายต่อเลย';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'พื้นที่ว่างพอสำหรับวิดีโอประมาณ $minutes นาทีเท่านั้น ลองล้างพื้นที่หรือลดคุณภาพวิดีโอ';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'แบตเตอรี่เหลือ $level% — เทคยาวอาจถูกตัด เสียบชาร์จถ้าทำได้';
+  }
+
+  @override
+  String get brightScreen => 'ความสว่างเต็มที่ขณะใช้พรอมป์เตอร์';
+
+  @override
+  String get brightScreenHint => 'อ่านง่ายขึ้นเมื่ออยู่กลางแจ้ง';
+
+  @override
+  String get cameraBusy => 'แอปอื่นกำลังใช้กล้องอยู่ ปิดแอปนั้นแล้วลองอีกครั้ง';
+
+  @override
+  String get cameraIntroTitle => 'กล้องและไมโครโฟน';
+
+  @override
+  String get cameraIntroBody =>
+      'APrompter ต้องใช้กล้องและไมโครโฟนเพื่อถ่ายคุณพร้อมสคริปต์บนจอ โทรศัพท์จะถามสิทธิ์ถัดไป วิดีโอจะอยู่ในโทรศัพท์ของคุณ';
+
+  @override
+  String get continueLabel => 'ต่อไป';
+
+  @override
+  String get notNow => 'ไว้ทีหลัง';
+
+  @override
+  String get colorWhite => 'ขาว';
+
+  @override
+  String get colorYellow => 'เหลือง';
+
+  @override
+  String get colorGreen => 'เขียว';
+
+  @override
+  String get colorBlue => 'น้ำเงิน';
+
+  @override
+  String get colorPink => 'ชมพู';
+
+  @override
+  String get colorBlack => 'ดำ';
+
+  @override
+  String get damagedData => 'ข้อมูลที่อ่านไม่ได้';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'แยกเก็บไว้เมื่อ $date · $size ตัวอักษร';
+  }
+
+  @override
+  String get tryToRecover => 'ลองกู้คืน';
+
+  @override
+  String get nothingRecovered => 'อ่านสคริปต์จากข้อมูลนี้ไม่ได้เลย';
+
+  @override
+  String get floatLowRam =>
+      'โทรศัพท์นี้แสดงแอปทับแอปอื่นไม่ได้ (หน่วยความจำต่ำหรือ Android Go) ใช้ปุ่มถ่ายแทน';
+
+  @override
+  String get oemTipsTitle => 'ให้พรอมป์เตอร์แบบลอยทำงานต่อเนื่อง';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'โทรศัพท์ $brand อาจปิดหน้าต่างลอยเพื่อประหยัดแบตเตอรี่ ไปที่ การตั้งค่า → แอป → APrompter: อนุญาตให้แสดงทับแอปอื่น (และหน้าต่างป๊อปอัป) ตั้งแบตเตอรี่เป็น \"ไม่จำกัด\" และอนุญาตการแจ้งเตือน';
+  }
+
+  @override
+  String get focusLine => 'เน้นบรรทัดปัจจุบัน';
+
+  @override
+  String get focusLineHint => 'หรี่บรรทัดอื่น';
+
+  @override
+  String get stepByLine => 'ทีละบรรทัด';
+
+  @override
+  String get stepByLineHint =>
+      'แตะหรือกดรีโมตแต่ละครั้งเลื่อนหนึ่งบรรทัด — ไม่เลื่อนอัตโนมัติ';
+
+  @override
+  String get reduceEffects => 'ลดเอฟเฟกต์';
+
+  @override
+  String get reduceEffectsHint =>
+      'ไม่มีการเฟดหรือเงา: ลื่นขึ้นบนเครื่องรุ่นเก่า ประหยัดแบต';
+
+  @override
+  String get letterSpacing => 'ระยะห่างตัวอักษร';
+
+  @override
+  String get importTextFile => 'นำเข้าไฟล์ข้อความ';
+
+  @override
+  String get importTextFileHint =>
+      'สคริปต์ .txt หรือ .md จากไฟล์ ไดรฟ์ หรืออีเมล';
+
+  @override
+  String get importTextFailed =>
+      'อ่านไฟล์นั้นไม่ได้ เลือกไฟล์ข้อความธรรมดา (.txt)';
+
+  @override
+  String get mySetup => 'ค่าของฉัน';
+
+  @override
+  String get mySetupHint => 'ค่าที่คุณบันทึกไว้';
+
+  @override
+  String get saveMySetup => 'บันทึกเป็นค่าของฉัน';
+
+  @override
+  String get resetAllSettings => 'รีเซ็ตการตั้งค่าทั้งหมด';
+
+  @override
+  String get runHadJumps => 'รอบนี้มีการข้ามไปมา จึงแนะนำความเร็วไม่ได้';
+
+  @override
+  String get keepTake => 'เก็บไว้';
+
+  @override
+  String get retake => 'ถ่ายใหม่';
+
+  @override
+  String get reviewTakes => 'ตรวจดูทุกเทค';
+
+  @override
+  String get reviewTakesHint => 'ดูแล้วเลือกเก็บไว้หรือถ่ายใหม่';
+
+  @override
+  String get takesToGallery => 'บันทึกเทคลงคลังภาพ';
+
+  @override
+  String get takesToGalleryHint =>
+      'ปิด: เทคจะอยู่ในแอป ไม่เข้า Google Photos และ iCloud';
+
+  @override
+  String get takesTitle => 'เทค';
+
+  @override
+  String get takesEmpty =>
+      'เทคที่เก็บไว้ในแอปจะแสดงที่นี่ ปิด \"บันทึกเทคลงคลังภาพ\" ในการตั้งค่าเพื่อเก็บไว้ที่นี่';
+
+  @override
+  String get saveToGallery => 'บันทึกลงคลังภาพ';
+
+  @override
+  String get savedToGallery => 'บันทึกลงคลังภาพแล้ว';
+
+  @override
+  String get deleteTake => 'ลบเทค';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'เก็บเทค $n ไว้ในแอปแล้ว';
+  }
 }

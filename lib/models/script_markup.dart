@@ -65,6 +65,7 @@ final _rtl = RegExp(
   r'[֐-ࣿיִ-﷿ﹰ-﻿]', // Hebrew, Arabic, Syriac, Thaana…
 );
 final _strong = RegExp(r'[\p{L}]', unicode: true);
+final _digitsOnly = RegExp(r'^\d+$');
 
 List<ScriptBlock> parseScript(String body) {
   final blocks = <ScriptBlock>[];
@@ -172,7 +173,13 @@ int countWords(String text) {
         .replaceAll(_kana, ' ')
         .replaceAll(_southeastAsian, ' ');
   }
-  final words = _words.allMatches(rest).length;
+  // T3: "1299" or "2025" is several spoken words; count longer numbers as
+  // about one word per two digits.
+  var words = 0;
+  for (final m in _words.allMatches(rest)) {
+    final w = m.group(0)!;
+    words += _digitsOnly.hasMatch(w) && w.length > 2 ? (w.length + 1) ~/ 2 : 1;
+  }
   return (words +
           han * _hanWeight +
           kana * _kanaWeight +
@@ -180,11 +187,24 @@ int countWords(String text) {
       .round();
 }
 
-/// Whether [text] should be laid out right-to-left (its first letter is
-/// Hebrew, Arabic, Persian, Urdu…).
+/// Whether [text] should be laid out right-to-left: most of its letters
+/// are Hebrew, Arabic, Persian, Urdu… A line that starts with a brand name
+/// ("iPhone الجديد…") still reads right-to-left.
 bool isRtlText(String text) {
-  final first = _strong.firstMatch(text);
-  return first != null && _rtl.hasMatch(first.group(0)!);
+  var rtl = 0;
+  var ltr = 0;
+  bool? first;
+  for (final m in _strong.allMatches(text)) {
+    final isRtl = _rtl.hasMatch(m.group(0)!);
+    first ??= isRtl;
+    if (isRtl) {
+      rtl++;
+    } else {
+      ltr++;
+    }
+  }
+  // A tie goes to the first letter.
+  return rtl == ltr ? (first ?? false) : rtl > ltr;
 }
 
 /// Section titles in order.
@@ -195,8 +215,11 @@ List<String> sectionTitles(String body) =>
         .toList();
 
 /// Sentences with more words than [maxWords] — hard to say in one breath.
-int longSentenceCount(String body, {int maxWords = 25}) =>
-    spokenText(body)
-        .split(RegExp(r'[.!?…。！？؟।۔]+|\n'))
-        .where((s) => countWords(s) > maxWords)
-        .length;
+///
+/// Thai, Lao, Khmer and Burmese have no full stop; a space marks the end of
+/// a phrase there, so those sentences are split on spaces too.
+int longSentenceCount(String body, {int maxWords = 25}) => spokenText(body)
+    .split(RegExp(r'[.!?…。！？؟।۔]+|\n'))
+    .expand((s) => _southeastAsian.hasMatch(s) ? s.split(RegExp(r'\s+')) : [s])
+    .where((s) => countWords(s) > maxWords)
+    .length;

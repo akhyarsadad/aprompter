@@ -132,8 +132,9 @@ Future<void> showSectionsSheet(
   BuildContext context, {
   required List<String> sections,
   required PrompterController controller,
+  bool keepPlaying = false,
 }) {
-  controller.pause();
+  if (!keepPlaying) controller.pause();
   return showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,

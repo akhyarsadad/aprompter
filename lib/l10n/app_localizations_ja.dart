@@ -643,4 +643,189 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get hashtagHint =>
       'ハッシュタグの行（#fyp #ad）は薄く表示され、時間に含まれません。セクションには「# 」（スペース付き）を使います。';
+
+  @override
+  String get appLock => 'アプリのロック';
+
+  @override
+  String get appLockHint => 'APrompter を開くときに指紋・顔・端末の PIN を求めます';
+
+  @override
+  String get appLockUnavailable => '先にこの端末で画面ロックを設定してください。';
+
+  @override
+  String get unlock => 'ロック解除';
+
+  @override
+  String get unlockReason => '台本を見るには APrompter のロックを解除してください';
+
+  @override
+  String get autoStopWait => '最後の行のあとの待ち時間';
+
+  @override
+  String get beforeYouRecord => '撮影の前に';
+
+  @override
+  String get recordAnyway => 'このまま撮影';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '空き容量では約 $minutes 分の動画しか撮れません。容量を空けるか画質を下げてください。';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'バッテリー残量 $level% — 長いテイクは途中で切れるかもしれません。できれば充電してください。';
+  }
+
+  @override
+  String get brightScreen => 'プロンプター中は最大の明るさ';
+
+  @override
+  String get brightScreenHint => '屋外でも読みやすくなります';
+
+  @override
+  String get cameraBusy => '別のアプリがカメラを使用中です。そのアプリを閉じてもう一度お試しください。';
+
+  @override
+  String get cameraIntroTitle => 'カメラとマイク';
+
+  @override
+  String get cameraIntroBody =>
+      '台本を画面に表示しながら撮影するため、APrompter はカメラとマイクを使います。このあと端末から確認が表示されます。動画は端末内に保存されます。';
+
+  @override
+  String get continueLabel => '続ける';
+
+  @override
+  String get notNow => '後で';
+
+  @override
+  String get colorWhite => '白';
+
+  @override
+  String get colorYellow => '黄';
+
+  @override
+  String get colorGreen => '緑';
+
+  @override
+  String get colorBlue => '青';
+
+  @override
+  String get colorPink => 'ピンク';
+
+  @override
+  String get colorBlack => '黒';
+
+  @override
+  String get damagedData => '読み取れないデータ';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date に退避 · $size 文字';
+  }
+
+  @override
+  String get tryToRecover => '復元を試す';
+
+  @override
+  String get nothingRecovered => '台本を読み取れませんでした。';
+
+  @override
+  String get floatLowRam =>
+      'この端末は他のアプリの上に重ねて表示できません（低メモリ端末または Android Go）。代わりに撮影を使ってください。';
+
+  @override
+  String get oemTipsTitle => 'フローティングプロンプターを維持する';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand の端末は電池節約のためにフローティング画面を閉じることがあります。設定 → アプリ → APrompter で、他のアプリの上に重ねて表示（とポップアップ画面）を許可し、バッテリーを「制限なし」にして、通知を許可してください。';
+  }
+
+  @override
+  String get focusLine => '現在の行を強調';
+
+  @override
+  String get focusLineHint => '他の行を暗くします';
+
+  @override
+  String get stepByLine => '1行ずつ';
+
+  @override
+  String get stepByLineHint => 'タップやリモコンを押すたびに1行進みます（自動スクロールなし）';
+
+  @override
+  String get reduceEffects => 'エフェクトを減らす';
+
+  @override
+  String get reduceEffectsHint => 'フェードや影なし：古い端末でもなめらか、電池も節約';
+
+  @override
+  String get letterSpacing => '文字間隔';
+
+  @override
+  String get importTextFile => 'テキストファイルを読み込む';
+
+  @override
+  String get importTextFileHint => 'ファイル、ドライブ、メールから .txt や .md の台本を';
+
+  @override
+  String get importTextFailed => 'ファイルを読み取れませんでした。プレーンテキスト（.txt）ファイルを選んでください。';
+
+  @override
+  String get mySetup => 'マイ設定';
+
+  @override
+  String get mySetupHint => '保存した設定';
+
+  @override
+  String get saveMySetup => 'マイ設定として保存';
+
+  @override
+  String get resetAllSettings => 'すべての設定をリセット';
+
+  @override
+  String get runHadJumps => '今回は途中で移動したため、ペースを提案できません。';
+
+  @override
+  String get keepTake => '残す';
+
+  @override
+  String get retake => '撮り直す';
+
+  @override
+  String get reviewTakes => 'テイクごとに確認';
+
+  @override
+  String get reviewTakesHint => '見てから、残すか撮り直すかを選べます';
+
+  @override
+  String get takesToGallery => 'テイクを写真に保存';
+
+  @override
+  String get takesToGalleryHint =>
+      'オフ：テイクはアプリ内に残り、Google Photos や iCloud に入りません';
+
+  @override
+  String get takesTitle => 'テイク';
+
+  @override
+  String get takesEmpty =>
+      'アプリ内に残したテイクがここに表示されます。ここに残すには、設定で「テイクを写真に保存」をオフにしてください。';
+
+  @override
+  String get saveToGallery => '写真に保存';
+
+  @override
+  String get savedToGallery => '写真に保存しました';
+
+  @override
+  String get deleteTake => 'テイクを削除';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'テイク $n をアプリ内に残しました';
+  }
 }

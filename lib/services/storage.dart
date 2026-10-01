@@ -43,6 +43,37 @@ class ScriptVersion {
   );
 }
 
+/// A take kept inside the app instead of the gallery (Y3).
+class Take {
+  const Take({
+    required this.path,
+    required this.scriptId,
+    required this.recordedAt,
+    required this.seconds,
+  });
+
+  final String path;
+  final String scriptId;
+  final DateTime recordedAt;
+  final int seconds;
+
+  Map<String, dynamic> toJson() => {
+    'path': path,
+    'scriptId': scriptId,
+    'recordedAt': recordedAt.toIso8601String(),
+    'seconds': seconds,
+  };
+
+  factory Take.fromJson(Map<String, dynamic> json) => Take(
+    path: json['path'] as String,
+    scriptId: json['scriptId'] as String? ?? '',
+    recordedAt:
+        DateTime.tryParse(json['recordedAt'] as String? ?? '') ??
+        DateTime(2000),
+    seconds: json['seconds'] as int? ?? 0,
+  );
+}
+
 /// A deleted script, kept for [Storage.trashDays] days.
 class TrashedScript {
   const TrashedScript(this.script, this.deletedAt);
@@ -91,11 +122,42 @@ class Storage {
   /// Re-read values written by another engine (e.g. the Android overlay).
   Future<void> reload() => _prefs.reload();
 
-  /// Loads the library. Never throws: unreadable entries are skipped and the
-  /// original data is backed up so nothing is silently destroyed.
+  static const _indexKey = 'script_index';
+  static const _scriptPrefix = 'script:';
+
+  /// Loads the library. Never throws: unreadable entries are skipped and
+  /// backed up so nothing is silently destroyed.
+  ///
+  /// Each script is stored under its own key (D3), so saving one script
+  /// doesn't rewrite the whole library. Libraries from older versions (one
+  /// JSON list under "scripts") are moved over on first start.
   List<Script> loadScripts() {
-    final raw = _prefs.getString(_scriptsKey);
-    if (raw == null) return [_welcomeScript()];
+    final legacy = _prefs.getString(_scriptsKey);
+    if (legacy != null) {
+      final scripts = _parseLegacy(legacy);
+      _migrate(scripts);
+      return scripts..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    }
+    final index = _prefs.getStringList(_indexKey);
+    if (index == null) {
+      final welcome = _welcomeScript();
+      saveScript(welcome).ignore();
+      return [welcome];
+    }
+    final scripts = <Script>[];
+    for (final id in index) {
+      final raw = _prefs.getString('$_scriptPrefix$id');
+      if (raw == null) continue;
+      try {
+        scripts.add(Script.fromJson(jsonDecode(raw) as Map<String, dynamic>));
+      } catch (_) {
+        _backUpDamaged(raw);
+      }
+    }
+    return scripts..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+  }
+
+  List<Script> _parseLegacy(String raw) {
     final scripts = <Script>[];
     var damaged = false;
     try {
@@ -109,13 +171,28 @@ class Storage {
     } catch (_) {
       damaged = true;
     }
-    if (damaged) {
-      _prefs.setString(
-        '$_scriptsKey$backupSuffix${DateTime.now().millisecondsSinceEpoch}',
-        raw,
-      );
+    if (damaged) _backUpDamaged(raw);
+    return scripts;
+  }
+
+  /// The old single-list format is removed only once every script is
+  /// stored on its own, so an interrupted move is simply redone.
+  Future<void> _migrate(List<Script> scripts) async {
+    try {
+      await saveScripts(scripts);
+      await _prefs.remove(_scriptsKey);
+    } catch (_) {
+      // Try again on the next start.
     }
-    return scripts..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+  }
+
+  void _backUpDamaged(String raw) {
+    _prefs
+        .setString(
+          '$_scriptsKey$backupSuffix${DateTime.now().microsecondsSinceEpoch}',
+          raw,
+        )
+        .ignore();
   }
 
   static const backupSuffix = '_backup_';
@@ -131,23 +208,57 @@ class Storage {
     if (!ok) throw SaveFailed(key);
   }
 
-  Future<void> saveScripts(List<Script> scripts) async {
-    await _write(
-      _scriptsKey,
-      jsonEncode(scripts.map((s) => s.toJson()).toList()),
-    );
+  Future<void> _writeIndex(List<String> ids) async {
+    bool ok;
+    try {
+      ok = await _prefs.setStringList(_indexKey, ids);
+    } catch (_) {
+      ok = false;
+    }
+    if (!ok) throw const SaveFailed(_indexKey);
     if (_prefs.getInt(_schemaKey) != schemaVersion) {
       await _prefs.setInt(_schemaKey, schemaVersion);
     }
   }
 
-  /// Backups made when saved data could not be read (see [loadScripts]).
-  List<String> damagedBackupKeys() =>
-      _prefs
-          .getKeys()
-          .where((k) => k.startsWith('$_scriptsKey$backupSuffix'))
-          .toList()
-        ..sort();
+  /// Saves one script.
+  Future<void> saveScript(Script script) async {
+    await _write('$_scriptPrefix${script.id}', jsonEncode(script.toJson()));
+    final index = _prefs.getStringList(_indexKey) ?? const [];
+    if (!index.contains(script.id)) await _writeIndex([...index, script.id]);
+  }
+
+  /// Removes one script from the library (not from the trash).
+  Future<void> removeScript(String id) async {
+    final index = _prefs.getStringList(_indexKey) ?? const [];
+    await _writeIndex([
+      for (final i in index)
+        if (i != id) i,
+    ]);
+    await _prefs.remove('$_scriptPrefix$id');
+  }
+
+  /// Writes the whole library (bulk changes: import, migration, retry).
+  Future<void> saveScripts(List<Script> scripts) async {
+    for (final s in scripts) {
+      await _write('$_scriptPrefix${s.id}', jsonEncode(s.toJson()));
+    }
+    final ids = [for (final s in scripts) s.id];
+    final old = _prefs.getStringList(_indexKey) ?? const [];
+    await _writeIndex(ids);
+    for (final id in old) {
+      if (!ids.contains(id)) await _prefs.remove('$_scriptPrefix$id');
+    }
+  }
+
+  /// D4: data that couldn't be read, by storage key, oldest first.
+  Map<String, String> damagedBackups() => {
+    for (final k in _prefs.getKeys().toList()..sort())
+      if (k.startsWith('$_scriptsKey$backupSuffix'))
+        if (_prefs.getString(k) case final String raw) k: raw,
+  };
+
+  Future<void> deleteBackup(String key) => _prefs.remove(key);
 
   /// Earlier versions of script [id], newest first.
   List<ScriptVersion> loadVersions(String id) {
@@ -205,6 +316,59 @@ class Storage {
 
   Future<void> saveSettings(PrompterSettings settings) =>
       _write(_settingsKey, jsonEncode(settings.toJson()));
+
+  static const _takesKey = 'takes';
+
+  /// Takes kept inside the app, newest first.
+  List<Take> loadTakes() {
+    final raw = _prefs.getString(_takesKey);
+    if (raw == null) return [];
+    try {
+      return [
+        for (final t in jsonDecode(raw) as List)
+          Take.fromJson(t as Map<String, dynamic>),
+      ]..sort((a, b) => b.recordedAt.compareTo(a.recordedAt));
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Future<void> saveTakes(List<Take> takes) =>
+      _write(_takesKey, jsonEncode(takes.map((t) => t.toJson()).toList()));
+
+  static const _appLockKey = 'app_lock';
+
+  /// Y1: ask for fingerprint / face / PIN to open the app.
+  bool get appLock => _prefs.getBool(_appLockKey) ?? false;
+  Future<void> setAppLock(bool on) => _prefs.setBool(_appLockKey, on);
+
+  static const _oemTipsKey = 'oem_tips_seen';
+
+  /// Whether the phone-maker Float tips were shown (F2).
+  bool get oemTipsSeen => _prefs.getBool(_oemTipsKey) ?? false;
+  Future<void> setOemTipsSeen() => _prefs.setBool(_oemTipsKey, true);
+
+  static const _cameraIntroKey = 'camera_intro_seen';
+
+  /// Whether the camera/microphone explanation was shown (O1).
+  bool get cameraIntroSeen => _prefs.getBool(_cameraIntroKey) ?? false;
+  Future<void> setCameraIntroSeen() => _prefs.setBool(_cameraIntroKey, true);
+
+  static const _mySetupKey = 'my_setup';
+
+  /// The creator's saved setup (S1), or null.
+  PrompterSettings? loadMySetup() {
+    final raw = _prefs.getString(_mySetupKey);
+    if (raw == null) return null;
+    try {
+      return PrompterSettings.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> saveMySetup(PrompterSettings settings) =>
+      _write(_mySetupKey, jsonEncode(settings.toJson()));
 
   /// The script currently shown in the floating overlay.
   Script? loadActiveScript() {

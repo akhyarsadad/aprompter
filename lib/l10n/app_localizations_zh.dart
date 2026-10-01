@@ -638,6 +638,188 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hashtagHint => '话题标签行（#fyp #ad）会变暗显示且不计时。段落请使用带空格的“# ”。';
+
+  @override
+  String get appLock => '应用锁';
+
+  @override
+  String get appLockHint => '打开 APrompter 时需验证指纹、面容或手机 PIN 码';
+
+  @override
+  String get appLockUnavailable => '请先在这台手机上设置锁屏。';
+
+  @override
+  String get unlock => '解锁';
+
+  @override
+  String get unlockReason => '解锁 APrompter 以查看你的脚本';
+
+  @override
+  String get autoStopWait => '最后一行后的等待时间';
+
+  @override
+  String get beforeYouRecord => '拍摄前提醒';
+
+  @override
+  String get recordAnyway => '仍然拍摄';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '剩余空间只够拍约 $minutes 分钟视频。请清理空间或降低视频画质。';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return '电量仅剩 $level%，长条视频可能会中断。请尽量连接充电器。';
+  }
+
+  @override
+  String get brightScreen => '提词时屏幕最亮';
+
+  @override
+  String get brightScreenHint => '户外更易看清';
+
+  @override
+  String get cameraBusy => '其他应用正在使用相机。请关闭后重试。';
+
+  @override
+  String get cameraIntroTitle => '相机和麦克风';
+
+  @override
+  String get cameraIntroBody =>
+      '为了在屏幕显示脚本的同时拍摄你，APrompter 需要使用相机和麦克风。手机接下来会询问授权。视频只保存在你的手机上。';
+
+  @override
+  String get continueLabel => '继续';
+
+  @override
+  String get notNow => '以后再说';
+
+  @override
+  String get colorWhite => '白色';
+
+  @override
+  String get colorYellow => '黄色';
+
+  @override
+  String get colorGreen => '绿色';
+
+  @override
+  String get colorBlue => '蓝色';
+
+  @override
+  String get colorPink => '粉色';
+
+  @override
+  String get colorBlack => '黑色';
+
+  @override
+  String get damagedData => '无法读取的数据';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '于 $date 单独保存 · $size 个字符';
+  }
+
+  @override
+  String get tryToRecover => '尝试恢复';
+
+  @override
+  String get nothingRecovered => '未能从中读取任何脚本。';
+
+  @override
+  String get floatLowRam => '这台手机无法在其他应用上层显示（低内存或 Android Go 手机）。请改用拍摄。';
+
+  @override
+  String get oemTipsTitle => '让悬浮提词器保持运行';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand 手机可能会为省电关闭悬浮窗。在 设置 → 应用 → APrompter 中：允许在其他应用上层显示（及弹出窗口），将电池设为“无限制”，并允许通知。';
+  }
+
+  @override
+  String get focusLine => '聚焦当前行';
+
+  @override
+  String get focusLineHint => '调暗其他行';
+
+  @override
+  String get stepByLine => '逐行模式';
+
+  @override
+  String get stepByLineHint => '每次点按或按遥控器前进一行，不自动滚动';
+
+  @override
+  String get reduceEffects => '减少特效';
+
+  @override
+  String get reduceEffectsHint => '无淡入淡出和阴影：旧手机更流畅，也更省电';
+
+  @override
+  String get letterSpacing => '字间距';
+
+  @override
+  String get importTextFile => '导入文本文件';
+
+  @override
+  String get importTextFileHint => '从文件、云端硬盘或邮件导入 .txt 或 .md 脚本';
+
+  @override
+  String get importTextFailed => '无法读取该文件。请选择纯文本（.txt）文件。';
+
+  @override
+  String get mySetup => '我的设置';
+
+  @override
+  String get mySetupHint => '你保存的设置';
+
+  @override
+  String get saveMySetup => '保存为我的设置';
+
+  @override
+  String get resetAllSettings => '重置所有设置';
+
+  @override
+  String get runHadJumps => '这次过程中有跳转，无法建议语速。';
+
+  @override
+  String get keepTake => '保留';
+
+  @override
+  String get retake => '重拍';
+
+  @override
+  String get reviewTakes => '逐条检查';
+
+  @override
+  String get reviewTakesHint => '看一遍，再决定保留还是重拍';
+
+  @override
+  String get takesToGallery => '将片段保存到相册';
+
+  @override
+  String get takesToGalleryHint => '关闭：片段只留在应用内，不进入 Google Photos 和 iCloud';
+
+  @override
+  String get takesTitle => '拍摄片段';
+
+  @override
+  String get takesEmpty => '留在应用内的片段会显示在这里。在设置中关闭“将片段保存到相册”即可保留在这里。';
+
+  @override
+  String get saveToGallery => '保存到相册';
+
+  @override
+  String get savedToGallery => '已保存到相册';
+
+  @override
+  String get deleteTake => '删除这一条';
+
+  @override
+  String takeKeptInApp(int n) {
+    return '第 $n 条已保留在应用内';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1274,4 +1456,186 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hashtagHint => '主題標籤行（#fyp #ad）會變暗顯示且不計時。段落請使用帶空格的「# 」。';
+
+  @override
+  String get appLock => 'App 鎖定';
+
+  @override
+  String get appLockHint => '開啟 APrompter 時需驗證指紋、臉孔或手機 PIN 碼';
+
+  @override
+  String get appLockUnavailable => '請先在這支手機上設定螢幕鎖定。';
+
+  @override
+  String get unlock => '解鎖';
+
+  @override
+  String get unlockReason => '解鎖 APrompter 以查看你的腳本';
+
+  @override
+  String get autoStopWait => '最後一行後的等待時間';
+
+  @override
+  String get beforeYouRecord => '拍攝前提醒';
+
+  @override
+  String get recordAnyway => '仍要拍攝';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '剩餘空間只夠拍約 $minutes 分鐘影片。請清出空間或降低影片畫質。';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return '電量僅剩 $level%，長條影片可能會中斷。請盡量接上充電器。';
+  }
+
+  @override
+  String get brightScreen => '提詞時螢幕最亮';
+
+  @override
+  String get brightScreenHint => '戶外更容易看清楚';
+
+  @override
+  String get cameraBusy => '其他 App 正在使用相機。請關閉後再試一次。';
+
+  @override
+  String get cameraIntroTitle => '相機和麥克風';
+
+  @override
+  String get cameraIntroBody =>
+      '為了在螢幕顯示腳本的同時拍攝你，APrompter 需要使用相機和麥克風。手機接下來會詢問授權。影片只會保存在你的手機上。';
+
+  @override
+  String get continueLabel => '繼續';
+
+  @override
+  String get notNow => '稍後再說';
+
+  @override
+  String get colorWhite => '白色';
+
+  @override
+  String get colorYellow => '黃色';
+
+  @override
+  String get colorGreen => '綠色';
+
+  @override
+  String get colorBlue => '藍色';
+
+  @override
+  String get colorPink => '粉紅色';
+
+  @override
+  String get colorBlack => '黑色';
+
+  @override
+  String get damagedData => '無法讀取的資料';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '於 $date 另外保存 · $size 個字元';
+  }
+
+  @override
+  String get tryToRecover => '嘗試復原';
+
+  @override
+  String get nothingRecovered => '無法從中讀取任何腳本。';
+
+  @override
+  String get floatLowRam => '這支手機無法在其他應用程式上層顯示（低記憶體或 Android Go 手機）。請改用拍攝。';
+
+  @override
+  String get oemTipsTitle => '讓懸浮提詞機保持運作';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand 手機可能會為了省電關閉懸浮視窗。在 設定 → 應用程式 → APrompter 中：允許顯示在其他應用程式上層（及彈出式視窗），將電池設為「不受限制」，並允許通知。';
+  }
+
+  @override
+  String get focusLine => '聚焦目前這一行';
+
+  @override
+  String get focusLineHint => '調暗其他行';
+
+  @override
+  String get stepByLine => '逐行模式';
+
+  @override
+  String get stepByLineHint => '每點一下或按一次遙控器前進一行，不會自動捲動';
+
+  @override
+  String get reduceEffects => '減少特效';
+
+  @override
+  String get reduceEffectsHint => '不淡入淡出、無陰影：舊手機更流暢，也更省電';
+
+  @override
+  String get letterSpacing => '字元間距';
+
+  @override
+  String get importTextFile => '匯入文字檔';
+
+  @override
+  String get importTextFileHint => '從檔案、雲端硬碟或電子郵件匯入 .txt 或 .md 腳本';
+
+  @override
+  String get importTextFailed => '無法讀取這個檔案。請選擇純文字（.txt）檔案。';
+
+  @override
+  String get mySetup => '我的設定';
+
+  @override
+  String get mySetupHint => '你儲存的設定';
+
+  @override
+  String get saveMySetup => '儲存為我的設定';
+
+  @override
+  String get resetAllSettings => '重設所有設定';
+
+  @override
+  String get runHadJumps => '這次過程中有跳段，無法建議語速。';
+
+  @override
+  String get keepTake => '保留';
+
+  @override
+  String get retake => '重拍';
+
+  @override
+  String get reviewTakes => '逐條檢查';
+
+  @override
+  String get reviewTakesHint => '看過一遍，再決定保留或重拍';
+
+  @override
+  String get takesToGallery => '將片段儲存到相簿';
+
+  @override
+  String get takesToGalleryHint => '關閉：片段只留在 App 內，不會進入 Google Photos 和 iCloud';
+
+  @override
+  String get takesTitle => '拍攝片段';
+
+  @override
+  String get takesEmpty => '留在 App 內的片段會顯示在這裡。在設定中關閉「將片段儲存到相簿」即可保留在這裡。';
+
+  @override
+  String get saveToGallery => '儲存到相簿';
+
+  @override
+  String get savedToGallery => '已儲存到相簿';
+
+  @override
+  String get deleteTake => '刪除這一條';
+
+  @override
+  String takeKeptInApp(int n) {
+    return '第 $n 條已保留在 App 內';
+  }
 }

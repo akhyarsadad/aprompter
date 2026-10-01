@@ -651,4 +651,196 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get hashtagHint =>
       'হ্যাশট্যাগ লাইন (#fyp #ad) ঝাপসা দেখায় এবং সময় গোনা হয় না। অংশের জন্য স্পেসসহ \"# \" ব্যবহার করুন।';
+
+  @override
+  String get appLock => 'অ্যাপ লক';
+
+  @override
+  String get appLockHint =>
+      'APrompter খুলতে আঙুলের ছাপ, মুখ বা ফোনের PIN চাইবে';
+
+  @override
+  String get appLockUnavailable => 'আগে এই ফোনে স্ক্রিন লক সেট করুন।';
+
+  @override
+  String get unlock => 'আনলক করুন';
+
+  @override
+  String get unlockReason => 'আপনার স্ক্রিপ্ট দেখতে APrompter আনলক করুন';
+
+  @override
+  String get autoStopWait => 'শেষ লাইনের পর অপেক্ষা';
+
+  @override
+  String get beforeYouRecord => 'রেকর্ড করার আগে';
+
+  @override
+  String get recordAnyway => 'তবুও রেকর্ড করুন';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'খালি জায়গায় মাত্র প্রায় $minutes মি. ভিডিও ধরবে। জায়গা খালি করুন বা ভিডিওর মান কমান।';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'ব্যাটারি $level% — লম্বা টেক মাঝপথে কেটে যেতে পারে। পারলে চার্জার লাগান।';
+  }
+
+  @override
+  String get brightScreen => 'প্রম্পটিংয়ের সময় পূর্ণ উজ্জ্বলতা';
+
+  @override
+  String get brightScreenHint => 'বাইরে পড়তে সুবিধা';
+
+  @override
+  String get cameraBusy =>
+      'অন্য একটি অ্যাপ ক্যামেরা ব্যবহার করছে। সেটি বন্ধ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get cameraIntroTitle => 'ক্যামেরা ও মাইক্রোফোন';
+
+  @override
+  String get cameraIntroBody =>
+      'স্ক্রিনে স্ক্রিপ্ট রেখে আপনাকে ভিডিও করতে APrompter-এর ক্যামেরা ও মাইক্রোফোন লাগবে। এরপর আপনার ফোন অনুমতি চাইবে। ভিডিও আপনার ফোনেই থাকে।';
+
+  @override
+  String get continueLabel => 'চালিয়ে যান';
+
+  @override
+  String get notNow => 'এখন নয়';
+
+  @override
+  String get colorWhite => 'সাদা';
+
+  @override
+  String get colorYellow => 'হলুদ';
+
+  @override
+  String get colorGreen => 'সবুজ';
+
+  @override
+  String get colorBlue => 'নীল';
+
+  @override
+  String get colorPink => 'গোলাপি';
+
+  @override
+  String get colorBlack => 'কালো';
+
+  @override
+  String get damagedData => 'পড়া যায় না এমন ডেটা';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date তারিখে আলাদা রাখা হয়েছে · $size অক্ষর';
+  }
+
+  @override
+  String get tryToRecover => 'উদ্ধারের চেষ্টা করুন';
+
+  @override
+  String get nothingRecovered => 'এখান থেকে কোনো স্ক্রিপ্ট পড়া যায়নি।';
+
+  @override
+  String get floatLowRam =>
+      'এই ফোন অন্য অ্যাপের উপরে অ্যাপ দেখাতে পারে না (কম মেমরি বা Android Go ফোন)। এর বদলে রেকর্ড ব্যবহার করুন।';
+
+  @override
+  String get oemTipsTitle => 'ভাসমান প্রম্পটার চালু রাখুন';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand ফোন ব্যাটারি বাঁচাতে ভাসমান উইন্ডো বন্ধ করে দিতে পারে। সেটিংস → অ্যাপ → APrompter-এ: অন্য অ্যাপের উপরে দেখানোর (এবং পপ-আপ উইন্ডোর) অনুমতি দিন, ব্যাটারি \"সীমাবদ্ধ নয়\"-এ রাখুন এবং বিজ্ঞপ্তির অনুমতি দিন।';
+  }
+
+  @override
+  String get focusLine => 'বর্তমান লাইনে ফোকাস';
+
+  @override
+  String get focusLineHint => 'অন্য লাইনগুলো ঝাপসা করে';
+
+  @override
+  String get stepByLine => 'লাইন ধরে ধরে';
+
+  @override
+  String get stepByLineHint =>
+      'প্রতিটি ট্যাপ বা রিমোট চাপে এক লাইন এগোয় — স্বয়ংক্রিয় স্ক্রল নেই';
+
+  @override
+  String get reduceEffects => 'ইফেক্ট কমান';
+
+  @override
+  String get reduceEffectsHint =>
+      'ফেড বা ছায়া নেই: পুরোনো ফোনে মসৃণ, ব্যাটারি বাঁচে';
+
+  @override
+  String get letterSpacing => 'অক্ষরের ব্যবধান';
+
+  @override
+  String get importTextFile => 'টেক্সট ফাইল ইমপোর্ট করুন';
+
+  @override
+  String get importTextFileHint =>
+      'Files, Drive বা ইমেল থেকে .txt বা .md স্ক্রিপ্ট';
+
+  @override
+  String get importTextFailed =>
+      'ফাইলটি পড়া যায়নি। সাধারণ টেক্সট (.txt) ফাইল বেছে নিন।';
+
+  @override
+  String get mySetup => 'আমার সেটআপ';
+
+  @override
+  String get mySetupHint => 'আপনার সেভ করা সেটআপ';
+
+  @override
+  String get saveMySetup => 'আমার সেটআপ হিসেবে সেভ করুন';
+
+  @override
+  String get resetAllSettings => 'সব সেটিংস রিসেট করুন';
+
+  @override
+  String get runHadJumps =>
+      'এই রানে আপনি আগে-পিছে গেছেন, তাই গতি সাজেস্ট করা যাচ্ছে না।';
+
+  @override
+  String get keepTake => 'রাখুন';
+
+  @override
+  String get retake => 'আবার নিন';
+
+  @override
+  String get reviewTakes => 'প্রতিটি টেক দেখুন';
+
+  @override
+  String get reviewTakesHint => 'দেখে নিন, তারপর রাখুন বা আবার নিন';
+
+  @override
+  String get takesToGallery => 'টেক গ্যালারিতে সেভ করুন';
+
+  @override
+  String get takesToGalleryHint =>
+      'বন্ধ: টেক অ্যাপেই থাকে, Google Photos ও iCloud-এর বাইরে';
+
+  @override
+  String get takesTitle => 'টেক';
+
+  @override
+  String get takesEmpty =>
+      'অ্যাপে রাখা টেক এখানে দেখা যাবে। এখানে রাখতে সেটিংসে \"টেক গ্যালারিতে সেভ করুন\" বন্ধ করুন।';
+
+  @override
+  String get saveToGallery => 'গ্যালারিতে সেভ করুন';
+
+  @override
+  String get savedToGallery => 'গ্যালারিতে সেভ হয়েছে';
+
+  @override
+  String get deleteTake => 'টেক মুছুন';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'টেক $n অ্যাপে রাখা হয়েছে';
+  }
 }

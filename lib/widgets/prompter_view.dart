@@ -16,6 +16,11 @@ class PrompterController extends ChangeNotifier {
   double _wpm;
   _PrompterViewState? _view;
   final _readTime = Stopwatch();
+  bool _jumped = false;
+
+  /// The reader dragged or jumped during this run, so its time says
+  /// nothing reliable about their pace.
+  bool get jumpedDuringRun => _jumped;
 
   /// Scroll position from 0 (start) to 1 (end).
   final progress = ValueNotifier<double>(0);
@@ -54,13 +59,30 @@ class PrompterController extends ChangeNotifier {
   void restart() {
     pause();
     _readTime.reset();
+    _jumped = false;
     _view?._jumpTo(0);
   }
 
   /// Jump so that section [index] sits on the reading line.
-  void jumpToSection(int index) => _view?._jumpToSection(index);
-  void nextSection() => _view?._stepSection(1);
-  void previousSection() => _view?._stepSection(-1);
+  void jumpToSection(int index) =>
+      _markJump(() => _view?._jumpToSection(index));
+  void nextSection() => _markJump(() => _view?._stepSection(1));
+  void previousSection() => _markJump(() => _view?._stepSection(-1));
+
+  /// Puts the reading line at [fraction] of the script (0 = start).
+  void seek(double fraction) {
+    final view = _view;
+    if (view == null || !view._scroll.hasClients) return;
+    view._jumpTo(fraction * view._scroll.position.maxScrollExtent);
+  }
+
+  /// Gives the keyboard (remote) back to the prompter, e.g. after a sheet.
+  void focus() => _view?._focus.requestFocus();
+
+  void _markJump(VoidCallback jump) {
+    if (_readTime.elapsed > Duration.zero) _jumped = true;
+    jump();
+  }
 
   @override
   void dispose() {
@@ -85,6 +107,7 @@ class PrompterView extends StatefulWidget {
     this.onTap,
     this.autofocus = true,
     this.onFontSizeChanged,
+    this.onWpmChanged,
   });
 
   final String text;
@@ -105,6 +128,9 @@ class PrompterView extends StatefulWidget {
   /// null or when [manualScroll] is false.
   final ValueChanged<double>? onFontSizeChanged;
 
+  /// Called when a remote or keyboard changes the pace, so it is kept.
+  final ValueChanged<double>? onWpmChanged;
+
   @override
   State<PrompterView> createState() => _PrompterViewState();
 }
@@ -122,6 +148,7 @@ class _PrompterViewState extends State<PrompterView>
   Duration _lastTick = Duration.zero;
   bool _dragging = false;
   double? _pinchStartFontSize;
+  final _focus = FocusNode(debugLabel: 'prompter');
 
   @override
   void initState() {
@@ -180,7 +207,8 @@ class _PrompterViewState extends State<PrompterView>
 
   void _onControllerChanged() {
     final c = widget.controller;
-    if (c.playing && !_ticker.isActive) {
+    // Line by line needs no ticker: nothing moves on its own.
+    if (c.playing && !_ticker.isActive && !widget.settings.stepByLine) {
       // Playing again after the end starts over instead of finishing at once.
       if (_scroll.hasClients &&
           _scroll.position.maxScrollExtent > 0 &&
@@ -261,7 +289,7 @@ class _PrompterViewState extends State<PrompterView>
   void _onTick(Duration elapsed) {
     final dt = (elapsed - _lastTick).inMicroseconds / 1e6;
     _lastTick = elapsed;
-    if (_dragging || !_scroll.hasClients) return;
+    if (_dragging || !_scroll.hasClients || widget.settings.stepByLine) return;
     final pos = _scroll.position;
     final next = _advance(pos.pixels, dt, pos.maxScrollExtent);
     if (next >= pos.maxScrollExtent) {
@@ -337,6 +365,67 @@ class _PrompterViewState extends State<PrompterView>
     LogicalKeyboardKey.period,
   };
 
+  /// Line-by-line mode: puts the next (or previous) spoken line on the
+  /// reading line. Past the last line the script is finished.
+  void _stepLine(int direction) {
+    if (!_scroll.hasClients) return;
+    final pos = _scroll.position;
+    final starts = [
+      for (final s in _segments(pos.maxScrollExtent))
+        if (s.words + s.pauses > 0) s.start,
+    ];
+    final current = _scroll.offset;
+    if (direction > 0) {
+      for (final o in starts) {
+        if (o > current + 1) return _animateTo(o);
+      }
+      _animateTo(pos.maxScrollExtent);
+      widget.controller.pause();
+      widget.onFinished?.call();
+    } else {
+      for (final o in starts.reversed) {
+        if (o < current - 1) return _animateTo(o);
+      }
+      _animateTo(0);
+    }
+  }
+
+  void _animateTo(double offset) {
+    final pos = _scroll.position;
+    _scroll.animateTo(
+      offset.clamp(pos.minScrollExtent, pos.maxScrollExtent),
+      duration: widget.settings.reduceEffects
+          ? const Duration(milliseconds: 1)
+          : const Duration(milliseconds: 250),
+      curve: Curves.easeOut,
+    );
+  }
+
+  /// Tap / play key: in line-by-line mode, while reading, each press is the
+  /// next line.
+  void _onPrimary() {
+    if (widget.settings.stepByLine && widget.controller.playing) {
+      _stepLine(1);
+    } else {
+      (widget.onTap ?? widget.controller.toggle)();
+    }
+  }
+
+  /// R1: a hand holding the phone touches the screen edges; those touches
+  /// must not pause a take.
+  static const _edgeDeadZone = 24.0;
+
+  void _onTapUp(TapUpDetails d) {
+    final width = context.size?.width ?? 0;
+    if (widget.manualScroll &&
+        width > 4 * _edgeDeadZone &&
+        (d.localPosition.dx < _edgeDeadZone ||
+            d.localPosition.dx > width - _edgeDeadZone)) {
+      return;
+    }
+    _onPrimary();
+  }
+
   KeyEventResult _onKey(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
       return KeyEventResult.ignored;
@@ -344,7 +433,7 @@ class _PrompterViewState extends State<PrompterView>
     final c = widget.controller;
     final key = event.logicalKey;
     if (_playPauseKeys.contains(key)) {
-      if (event is KeyDownEvent) (widget.onTap ?? c.toggle)();
+      if (event is KeyDownEvent) _onPrimary();
     } else if (key == LogicalKeyboardKey.pageUp ||
         key == LogicalKeyboardKey.mediaTrackPrevious ||
         key == LogicalKeyboardKey.mediaRewind) {
@@ -353,9 +442,13 @@ class _PrompterViewState extends State<PrompterView>
         key == LogicalKeyboardKey.mediaFastForward) {
       c.nextSection();
     } else if (key == LogicalKeyboardKey.arrowUp) {
+      if (widget.settings.stepByLine) return _stepAndHandle(-1);
       c.faster();
+      widget.onWpmChanged?.call(c.wpm);
     } else if (key == LogicalKeyboardKey.arrowDown) {
+      if (widget.settings.stepByLine) return _stepAndHandle(1);
       c.slower();
+      widget.onWpmChanged?.call(c.wpm);
     } else if (key == LogicalKeyboardKey.arrowRight) {
       c.nextSection();
     } else if (key == LogicalKeyboardKey.arrowLeft) {
@@ -366,8 +459,14 @@ class _PrompterViewState extends State<PrompterView>
     return KeyEventResult.handled;
   }
 
+  KeyEventResult _stepAndHandle(int direction) {
+    _stepLine(direction);
+    return KeyEventResult.handled;
+  }
+
   void _onScaleStart(ScaleStartDetails d) {
     _dragging = true;
+    if (widget.controller.playing) widget.controller._jumped = true;
     _pinchStartFontSize = widget.settings.fontSize;
   }
 
@@ -388,9 +487,51 @@ class _PrompterViewState extends State<PrompterView>
     _pinchStartFontSize = null;
   }
 
+  /// Fades text at the edges; with "focus line", also dims everything but
+  /// the line being read (R8). No mask at all when effects are reduced.
+  Widget _mask(PrompterSettings s, double height, Widget child) {
+    if (s.reduceEffects && !s.focusLine) return child;
+    const guide = 0.3;
+    final line = height <= 0
+        ? 0.1
+        : (s.fontSize * s.lineHeight * 1.15 / height).clamp(0.02, 0.5);
+    const dim = Color(0x40FFFFFF);
+    final gradient = s.focusLine
+        ? LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: const [dim, dim, Colors.white, Colors.white, dim, dim],
+            stops: [
+              0,
+              (guide - 0.03).clamp(0.0, 1.0),
+              guide - 0.005,
+              (guide + line).clamp(0.0, 1.0),
+              (guide + line + 0.03).clamp(0.0, 1.0),
+              1,
+            ],
+          )
+        : const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Colors.white,
+              Colors.white,
+              Colors.transparent,
+            ],
+            stops: [0, 0.08, 0.92, 1],
+          );
+    return ShaderMask(
+      shaderCallback: gradient.createShader,
+      blendMode: BlendMode.dstIn,
+      child: child,
+    );
+  }
+
   @override
   void dispose() {
     _detach(widget.controller);
+    _focus.dispose();
     _ticker.dispose();
     _scroll.dispose();
     super.dispose();
@@ -400,109 +541,115 @@ class _PrompterViewState extends State<PrompterView>
   Widget build(BuildContext context) {
     final s = widget.settings;
     final color = Color(s.textColor);
-    return Focus(
-      autofocus: widget.autofocus,
-      onKeyEvent: _onKey,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // Start the first line at the reading guide and let the last line
-          // scroll all the way up to it.
-          final guideY = constraints.maxHeight * 0.3;
-          Widget content = ScriptText(
-            key: _contentKey,
-            blocks: _blocks,
-            settings: s,
-            sectionKeys: _sectionKeys,
-            blockKeys: _blockKeys,
-          );
-          if (s.mirror) content = Transform.flip(flipX: true, child: content);
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: ColoredBox(
-                  color: Colors.black.withValues(alpha: s.backgroundOpacity),
+    final l = context.l10n;
+    // A2: screen readers get the spoken text and play / pause.
+    final spoken = spokenText(widget.text);
+    return Semantics(
+      container: true,
+      label: l.script,
+      value: spoken.length > 4000 ? spoken.substring(0, 4000) : spoken,
+      onTapHint: widget.controller.playing ? l.pause : l.play,
+      onTap: _onPrimary,
+      child: Focus(
+        focusNode: _focus,
+        autofocus: widget.autofocus,
+        onKeyEvent: _onKey,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Start the first line at the reading guide and let the last line
+            // scroll all the way up to it.
+            final guideY = constraints.maxHeight * 0.3;
+            Widget content = ScriptText(
+              key: _contentKey,
+              blocks: _blocks,
+              settings: s,
+              sectionKeys: _sectionKeys,
+              blockKeys: _blockKeys,
+            );
+            if (s.mirror) content = Transform.flip(flipX: true, child: content);
+            return Stack(
+              children: [
+                Positioned.fill(
+                  child: ColoredBox(
+                    // R2: dark text gets a light backdrop so it stays readable.
+                    color:
+                        (PrompterSettings.isDark(s.textColor)
+                                ? Colors.white
+                                : Colors.black)
+                            .withValues(alpha: s.backgroundOpacity),
+                  ),
                 ),
-              ),
-              Positioned.fill(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: widget.onTap ?? widget.controller.toggle,
-                  onScaleStart: widget.manualScroll ? _onScaleStart : null,
-                  onScaleUpdate: widget.manualScroll ? _onScaleUpdate : null,
-                  onScaleEnd: widget.manualScroll ? _onScaleEnd : null,
-                  child: ShaderMask(
-                    shaderCallback: (rect) => const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.white,
-                        Colors.white,
-                        Colors.transparent,
-                      ],
-                      stops: [0, 0.08, 0.92, 1],
-                    ).createShader(rect),
-                    blendMode: BlendMode.dstIn,
-                    child: SingleChildScrollView(
-                      controller: _scroll,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(
-                        16,
-                        guideY,
-                        16,
-                        constraints.maxHeight - guideY,
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTapUp: _onTapUp,
+                    onScaleStart: widget.manualScroll ? _onScaleStart : null,
+                    onScaleUpdate: widget.manualScroll ? _onScaleUpdate : null,
+                    onScaleEnd: widget.manualScroll ? _onScaleEnd : null,
+                    child: _mask(
+                      s,
+                      constraints.maxHeight,
+                      SingleChildScrollView(
+                        controller: _scroll,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(
+                          16,
+                          guideY,
+                          16,
+                          constraints.maxHeight - guideY,
+                        ),
+                        child: content,
                       ),
-                      child: content,
                     ),
                   ),
                 ),
-              ),
-              if (s.showGuide)
-                Positioned(
-                  top: guideY - 2,
-                  left: 0,
-                  right: 0,
-                  child: IgnorePointer(
-                    child: Row(
-                      // Arrows point at the line in every UI direction.
-                      textDirection: TextDirection.ltr,
-                      children: [
-                        Icon(
-                          Icons.play_arrow,
-                          color: color.withValues(alpha: 0.7),
-                        ),
-                        Expanded(
-                          child: Container(
-                            height: 2,
-                            color: color.withValues(alpha: 0.25),
-                          ),
-                        ),
-                        Transform.flip(
-                          flipX: true,
-                          child: Icon(
+                if (s.showGuide)
+                  Positioned(
+                    top: guideY - 2,
+                    left: 0,
+                    right: 0,
+                    child: IgnorePointer(
+                      child: Row(
+                        // Arrows point at the line in every UI direction.
+                        textDirection: TextDirection.ltr,
+                        children: [
+                          Icon(
                             Icons.play_arrow,
                             color: color.withValues(alpha: 0.7),
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Container(
+                              height: 2,
+                              color: color.withValues(alpha: 0.25),
+                            ),
+                          ),
+                          Transform.flip(
+                            flipX: true,
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: color.withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              if (!widget.controller.playing)
-                const Positioned(
-                  right: 8,
-                  bottom: 8,
-                  child: IgnorePointer(
-                    child: Icon(
-                      Icons.pause_circle,
-                      color: Colors.white54,
-                      size: 28,
+                if (!widget.controller.playing)
+                  const Positioned(
+                    right: 8,
+                    bottom: 8,
+                    child: IgnorePointer(
+                      child: Icon(
+                        Icons.pause_circle,
+                        color: Colors.white54,
+                        size: 28,
+                      ),
                     ),
                   ),
-                ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -540,7 +687,17 @@ class ScriptText extends StatelessWidget {
       fontSize: s.fontSize,
       height: s.lineHeight,
       fontWeight: FontWeight.w600,
-      shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
+      letterSpacing: s.letterSpacing,
+      shadows: s.reduceEffects
+          ? null
+          : [
+              Shadow(
+                blurRadius: 4,
+                color: PrompterSettings.isDark(s.textColor)
+                    ? Colors.white54
+                    : Colors.black54,
+              ),
+            ],
     );
     // "Left" means the start of each line, so right-to-left lines (Arabic,
     // Hebrew…) hug the right edge even inside a left-to-right app.
@@ -564,7 +721,9 @@ class ScriptText extends StatelessWidget {
             key: key,
             padding: EdgeInsets.only(bottom: s.fontSize * 0.2),
             child: Text(
-              b.text.toUpperCase(),
+              // Not upper-cased: casing rules differ per language
+              // (Turkish i → İ, German ß…).
+              b.text,
               textAlign: align,
               textDirection: dir(b.text),
               style: base.copyWith(
