@@ -51,7 +51,7 @@ class FloatingPrompter {
     await storage.saveSettings(settings);
 
     if (!await FlutterOverlayWindow.isActive()) {
-      final l = deviceLocalizations();
+      final l = deviceLocalizations(parseLocaleTag(storage.loadLocale()));
       final display = PlatformDispatcher.instance.displays.first;
       final ratio = display.devicePixelRatio;
       final screen = display.size / ratio;
@@ -75,6 +75,7 @@ class FloatingPrompter {
         'type': 'load',
         'script': script.toJson(),
         'settings': settings.toJson(),
+        'locale': storage.loadLocale(),
       }),
     );
   }

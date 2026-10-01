@@ -1,7 +1,6 @@
 {
   "@@locale": "id",
   "appTitle": "APrompter",
-  "cancel": "Batal",
   "close": "Tutup",
   "settings": "Pengaturan",
   "prompterSettings": "Pengaturan prompter",
@@ -38,7 +37,6 @@
   "floatingStarted": "Prompter melayang aktif. Buka aplikasi kamera lalu ketuk teks untuk mulai.",
   "floatingNotificationTitle": "APrompter sedang melayang",
   "openScriptInApp": "Buka naskah di APrompter",
-  "deleteScriptTitle": "Hapus naskah?",
   "script": "Naskah",
   "title": "Judul",
   "status": "Status",
@@ -65,7 +63,6 @@
   "sectionN": "Bagian {n}",
   "noSectionsHint": "Belum ada bagian. Tambahkan baris yang diawali \"#\" di editor (mis. \"# Hook\") untuk lompat antar bagian dan mengulang satu bagian saja.",
   "emptyScript": "(naskah kosong)",
-  "pinchToResize": "Cubit untuk mengubah ukuran teks",
   "preview": "Pratinjau",
   "setup": "Setelan",
   "pace": "Tempo",
@@ -108,10 +105,8 @@
   "stopRecording": "Berhenti rekam",
   "noCamera": "Kamera tidak ditemukan di perangkat ini.",
   "cameraDenied": "Akses kamera ditolak. Aktifkan di pengaturan sistem.",
-  "micDenied": "Akses mikrofon ditolak. Aktifkan di pengaturan sistem.",
   "cameraError": "Kesalahan kamera: {message}",
   "takeSaved": "Take {n} disimpan ke galeri",
-  "saveFailed": "Gagal menyimpan video: {message}",
   "templateBlank": "Kosong",
   "templateBlankHint": "Mulai dari halaman kosong",
   "templateHvc": "Hook → Isi → CTA",
@@ -159,5 +154,10 @@
   "resizePrompter": "Seret untuk mengubah ukuran prompter",
   "prompterWidth": "Lebar prompter",
   "resetPosition": "Atur ulang posisi (atas, lebar penuh)",
-  "positionHint": "Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya."
+  "positionHint": "Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya.",
+  "app": "Aplikasi",
+  "appLanguage": "Bahasa aplikasi",
+  "systemDefault": "Bahasa ponsel",
+  "secondsShort": "{n} dtk",
+  "minutesShort": "{n} mnt"
 }

@@ -19,6 +19,9 @@ Severity: **P0** = data loss / app unusable, **P1** = stuck or misleading, **P2*
 | U12 | J3/J5 | Rehearse / Record / Float a script with **no spoken words** (empty, or only `#` sections and `//` notes) | Prompter showed "(empty script)", timers at 0:00, camera opened for nothing | Actions blocked with a hint: "Add some lines to say first" | P2 | `unhappy_paths_test` |
 | U13 | J7 Library | Copy as caption on a script with nothing to say | Copied an empty string, said "copied" | Same hint, nothing copied | P2 | `unhappy_paths_test` |
 | U16 | J5 Record | First save on **iOS** into the "APrompter" album | App would be killed by iOS: album access needs `NSPhotoLibraryUsageDescription`, which was missing | Usage description added; access is requested for album saving | P0 | iOS CI build + manual |
+| U17 | J1 Write | Open a template, look at it, go back without writing | A junk "Untitled" script was autosaved every time | Untouched templates are not saved | P2 | `world_test` |
+| U18 | All | Phone set to a language the app doesn't have (e.g. Norwegian) | App fell back to **Arabic** (Flutter picks the first supported language) | Falls back to English; Chinese without a script (old Android "zh-TW") picks Traditional for TW/HK/MO | P1 | `world_test` |
+| U19 | All | Long translations (German, Tamil…) on a small phone | Setup cards in Settings overflowed | Cards grow with their text; every language is checked on a 360 dp screen | P2 | `world_test` |
 | U14 | J5 Float | "Display over other apps" denied | — | Already handled: explains the permission | — | existing |
 | U15 | J4 Settings | Phone language not English/Indonesian | — | Already handled: falls back to English | — | existing |
 

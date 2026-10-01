@@ -32,18 +32,24 @@ class AprompterApp extends StatelessWidget {
     const seed = Color(0xFF7C4DFF);
     return AppScope(
       state: state,
-      child: MaterialApp(
-        onGenerateTitle: (context) => context.l10n.appTitle,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(colorSchemeSeed: seed, useMaterial3: true),
-        darkTheme: ThemeData(
-          colorSchemeSeed: seed,
-          brightness: Brightness.dark,
-          useMaterial3: true,
+      child: ListenableBuilder(
+        listenable: state,
+        builder: (context, _) => MaterialApp(
+          onGenerateTitle: (context) => context.l10n.appTitle,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: state.locale,
+          localeListResolutionCallback: (locales, _) =>
+              resolveAppLocale(locales),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(colorSchemeSeed: seed, useMaterial3: true),
+          darkTheme: ThemeData(
+            colorSchemeSeed: seed,
+            brightness: Brightness.dark,
+            useMaterial3: true,
+          ),
+          home: const HomeScreen(),
         ),
-        home: const HomeScreen(),
       ),
     );
   }

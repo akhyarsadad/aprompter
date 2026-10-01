@@ -1,0 +1,569 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Swahili (`sw`).
+class AppLocalizationsSw extends AppLocalizations {
+  AppLocalizationsSw([String locale = 'sw']) : super(locale);
+
+  @override
+  String get appTitle => 'APrompter';
+
+  @override
+  String get close => 'Funga';
+
+  @override
+  String get settings => 'Mipangilio';
+
+  @override
+  String get prompterSettings => 'Mipangilio ya prompter';
+
+  @override
+  String get edit => 'Hariri';
+
+  @override
+  String get delete => 'Futa';
+
+  @override
+  String get undo => 'Tendua';
+
+  @override
+  String get duplicate => 'Nakili';
+
+  @override
+  String get share => 'Shiriki';
+
+  @override
+  String get copyAsCaption => 'Nakili kama maelezo';
+
+  @override
+  String get captionCopied =>
+      'Maandishi ya kusema yamenakiliwa — yabandike kama maelezo ya chapisho';
+
+  @override
+  String get copySuffix => '(nakala)';
+
+  @override
+  String deletedScript(String title) {
+    return '\"$title\" imefutwa';
+  }
+
+  @override
+  String duplicatedScript(String title) {
+    return 'Imenakiliwa kama \"$title\"';
+  }
+
+  @override
+  String get untitled => 'Bila jina';
+
+  @override
+  String get newScript => 'Hati mpya';
+
+  @override
+  String get searchScripts => 'Tafuta hati';
+
+  @override
+  String get filterAll => 'Zote';
+
+  @override
+  String get statusDraft => 'Rasimu';
+
+  @override
+  String get statusReady => 'Tayari';
+
+  @override
+  String get statusRecorded => 'Imerekodiwa';
+
+  @override
+  String markAs(String status) {
+    return 'Weka alama: $status';
+  }
+
+  @override
+  String filterCount(String label, int count) {
+    return '$label ($count)';
+  }
+
+  @override
+  String get rehearse => 'Mazoezi';
+
+  @override
+  String get float => 'Elea';
+
+  @override
+  String get record => 'Rekodi';
+
+  @override
+  String words(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'maneno $count',
+      one: 'neno 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String takes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'picha $count',
+      one: 'picha 1',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noScriptsYet => 'Bado hakuna hati';
+
+  @override
+  String get noScriptsHint =>
+      'Gusa \"Hati mpya\" na uchague kiolezo ili kuanza.';
+
+  @override
+  String get nothingHere => 'Hakuna kitu hapa';
+
+  @override
+  String get nothingHereHint => 'Jaribu kichujio au utafutaji mwingine.';
+
+  @override
+  String get startFromTemplate => 'Anza na kiolezo';
+
+  @override
+  String get overlayPermissionNeeded =>
+      'Ruhusu \"Onyesha juu ya programu nyingine\" ili kutumia prompter inayoelea.';
+
+  @override
+  String get floatingStarted =>
+      'Prompter inaelea. Fungua programu ya kamera na ugonge maandishi ili kuanza.';
+
+  @override
+  String get floatingNotificationTitle => 'APrompter inaelea skrinini';
+
+  @override
+  String get openScriptInApp => 'Fungua hati katika APrompter';
+
+  @override
+  String get script => 'Hati';
+
+  @override
+  String get title => 'Kichwa';
+
+  @override
+  String get status => 'Hali';
+
+  @override
+  String get noTarget => 'Hakuna lengo';
+
+  @override
+  String get editorHint =>
+      'Andika au bandika unachotaka kusema…\n\nKidokezo: anza mstari kwa # kwa sehemu, kwa // kwa dokezo lako binafsi.';
+
+  @override
+  String timing(String words, String spoken, int wpm) {
+    return '$words · $spoken kwa $wpm m/d';
+  }
+
+  @override
+  String get onTarget => 'Kwenye lengo';
+
+  @override
+  String overTarget(int seconds, int words) {
+    return 'Zaidi kwa sek $seconds · punguza maneno ~$words';
+  }
+
+  @override
+  String underTarget(int seconds, int words) {
+    return 'Zimebaki sek $seconds · maneno ~$words zaidi';
+  }
+
+  @override
+  String longSentences(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Sentensi $count ndefu (maneno 25+) — zigawe ili upate kupumua',
+      one: 'Sentensi 1 ndefu (maneno 25+) — igawe ili upate kupumua',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get toolSection => 'Sehemu';
+
+  @override
+  String get toolEmphasis => 'Msisitizo';
+
+  @override
+  String get toolPause => 'Kituo';
+
+  @override
+  String get toolNote => 'Dokezo';
+
+  @override
+  String get toolPaste => 'Bandika';
+
+  @override
+  String get restart => 'Anza upya';
+
+  @override
+  String get sections => 'Sehemu';
+
+  @override
+  String get slower => 'Polepole';
+
+  @override
+  String get faster => 'Haraka';
+
+  @override
+  String get play => 'Cheza';
+
+  @override
+  String get pause => 'Sitisha';
+
+  @override
+  String get wpmUnit => 'm/d';
+
+  @override
+  String get startOfScript => 'Mwanzo wa hati';
+
+  @override
+  String sectionN(int n) {
+    return 'Sehemu $n';
+  }
+
+  @override
+  String get noSectionsHint =>
+      'Bado hakuna sehemu. Ongeza mistari inayoanza na \"#\" kwenye kihariri (k.m. \"# Ndoano\") ili kuruka kati ya sehemu na kurekodi upya moja tu.';
+
+  @override
+  String get emptyScript => '(hati tupu)';
+
+  @override
+  String get preview => 'Onyesho la awali';
+
+  @override
+  String get setup => 'Mpangilio wa upigaji';
+
+  @override
+  String get pace => 'Kasi';
+
+  @override
+  String get text => 'Maandishi';
+
+  @override
+  String get layout => 'Mpangilio';
+
+  @override
+  String get recording => 'Kurekodi';
+
+  @override
+  String get wordsPerMinute => 'maneno / dakika';
+
+  @override
+  String fitTo(String time) {
+    return 'Linganisha na $time';
+  }
+
+  @override
+  String get paceCalm => 'Tulivu';
+
+  @override
+  String get paceNatural => 'Asilia';
+
+  @override
+  String get paceEnergetic => 'Kwa nguvu';
+
+  @override
+  String get countdown => 'Kuhesabu kabla ya kuanza';
+
+  @override
+  String get off => 'Zima';
+
+  @override
+  String get size => 'Ukubwa';
+
+  @override
+  String get lineSpacing => 'Nafasi ya mistari';
+
+  @override
+  String get textColor => 'Rangi ya maandishi';
+
+  @override
+  String get prompterHeight => 'Urefu wa prompter';
+
+  @override
+  String get background => 'Mandharinyuma';
+
+  @override
+  String get readingGuide => 'Mstari wa kusoma';
+
+  @override
+  String get mirrorText => 'Geuza maandishi kama kioo';
+
+  @override
+  String get mirrorTextHint => 'Kwa kioo cha teleprompter / beam splitter';
+
+  @override
+  String get videoQuality => 'Ubora wa video';
+
+  @override
+  String get autoStop => 'Acha kurekodi hati ikiisha';
+
+  @override
+  String get autoStopHint => 'Husubiri sekunde 2 baada ya mstari wa mwisho';
+
+  @override
+  String get presetHandheld => 'Selfie mkononi';
+
+  @override
+  String get presetHandheldHint => 'Maandishi ya wastani karibu na lenzi';
+
+  @override
+  String get presetTripod => 'Tripodi / kwa umbali';
+
+  @override
+  String get presetTripodHint => 'Maandishi makubwa yanayosomeka kutoka m 1–2';
+
+  @override
+  String get presetGlass => 'Kioo cha teleprompter';
+
+  @override
+  String get presetGlassHint => 'Imegeuzwa, skrini nzima, mandharinyuma imara';
+
+  @override
+  String get niceRun => 'Hongera!';
+
+  @override
+  String runSummary(String time, int words, int wpm) {
+    return 'Ulitumia $time kwa maneno $words → maneno $wpm kwa dakika.';
+  }
+
+  @override
+  String runOver(int seconds, String target) {
+    return 'Hiyo ni sek $seconds zaidi ya lengo lako la $target — fupisha hati au ongeza kasi.';
+  }
+
+  @override
+  String runUnder(int seconds) {
+    return 'Una sek $seconds kabla ya lengo lako.';
+  }
+
+  @override
+  String get runOnTarget => 'Sawasawa na urefu uliolenga. 🎯';
+
+  @override
+  String get keepCurrent => 'Acha ilivyo';
+
+  @override
+  String useWpm(int wpm) {
+    return 'Tumia $wpm m/d';
+  }
+
+  @override
+  String get switchCamera => 'Badilisha kamera';
+
+  @override
+  String get startRecording => 'Anza kurekodi';
+
+  @override
+  String get stopRecording => 'Acha kurekodi';
+
+  @override
+  String get noCamera => 'Hakuna kamera iliyopatikana kwenye kifaa hiki.';
+
+  @override
+  String get cameraDenied =>
+      'Ruhusa ya kamera imekataliwa. Iwashe kwenye mipangilio ya mfumo.';
+
+  @override
+  String cameraError(String message) {
+    return 'Hitilafu ya kamera: $message';
+  }
+
+  @override
+  String takeSaved(int n) {
+    return 'Picha $n imehifadhiwa kwenye matunzio';
+  }
+
+  @override
+  String get templateBlank => 'Tupu';
+
+  @override
+  String get templateBlankHint => 'Anza na ukurasa mtupu';
+
+  @override
+  String get templateHvc => 'Ndoano → Thamani → CTA';
+
+  @override
+  String get templateHvcHint => 'Muundo wa kawaida wa video fupi';
+
+  @override
+  String get templateTutorial => 'Mafunzo';
+
+  @override
+  String get templateTutorialHint => 'Fundisha kitu hatua kwa hatua';
+
+  @override
+  String get templateReview => 'Tathmini ya bidhaa';
+
+  @override
+  String get templateReviewHint => 'UGC, matangazo na tathmini za kweli';
+
+  @override
+  String get templateStory => 'Hadithi';
+
+  @override
+  String get templateStoryHint => 'Hadithi binafsi yenye funzo';
+
+  @override
+  String get secHook => 'Ndoano';
+
+  @override
+  String get secValue => 'Thamani';
+
+  @override
+  String get secCta => 'CTA';
+
+  @override
+  String secStep(int n) {
+    return 'Hatua $n';
+  }
+
+  @override
+  String get secRecap => 'Muhtasari na CTA';
+
+  @override
+  String get secWhatItIs => 'Ni nini';
+
+  @override
+  String get secLoved => 'Nilichopenda';
+
+  @override
+  String get secBetter => 'Kinachoweza kuboreshwa';
+
+  @override
+  String get secVerdict => 'Uamuzi na CTA';
+
+  @override
+  String get secSetup => 'Utangulizi';
+
+  @override
+  String get secTurningPoint => 'Mabadiliko';
+
+  @override
+  String get secLesson => 'Funzo';
+
+  @override
+  String get noteHook =>
+      'Vuta umakini ndani ya sekunde 3 za kwanza: dai la kijasiri au swali';
+
+  @override
+  String get noteValue => 'Toa kile kitu kimoja ulichoahidi';
+
+  @override
+  String get noteCta =>
+      'Waambie wafanye nini baadaye: fuata, toa maoni, kiungo kwenye wasifu';
+
+  @override
+  String get noteTutorialHook => '\"Hivi ndivyo … chini ya dakika moja\"';
+
+  @override
+  String get noteRecap =>
+      'Fupisha kwa sentensi moja, kisha waombe wahifadhi video';
+
+  @override
+  String get noteReviewHook => 'Onyesha bidhaa na tatizo inalotatua';
+
+  @override
+  String get noteVerdict => 'Inamfaa nani — taja msimbo au kiungo';
+
+  @override
+  String get noteStoryHook => 'Anza katikati ya tukio';
+
+  @override
+  String get welcomeTitle => 'Karibu APrompter';
+
+  @override
+  String get welcomeBody =>
+      '# Ndoano\nUnataka kurekodi bila kusahau maneno yako? [pause]\n// tazama moja kwa moja kwenye lenzi\n\n# Jinsi inavyofanya kazi\nAndika hati yako, chagua *urefu unaolenga*, na kipima muda kitakuambia kama inatosha.\nFanya mazoezi kupata kasi yako kwa maneno kwa dakika.\nKisha gusa Rekodi. Maandishi yanasogea chini kabisa ya kamera, hivyo unadumisha *kutazamana macho* na hadhira yako.\n\n# CTA\nGusa kadi hii kuhariri hati, au unda yako mwenyewe kwa kitufe cha kuongeza. [pause] Furahia kuunda!\n';
+
+  @override
+  String get expand => 'Panua';
+
+  @override
+  String get minimize => 'Punguza';
+
+  @override
+  String get nothingToSay =>
+      'Ongeza kwanza kitu cha kusema — sehemu (#) na madokezo (//) hayasomwi.';
+
+  @override
+  String get openSettings => 'Fungua mipangilio';
+
+  @override
+  String get tryAgain => 'Jaribu tena';
+
+  @override
+  String get noMicBanner =>
+      'Hakuna ruhusa ya maikrofoni — inarekodi bila sauti';
+
+  @override
+  String get saveFailedTitle => 'Imeshindwa kuhifadhi kwenye matunzio';
+
+  @override
+  String saveFailedBody(String reason) {
+    return 'Picha yako iko salama kwa sasa. Jaribu tena, au ishiriki kwenye Faili, Drive au gumzo ili isipotee. ($reason)';
+  }
+
+  @override
+  String get shareVideo => 'Shiriki video';
+
+  @override
+  String get discardTake => 'Tupa picha hii';
+
+  @override
+  String takeShared(int n) {
+    return 'Picha $n imeshirikiwa';
+  }
+
+  @override
+  String get movePrompter => 'Buruta kusogeza prompter';
+
+  @override
+  String get resizePrompter => 'Buruta kubadilisha ukubwa wa prompter';
+
+  @override
+  String get prompterWidth => 'Upana wa prompter';
+
+  @override
+  String get resetPosition => 'Rejesha mahali (juu, upana kamili)';
+
+  @override
+  String get positionHint =>
+      'Buruta upau ulio juu ya prompter kuisogeza popote, na kona kubadilisha ukubwa. Kwenye Android, dirisha linaloelea linaweza kuburutwa popote na hukumbuka mahali pake.';
+
+  @override
+  String get app => 'Programu';
+
+  @override
+  String get appLanguage => 'Lugha ya programu';
+
+  @override
+  String get systemDefault => 'Lugha ya simu';
+
+  @override
+  String secondsShort(int n) {
+    return 'sek $n';
+  }
+
+  @override
+  String minutesShort(int n) {
+    return 'dak $n';
+  }
+}

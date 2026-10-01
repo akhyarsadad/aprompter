@@ -141,19 +141,23 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                 children: [
                   _header(context, l.setup),
-                  SizedBox(
-                    height: 124,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        for (final p in SetupPreset.values)
-                          _PresetCard(
-                            icon: p.icon,
-                            name: presetName(l, p),
-                            description: presetHint(l, p),
-                            onTap: () => _update(p.apply(_s)),
-                          ),
-                      ],
+                  // Cards grow with their text, so long translations wrap
+                  // instead of overflowing.
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final p in SetupPreset.values)
+                            _PresetCard(
+                              icon: p.icon,
+                              name: presetName(l, p),
+                              description: presetHint(l, p),
+                              onTap: () => _update(p.apply(_s)),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                   _header(context, l.pace),
@@ -215,7 +219,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                           for (final s in const [0, 3, 5, 10])
                             DropdownMenuItem(
                               value: s,
-                              child: Text(s == 0 ? l.off : '${s}s'),
+                              child: Text(s == 0 ? l.off : l.secondsShort(s)),
                             ),
                         ],
                         onChanged: (v) =>
@@ -346,6 +350,21 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     value: _s.mirror,
                     onChanged: (v) => _update(_s.copyWith(mirror: v)),
                   ),
+                  _header(context, l.app),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.translate),
+                    title: Text(l.appLanguage),
+                    subtitle: Text(
+                      AppScope.of(context).locale == null
+                          ? l.systemDefault
+                          : languageNames[localeTag(
+                                  AppScope.of(context).locale!,
+                                )] ??
+                                '',
+                    ),
+                    onTap: () => _pickLanguage(context),
+                  ),
                   _header(context, l.recording),
                   Row(
                     children: [
@@ -377,6 +396,39 @@ class _SettingsSheetState extends State<_SettingsSheet> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickLanguage(BuildContext context) async {
+    final state = AppScope.read(context);
+    final l = context.l10n;
+    final current = state.locale == null ? '' : localeTag(state.locale!);
+    final tags = languageNames.keys.toList()
+      ..sort((a, b) => languageNames[a]!.compareTo(languageNames[b]!));
+    final picked = await showDialog<String>(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: Text(l.appLanguage),
+        children: [
+          RadioGroup<String>(
+            groupValue: current,
+            onChanged: (v) => Navigator.pop(context, v),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RadioListTile<String>(value: '', title: Text(l.systemDefault)),
+                for (final tag in tags)
+                  RadioListTile<String>(
+                    value: tag,
+                    title: Text(languageNames[tag]!),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    if (picked == null) return;
+    await state.setLocale(parseLocaleTag(picked));
   }
 
   Widget _header(BuildContext context, String text) => Padding(
@@ -434,7 +486,7 @@ class _PresetCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: SizedBox(
-        width: 150,
+        width: 160,
         child: Card.outlined(
           margin: EdgeInsets.zero,
           clipBehavior: Clip.antiAlias,
@@ -448,12 +500,7 @@ class _PresetCard extends StatelessWidget {
                   Icon(icon, size: 20, color: theme.colorScheme.primary),
                   const SizedBox(height: 4),
                   Text(name, style: theme.textTheme.labelLarge),
-                  Text(
-                    description,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text(description, style: theme.textTheme.bodySmall),
                 ],
               ),
             ),

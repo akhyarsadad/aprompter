@@ -16,6 +16,7 @@ class Storage {
   static const _settingsKey = 'settings';
   static const _activeScriptKey = 'active_script';
   static const _floatPositionKey = 'float_position';
+  static const _localeKey = 'app_locale';
 
   final SharedPreferences _prefs;
 
@@ -105,6 +106,13 @@ class Storage {
           jsonEncode({'x': position.dx, 'y': position.dy}),
         );
 
+  /// App language picked by the user ("zh-Hant", "ar"…); null = phone's.
+  String? loadLocale() => _prefs.getString(_localeKey);
+
+  Future<void> saveLocale(String? tag) => tag == null
+      ? _prefs.remove(_localeKey)
+      : _prefs.setString(_localeKey, tag);
+
   static Script newScript() => Script(
     id: const Uuid().v4(),
     title: '',
@@ -112,8 +120,8 @@ class Storage {
     updatedAt: DateTime.now(),
   );
 
-  static Script _welcomeScript() {
-    final l = deviceLocalizations();
+  Script _welcomeScript() {
+    final l = deviceLocalizations(parseLocaleTag(loadLocale()));
     return Script(
       id: const Uuid().v4(),
       title: l.welcomeTitle,

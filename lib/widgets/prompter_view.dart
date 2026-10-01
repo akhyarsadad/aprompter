@@ -390,6 +390,8 @@ class _PrompterViewState extends State<PrompterView>
                   right: 0,
                   child: IgnorePointer(
                     child: Row(
+                      // Arrows point at the line in every UI direction.
+                      textDirection: TextDirection.ltr,
                       children: [
                         Icon(
                           Icons.play_arrow,
@@ -462,9 +464,13 @@ class ScriptText extends StatelessWidget {
       fontWeight: FontWeight.w600,
       shadows: const [Shadow(blurRadius: 4, color: Colors.black54)],
     );
-    final crossAlign = s.textAlign == TextAlign.center
-        ? CrossAxisAlignment.center
-        : CrossAxisAlignment.start;
+    // "Left" means the start of each line, so right-to-left lines (Arabic,
+    // Hebrew…) hug the right edge even inside a left-to-right app.
+    final align = s.textAlign == TextAlign.center
+        ? TextAlign.center
+        : TextAlign.start;
+    TextDirection dir(String text) =>
+        isRtlText(text) ? TextDirection.rtl : TextDirection.ltr;
 
     var sectionIndex = 0;
     final children = <Widget>[];
@@ -483,7 +489,8 @@ class ScriptText extends StatelessWidget {
               padding: EdgeInsets.only(bottom: s.fontSize * 0.2),
               child: Text(
                 b.text.toUpperCase(),
-                textAlign: s.textAlign,
+                textAlign: align,
+                textDirection: dir(b.text),
                 style: base.copyWith(
                   fontSize: s.fontSize * 0.5,
                   letterSpacing: 2,
@@ -497,7 +504,8 @@ class ScriptText extends StatelessWidget {
           children.add(
             Text(
               b.text,
-              textAlign: s.textAlign,
+              textAlign: align,
+              textDirection: dir(b.text),
               style: base.copyWith(
                 fontSize: s.fontSize * 0.5,
                 fontStyle: FontStyle.italic,
@@ -529,7 +537,8 @@ class ScriptText extends StatelessWidget {
                     },
                 ],
               ),
-              textAlign: s.textAlign,
+              textAlign: align,
+              textDirection: dir(b.text),
             ),
           );
       }
@@ -539,7 +548,10 @@ class ScriptText extends StatelessWidget {
     }
     return SizedBox(
       width: double.infinity,
-      child: Column(crossAxisAlignment: crossAlign, children: children),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
     );
   }
 }

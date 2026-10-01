@@ -53,5 +53,7 @@ List<ScriptTemplate> scriptTemplates(AppLocalizations l) {
 /// Target video lengths offered when writing a script, in seconds.
 const targetLengths = <int>[15, 30, 60, 90, 180];
 
-String targetLabel(int seconds) =>
-    seconds < 60 || seconds % 60 != 0 ? '${seconds}s' : '${seconds ~/ 60} min';
+String targetLabel(AppLocalizations l, int seconds) =>
+    seconds < 60 || seconds % 60 != 0
+    ? l.secondsShort(seconds)
+    : l.minutesShort(seconds ~/ 60);

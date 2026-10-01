@@ -13,9 +13,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'APrompter';
 
   @override
-  String get cancel => 'Cancel';
-
-  @override
   String get close => 'Close';
 
   @override
@@ -151,9 +148,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openScriptInApp => 'Open a script in APrompter';
 
   @override
-  String get deleteScriptTitle => 'Delete script?';
-
-  @override
   String get script => 'Script';
 
   @override
@@ -249,9 +243,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyScript => '(empty script)';
-
-  @override
-  String get pinchToResize => 'Pinch to resize text';
 
   @override
   String get preview => 'Preview';
@@ -391,10 +382,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Camera access was denied. Enable it in system settings.';
 
   @override
-  String get micDenied =>
-      'Microphone access was denied. Enable it in system settings.';
-
-  @override
   String cameraError(String message) {
     return 'Camera error: $message';
   }
@@ -402,11 +389,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String takeSaved(int n) {
     return 'Take $n saved to your gallery';
-  }
-
-  @override
-  String saveFailed(String message) {
-    return 'Could not save video: $message';
   }
 
   @override
@@ -564,4 +546,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get positionHint =>
       'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.';
+
+  @override
+  String get app => 'App';
+
+  @override
+  String get appLanguage => 'App language';
+
+  @override
+  String get systemDefault => 'Phone language';
+
+  @override
+  String secondsShort(int n) {
+    return '${n}s';
+  }
+
+  @override
+  String minutesShort(int n) {
+    return '$n min';
+  }
 }

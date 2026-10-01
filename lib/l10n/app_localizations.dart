@@ -5,8 +5,33 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_ar.dart';
+import 'app_localizations_bn.dart';
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
+import 'app_localizations_fa.dart';
+import 'app_localizations_fil.dart';
+import 'app_localizations_fr.dart';
+import 'app_localizations_he.dart';
+import 'app_localizations_hi.dart';
 import 'app_localizations_id.dart';
+import 'app_localizations_it.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_ms.dart';
+import 'app_localizations_nl.dart';
+import 'app_localizations_pl.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_sw.dart';
+import 'app_localizations_ta.dart';
+import 'app_localizations_th.dart';
+import 'app_localizations_tr.dart';
+import 'app_localizations_uk.dart';
+import 'app_localizations_ur.dart';
+import 'app_localizations_vi.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -94,8 +119,34 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('ar'),
+    Locale('bn'),
+    Locale('de'),
     Locale('en'),
+    Locale('es'),
+    Locale('fa'),
+    Locale('fil'),
+    Locale('fr'),
+    Locale('he'),
+    Locale('hi'),
     Locale('id'),
+    Locale('it'),
+    Locale('ja'),
+    Locale('ko'),
+    Locale('ms'),
+    Locale('nl'),
+    Locale('pl'),
+    Locale('pt'),
+    Locale('ru'),
+    Locale('sw'),
+    Locale('ta'),
+    Locale('th'),
+    Locale('tr'),
+    Locale('uk'),
+    Locale('ur'),
+    Locale('vi'),
+    Locale('zh'),
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   ];
 
   /// No description provided for @appTitle.
@@ -103,12 +154,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'APrompter'**
   String get appTitle;
-
-  /// No description provided for @cancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel'**
-  String get cancel;
 
   /// No description provided for @close.
   ///
@@ -326,12 +371,6 @@ abstract class AppLocalizations {
   /// **'Open a script in APrompter'**
   String get openScriptInApp;
 
-  /// No description provided for @deleteScriptTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete script?'**
-  String get deleteScriptTitle;
-
   /// No description provided for @script.
   ///
   /// In en, this message translates to:
@@ -487,12 +526,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'(empty script)'**
   String get emptyScript;
-
-  /// No description provided for @pinchToResize.
-  ///
-  /// In en, this message translates to:
-  /// **'Pinch to resize text'**
-  String get pinchToResize;
 
   /// No description provided for @preview.
   ///
@@ -746,12 +779,6 @@ abstract class AppLocalizations {
   /// **'Camera access was denied. Enable it in system settings.'**
   String get cameraDenied;
 
-  /// No description provided for @micDenied.
-  ///
-  /// In en, this message translates to:
-  /// **'Microphone access was denied. Enable it in system settings.'**
-  String get micDenied;
-
   /// No description provided for @cameraError.
   ///
   /// In en, this message translates to:
@@ -763,12 +790,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take {n} saved to your gallery'**
   String takeSaved(int n);
-
-  /// No description provided for @saveFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not save video: {message}'**
-  String saveFailed(String message);
 
   /// No description provided for @templateBlank.
   ///
@@ -1057,6 +1078,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.'**
   String get positionHint;
+
+  /// No description provided for @app.
+  ///
+  /// In en, this message translates to:
+  /// **'App'**
+  String get app;
+
+  /// No description provided for @appLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get appLanguage;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone language'**
+  String get systemDefault;
+
+  /// No description provided for @secondsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{n}s'**
+  String secondsShort(int n);
+
+  /// No description provided for @minutesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} min'**
+  String minutesShort(int n);
 }
 
 class _AppLocalizationsDelegate
@@ -1069,20 +1120,109 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'id'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ar',
+    'bn',
+    'de',
+    'en',
+    'es',
+    'fa',
+    'fil',
+    'fr',
+    'he',
+    'hi',
+    'id',
+    'it',
+    'ja',
+    'ko',
+    'ms',
+    'nl',
+    'pl',
+    'pt',
+    'ru',
+    'sw',
+    'ta',
+    'th',
+    'tr',
+    'uk',
+    'ur',
+    'vi',
+    'zh',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+script codes are specified.
+  switch (locale.languageCode) {
+    case 'zh':
+      {
+        switch (locale.scriptCode) {
+          case 'Hant':
+            return AppLocalizationsZhHant();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'ar':
+      return AppLocalizationsAr();
+    case 'bn':
+      return AppLocalizationsBn();
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fa':
+      return AppLocalizationsFa();
+    case 'fil':
+      return AppLocalizationsFil();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'he':
+      return AppLocalizationsHe();
+    case 'hi':
+      return AppLocalizationsHi();
     case 'id':
       return AppLocalizationsId();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'ms':
+      return AppLocalizationsMs();
+    case 'nl':
+      return AppLocalizationsNl();
+    case 'pl':
+      return AppLocalizationsPl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'sw':
+      return AppLocalizationsSw();
+    case 'ta':
+      return AppLocalizationsTa();
+    case 'th':
+      return AppLocalizationsTh();
+    case 'tr':
+      return AppLocalizationsTr();
+    case 'uk':
+      return AppLocalizationsUk();
+    case 'ur':
+      return AppLocalizationsUr();
+    case 'vi':
+      return AppLocalizationsVi();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import 'storage.dart';
@@ -8,11 +9,22 @@ import 'storage.dart';
 class AppState extends ChangeNotifier {
   AppState(this.storage)
     : _scripts = storage.loadScripts(),
-      _settings = storage.loadSettings();
+      _settings = storage.loadSettings(),
+      _locale = parseLocaleTag(storage.loadLocale());
 
   final Storage storage;
   List<Script> _scripts;
   PrompterSettings _settings;
+  Locale? _locale;
+
+  /// App language chosen in the app; null follows the phone.
+  Locale? get locale => _locale;
+
+  Future<void> setLocale(Locale? locale) {
+    _locale = locale;
+    notifyListeners();
+    return storage.saveLocale(locale == null ? null : localeTag(locale));
+  }
 
   List<Script> get scripts => List.unmodifiable(_scripts);
   PrompterSettings get settings => _settings;

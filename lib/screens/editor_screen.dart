@@ -37,6 +37,22 @@ class _EditorScreenState extends State<EditorScreen>
     WidgetsBinding.instance.addObserver(this);
     _title.addListener(_scheduleSave);
     _body.addListener(_scheduleSave);
+    _title.addListener(_updateDirection);
+    _body.addListener(_updateDirection);
+  }
+
+  /// Text direction follows what is typed, not the app language, so an
+  /// Arabic or Hebrew script reads right-to-left in any UI language.
+  late final _titleDir = ValueNotifier(_directionOf(_title.text));
+  late final _bodyDir = ValueNotifier(_directionOf(_body.text));
+
+  static TextDirection? _directionOf(String text) => text.trim().isEmpty
+      ? null
+      : (isRtlText(text) ? TextDirection.rtl : TextDirection.ltr);
+
+  void _updateDirection() {
+    _titleDir.value = _directionOf(_title.text);
+    _bodyDir.value = _directionOf(_body.text);
   }
 
   /// Saves shortly after typing stops, so a crash or a killed app loses at
@@ -70,10 +86,16 @@ class _EditorScreenState extends State<EditorScreen>
   Future<Script?> _save() async {
     var script = _current;
     if (script.title.isEmpty && script.body.trim().isEmpty) return null;
+    final state = AppScope.read(context);
+    // A template opened and left untouched is not a script yet.
+    if (state.byId(script.id) == null &&
+        script.title.isEmpty &&
+        script.body == widget.script.body) {
+      return null;
+    }
     if (script.title.isEmpty) {
       script = script.copyWith(title: context.l10n.untitled);
     }
-    final state = AppScope.read(context);
     final stored = state.byId(script.id);
     final changed =
         stored == null ||
@@ -141,6 +163,8 @@ class _EditorScreenState extends State<EditorScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _autosave?.cancel();
+    _titleDir.dispose();
+    _bodyDir.dispose();
     _title.dispose();
     _body.dispose();
     _bodyFocus.dispose();
@@ -175,13 +199,17 @@ class _EditorScreenState extends State<EditorScreen>
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                controller: _title,
-                textCapitalization: TextCapitalization.sentences,
-                style: theme.textTheme.titleLarge,
-                decoration: InputDecoration(
-                  hintText: l.title,
-                  border: InputBorder.none,
+              child: ValueListenableBuilder(
+                valueListenable: _titleDir,
+                builder: (context, dir, _) => TextField(
+                  textDirection: dir,
+                  controller: _title,
+                  textCapitalization: TextCapitalization.sentences,
+                  style: theme.textTheme.titleLarge,
+                  decoration: InputDecoration(
+                    hintText: l.title,
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             ),
@@ -206,7 +234,9 @@ class _EditorScreenState extends State<EditorScreen>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 3),
                         child: ChoiceChip(
-                          label: Text(t == null ? l.noTarget : targetLabel(t)),
+                          label: Text(
+                            t == null ? l.noTarget : targetLabel(l, t),
+                          ),
                           selected: _target == t,
                           onSelected: (_) {
                             setState(() => _target = t);
@@ -231,19 +261,23 @@ class _EditorScreenState extends State<EditorScreen>
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextField(
-                  controller: _body,
-                  focusNode: _bodyFocus,
-                  autofocus: widget.script.body.isEmpty,
-                  maxLines: null,
-                  expands: true,
-                  textAlignVertical: TextAlignVertical.top,
-                  textCapitalization: TextCapitalization.sentences,
-                  keyboardType: TextInputType.multiline,
-                  style: const TextStyle(fontSize: 18, height: 1.5),
-                  decoration: InputDecoration(
-                    hintText: l.editorHint,
-                    border: InputBorder.none,
+                child: ValueListenableBuilder(
+                  valueListenable: _bodyDir,
+                  builder: (context, dir, _) => TextField(
+                    textDirection: dir,
+                    controller: _body,
+                    focusNode: _bodyFocus,
+                    autofocus: widget.script.body.isEmpty,
+                    maxLines: null,
+                    expands: true,
+                    textAlignVertical: TextAlignVertical.top,
+                    textCapitalization: TextCapitalization.sentences,
+                    keyboardType: TextInputType.multiline,
+                    style: const TextStyle(fontSize: 18, height: 1.5),
+                    decoration: InputDecoration(
+                      hintText: l.editorHint,
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),

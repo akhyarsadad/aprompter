@@ -16,19 +16,27 @@ import '../widgets/prompter_view.dart';
 /// The floating prompter window drawn above other apps (Android).
 ///
 /// Runs in its own Flutter engine, started by `overlayMain` in main.dart.
+/// Language picked in the main app; updated from storage and messages.
+final _locale = ValueNotifier<Locale?>(null);
+
 class OverlayApp extends StatelessWidget {
   const OverlayApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData.dark(useMaterial3: true),
-      home: const Material(
-        type: MaterialType.transparency,
-        child: _FloatingPrompter(),
+    return ValueListenableBuilder(
+      valueListenable: _locale,
+      builder: (context, locale, _) => MaterialApp(
+        locale: locale,
+        localeListResolutionCallback: (locales, _) => resolveAppLocale(locales),
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeData.dark(useMaterial3: true),
+        home: const Material(
+          type: MaterialType.transparency,
+          child: _FloatingPrompter(),
+        ),
       ),
     );
   }
@@ -59,6 +67,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
   Future<void> _loadFromStorage() async {
     final storage = await Storage.open();
     await storage.reload();
+    _locale.value = parseLocaleTag(storage.loadLocale());
     final script = storage.loadActiveScript();
     if (!mounted || _script != null || script == null) return;
     _apply(script, storage.loadSettings());
@@ -68,6 +77,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
     if (event is! String) return;
     final msg = jsonDecode(event) as Map<String, dynamic>;
     if (msg['type'] == 'load') {
+      _locale.value = parseLocaleTag(msg['locale'] as String?);
       _apply(
         Script.fromJson(msg['script'] as Map<String, dynamic>),
         PrompterSettings.fromJson(msg['settings'] as Map<String, dynamic>),

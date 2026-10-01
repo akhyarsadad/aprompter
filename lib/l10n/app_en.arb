@@ -1,7 +1,6 @@
 {
   "@@locale": "en",
   "appTitle": "APrompter",
-  "cancel": "Cancel",
   "close": "Close",
   "settings": "Settings",
   "prompterSettings": "Prompter settings",
@@ -83,7 +82,6 @@
   "floatingStarted": "Prompter is floating. Open your camera app and tap the text to start.",
   "floatingNotificationTitle": "APrompter is floating",
   "openScriptInApp": "Open a script in APrompter",
-  "deleteScriptTitle": "Delete script?",
   "script": "Script",
   "title": "Title",
   "status": "Status",
@@ -157,7 +155,6 @@
   },
   "noSectionsHint": "No sections yet. Add lines starting with \"#\" in the editor (e.g. \"# Hook\") to jump between parts and retake just one.",
   "emptyScript": "(empty script)",
-  "pinchToResize": "Pinch to resize text",
   "preview": "Preview",
   "setup": "Setup",
   "pace": "Pace",
@@ -244,7 +241,6 @@
   "stopRecording": "Stop recording",
   "noCamera": "No camera found on this device.",
   "cameraDenied": "Camera access was denied. Enable it in system settings.",
-  "micDenied": "Microphone access was denied. Enable it in system settings.",
   "cameraError": "Camera error: {message}",
   "@cameraError": {
     "placeholders": {
@@ -258,14 +254,6 @@
     "placeholders": {
       "n": {
         "type": "int"
-      }
-    }
-  },
-  "saveFailed": "Could not save video: {message}",
-  "@saveFailed": {
-    "placeholders": {
-      "message": {
-        "type": "String"
       }
     }
   },
@@ -337,5 +325,24 @@
   "resizePrompter": "Drag to resize the prompter",
   "prompterWidth": "Prompter width",
   "resetPosition": "Reset position (top, full width)",
-  "positionHint": "Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot."
+  "positionHint": "Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.",
+  "app": "App",
+  "appLanguage": "App language",
+  "systemDefault": "Phone language",
+  "secondsShort": "{n}s",
+  "@secondsShort": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesShort": "{n} min",
+  "@minutesShort": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  }
 }

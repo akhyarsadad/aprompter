@@ -13,9 +13,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get appTitle => 'APrompter';
 
   @override
-  String get cancel => 'Batal';
-
-  @override
   String get close => 'Tutup';
 
   @override
@@ -139,9 +136,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get openScriptInApp => 'Buka naskah di APrompter';
 
   @override
-  String get deleteScriptTitle => 'Hapus naskah?';
-
-  @override
   String get script => 'Naskah';
 
   @override
@@ -230,9 +224,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get emptyScript => '(naskah kosong)';
-
-  @override
-  String get pinchToResize => 'Cubit untuk mengubah ukuran teks';
 
   @override
   String get preview => 'Pratinjau';
@@ -372,10 +363,6 @@ class AppLocalizationsId extends AppLocalizations {
       'Akses kamera ditolak. Aktifkan di pengaturan sistem.';
 
   @override
-  String get micDenied =>
-      'Akses mikrofon ditolak. Aktifkan di pengaturan sistem.';
-
-  @override
   String cameraError(String message) {
     return 'Kesalahan kamera: $message';
   }
@@ -383,11 +370,6 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String takeSaved(int n) {
     return 'Take $n disimpan ke galeri';
-  }
-
-  @override
-  String saveFailed(String message) {
-    return 'Gagal menyimpan video: $message';
   }
 
   @override
@@ -545,4 +527,23 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get positionHint =>
       'Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
+
+  @override
+  String get app => 'Aplikasi';
+
+  @override
+  String get appLanguage => 'Bahasa aplikasi';
+
+  @override
+  String get systemDefault => 'Bahasa ponsel';
+
+  @override
+  String secondsShort(int n) {
+    return '$n dtk';
+  }
+
+  @override
+  String minutesShort(int n) {
+    return '$n mnt';
+  }
 }

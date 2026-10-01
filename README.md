@@ -61,8 +61,23 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
 > **Why no floating mode on iOS?** iOS does not let apps draw over other apps, so on
 > iPhone use **Record** — the built-in camera with the prompter overlaid.
 
-**Languages:** English and Bahasa Indonesia, following the phone's language
-(strings live in `lib/l10n/*.arb`).
+**Languages (28):** English, Español, Português, Français, Deutsch, Italiano, Nederlands,
+Polski, Русский, Українська, Türkçe, العربية, فارسی, اردو, עברית, हिन्दी, বাংলা, தமிழ், ไทย,
+Tiếng Việt, Bahasa Indonesia, Bahasa Melayu, Filipino, 简体中文, 繁體中文, 日本語, 한국어,
+Kiswahili.
+
+- Follows the phone's language, or pick one in *Settings → App → App language*
+  (also in Android 13+ / iOS per-app language settings).
+- **Scripts in any language:** right-to-left lines (Arabic, Hebrew, Persian, Urdu) are laid
+  out right-to-left even in an English app; the editor follows what you type.
+- **Timing works without spaces:** Chinese, Japanese, Thai, Lao, Khmer and Burmese are
+  timed by characters, converted to word equivalents, so one pace in words per minute
+  fits every language. Indic vowel signs no longer split words.
+- Sentence checks understand 。！？ ؟ । ۔.
+- Translations live in `lib/l10n/app_<lang>.arb`; `test/translations_test.dart` fails if a
+  language misses a string or breaks a `{placeholder}`.
+- Not yet translated: the iOS system permission prompts (camera, microphone, photos) are
+  in English.
 
 ## Download a test build
 

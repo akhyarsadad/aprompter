@@ -251,7 +251,7 @@ class _ScriptCard extends StatelessWidget {
     final meta = [
       l.words(script.wordCount),
       '~${formatDuration(script.durationAt(wpm))}'
-          '${target != null ? ' / ${targetLabel(target)}' : ''}',
+          '${target != null ? ' / ${targetLabel(l, target)}' : ''}',
       if (script.takes > 0) l.takes(script.takes),
     ].join(' · ');
     final statusActions = {

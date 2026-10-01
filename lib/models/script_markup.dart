@@ -28,7 +28,30 @@ class ScriptBlock {
 }
 
 final _inline = RegExp(r'\*([^*\n]+)\*|\[pause\]', caseSensitive: false);
-final _words = RegExp(r"[\p{L}\p{N}'’]+", unicode: true);
+// Letters + combining marks, so Hindi, Bengali, Tamil… words with vowel signs
+// stay one word.
+final _words = RegExp(r"[\p{L}\p{M}\p{N}'’]+", unicode: true);
+
+// Scripts written without spaces between words. Speaking time is estimated
+// from characters, expressed in "English-word equivalents" so one pace in
+// words per minute works for every language.
+final _han = RegExp(r'\p{Script=Han}', unicode: true);
+final _kana = RegExp(
+  r'[\p{Script=Hiragana}\p{Script=Katakana}]',
+  unicode: true,
+);
+final _southeastAsian = RegExp(
+  r'[\p{Script=Thai}\p{Script=Lao}\p{Script=Khmer}\p{Script=Myanmar}]',
+  unicode: true,
+);
+const _hanWeight = 0.5; // ~300 characters/min at 150 wpm
+const _kanaWeight = 0.35; // Japanese kana are spoken faster
+const _southeastAsianWeight = 0.2; // ~5 characters (incl. marks) per word
+
+final _rtl = RegExp(
+  r'[֐-ࣿיִ-﷿ﹰ-﻿]', // Hebrew, Arabic, Syriac, Thaana…
+);
+final _strong = RegExp(r'[\p{L}]', unicode: true);
 
 List<ScriptBlock> parseScript(String body) {
   final blocks = <ScriptBlock>[];
@@ -86,7 +109,34 @@ String spokenText(String body) => parseScript(body)
     )
     .join('\n');
 
-int countWords(String text) => _words.allMatches(text).length;
+/// Spoken length in word equivalents. Space-separated languages count
+/// words; Chinese, Japanese, Thai, Lao, Khmer and Burmese count characters,
+/// weighted to the time they take to say.
+int countWords(String text) {
+  final han = _han.allMatches(text).length;
+  final kana = _kana.allMatches(text).length;
+  final sea = _southeastAsian.allMatches(text).length;
+  var rest = text;
+  if (han + kana + sea > 0) {
+    rest = text
+        .replaceAll(_han, ' ')
+        .replaceAll(_kana, ' ')
+        .replaceAll(_southeastAsian, ' ');
+  }
+  final words = _words.allMatches(rest).length;
+  return (words +
+          han * _hanWeight +
+          kana * _kanaWeight +
+          sea * _southeastAsianWeight)
+      .round();
+}
+
+/// Whether [text] should be laid out right-to-left (its first letter is
+/// Hebrew, Arabic, Persian, Urdu…).
+bool isRtlText(String text) {
+  final first = _strong.firstMatch(text);
+  return first != null && _rtl.hasMatch(first.group(0)!);
+}
 
 /// Section titles in order.
 List<String> sectionTitles(String body) =>
@@ -98,6 +148,6 @@ List<String> sectionTitles(String body) =>
 /// Sentences with more words than [maxWords] — hard to say in one breath.
 int longSentenceCount(String body, {int maxWords = 25}) =>
     spokenText(body)
-        .split(RegExp(r'[.!?…]+|\n'))
+        .split(RegExp(r'[.!?…。！？؟।۔]+|\n'))
         .where((s) => countWords(s) > maxWords)
         .length;

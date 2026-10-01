@@ -115,6 +115,7 @@
 | Bahasa Indonesia + English UI and templates | ✅ |
 | J4/J5 Prompter can be moved and resized anywhere (camera, both platforms) and the Android floating window can be dragged anywhere, resized and remembers its position | ✅ |
 | CI builds an installable Android APK on every push | ✅ |
+| Worldwide: 28 UI languages, in-app language picker, right-to-left scripts, timing for languages written without spaces | ✅ |
 
 **Later:** voice-follow scrolling (speech recognition), cloud sync, import from Google Docs, AI rewrite to fit time, per-script settings.
 
