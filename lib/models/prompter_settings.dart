@@ -13,6 +13,8 @@ class PrompterSettings {
     this.textAlign = TextAlign.center,
     this.showGuide = true,
     this.overlayHeightFraction = 0.35,
+    this.videoQuality = VideoQuality.fullHd,
+    this.autoStopRecording = true,
   });
 
   /// Font size in logical pixels.
@@ -39,6 +41,11 @@ class PrompterSettings {
 
   /// Height of the floating/camera prompter as a fraction of the screen.
   final double overlayHeightFraction;
+
+  final VideoQuality videoQuality;
+
+  /// Stop recording shortly after the last line has scrolled past.
+  final bool autoStopRecording;
 
   static const minFontSize = 16.0;
   static const maxFontSize = 96.0;
@@ -68,6 +75,8 @@ class PrompterSettings {
     TextAlign? textAlign,
     bool? showGuide,
     double? overlayHeightFraction,
+    VideoQuality? videoQuality,
+    bool? autoStopRecording,
   }) => PrompterSettings(
     fontSize: fontSize ?? this.fontSize,
     wpm: wpm != null ? clampWpm(wpm) : this.wpm,
@@ -79,6 +88,8 @@ class PrompterSettings {
     textAlign: textAlign ?? this.textAlign,
     showGuide: showGuide ?? this.showGuide,
     overlayHeightFraction: overlayHeightFraction ?? this.overlayHeightFraction,
+    videoQuality: videoQuality ?? this.videoQuality,
+    autoStopRecording: autoStopRecording ?? this.autoStopRecording,
   );
 
   Map<String, dynamic> toJson() => {
@@ -92,6 +103,8 @@ class PrompterSettings {
     'textAlign': textAlign.name,
     'showGuide': showGuide,
     'overlayHeightFraction': overlayHeightFraction,
+    'videoQuality': videoQuality.name,
+    'autoStopRecording': autoStopRecording,
   };
 
   factory PrompterSettings.fromJson(Map<String, dynamic> json) {
@@ -121,61 +134,64 @@ class PrompterSettings {
         'overlayHeightFraction',
         d.overlayHeightFraction,
       ).clamp(0.15, 1.0),
+      videoQuality: VideoQuality.values.firstWhere(
+        (q) => q.name == json['videoQuality'],
+        orElse: () => d.videoQuality,
+      ),
+      autoStopRecording:
+          json['autoStopRecording'] as bool? ?? d.autoStopRecording,
     );
   }
 }
 
-/// Named reading paces.
-const pacePresets = <(String, double)>[
-  ('Calm', 120),
-  ('Natural', 150),
-  ('Energetic', 180),
-];
+enum VideoQuality {
+  hd('720p'),
+  fullHd('1080p'),
+  uhd('4K');
 
-/// One-tap setups for common filming situations. Pace is kept as is.
-class SetupPreset {
-  const SetupPreset(this.name, this.description, this.icon, this.apply);
-  final String name;
-  final String description;
-  final IconData icon;
-  final PrompterSettings Function(PrompterSettings) apply;
+  const VideoQuality(this.label);
+  final String label;
 }
 
-final setupPresets = <SetupPreset>[
-  SetupPreset(
-    'Handheld selfie',
-    'Medium text close to the lens',
-    Icons.phone_android,
-    (s) => s.copyWith(
+enum PacePreset {
+  calm(120),
+  natural(150),
+  energetic(180);
+
+  const PacePreset(this.wpm);
+  final double wpm;
+}
+
+/// One-tap setups for common filming situations. Pace is kept as is.
+enum SetupPreset {
+  handheld(Icons.phone_android),
+  tripod(Icons.videocam_outlined),
+  glass(Icons.flip);
+
+  const SetupPreset(this.icon);
+  final IconData icon;
+
+  PrompterSettings apply(PrompterSettings s) => switch (this) {
+    SetupPreset.handheld => s.copyWith(
       fontSize: 30,
       overlayHeightFraction: 0.3,
       backgroundOpacity: 0.45,
       mirror: false,
       textAlign: TextAlign.center,
     ),
-  ),
-  SetupPreset(
-    'Tripod / distance',
-    'Big text you can read from 1–2 m',
-    Icons.videocam_outlined,
-    (s) => s.copyWith(
+    SetupPreset.tripod => s.copyWith(
       fontSize: 56,
       lineHeight: 1.3,
       overlayHeightFraction: 0.55,
       backgroundOpacity: 0.6,
       mirror: false,
     ),
-  ),
-  SetupPreset(
-    'Teleprompter glass',
-    'Mirrored, full screen, solid background',
-    Icons.flip,
-    (s) => s.copyWith(
+    SetupPreset.glass => s.copyWith(
       fontSize: 48,
       overlayHeightFraction: 1,
       backgroundOpacity: 1,
       mirror: true,
       textColor: 0xFFFFFFFF,
     ),
-  ),
-];
+  };
+}

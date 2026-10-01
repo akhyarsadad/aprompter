@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script_markup.dart';
 
@@ -83,6 +84,7 @@ class PrompterView extends StatefulWidget {
     this.manualScroll = true,
     this.onTap,
     this.autofocus = true,
+    this.onFontSizeChanged,
   });
 
   final String text;
@@ -99,6 +101,10 @@ class PrompterView extends StatefulWidget {
 
   final bool autofocus;
 
+  /// Called when the user pinches to resize the text. Pinch is disabled when
+  /// null or when [manualScroll] is false.
+  final ValueChanged<double>? onFontSizeChanged;
+
   @override
   State<PrompterView> createState() => _PrompterViewState();
 }
@@ -113,6 +119,7 @@ class _PrompterViewState extends State<PrompterView>
   List<GlobalKey> _sectionKeys = [];
   Duration _lastTick = Duration.zero;
   bool _dragging = false;
+  double? _pinchStartFontSize;
 
   @override
   void initState() {
@@ -147,6 +154,20 @@ class _PrompterViewState extends State<PrompterView>
   void didUpdateWidget(PrompterView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.text != widget.text) _parse();
+    final old = oldWidget.settings;
+    final now = widget.settings;
+    if (_scroll.hasClients &&
+        (old.fontSize != now.fontSize ||
+            old.lineHeight != now.lineHeight ||
+            old.mirror != now.mirror)) {
+      // Keep the reader on the same line after the text reflows.
+      final fraction = widget.controller.progress.value;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _scroll.hasClients) {
+          _jumpTo(fraction * _scroll.position.maxScrollExtent);
+        }
+      });
+    }
     if (oldWidget.controller != widget.controller) {
       _detach(oldWidget.controller);
       _attach(widget.controller);
@@ -265,9 +286,26 @@ class _PrompterViewState extends State<PrompterView>
     return KeyEventResult.handled;
   }
 
-  void _onDrag(DragUpdateDetails d) {
-    if (!_scroll.hasClients) return;
-    _jumpTo(_scroll.offset - d.delta.dy);
+  void _onScaleStart(ScaleStartDetails d) {
+    _dragging = true;
+    _pinchStartFontSize = widget.settings.fontSize;
+  }
+
+  /// One finger scrolls; two fingers resize the text.
+  void _onScaleUpdate(ScaleUpdateDetails d) {
+    if (d.pointerCount >= 2 && widget.onFontSizeChanged != null) {
+      final size = ((_pinchStartFontSize ?? widget.settings.fontSize) * d.scale)
+          .clamp(PrompterSettings.minFontSize, PrompterSettings.maxFontSize)
+          .roundToDouble();
+      if (size != widget.settings.fontSize) widget.onFontSizeChanged!(size);
+    } else if (d.pointerCount == 1 && _scroll.hasClients) {
+      _jumpTo(_scroll.offset - d.focalPointDelta.dy);
+    }
+  }
+
+  void _onScaleEnd(ScaleEndDetails d) {
+    _dragging = false;
+    _pinchStartFontSize = null;
   }
 
   @override
@@ -308,16 +346,9 @@ class _PrompterViewState extends State<PrompterView>
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: widget.onTap ?? widget.controller.toggle,
-                  onVerticalDragStart: widget.manualScroll
-                      ? (_) => _dragging = true
-                      : null,
-                  onVerticalDragUpdate: widget.manualScroll ? _onDrag : null,
-                  onVerticalDragEnd: widget.manualScroll
-                      ? (_) => _dragging = false
-                      : null,
-                  onVerticalDragCancel: widget.manualScroll
-                      ? () => _dragging = false
-                      : null,
+                  onScaleStart: widget.manualScroll ? _onScaleStart : null,
+                  onScaleUpdate: widget.manualScroll ? _onScaleUpdate : null,
+                  onScaleEnd: widget.manualScroll ? _onScaleEnd : null,
                   child: ShaderMask(
                     shaderCallback: (rect) => const LinearGradient(
                       begin: Alignment.topCenter,
@@ -497,7 +528,7 @@ class ScriptText extends StatelessWidget {
       }
     }
     if (children.isEmpty) {
-      children.add(Text('(empty script)', style: base));
+      children.add(Text(context.l10n.emptyScript, style: base));
     }
     return SizedBox(
       width: double.infinity,
@@ -531,7 +562,9 @@ class _CountdownState extends State<Countdown> {
       await Future<void>.delayed(const Duration(seconds: 1));
       if (!mounted) return;
       setState(() => _left--);
+      if (_left > 0) HapticFeedback.selectionClick();
     }
+    HapticFeedback.heavyImpact();
     widget.onDone();
   }
 

@@ -1,13 +1,6 @@
 import 'script_markup.dart';
 
-enum ScriptStatus {
-  draft('Draft'),
-  ready('Ready'),
-  recorded('Recorded');
-
-  const ScriptStatus(this.label);
-  final String label;
-}
+enum ScriptStatus { draft, ready, recorded }
 
 /// A teleprompter script written by the user.
 class Script {

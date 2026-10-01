@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 
@@ -64,26 +65,15 @@ class Storage {
     updatedAt: DateTime.now(),
   );
 
-  static Script _welcomeScript() => Script(
-    id: const Uuid().v4(),
-    title: 'Welcome to APrompter',
-    status: ScriptStatus.ready,
-    targetSeconds: 60,
-    body:
-        '# Hook\n'
-        'Want to film without forgetting your lines? [pause]\n'
-        '// look straight into the lens\n'
-        '\n'
-        '# How it works\n'
-        'Write your script, pick a *target length*, and watch the timer '
-        'tell you if it fits.\n'
-        'Rehearse to find your pace in words per minute.\n'
-        'Then hit Record. The text scrolls right under the camera, so you '
-        'keep *eye contact* with your audience.\n'
-        '\n'
-        '# CTA\n'
-        'Tap the pencil to edit this script, or create your own with '
-        'the plus button. [pause] Have fun creating!\n',
-    updatedAt: DateTime.now(),
-  );
+  static Script _welcomeScript() {
+    final l = deviceLocalizations();
+    return Script(
+      id: const Uuid().v4(),
+      title: l.welcomeTitle,
+      status: ScriptStatus.ready,
+      targetSeconds: 60,
+      body: l.welcomeBody,
+      updatedAt: DateTime.now(),
+    );
+  }
 }

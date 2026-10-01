@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
@@ -70,6 +71,7 @@ class _ReadScreenState extends State<ReadScreen> {
       showDragHandle: true,
       builder: (context) {
         final theme = Theme.of(context);
+        final l = context.l10n;
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
@@ -77,24 +79,23 @@ class _ReadScreenState extends State<ReadScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Nice run!', style: theme.textTheme.headlineSmall),
+                Text(l.niceRun, style: theme.textTheme.headlineSmall),
                 const SizedBox(height: 12),
                 Text(
-                  'You took ${formatDuration(time)} for $words words '
-                  '→ ${actualWpm.round()} words per minute.',
+                  l.runSummary(formatDuration(time), words, actualWpm.round()),
                   style: theme.textTheme.bodyLarge,
                 ),
                 if (target != null) ...[
                   const SizedBox(height: 8),
                   Text(
                     time.inSeconds > target * 1.1
-                        ? 'That is ${time.inSeconds - target}s over your '
-                              '${formatDuration(Duration(seconds: target))} '
-                              'target — trim the script or speed up.'
+                        ? l.runOver(
+                            time.inSeconds - target,
+                            formatDuration(Duration(seconds: target)),
+                          )
                         : time.inSeconds < target * 0.9
-                        ? 'You have ${target - time.inSeconds}s of room '
-                              'before your target.'
-                        : 'Right on your target length. 🎯',
+                        ? l.runUnder(target - time.inSeconds)
+                        : l.runOnTarget,
                   ),
                 ],
                 const SizedBox(height: 20),
@@ -103,14 +104,14 @@ class _ReadScreenState extends State<ReadScreen> {
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Keep current'),
+                        child: Text(l.keepCurrent),
                       ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: FilledButton(
                         onPressed: () => Navigator.pop(context, true),
-                        child: Text('Use ${suggested.round()} wpm'),
+                        child: Text(l.useWpm(suggested.round())),
                       ),
                     ),
                   ],
@@ -143,6 +144,8 @@ class _ReadScreenState extends State<ReadScreen> {
                 controller: _prompter,
                 onTap: _start,
                 onFinished: _onFinished,
+                onFontSizeChanged: (v) =>
+                    state.updateSettings(settings.copyWith(fontSize: v)),
               ),
             ),
             Positioned(
@@ -169,7 +172,7 @@ class _ReadScreenState extends State<ReadScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      tooltip: 'Close',
+                      tooltip: context.l10n.close,
                       color: Colors.white,
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.close),
@@ -193,7 +196,7 @@ class _ReadScreenState extends State<ReadScreen> {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Settings',
+                      tooltip: context.l10n.settings,
                       color: Colors.white,
                       onPressed: () {
                         _prompter.pause();

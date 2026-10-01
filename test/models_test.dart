@@ -103,9 +103,9 @@ void main() {
 
   test('setup presets keep the pace', () {
     const s = PrompterSettings(wpm: 180);
-    for (final p in setupPresets) {
+    for (final p in SetupPreset.values) {
       expect(p.apply(s).wpm, 180);
     }
-    expect(setupPresets.last.apply(s).mirror, isTrue);
+    expect(SetupPreset.glass.apply(s).mirror, isTrue);
   });
 }

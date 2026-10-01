@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
 import 'prompter_view.dart';
 
-const _previewText =
-    '# Hook\n'
-    'Stop scrolling — this *one trick* saves you hours. [pause]\n'
-    '// smile, lean in\n'
-    'Here is how it works.';
-
-/// Bottom sheet for tuning the prompter: setups, pace, text and layout,
-/// with a live preview.
+/// Bottom sheet for tuning the prompter: setups, pace, text, layout and
+/// recording, with a live preview (journey J4).
 ///
 /// Pass [script] to enable "fit to target length".
 Future<void> showSettingsSheet(
@@ -29,6 +24,24 @@ Future<void> showSettingsSheet(
         _SettingsSheet(initial: settings, onChanged: onChanged, script: script),
   );
 }
+
+String presetName(AppLocalizations l, SetupPreset p) => switch (p) {
+  SetupPreset.handheld => l.presetHandheld,
+  SetupPreset.tripod => l.presetTripod,
+  SetupPreset.glass => l.presetGlass,
+};
+
+String presetHint(AppLocalizations l, SetupPreset p) => switch (p) {
+  SetupPreset.handheld => l.presetHandheldHint,
+  SetupPreset.tripod => l.presetTripodHint,
+  SetupPreset.glass => l.presetGlassHint,
+};
+
+String paceName(AppLocalizations l, PacePreset p) => switch (p) {
+  PacePreset.calm => l.paceCalm,
+  PacePreset.natural => l.paceNatural,
+  PacePreset.energetic => l.paceEnergetic,
+};
 
 class _SettingsSheet extends StatefulWidget {
   const _SettingsSheet({
@@ -47,7 +60,6 @@ class _SettingsSheet extends StatefulWidget {
 
 class _SettingsSheetState extends State<_SettingsSheet> {
   late PrompterSettings _s = widget.initial;
-  final _previewBlocks = parseScript(_previewText);
 
   void _update(PrompterSettings s) {
     setState(() => _s = s);
@@ -56,6 +68,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final theme = Theme.of(context);
     final script = widget.script;
     final target = script?.targetSeconds;
@@ -66,6 +79,9 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                 PrompterSettings.wpmStep,
           )
         : null;
+    final previewBlocks = parseScript(
+      '# ${l.secHook}\n${l.welcomeBody.split('\n')[1]}\n// ${l.noteHook}',
+    );
 
     return SafeArea(
       child: ConstrainedBox(
@@ -101,7 +117,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                       padding: const EdgeInsets.all(12),
                       child: Transform.flip(
                         flipX: _s.mirror,
-                        child: ScriptText(blocks: _previewBlocks, settings: _s),
+                        child: ScriptText(blocks: previewBlocks, settings: _s),
                       ),
                     ),
                   ),
@@ -109,7 +125,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     right: 8,
                     top: 6,
                     child: Text(
-                      'Preview',
+                      l.preview,
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: Colors.white54,
                       ),
@@ -123,21 +139,23 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                 children: [
-                  _header(context, 'Setup'),
+                  _header(context, l.setup),
                   SizedBox(
                     height: 124,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        for (final p in setupPresets)
+                        for (final p in SetupPreset.values)
                           _PresetCard(
-                            preset: p,
+                            icon: p.icon,
+                            name: presetName(l, p),
+                            description: presetHint(l, p),
                             onTap: () => _update(p.apply(_s)),
                           ),
                       ],
                     ),
                   ),
-                  _header(context, 'Pace'),
+                  _header(context, l.pace),
                   Row(
                     children: [
                       Text(
@@ -145,7 +163,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                         style: theme.textTheme.headlineSmall,
                       ),
                       const SizedBox(width: 4),
-                      const Text('words / min'),
+                      Text(l.wordsPerMinute),
                       const Spacer(),
                       if (script != null)
                         Text(
@@ -163,24 +181,24 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                         ((PrompterSettings.maxWpm - PrompterSettings.minWpm) /
                                 PrompterSettings.wpmStep)
                             .round(),
-                    label: '${_s.wpm.round()} wpm',
+                    label: '${_s.wpm.round()} ${l.wpmUnit}',
                     onChanged: (v) => _update(_s.copyWith(wpm: v)),
                   ),
                   Wrap(
                     spacing: 8,
                     runSpacing: 4,
                     children: [
-                      for (final (name, wpm) in pacePresets)
+                      for (final p in PacePreset.values)
                         ChoiceChip(
-                          label: Text('$name ${wpm.round()}'),
-                          selected: _s.wpm == wpm,
-                          onSelected: (_) => _update(_s.copyWith(wpm: wpm)),
+                          label: Text('${paceName(l, p)} ${p.wpm.round()}'),
+                          selected: _s.wpm == p.wpm,
+                          onSelected: (_) => _update(_s.copyWith(wpm: p.wpm)),
                         ),
                       if (fitWpm != null)
                         ActionChip(
                           avatar: const Icon(Icons.timer_outlined, size: 18),
                           label: Text(
-                            'Fit to ${formatDuration(Duration(seconds: target!))}',
+                            l.fitTo(formatDuration(Duration(seconds: target!))),
                           ),
                           onPressed: () => _update(_s.copyWith(wpm: fitWpm)),
                         ),
@@ -189,25 +207,24 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Expanded(child: Text('Countdown before start')),
+                      Expanded(child: Text(l.countdown)),
                       DropdownButton<int>(
                         value: _s.countdownSeconds,
-                        items: const [0, 3, 5, 10]
-                            .map(
-                              (s) => DropdownMenuItem(
-                                value: s,
-                                child: Text(s == 0 ? 'Off' : '${s}s'),
-                              ),
-                            )
-                            .toList(),
+                        items: [
+                          for (final s in const [0, 3, 5, 10])
+                            DropdownMenuItem(
+                              value: s,
+                              child: Text(s == 0 ? l.off : '${s}s'),
+                            ),
+                        ],
                         onChanged: (v) =>
                             _update(_s.copyWith(countdownSeconds: v)),
                       ),
                     ],
                   ),
-                  _header(context, 'Text'),
+                  _header(context, l.text),
                   _slider(
-                    label: 'Size',
+                    label: l.size,
                     value: _s.fontSize,
                     min: PrompterSettings.minFontSize,
                     max: PrompterSettings.maxFontSize,
@@ -215,7 +232,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     onChanged: (v) => _update(_s.copyWith(fontSize: v)),
                   ),
                   _slider(
-                    label: 'Line spacing',
+                    label: l.lineSpacing,
                     value: _s.lineHeight,
                     min: 1.0,
                     max: 2.5,
@@ -234,7 +251,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                               Semantics(
                                 button: true,
                                 selected: _s.textColor == c,
-                                label: 'Text color',
+                                label: l.textColor,
                                 child: GestureDetector(
                                   onTap: () =>
                                       _update(_s.copyWith(textColor: c)),
@@ -269,9 +286,9 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                       ),
                     ],
                   ),
-                  _header(context, 'Layout'),
+                  _header(context, l.layout),
                   _slider(
-                    label: 'Prompter height',
+                    label: l.prompterHeight,
                     value: _s.overlayHeightFraction,
                     min: 0.15,
                     max: 1,
@@ -280,7 +297,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                         _update(_s.copyWith(overlayHeightFraction: v)),
                   ),
                   _slider(
-                    label: 'Background',
+                    label: l.background,
                     value: _s.backgroundOpacity,
                     min: 0,
                     max: 1,
@@ -290,18 +307,40 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Reading guide line'),
+                    title: Text(l.readingGuide),
                     value: _s.showGuide,
                     onChanged: (v) => _update(_s.copyWith(showGuide: v)),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Mirror text'),
-                    subtitle: const Text(
-                      'For teleprompter glass / beam splitter',
-                    ),
+                    title: Text(l.mirrorText),
+                    subtitle: Text(l.mirrorTextHint),
                     value: _s.mirror,
                     onChanged: (v) => _update(_s.copyWith(mirror: v)),
+                  ),
+                  _header(context, l.recording),
+                  Row(
+                    children: [
+                      Expanded(child: Text(l.videoQuality)),
+                      SegmentedButton<VideoQuality>(
+                        showSelectedIcon: false,
+                        segments: [
+                          for (final q in VideoQuality.values)
+                            ButtonSegment(value: q, label: Text(q.label)),
+                        ],
+                        selected: {_s.videoQuality},
+                        onSelectionChanged: (v) =>
+                            _update(_s.copyWith(videoQuality: v.first)),
+                      ),
+                    ],
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.autoStop),
+                    subtitle: Text(l.autoStopHint),
+                    value: _s.autoStopRecording,
+                    onChanged: (v) =>
+                        _update(_s.copyWith(autoStopRecording: v)),
                   ),
                 ],
               ),
@@ -349,9 +388,16 @@ class _SettingsSheetState extends State<_SettingsSheet> {
 }
 
 class _PresetCard extends StatelessWidget {
-  const _PresetCard({required this.preset, required this.onTap});
+  const _PresetCard({
+    required this.icon,
+    required this.name,
+    required this.description,
+    required this.onTap,
+  });
 
-  final SetupPreset preset;
+  final IconData icon;
+  final String name;
+  final String description;
   final VoidCallback onTap;
 
   @override
@@ -371,11 +417,11 @@ class _PresetCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(preset.icon, size: 20, color: theme.colorScheme.primary),
+                  Icon(icon, size: 20, color: theme.colorScheme.primary),
                   const SizedBox(height: 4),
-                  Text(preset.name, style: theme.textTheme.labelLarge),
+                  Text(name, style: theme.textTheme.labelLarge),
                   Text(
-                    preset.description,
+                    description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodySmall,

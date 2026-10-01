@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../l10n/l10n.dart';
+import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
 import '../widgets/prompter_controls.dart';
@@ -50,7 +52,7 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     try {
       _cameras = await availableCameras();
       if (_cameras.isEmpty) {
-        setState(() => _error = 'No camera found on this device.');
+        setState(() => _error = context.l10n.noCamera);
         return;
       }
       final front = _cameras.indexWhere(
@@ -65,11 +67,16 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
 
   Future<void> _openCamera() async {
     final old = _camera;
+    final quality = AppScope.read(context).settings.videoQuality;
     setState(() => _camera = null);
     await old?.dispose();
     final controller = CameraController(
       _cameras[_cameraIndex],
-      ResolutionPreset.high,
+      switch (quality) {
+        VideoQuality.hd => ResolutionPreset.high,
+        VideoQuality.fullHd => ResolutionPreset.veryHigh,
+        VideoQuality.uhd => ResolutionPreset.ultraHigh,
+      },
       enableAudio: true,
     );
     try {
@@ -92,13 +99,11 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
   String _describe(CameraException e) => switch (e.code) {
     'CameraAccessDenied' ||
     'CameraAccessDeniedWithoutPrompt' ||
-    'CameraAccessRestricted' =>
-      'Camera access was denied. Enable it in system settings.',
+    'CameraAccessRestricted' => context.l10n.cameraDenied,
     'AudioAccessDenied' ||
     'AudioAccessDeniedWithoutPrompt' ||
-    'AudioAccessRestricted' =>
-      'Microphone access was denied. Enable it in system settings.',
-    _ => 'Camera error: ${e.description ?? e.code}',
+    'AudioAccessRestricted' => context.l10n.micDenied,
+    _ => context.l10n.cameraError(e.description ?? e.code),
   };
 
   @override
@@ -170,15 +175,27 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
       final file = await camera.stopVideoRecording();
       if (!await Gal.hasAccess()) await Gal.requestAccess();
       await Gal.putVideo(file.path, album: 'APrompter');
-      if (mounted) await AppScope.read(context).recordTake(widget.script.id);
-      _toast('Take saved to your gallery');
+      if (!mounted) return;
+      final state = AppScope.read(context);
+      await state.recordTake(widget.script.id);
+      if (!mounted) return;
+      _toast(context.l10n.takeSaved(state.byId(widget.script.id)?.takes ?? 1));
     } on GalException catch (e) {
-      _toast('Could not save video: ${e.type.message}');
+      if (mounted) _toast(context.l10n.saveFailed(e.type.message));
     } on CameraException catch (e) {
       _toast(_describe(e));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  /// Auto-stop: give the creator a beat to finish the last line.
+  Future<void> _onScriptFinished() async {
+    if (!_recording || !AppScope.read(context).settings.autoStopRecording) {
+      return;
+    }
+    await Future<void>.delayed(const Duration(seconds: 2));
+    if (mounted && _recording && !_prompter.playing) await _stopRecording();
   }
 
   void _toast(String msg) {
@@ -239,6 +256,9 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                     text: widget.script.body,
                     settings: settings,
                     controller: _prompter,
+                    onFinished: _onScriptFinished,
+                    onFontSizeChanged: (v) =>
+                        state.updateSettings(settings.copyWith(fontSize: v)),
                   ),
                 ),
                 Positioned(
@@ -299,7 +319,7 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                   children: [
                     _RoundButton(
                       icon: Icons.close,
-                      tooltip: 'Close',
+                      tooltip: context.l10n.close,
                       onPressed: _recording
                           ? null
                           : () => Navigator.pop(context),
@@ -311,22 +331,26 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                     ),
                     _RoundButton(
                       icon: Icons.tune,
-                      tooltip: 'Settings',
+                      tooltip: context.l10n.settings,
                       onPressed: _recording
                           ? null
                           : () => showSettingsSheet(
                               context,
                               settings: settings,
                               script: widget.script,
-                              onChanged: (s) {
-                                state.updateSettings(s);
+                              onChanged: (s) async {
+                                final qualityChanged =
+                                    s.videoQuality !=
+                                    state.settings.videoQuality;
+                                await state.updateSettings(s);
                                 _prompter.wpm = s.wpm;
+                                if (qualityChanged) await _openCamera();
                               },
                             ),
                     ),
                     _RoundButton(
                       icon: Icons.cameraswitch,
-                      tooltip: 'Switch camera',
+                      tooltip: context.l10n.switchCamera,
                       onPressed: _cameras.length > 1 && !_recording
                           ? _switchCamera
                           : null,
@@ -407,7 +431,9 @@ class _RecordButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: recording ? 'Stop recording' : 'Start recording',
+      label: recording
+          ? context.l10n.stopRecording
+          : context.l10n.startRecording,
       child: GestureDetector(
         onTap: busy ? null : onPressed,
         child: Container(

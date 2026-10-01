@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 
+import '../l10n/l10n.dart';
 import '../models/script.dart';
+import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
 import '../services/floating_prompter.dart';
@@ -24,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final state = AppScope.of(context);
     final q = _query.toLowerCase();
     final scripts = state.scripts
@@ -38,10 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('APrompter'),
+        title: Text(l.appTitle),
         actions: [
           IconButton(
-            tooltip: 'Prompter settings',
+            tooltip: l.prompterSettings,
             icon: const Icon(Icons.tune),
             onPressed: () => showSettingsSheet(
               context,
@@ -54,14 +59,14 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _newScript(context),
         icon: const Icon(Icons.add),
-        label: const Text('New script'),
+        label: Text(l.newScript),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
             child: SearchBar(
-              hintText: 'Search scripts',
+              hintText: l.searchScripts,
               leading: const Icon(Icons.search),
               elevation: const WidgetStatePropertyAll(0),
               onChanged: (v) => setState(() => _query = v),
@@ -79,7 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: FilterChip(
                         label: Text(
-                          '${f?.label ?? 'All'} (${state.scripts.where((s) => f == null || s.status == f).length})',
+                          l.filterCount(
+                            f?.label(l) ?? l.filterAll,
+                            state.scripts
+                                .where((s) => f == null || s.status == f)
+                                .length,
+                          ),
                         ),
                         selected: _filter == f,
                         onSelected: (_) => setState(() => _filter = f),
@@ -96,8 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
                     itemCount: scripts.length,
                     separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (context, i) =>
-                        _ScriptCard(script: scripts[i]),
+                    itemBuilder: (context, i) => _ScriptCard(
+                      key: ValueKey(scripts[i].id),
+                      script: scripts[i],
+                    ),
                   ),
           ),
         ],
@@ -108,21 +120,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
 /// J1: pick a template, then open the editor.
 Future<void> _newScript(BuildContext context) async {
+  final l = context.l10n;
   final template = await showModalBottomSheet<ScriptTemplate>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true,
     builder: (context) => SafeArea(
       child: ListView(
         shrinkWrap: true,
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
             child: Text(
-              'Start from a template',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              l.startFromTemplate,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          for (final t in scriptTemplates)
+          for (final t in scriptTemplates(l))
             ListTile(
               leading: Icon(
                 t.body.isEmpty
@@ -150,21 +164,20 @@ void _edit(BuildContext context, Script script) => Navigator.push(
   MaterialPageRoute<void>(builder: (_) => EditorScreen(script: script)),
 );
 
+enum _Action { edit, duplicate, share, caption, draft, ready, recorded, delete }
+
 class _ScriptCard extends StatelessWidget {
-  const _ScriptCard({required this.script});
+  const _ScriptCard({super.key, required this.script});
 
   final Script script;
 
   Future<void> _float(BuildContext context) async {
+    final l = context.l10n;
     final state = AppScope.read(context);
     final messenger = ScaffoldMessenger.of(context);
     if (!await FloatingPrompter.ensurePermission()) {
       messenger.showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Allow "Display over other apps" to use the floating prompter.',
-          ),
-        ),
+        SnackBar(content: Text(l.overlayPermissionNeeded)),
       );
       return;
     }
@@ -173,51 +186,77 @@ class _ScriptCard extends StatelessWidget {
       script: script,
       settings: state.settings,
     );
-    messenger.showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Prompter is floating. Open your camera app and tap the '
-          'text to start.',
-        ),
-      ),
-    );
+    messenger.showSnackBar(SnackBar(content: Text(l.floatingStarted)));
   }
 
-  Future<void> _delete(BuildContext context) async {
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete script?'),
-        content: Text('"${script.title}" will be removed permanently.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+  Future<void> _onAction(BuildContext context, _Action action) async {
+    final l = context.l10n;
+    final state = AppScope.read(context);
+    final messenger = ScaffoldMessenger.of(context);
+    switch (action) {
+      case _Action.edit:
+        _edit(context, script);
+      case _Action.duplicate:
+        final copy = await state.duplicate(
+          script.id,
+          titleSuffix: l.copySuffix,
+        );
+        messenger.showSnackBar(
+          SnackBar(content: Text(l.duplicatedScript(copy.title))),
+        );
+      case _Action.share:
+        final box = context.findRenderObject() as RenderBox?;
+        await SharePlus.instance.share(
+          ShareParams(
+            title: script.title,
+            text: '${script.title}\n\n${script.body}',
+            sharePositionOrigin: box == null
+                ? null
+                : box.localToGlobal(Offset.zero) & box.size,
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete'),
+        );
+      case _Action.caption:
+        await Clipboard.setData(ClipboardData(text: spokenText(script.body)));
+        messenger.showSnackBar(SnackBar(content: Text(l.captionCopied)));
+      case _Action.draft:
+        await state.upsert(script.copyWith(status: ScriptStatus.draft));
+      case _Action.ready:
+        await state.upsert(script.copyWith(status: ScriptStatus.ready));
+      case _Action.recorded:
+        await state.upsert(script.copyWith(status: ScriptStatus.recorded));
+      case _Action.delete:
+        final removed = await state.delete(script.id);
+        if (removed == null) return;
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(l.deletedScript(removed.title)),
+            action: SnackBarAction(
+              label: l.undo,
+              onPressed: () => state.restore(removed),
+            ),
           ),
-        ],
-      ),
-    );
-    if (ok == true && context.mounted) {
-      await AppScope.read(context).delete(script.id);
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final theme = Theme.of(context);
     final wpm = AppScope.of(context).settings.wpm;
     final target = script.targetSeconds;
     final meta = [
-      '${script.wordCount} words',
+      l.words(script.wordCount),
       '~${formatDuration(script.durationAt(wpm))}'
           '${target != null ? ' / ${targetLabel(target)}' : ''}',
-      if (script.takes > 0)
-        '${script.takes} take${script.takes == 1 ? '' : 's'}',
+      if (script.takes > 0) l.takes(script.takes),
     ].join(' · ');
+    final statusActions = {
+      ScriptStatus.draft: _Action.draft,
+      ScriptStatus.ready: _Action.ready,
+      ScriptStatus.recorded: _Action.recorded,
+    };
+
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -237,43 +276,39 @@ class _ScriptCard extends StatelessWidget {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      script.title.isEmpty ? 'Untitled' : script.title,
+                      script.title.isEmpty ? l.untitled : script.title,
                       style: theme.textTheme.titleMedium,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  PopupMenuButton<String>(
-                    onSelected: (v) {
-                      if (v == 'edit') _edit(context, script);
-                      if (v == 'delete') _delete(context);
-                      for (final s in ScriptStatus.values) {
-                        if (v == s.name) {
-                          AppScope.read(context)
-                              .upsert(script.copyWith(status: s));
-                        }
-                      }
-                    },
+                  PopupMenuButton<_Action>(
+                    onSelected: (a) => _onAction(context, a),
                     itemBuilder: (_) => [
-                      const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                      for (final s in ScriptStatus.values)
-                        if (s != script.status)
-                          PopupMenuItem(
-                            value: s.name,
-                            child: Text('Mark as ${s.label}'),
-                          ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Text('Delete'),
+                      _item(_Action.edit, Icons.edit_outlined, l.edit),
+                      _item(_Action.duplicate, Icons.copy_all, l.duplicate),
+                      _item(_Action.share, Icons.share_outlined, l.share),
+                      _item(
+                        _Action.caption,
+                        Icons.closed_caption_outlined,
+                        l.copyAsCaption,
                       ),
+                      const PopupMenuDivider(),
+                      for (final MapEntry(key: status, value: action)
+                          in statusActions.entries)
+                        if (status != script.status)
+                          _item(
+                            action,
+                            statusIcon(status),
+                            l.markAs(status.label(l)),
+                          ),
+                      const PopupMenuDivider(),
+                      _item(_Action.delete, Icons.delete_outline, l.delete),
                     ],
                   ),
                 ],
               ),
               Text(
-                script.body.replaceAll(
-                  RegExp(r'^(#|//).*$\n?', multiLine: true),
-                  '',
-                ),
+                spokenText(script.body).replaceAll('\n', ' '),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -293,13 +328,13 @@ class _ScriptCard extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(Icons.record_voice_over_outlined),
-                    label: const Text('Rehearse'),
+                    label: Text(l.rehearse),
                   ),
                   if (FloatingPrompter.isSupported)
                     TextButton.icon(
                       onPressed: () => _float(context),
                       icon: const Icon(Icons.picture_in_picture_alt_outlined),
-                      label: const Text('Float'),
+                      label: Text(l.float),
                     ),
                   FilledButton.icon(
                     onPressed: () => Navigator.push(
@@ -309,7 +344,7 @@ class _ScriptCard extends StatelessWidget {
                       ),
                     ),
                     icon: const Icon(Icons.videocam),
-                    label: const Text('Record'),
+                    label: Text(l.record),
                   ),
                 ],
               ),
@@ -319,6 +354,18 @@ class _ScriptCard extends StatelessWidget {
       ),
     );
   }
+
+  PopupMenuItem<_Action> _item(_Action value, IconData icon, String text) =>
+      PopupMenuItem(
+        value: value,
+        child: Row(
+          children: [
+            Icon(icon, size: 20),
+            const SizedBox(width: 12),
+            Expanded(child: Text(text)),
+          ],
+        ),
+      );
 }
 
 class _EmptyState extends StatelessWidget {
@@ -328,6 +375,7 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -341,14 +389,12 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              filtered ? 'Nothing here' : 'No scripts yet',
+              filtered ? l.nothingHere : l.noScriptsYet,
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 8),
             Text(
-              filtered
-                  ? 'Try another filter or search.'
-                  : 'Tap "New script" and pick a template to get started.',
+              filtered ? l.nothingHereHint : l.noScriptsHint,
               textAlign: TextAlign.center,
             ),
           ],

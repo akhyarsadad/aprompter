@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../models/script.dart';
 import 'prompter_view.dart';
 
@@ -31,6 +32,7 @@ class PrompterControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     final iconSize = dense ? 20.0 : 26.0;
     final small = TextStyle(
       color: Colors.white,
@@ -47,10 +49,10 @@ class PrompterControls extends StatelessWidget {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _btn(Icons.replay, 'Restart', controller.restart, iconSize),
+            _btn(Icons.replay, l.restart, controller.restart, iconSize),
             if (onSections != null)
-              _btn(Icons.list, 'Sections', onSections!, iconSize),
-            _btn(Icons.remove, 'Slower', () {
+              _btn(Icons.list, l.sections, onSections!, iconSize),
+            _btn(Icons.remove, l.slower, () {
               controller.slower();
               onWpmChanged?.call(controller.wpm);
             }, iconSize),
@@ -62,18 +64,18 @@ class PrompterControls extends StatelessWidget {
                   style: small.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'wpm',
+                  l.wpmUnit,
                   style: small.copyWith(fontSize: 9, color: Colors.white70),
                 ),
               ],
             ),
-            _btn(Icons.add, 'Faster', () {
+            _btn(Icons.add, l.faster, () {
               controller.faster();
               onWpmChanged?.call(controller.wpm);
             }, iconSize),
             _btn(
               controller.playing ? Icons.pause : Icons.play_arrow,
-              controller.playing ? 'Pause' : 'Play',
+              controller.playing ? l.pause : l.play,
               controller.playing
                   ? controller.pause
                   : (onPlay ?? controller.play),
@@ -132,19 +134,16 @@ Future<void> showSectionsSheet(
     showDragHandle: true,
     builder: (context) => SafeArea(
       child: sections.isEmpty
-          ? const Padding(
-              padding: EdgeInsets.fromLTRB(24, 0, 24, 24),
-              child: Text(
-                'No sections yet. Add lines starting with "#" in the editor '
-                '(e.g. "# Hook") to jump between parts and retake just one.',
-              ),
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              child: Text(context.l10n.noSectionsHint),
             )
           : ListView(
               shrinkWrap: true,
               children: [
                 ListTile(
                   leading: const Icon(Icons.vertical_align_top),
-                  title: const Text('Start of script'),
+                  title: Text(context.l10n.startOfScript),
                   onTap: () {
                     Navigator.pop(context);
                     controller.restart();
@@ -153,7 +152,9 @@ Future<void> showSectionsSheet(
                 for (final (i, title) in sections.indexed)
                   ListTile(
                     leading: CircleAvatar(radius: 14, child: Text('${i + 1}')),
-                    title: Text(title.isEmpty ? 'Section ${i + 1}' : title),
+                    title: Text(
+                      title.isEmpty ? context.l10n.sectionN(i + 1) : title,
+                    ),
                     onTap: () {
                       Navigator.pop(context);
                       controller.jumpToSection(i);

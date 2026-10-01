@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import 'storage.dart';
@@ -31,6 +32,7 @@ class FloatingPrompter {
     await storage.saveSettings(settings);
 
     if (!await FlutterOverlayWindow.isActive()) {
+      final l = deviceLocalizations();
       final view = PlatformDispatcher.instance.implicitView!;
       final heightPx =
           (view.physicalSize.height * settings.overlayHeightFraction).round();
@@ -41,8 +43,8 @@ class FloatingPrompter {
         flag: OverlayFlag.defaultFlag,
         enableDrag: true,
         positionGravity: PositionGravity.none,
-        overlayTitle: 'APrompter is floating',
-        overlayContent: script.title.isEmpty ? 'Teleprompter' : script.title,
+        overlayTitle: l.floatingNotificationTitle,
+        overlayContent: script.title.isEmpty ? l.untitled : script.title,
       );
     }
     await FlutterOverlayWindow.shareData(

@@ -1,0 +1,313 @@
+{
+  "@@locale": "en",
+  "appTitle": "APrompter",
+  "cancel": "Cancel",
+  "close": "Close",
+  "settings": "Settings",
+  "prompterSettings": "Prompter settings",
+  "edit": "Edit",
+  "delete": "Delete",
+  "undo": "Undo",
+  "duplicate": "Duplicate",
+  "share": "Share",
+  "copyAsCaption": "Copy as caption",
+  "captionCopied": "Spoken text copied — paste it as your caption",
+  "copySuffix": "(copy)",
+  "deletedScript": "Deleted \"{title}\"",
+  "@deletedScript": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "duplicatedScript": "Duplicated as \"{title}\"",
+  "@duplicatedScript": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "untitled": "Untitled",
+  "newScript": "New script",
+  "searchScripts": "Search scripts",
+  "filterAll": "All",
+  "statusDraft": "Draft",
+  "statusReady": "Ready",
+  "statusRecorded": "Recorded",
+  "markAs": "Mark as {status}",
+  "@markAs": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "filterCount": "{label} ({count})",
+  "@filterCount": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rehearse": "Rehearse",
+  "float": "Float",
+  "record": "Record",
+  "words": "{count, plural, =1{1 word} other{{count} words}}",
+  "@words": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "takes": "{count, plural, =1{1 take} other{{count} takes}}",
+  "@takes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noScriptsYet": "No scripts yet",
+  "noScriptsHint": "Tap \"New script\" and pick a template to get started.",
+  "nothingHere": "Nothing here",
+  "nothingHereHint": "Try another filter or search.",
+  "startFromTemplate": "Start from a template",
+  "overlayPermissionNeeded": "Allow \"Display over other apps\" to use the floating prompter.",
+  "floatingStarted": "Prompter is floating. Open your camera app and tap the text to start.",
+  "floatingNotificationTitle": "APrompter is floating",
+  "openScriptInApp": "Open a script in APrompter",
+  "deleteScriptTitle": "Delete script?",
+  "script": "Script",
+  "title": "Title",
+  "status": "Status",
+  "noTarget": "No target",
+  "editorHint": "Write or paste what you want to say…\n\nTip: start a line with # for a section, // for a note to yourself.",
+  "timing": "{words} · {spoken} at {wpm} wpm",
+  "@timing": {
+    "placeholders": {
+      "words": {
+        "type": "String"
+      },
+      "spoken": {
+        "type": "String"
+      },
+      "wpm": {
+        "type": "int"
+      }
+    }
+  },
+  "onTarget": "On target",
+  "overTarget": "{seconds}s over · cut ~{words} words",
+  "@overTarget": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "words": {
+        "type": "int"
+      }
+    }
+  },
+  "underTarget": "{seconds}s left · ~{words} words to go",
+  "@underTarget": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "words": {
+        "type": "int"
+      }
+    }
+  },
+  "longSentences": "{count, plural, =1{1 long sentence (25+ words) — split it so you can breathe} other{{count} long sentences (25+ words) — split them so you can breathe}}",
+  "@longSentences": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "toolSection": "Section",
+  "toolEmphasis": "Emphasis",
+  "toolPause": "Pause",
+  "toolNote": "Note",
+  "toolPaste": "Paste",
+  "restart": "Restart",
+  "sections": "Sections",
+  "slower": "Slower",
+  "faster": "Faster",
+  "play": "Play",
+  "pause": "Pause",
+  "wpmUnit": "wpm",
+  "startOfScript": "Start of script",
+  "sectionN": "Section {n}",
+  "@sectionN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "noSectionsHint": "No sections yet. Add lines starting with \"#\" in the editor (e.g. \"# Hook\") to jump between parts and retake just one.",
+  "emptyScript": "(empty script)",
+  "pinchToResize": "Pinch to resize text",
+  "preview": "Preview",
+  "setup": "Setup",
+  "pace": "Pace",
+  "text": "Text",
+  "layout": "Layout",
+  "recording": "Recording",
+  "wordsPerMinute": "words / min",
+  "fitTo": "Fit to {time}",
+  "@fitTo": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "paceCalm": "Calm",
+  "paceNatural": "Natural",
+  "paceEnergetic": "Energetic",
+  "countdown": "Countdown before start",
+  "off": "Off",
+  "size": "Size",
+  "lineSpacing": "Line spacing",
+  "textColor": "Text color",
+  "prompterHeight": "Prompter height",
+  "background": "Background",
+  "readingGuide": "Reading guide line",
+  "mirrorText": "Mirror text",
+  "mirrorTextHint": "For teleprompter glass / beam splitter",
+  "videoQuality": "Video quality",
+  "autoStop": "Stop recording when the script ends",
+  "autoStopHint": "Waits 2 seconds after the last line",
+  "presetHandheld": "Handheld selfie",
+  "presetHandheldHint": "Medium text close to the lens",
+  "presetTripod": "Tripod / distance",
+  "presetTripodHint": "Big text you can read from 1–2 m",
+  "presetGlass": "Teleprompter glass",
+  "presetGlassHint": "Mirrored, full screen, solid background",
+  "niceRun": "Nice run!",
+  "runSummary": "You took {time} for {words} words → {wpm} words per minute.",
+  "@runSummary": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "words": {
+        "type": "int"
+      },
+      "wpm": {
+        "type": "int"
+      }
+    }
+  },
+  "runOver": "That is {seconds}s over your {target} target — trim the script or speed up.",
+  "@runOver": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "runUnder": "You have {seconds}s of room before your target.",
+  "@runUnder": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "runOnTarget": "Right on your target length. 🎯",
+  "keepCurrent": "Keep current",
+  "useWpm": "Use {wpm} wpm",
+  "@useWpm": {
+    "placeholders": {
+      "wpm": {
+        "type": "int"
+      }
+    }
+  },
+  "switchCamera": "Switch camera",
+  "startRecording": "Start recording",
+  "stopRecording": "Stop recording",
+  "noCamera": "No camera found on this device.",
+  "cameraDenied": "Camera access was denied. Enable it in system settings.",
+  "micDenied": "Microphone access was denied. Enable it in system settings.",
+  "cameraError": "Camera error: {message}",
+  "@cameraError": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "takeSaved": "Take {n} saved to your gallery",
+  "@takeSaved": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "saveFailed": "Could not save video: {message}",
+  "@saveFailed": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "templateBlank": "Blank",
+  "templateBlankHint": "Start from an empty page",
+  "templateHvc": "Hook → Value → CTA",
+  "templateHvcHint": "The classic short-form structure",
+  "templateTutorial": "Tutorial",
+  "templateTutorialHint": "Teach something step by step",
+  "templateReview": "Product review",
+  "templateReviewHint": "UGC, ad reads and honest reviews",
+  "templateStory": "Storytime",
+  "templateStoryHint": "Personal story with a lesson",
+  "secHook": "Hook",
+  "secValue": "Value",
+  "secCta": "CTA",
+  "secStep": "Step {n}",
+  "@secStep": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "secRecap": "Recap & CTA",
+  "secWhatItIs": "What it is",
+  "secLoved": "What I loved",
+  "secBetter": "What could be better",
+  "secVerdict": "Verdict & CTA",
+  "secSetup": "Setup",
+  "secTurningPoint": "Turning point",
+  "secLesson": "Lesson",
+  "noteHook": "Grab attention in the first 3 seconds: a bold claim or question",
+  "noteValue": "Deliver the one thing you promised",
+  "noteCta": "Tell them what to do next: follow, comment, link in bio",
+  "noteTutorialHook": "\"Here's how to … in under a minute\"",
+  "noteRecap": "Summarise in one line, then ask them to save the video",
+  "noteReviewHook": "Show the product and the problem it solves",
+  "noteVerdict": "Who should buy it — mention the code or link",
+  "noteStoryHook": "Start in the middle of the action",
+  "welcomeTitle": "Welcome to APrompter",
+  "welcomeBody": "# Hook\nWant to film without forgetting your lines? [pause]\n// look straight into the lens\n\n# How it works\nWrite your script, pick a *target length*, and watch the timer tell you if it fits.\nRehearse to find your pace in words per minute.\nThen hit Record. The text scrolls right under the camera, so you keep *eye contact* with your audience.\n\n# CTA\nTap this card to edit the script, or create your own with the plus button. [pause] Have fun creating!\n",
+  "expand": "Expand",
+  "minimize": "Minimize"
+}

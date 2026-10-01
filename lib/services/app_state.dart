@@ -40,8 +40,31 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  Future<void> delete(String id) {
+  /// Copies a script as a fresh draft and returns the copy.
+  Future<Script> duplicate(String id, {required String titleSuffix}) async {
+    final source = byId(id)!;
+    final copy = Storage.newScript().copyWith(
+      title: '${source.title} $titleSuffix',
+      body: source.body,
+      targetSeconds: () => source.targetSeconds,
+    );
+    await upsert(copy);
+    return copy;
+  }
+
+  /// Removes a script and returns it so the deletion can be undone.
+  Future<Script?> delete(String id) async {
+    final removed = byId(id);
     _scripts = _scripts.where((s) => s.id != id).toList();
+    notifyListeners();
+    await storage.saveScripts(_scripts);
+    return removed;
+  }
+
+  /// Puts a deleted script back unchanged.
+  Future<void> restore(Script script) {
+    _scripts = [script, ..._scripts.where((s) => s.id != script.id)]
+      ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     notifyListeners();
     return storage.saveScripts(_scripts);
   }

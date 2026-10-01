@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../models/templates.dart';
@@ -38,7 +39,9 @@ class _EditorScreenState extends State<EditorScreen> {
   Future<Script?> _save() async {
     var script = _current;
     if (script.title.isEmpty && script.body.trim().isEmpty) return null;
-    if (script.title.isEmpty) script = script.copyWith(title: 'Untitled');
+    if (script.title.isEmpty) {
+      script = script.copyWith(title: context.l10n.untitled);
+    }
     final state = AppScope.read(context);
     final stored = state.byId(script.id);
     final changed =
@@ -114,21 +117,22 @@ class _EditorScreenState extends State<EditorScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = context.l10n;
     return PopScope<Object?>(
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) _save();
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Script'),
+          title: Text(l.script),
           actions: [
             IconButton(
-              tooltip: 'Rehearse',
+              tooltip: l.rehearse,
               icon: const Icon(Icons.record_voice_over_outlined),
               onPressed: () => _open((s) => ReadScreen(script: s)),
             ),
             IconButton(
-              tooltip: 'Record',
+              tooltip: l.record,
               icon: const Icon(Icons.videocam_outlined),
               onPressed: () => _open((s) => CameraPrompterScreen(script: s)),
             ),
@@ -142,8 +146,8 @@ class _EditorScreenState extends State<EditorScreen> {
                 controller: _title,
                 textCapitalization: TextCapitalization.sentences,
                 style: theme.textTheme.titleLarge,
-                decoration: const InputDecoration(
-                  hintText: 'Title',
+                decoration: InputDecoration(
+                  hintText: l.title,
                   border: InputBorder.none,
                 ),
               ),
@@ -166,7 +170,7 @@ class _EditorScreenState extends State<EditorScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 3),
                         child: ChoiceChip(
-                          label: Text(t == null ? 'No target' : targetLabel(t)),
+                          label: Text(t == null ? l.noTarget : targetLabel(t)),
                           selected: _target == t,
                           onSelected: (_) => setState(() => _target = t),
                           visualDensity: VisualDensity.compact,
@@ -198,11 +202,8 @@ class _EditorScreenState extends State<EditorScreen> {
                   textCapitalization: TextCapitalization.sentences,
                   keyboardType: TextInputType.multiline,
                   style: const TextStyle(fontSize: 18, height: 1.5),
-                  decoration: const InputDecoration(
-                    hintText:
-                        'Write or paste what you want to say…\n\n'
-                        'Tip: start a line with # for a section, '
-                        '// for a note to yourself.',
+                  decoration: InputDecoration(
+                    hintText: l.editorHint,
                     border: InputBorder.none,
                   ),
                 ),
@@ -232,16 +233,16 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: PopupMenuButton<ScriptStatus>(
-        tooltip: 'Status',
+        tooltip: context.l10n.status,
         onSelected: onChanged,
         itemBuilder: (_) => [
           for (final s in ScriptStatus.values)
-            PopupMenuItem(value: s, child: Text(s.label)),
+            PopupMenuItem(value: s, child: Text(s.label(context.l10n))),
         ],
         child: Chip(
           visualDensity: VisualDensity.compact,
           avatar: Icon(statusIcon(status), size: 16),
-          label: Text(status.label),
+          label: Text(status.label(context.l10n)),
         ),
       ),
     );
@@ -269,6 +270,7 @@ class _TimingBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = context.l10n;
     final words = countWords(spokenText(body));
     final seconds = words / wpm * 60;
     final target = targetSeconds;
@@ -285,13 +287,13 @@ class _TimingBar extends StatelessWidget {
       final diff = seconds - target;
       final wordsDiff = (diff.abs() / 60 * wpm).round();
       if (diff.abs() <= target * 0.1) {
-        status = 'On target';
+        status = l.onTarget;
         color = Colors.green;
       } else if (diff > 0) {
-        status = '${diff.round()}s over · cut ~$wordsDiff words';
+        status = l.overTarget(diff.round(), wordsDiff);
         color = theme.colorScheme.error;
       } else {
-        status = '${(-diff).round()}s left · ~$wordsDiff words to go';
+        status = l.underTarget((-diff).round(), wordsDiff);
         color = Colors.orange;
       }
     }
@@ -302,9 +304,14 @@ class _TimingBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '$words words · ${formatDuration(Duration(seconds: seconds.round()))}'
-            '${target != null ? ' / ${formatDuration(Duration(seconds: target))}' : ''}'
-            ' at ${wpm.round()} wpm',
+            l.timing(
+              l.words(words),
+              formatDuration(Duration(seconds: seconds.round())) +
+                  (target != null
+                      ? ' / ${formatDuration(Duration(seconds: target))}'
+                      : ''),
+              wpm.round(),
+            ),
             style: theme.textTheme.bodySmall,
           ),
           if (fraction != null) ...[
@@ -325,8 +332,7 @@ class _TimingBar extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: Text(
-                '$longOnes long sentence${longOnes == 1 ? '' : 's'} '
-                '(25+ words) — split ${longOnes == 1 ? 'it' : 'them'} so you can breathe',
+                l.longSentences(longOnes),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.tertiary,
                 ),
@@ -355,6 +361,7 @@ class _MarkupToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = context.l10n;
     return Material(
       color: Theme.of(context).colorScheme.surfaceContainer,
       child: SafeArea(
@@ -364,11 +371,11 @@ class _MarkupToolbar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: [
-              _tool(Icons.title, 'Section', onSection),
-              _tool(Icons.format_bold, 'Emphasis', onEmphasis),
-              _tool(Icons.pause, 'Pause', onPause),
-              _tool(Icons.sticky_note_2_outlined, 'Note', onNote),
-              _tool(Icons.content_paste, 'Paste', onPaste),
+              _tool(Icons.title, l.toolSection, onSection),
+              _tool(Icons.format_bold, l.toolEmphasis, onEmphasis),
+              _tool(Icons.pause, l.toolPause, onPause),
+              _tool(Icons.sticky_note_2_outlined, l.toolNote, onNote),
+              _tool(Icons.content_paste, l.toolPaste, onPaste),
             ],
           ),
         ),

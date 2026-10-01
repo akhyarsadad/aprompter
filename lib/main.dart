@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'l10n/l10n.dart';
 import 'overlay/overlay_app.dart';
 import 'screens/home_screen.dart';
 import 'services/app_state.dart';
@@ -32,7 +33,9 @@ class AprompterApp extends StatelessWidget {
     return AppScope(
       state: state,
       child: MaterialApp(
-        title: 'APrompter',
+        onGenerateTitle: (context) => context.l10n.appTitle,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(colorSchemeSeed: seed, useMaterial3: true),
         darkTheme: ThemeData(

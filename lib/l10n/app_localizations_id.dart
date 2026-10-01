@@ -1,0 +1,500 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Indonesian (`id`).
+class AppLocalizationsId extends AppLocalizations {
+  AppLocalizationsId([String locale = 'id']) : super(locale);
+
+  @override
+  String get appTitle => 'APrompter';
+
+  @override
+  String get cancel => 'Batal';
+
+  @override
+  String get close => 'Tutup';
+
+  @override
+  String get settings => 'Pengaturan';
+
+  @override
+  String get prompterSettings => 'Pengaturan prompter';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get delete => 'Hapus';
+
+  @override
+  String get undo => 'Urungkan';
+
+  @override
+  String get duplicate => 'Duplikat';
+
+  @override
+  String get share => 'Bagikan';
+
+  @override
+  String get copyAsCaption => 'Salin sebagai caption';
+
+  @override
+  String get captionCopied => 'Teks ucapan disalin — tempel sebagai caption';
+
+  @override
+  String get copySuffix => '(salinan)';
+
+  @override
+  String deletedScript(String title) {
+    return '\"$title\" dihapus';
+  }
+
+  @override
+  String duplicatedScript(String title) {
+    return 'Diduplikat sebagai \"$title\"';
+  }
+
+  @override
+  String get untitled => 'Tanpa judul';
+
+  @override
+  String get newScript => 'Naskah baru';
+
+  @override
+  String get searchScripts => 'Cari naskah';
+
+  @override
+  String get filterAll => 'Semua';
+
+  @override
+  String get statusDraft => 'Draf';
+
+  @override
+  String get statusReady => 'Siap';
+
+  @override
+  String get statusRecorded => 'Direkam';
+
+  @override
+  String markAs(String status) {
+    return 'Tandai $status';
+  }
+
+  @override
+  String filterCount(String label, int count) {
+    return '$label ($count)';
+  }
+
+  @override
+  String get rehearse => 'Latihan';
+
+  @override
+  String get float => 'Melayang';
+
+  @override
+  String get record => 'Rekam';
+
+  @override
+  String words(int count) {
+    return '$count kata';
+  }
+
+  @override
+  String takes(int count) {
+    return '$count take';
+  }
+
+  @override
+  String get noScriptsYet => 'Belum ada naskah';
+
+  @override
+  String get noScriptsHint =>
+      'Ketuk \"Naskah baru\" dan pilih template untuk mulai.';
+
+  @override
+  String get nothingHere => 'Tidak ada apa-apa';
+
+  @override
+  String get nothingHereHint => 'Coba filter atau kata kunci lain.';
+
+  @override
+  String get startFromTemplate => 'Mulai dari template';
+
+  @override
+  String get overlayPermissionNeeded =>
+      'Izinkan \"Tampilkan di atas aplikasi lain\" untuk memakai prompter melayang.';
+
+  @override
+  String get floatingStarted =>
+      'Prompter melayang aktif. Buka aplikasi kamera lalu ketuk teks untuk mulai.';
+
+  @override
+  String get floatingNotificationTitle => 'APrompter sedang melayang';
+
+  @override
+  String get openScriptInApp => 'Buka naskah di APrompter';
+
+  @override
+  String get deleteScriptTitle => 'Hapus naskah?';
+
+  @override
+  String get script => 'Naskah';
+
+  @override
+  String get title => 'Judul';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get noTarget => 'Tanpa target';
+
+  @override
+  String get editorHint =>
+      'Tulis atau tempel apa yang ingin kamu ucapkan…\n\nTips: awali baris dengan # untuk bagian, // untuk catatan pribadi.';
+
+  @override
+  String timing(String words, String spoken, int wpm) {
+    return '$words · $spoken pada $wpm kpm';
+  }
+
+  @override
+  String get onTarget => 'Sesuai target';
+
+  @override
+  String overTarget(int seconds, int words) {
+    return 'Lebih $seconds dtk · potong ~$words kata';
+  }
+
+  @override
+  String underTarget(int seconds, int words) {
+    return 'Sisa $seconds dtk · ~$words kata lagi';
+  }
+
+  @override
+  String longSentences(int count) {
+    return '$count kalimat panjang (25+ kata) — pecah agar bisa bernapas';
+  }
+
+  @override
+  String get toolSection => 'Bagian';
+
+  @override
+  String get toolEmphasis => 'Tekanan';
+
+  @override
+  String get toolPause => 'Jeda';
+
+  @override
+  String get toolNote => 'Catatan';
+
+  @override
+  String get toolPaste => 'Tempel';
+
+  @override
+  String get restart => 'Ulang';
+
+  @override
+  String get sections => 'Bagian';
+
+  @override
+  String get slower => 'Lebih lambat';
+
+  @override
+  String get faster => 'Lebih cepat';
+
+  @override
+  String get play => 'Putar';
+
+  @override
+  String get pause => 'Jeda';
+
+  @override
+  String get wpmUnit => 'kpm';
+
+  @override
+  String get startOfScript => 'Awal naskah';
+
+  @override
+  String sectionN(int n) {
+    return 'Bagian $n';
+  }
+
+  @override
+  String get noSectionsHint =>
+      'Belum ada bagian. Tambahkan baris yang diawali \"#\" di editor (mis. \"# Hook\") untuk lompat antar bagian dan mengulang satu bagian saja.';
+
+  @override
+  String get emptyScript => '(naskah kosong)';
+
+  @override
+  String get pinchToResize => 'Cubit untuk mengubah ukuran teks';
+
+  @override
+  String get preview => 'Pratinjau';
+
+  @override
+  String get setup => 'Setelan';
+
+  @override
+  String get pace => 'Tempo';
+
+  @override
+  String get text => 'Teks';
+
+  @override
+  String get layout => 'Tata letak';
+
+  @override
+  String get recording => 'Perekaman';
+
+  @override
+  String get wordsPerMinute => 'kata / menit';
+
+  @override
+  String fitTo(String time) {
+    return 'Pas $time';
+  }
+
+  @override
+  String get paceCalm => 'Tenang';
+
+  @override
+  String get paceNatural => 'Natural';
+
+  @override
+  String get paceEnergetic => 'Energik';
+
+  @override
+  String get countdown => 'Hitung mundur sebelum mulai';
+
+  @override
+  String get off => 'Mati';
+
+  @override
+  String get size => 'Ukuran';
+
+  @override
+  String get lineSpacing => 'Jarak baris';
+
+  @override
+  String get textColor => 'Warna teks';
+
+  @override
+  String get prompterHeight => 'Tinggi prompter';
+
+  @override
+  String get background => 'Latar';
+
+  @override
+  String get readingGuide => 'Garis panduan baca';
+
+  @override
+  String get mirrorText => 'Cerminkan teks';
+
+  @override
+  String get mirrorTextHint => 'Untuk kaca teleprompter / beam splitter';
+
+  @override
+  String get videoQuality => 'Kualitas video';
+
+  @override
+  String get autoStop => 'Berhenti merekam saat naskah selesai';
+
+  @override
+  String get autoStopHint => 'Menunggu 2 detik setelah baris terakhir';
+
+  @override
+  String get presetHandheld => 'Selfie genggam';
+
+  @override
+  String get presetHandheldHint => 'Teks sedang dekat lensa';
+
+  @override
+  String get presetTripod => 'Tripod / jarak jauh';
+
+  @override
+  String get presetTripodHint => 'Teks besar terbaca dari 1–2 m';
+
+  @override
+  String get presetGlass => 'Kaca teleprompter';
+
+  @override
+  String get presetGlassHint => 'Dicerminkan, layar penuh, latar solid';
+
+  @override
+  String get niceRun => 'Mantap!';
+
+  @override
+  String runSummary(String time, int words, int wpm) {
+    return 'Kamu butuh $time untuk $words kata → $wpm kata per menit.';
+  }
+
+  @override
+  String runOver(int seconds, String target) {
+    return 'Itu $seconds dtk melewati target $target — pangkas naskah atau percepat.';
+  }
+
+  @override
+  String runUnder(int seconds) {
+    return 'Masih ada $seconds dtk sebelum target.';
+  }
+
+  @override
+  String get runOnTarget => 'Pas dengan target durasi. 🎯';
+
+  @override
+  String get keepCurrent => 'Tetap';
+
+  @override
+  String useWpm(int wpm) {
+    return 'Pakai $wpm kpm';
+  }
+
+  @override
+  String get switchCamera => 'Ganti kamera';
+
+  @override
+  String get startRecording => 'Mulai rekam';
+
+  @override
+  String get stopRecording => 'Berhenti rekam';
+
+  @override
+  String get noCamera => 'Kamera tidak ditemukan di perangkat ini.';
+
+  @override
+  String get cameraDenied =>
+      'Akses kamera ditolak. Aktifkan di pengaturan sistem.';
+
+  @override
+  String get micDenied =>
+      'Akses mikrofon ditolak. Aktifkan di pengaturan sistem.';
+
+  @override
+  String cameraError(String message) {
+    return 'Kesalahan kamera: $message';
+  }
+
+  @override
+  String takeSaved(int n) {
+    return 'Take $n disimpan ke galeri';
+  }
+
+  @override
+  String saveFailed(String message) {
+    return 'Gagal menyimpan video: $message';
+  }
+
+  @override
+  String get templateBlank => 'Kosong';
+
+  @override
+  String get templateBlankHint => 'Mulai dari halaman kosong';
+
+  @override
+  String get templateHvc => 'Hook → Isi → CTA';
+
+  @override
+  String get templateHvcHint => 'Struktur klasik video pendek';
+
+  @override
+  String get templateTutorial => 'Tutorial';
+
+  @override
+  String get templateTutorialHint => 'Ajarkan sesuatu langkah demi langkah';
+
+  @override
+  String get templateReview => 'Review produk';
+
+  @override
+  String get templateReviewHint => 'UGC, iklan, dan ulasan jujur';
+
+  @override
+  String get templateStory => 'Cerita';
+
+  @override
+  String get templateStoryHint => 'Cerita pribadi dengan pelajaran';
+
+  @override
+  String get secHook => 'Hook';
+
+  @override
+  String get secValue => 'Isi';
+
+  @override
+  String get secCta => 'CTA';
+
+  @override
+  String secStep(int n) {
+    return 'Langkah $n';
+  }
+
+  @override
+  String get secRecap => 'Ringkasan & CTA';
+
+  @override
+  String get secWhatItIs => 'Apa ini';
+
+  @override
+  String get secLoved => 'Yang aku suka';
+
+  @override
+  String get secBetter => 'Yang bisa lebih baik';
+
+  @override
+  String get secVerdict => 'Kesimpulan & CTA';
+
+  @override
+  String get secSetup => 'Pembuka';
+
+  @override
+  String get secTurningPoint => 'Titik balik';
+
+  @override
+  String get secLesson => 'Pelajaran';
+
+  @override
+  String get noteHook =>
+      'Tarik perhatian di 3 detik pertama: klaim berani atau pertanyaan';
+
+  @override
+  String get noteValue => 'Berikan satu hal yang kamu janjikan';
+
+  @override
+  String get noteCta =>
+      'Bilang apa langkah berikutnya: follow, komen, link di bio';
+
+  @override
+  String get noteTutorialHook => '\"Begini cara … dalam kurang dari semenit\"';
+
+  @override
+  String get noteRecap =>
+      'Ringkas dalam satu kalimat, lalu minta mereka menyimpan video';
+
+  @override
+  String get noteReviewHook => 'Tunjukkan produk dan masalah yang diselesaikan';
+
+  @override
+  String get noteVerdict => 'Siapa yang cocok membeli — sebut kode atau link';
+
+  @override
+  String get noteStoryHook => 'Mulai dari tengah aksi';
+
+  @override
+  String get welcomeTitle => 'Selamat datang di APrompter';
+
+  @override
+  String get welcomeBody =>
+      '# Hook\nMau rekam video tanpa lupa naskah? [pause]\n// lihat langsung ke lensa\n\n# Cara kerja\nTulis naskahmu, pilih *target durasi*, dan lihat timer memberi tahu apakah pas.\nLatihan untuk menemukan tempo bicaramu dalam kata per menit.\nLalu tekan Rekam. Teks bergulir tepat di bawah kamera, jadi kamu tetap *kontak mata* dengan penonton.\n\n# CTA\nKetuk kartu ini untuk mengedit naskah, atau buat naskahmu sendiri dengan tombol plus. [pause] Selamat berkarya!\n';
+
+  @override
+  String get expand => 'Perbesar';
+
+  @override
+  String get minimize => 'Perkecil';
+}

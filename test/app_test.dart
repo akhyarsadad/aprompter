@@ -1,3 +1,4 @@
+import 'package:aprompter/l10n/l10n.dart';
 import 'package:aprompter/main.dart';
 import 'package:aprompter/models/prompter_settings.dart';
 import 'package:aprompter/models/script.dart';
@@ -86,6 +87,7 @@ void main() {
   });
 
   Widget prompter(PrompterController c, String text) => MaterialApp(
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
     home: SizedBox(
       height: 300,
       child: PrompterView(

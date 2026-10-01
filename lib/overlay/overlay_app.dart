@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 
+import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/storage.dart';
@@ -21,6 +22,8 @@ class OverlayApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData.dark(useMaterial3: true),
       home: const Material(
         type: MaterialType.transparency,
@@ -143,14 +146,14 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
               ),
             ),
           IconButton(
-            tooltip: _minimized ? 'Expand' : 'Minimize',
+            tooltip: _minimized ? context.l10n.expand : context.l10n.minimize,
             visualDensity: VisualDensity.compact,
             color: Colors.white,
             onPressed: _toggleMinimize,
             icon: Icon(_minimized ? Icons.open_in_full : Icons.minimize),
           ),
           IconButton(
-            tooltip: 'Close',
+            tooltip: context.l10n.close,
             visualDensity: VisualDensity.compact,
             color: Colors.white,
             onPressed: () {
@@ -174,12 +177,12 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
                 children: [
                   Positioned.fill(
                     child: _script == null
-                        ? const ColoredBox(
+                        ? ColoredBox(
                             color: Colors.black54,
                             child: Center(
                               child: Text(
-                                'Open a script in APrompter',
-                                style: TextStyle(color: Colors.white),
+                                context.l10n.openScriptInApp,
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           )

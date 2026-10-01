@@ -26,6 +26,8 @@ for personas, journeys and scope.
   | `// smile` | Note to yourself — dimmed, not counted as spoken |
 
 - Status: Draft → Ready → Recorded, with take count. Search and filter on home.
+- Duplicate a script, share it, or **copy as caption** (spoken text without markup —
+  ready to paste as the post caption). Deleting can be undone.
 
 **Rehearse & pace (J3)**
 - Speed is in **words per minute**, so changing the text size never changes the pace.
@@ -46,17 +48,30 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
 | **Rehearse** | ✅ | ✅ | Full-screen prompter, no camera. |
 
 - Jump to any section to retake just that part.
+- **Pinch** the prompter text to resize it on the fly; you stay on the same line.
+- Video quality 720p / 1080p / 4K, and **auto-stop** 2 s after the last line.
+- Haptic ticks during the countdown.
 - Bluetooth remote / keyboard: Space · Enter · PageDown = play/pause, PageUp / ← = previous
   section, → = next section, ↑ / ↓ = faster / slower.
 
 > **Why no floating mode on iOS?** iOS does not let apps draw over other apps, so on
 > iPhone use **Record** — the built-in camera with the prompter overlaid.
 
+**Languages:** English and Bahasa Indonesia, following the phone's language
+(strings live in `lib/l10n/*.arb`).
+
+## Download a test build
+
+Every push runs CI (analyze, tests, Android + iOS builds). The Android APK is attached to
+each run: GitHub → **Actions** → latest **CI** run → *Artifacts* → `aprompter-android-apk`.
+Unzip it and install the `.apk` on your phone (allow "install unknown apps").
+
 ## Project layout
 
 ```
 lib/
   main.dart                     app entry + `overlayMain` (Android floating window entry)
+  l10n/                         English & Indonesian strings (ARB) + helpers
   models/                       Script, markup parser, settings & presets, templates
   services/                     storage (shared_preferences), app state, floating prompter
   widgets/                      PrompterView (auto-scrolling text), controls, settings sheet

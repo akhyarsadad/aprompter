@@ -106,6 +106,15 @@
 | J6 Section jump (sheet + remote) | ✅ |
 | J7 Status filter + search | ✅ |
 
+### Release 2 additions
+
+| Area | Shipped |
+|---|---|
+| J5 Pinch-to-resize text while reading, video quality, auto-stop at script end, haptic countdown | ✅ |
+| J7 Duplicate, share, copy as caption, undo delete | ✅ |
+| Bahasa Indonesia + English UI and templates | ✅ |
+| CI builds an installable Android APK on every push | ✅ |
+
 **Later:** voice-follow scrolling (speech recognition), cloud sync, import from Google Docs, AI rewrite to fit time, per-script settings.
 
 ## Success metrics
