@@ -1606,6 +1606,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take {n} kept in the app'**
   String takeKeptInApp(int n);
+
+  /// No description provided for @signInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to continue'**
+  String get signInTitle;
+
+  /// No description provided for @signInBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This only identifies your purchase across your devices — it does not sync your scripts.'**
+  String get signInBody;
+
+  /// No description provided for @continueWithApple.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get continueWithApple;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @signInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in failed. Try again.'**
+  String get signInFailed;
+
+  /// No description provided for @upgradeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Go unlimited'**
+  String get upgradeTitle;
+
+  /// No description provided for @upgradeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock unlimited scripts and length with a subscription or a one-time purchase.'**
+  String get upgradeBody;
+
+  /// No description provided for @offeringsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load plans. Check your connection and try again.'**
+  String get offeringsLoadFailed;
+
+  /// No description provided for @purchaseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase failed. Try again.'**
+  String get purchaseFailed;
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t restore purchases. Try again.'**
+  String get restoreFailed;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get restorePurchases;
 }
 
 class _AppLocalizationsDelegate

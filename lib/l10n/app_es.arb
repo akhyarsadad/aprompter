@@ -242,5 +242,16 @@
   "saveToGallery": "Guardar en la galería",
   "savedToGallery": "Guardado en tu galería",
   "deleteTake": "Eliminar toma",
-  "takeKeptInApp": "Toma {n} guardada en la app"
+  "takeKeptInApp": "Toma {n} guardada en la app",
+  "signInTitle": "Sign in to continue",
+  "signInBody": "This only identifies your purchase across your devices — it does not sync your scripts.",
+  "continueWithApple": "Continue with Apple",
+  "continueWithGoogle": "Continue with Google",
+  "signInFailed": "Sign in failed. Try again.",
+  "upgradeTitle": "Go unlimited",
+  "upgradeBody": "Unlock unlimited scripts and length with a subscription or a one-time purchase.",
+  "offeringsLoadFailed": "Couldn't load plans. Check your connection and try again.",
+  "purchaseFailed": "Purchase failed. Try again.",
+  "restoreFailed": "Couldn't restore purchases. Try again.",
+  "restorePurchases": "Restore purchases"
 }

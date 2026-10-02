@@ -242,5 +242,16 @@
   "saveToGallery": "갤러리에 저장",
   "savedToGallery": "갤러리에 저장했어요",
   "deleteTake": "테이크 삭제",
-  "takeKeptInApp": "테이크 {n}을(를) 앱에 남겼어요"
+  "takeKeptInApp": "테이크 {n}을(를) 앱에 남겼어요",
+  "signInTitle": "Sign in to continue",
+  "signInBody": "This only identifies your purchase across your devices — it does not sync your scripts.",
+  "continueWithApple": "Continue with Apple",
+  "continueWithGoogle": "Continue with Google",
+  "signInFailed": "Sign in failed. Try again.",
+  "upgradeTitle": "Go unlimited",
+  "upgradeBody": "Unlock unlimited scripts and length with a subscription or a one-time purchase.",
+  "offeringsLoadFailed": "Couldn't load plans. Check your connection and try again.",
+  "purchaseFailed": "Purchase failed. Try again.",
+  "restoreFailed": "Couldn't restore purchases. Try again.",
+  "restorePurchases": "Restore purchases"
 }
