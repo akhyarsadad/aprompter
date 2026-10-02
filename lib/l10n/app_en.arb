@@ -344,5 +344,187 @@
         "type": "int"
       }
     }
-  }
+  },
+  "storageSaveFailed": "Couldn't save — your phone may be out of storage. Your work is kept while the app stays open.",
+  "versionHistory": "Version history",
+  "noVersions": "No earlier versions yet. They are kept automatically while you write.",
+  "restore": "Restore",
+  "versionRestored": "Earlier version restored",
+  "recentlyDeleted": "Recently deleted",
+  "trashHint": "{days, plural, =1{Deleted scripts stay here for 1 day.} other{Deleted scripts stay here for {days} days.}}",
+  "@trashHint": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteForever": "Delete forever",
+  "deletedOn": "Deleted {date}",
+  "@deletedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "restoredScript": "Restored \"{title}\"",
+  "@restoredScript": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "backUpScripts": "Back up all scripts",
+  "restoreBackup": "Restore from a backup",
+  "backupShareTitle": "APrompter backup",
+  "importedScripts": "{count, plural, =0{Everything in this backup is already here} =1{1 script restored} other{{count} scripts restored}}",
+  "@importedScripts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notABackup": "That file isn't an APrompter backup.",
+  "fitImpossible": "Even at {wpm} wpm this won't fit {target} — cut about {words} words.",
+  "@fitImpossible": {
+    "placeholders": {
+      "wpm": {
+        "type": "int"
+      },
+      "target": {
+        "type": "String"
+      },
+      "words": {
+        "type": "int"
+      }
+    }
+  },
+  "cameraNotReady": "The camera wasn't ready, so recording didn't start. Try again.",
+  "previousSection": "Previous section",
+  "nextSection": "Next section",
+  "floatingNotificationBody": "Tap to open APrompter",
+  "customTarget": "Custom…",
+  "customTargetTitle": "Target length",
+  "customTargetHint": "Minutes and seconds, e.g. 5:00",
+  "saved": "Saved",
+  "floatNotOnIos": "iPhone doesn't let apps float over other apps. Use Record to film with the script under the camera.",
+  "hashtagHint": "Hashtag lines (#fyp #ad) are shown dimmed and not timed. Use \"# \" with a space for a section.",
+  "appLock": "App lock",
+  "appLockHint": "Ask for fingerprint, face or phone PIN to open APrompter",
+  "appLockUnavailable": "Set up a screen lock on this phone first.",
+  "unlock": "Unlock",
+  "unlockReason": "Unlock APrompter to see your scripts",
+  "autoStopWait": "Wait after the last line",
+  "beforeYouRecord": "Before you record",
+  "recordAnyway": "Record anyway",
+  "lowStorageWarning": "Only about {minutes} min of video fits in your free space. Free up space or lower the video quality.",
+  "@lowStorageWarning": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "lowBatteryWarning": "Battery is at {level}% — a long take may get cut off. Plug in if you can.",
+  "@lowBatteryWarning": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "brightScreen": "Full brightness while prompting",
+  "brightScreenHint": "Easier to read outdoors",
+  "cameraBusy": "Another app is using the camera. Close it and try again.",
+  "cameraIntroTitle": "Camera and microphone",
+  "cameraIntroBody": "To film you with the script on screen, APrompter needs your camera and microphone. Your phone will ask next. Videos stay on your phone.",
+  "continueLabel": "Continue",
+  "notNow": "Not now",
+  "colorWhite": "White",
+  "colorYellow": "Yellow",
+  "colorGreen": "Green",
+  "colorBlue": "Blue",
+  "colorPink": "Pink",
+  "colorBlack": "Black",
+  "damagedData": "Unreadable data",
+  "damagedDataHint": "Kept aside on {date} · {size} characters",
+  "@damagedDataHint": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "size": {
+        "type": "int"
+      }
+    }
+  },
+  "tryToRecover": "Try to recover",
+  "nothingRecovered": "No scripts could be read from it.",
+  "floatLowRam": "This phone can't show apps over other apps (low-memory or Android Go phone). Use Record instead.",
+  "oemTipsTitle": "Keep the floating prompter alive",
+  "oemTipsBody": "{brand} phones may close floating windows to save battery. In Settings → Apps → APrompter: allow display over other apps (and pop-up windows), set battery to \"No restrictions\", and allow notifications.",
+  "@oemTipsBody": {
+    "placeholders": {
+      "brand": {
+        "type": "String"
+      }
+    }
+  },
+  "focusLine": "Focus on the current line",
+  "focusLineHint": "Dims the other lines",
+  "stepByLine": "Line by line",
+  "stepByLineHint": "Each tap or remote press moves one line — no automatic scrolling",
+  "reduceEffects": "Reduce effects",
+  "reduceEffectsHint": "No fades or shadows: smoother on older phones, saves battery",
+  "letterSpacing": "Letter spacing",
+  "importTextFile": "Import a text file",
+  "importTextFileHint": "A .txt or .md script from Files, Drive or email",
+  "importTextFailed": "Couldn't read that file. Pick a plain text (.txt) file.",
+  "mySetup": "My setup",
+  "mySetupHint": "The setup you saved",
+  "saveMySetup": "Save as my setup",
+  "resetAllSettings": "Reset all settings",
+  "runHadJumps": "You skipped around during this run, so it can't suggest a pace.",
+  "keepTake": "Keep",
+  "retake": "Retake",
+  "reviewTakes": "Review each take",
+  "reviewTakesHint": "Watch it, then keep it or go again",
+  "takesToGallery": "Save takes to the gallery",
+  "takesToGalleryHint": "Off: takes stay inside the app, out of Google Photos and iCloud",
+  "takesTitle": "Takes",
+  "takesEmpty": "Takes kept inside the app show up here. Turn off \"Save takes to the gallery\" in settings to keep them here.",
+  "saveToGallery": "Save to gallery",
+  "savedToGallery": "Saved to your gallery",
+  "deleteTake": "Delete take",
+  "takeKeptInApp": "Take {n} kept in the app",
+  "@takeKeptInApp": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "signInTitle": "Sign in to continue",
+  "signInBody": "This only identifies your purchase across your devices — it does not sync your scripts.",
+  "continueWithApple": "Continue with Apple",
+  "continueWithGoogle": "Continue with Google",
+  "signInFailed": "Sign in failed. Try again.",
+  "upgradeTitle": "Go unlimited",
+  "upgradeBody": "Unlock unlimited scripts and length with a subscription or a one-time purchase.",
+  "offeringsLoadFailed": "Couldn't load plans. Check your connection and try again.",
+  "purchaseFailed": "Purchase failed. Try again.",
+  "restoreFailed": "Couldn't restore purchases. Try again.",
+  "restorePurchases": "Restore purchases",
+  "wordCapBannerText": "Free scripts are capped at {count} words.",
+  "@wordCapBannerText": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "upgrade": "Upgrade"
 }

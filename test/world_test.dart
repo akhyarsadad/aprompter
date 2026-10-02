@@ -3,6 +3,8 @@ import 'package:aprompter/main.dart';
 import 'package:aprompter/models/prompter_settings.dart';
 import 'package:aprompter/models/script_markup.dart';
 import 'package:aprompter/services/app_state.dart';
+import 'package:aprompter/services/auth_service.dart';
+import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
 import 'package:aprompter/widgets/prompter_view.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,9 @@ void main() {
       expect(longSentenceCount('$hindi। छोटा।'), 1);
     });
 
-    test('right-to-left detection uses the first letter', () {
+    test('right-to-left detection follows most letters (R7)', () {
+      expect(isRtlText('iPhone الجديد رائع جدا'), isTrue);
+      expect(isRtlText('Read this: שלום'), isFalse);
       expect(isRtlText('שלום עולם'), isTrue);
       expect(isRtlText('2025 مرحبا'), isTrue);
       expect(isRtlText('سلام دنیا'), isTrue);
@@ -99,7 +103,14 @@ void main() {
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
     final storage = await Storage.open();
-    await tester.pumpWidget(AprompterApp(state: AppState(storage)));
+    final entitlements = Entitlements(isUnlimited: true);
+    await tester.pumpWidget(
+      AprompterApp(
+        state: AppState(storage),
+        entitlements: entitlements,
+        authService: AuthService(entitlements: entitlements, storage: storage),
+      ),
+    );
 
     await tester.tap(find.byTooltip('Prompter settings'));
     await tester.pumpAndSettle();
@@ -124,7 +135,17 @@ void main() {
       tester.view.devicePixelRatio = 3;
       addTearDown(tester.view.reset);
       final state = AppState(await Storage.open());
-      await tester.pumpWidget(AprompterApp(state: state));
+      final entitlements = Entitlements(isUnlimited: true);
+      await tester.pumpWidget(
+        AprompterApp(
+          state: state,
+          entitlements: entitlements,
+          authService: AuthService(
+            entitlements: entitlements,
+            storage: state.storage,
+          ),
+        ),
+      );
       await tester.pumpAndSettle();
       final l = lookupAppLocalizations(locale);
       expect(find.text(l.newScript), findsOneWidget);

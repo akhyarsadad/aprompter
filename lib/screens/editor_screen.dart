@@ -2,14 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 import '../l10n/l10n.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
+import '../services/entitlements.dart';
+import '../services/floating_prompter.dart';
+import '../services/storage.dart';
 import '../widgets/guards.dart';
 import 'camera_prompter_screen.dart';
+import 'paywall_screen.dart';
 import 'read_screen.dart';
 
 /// Write and polish a script (journeys J1 & J2). Saves automatically.
@@ -31,12 +36,16 @@ class _EditorScreenState extends State<EditorScreen>
   late ScriptStatus _status = widget.script.status;
   Timer? _autosave;
 
+  /// True once what is on screen is stored; drives the "Saved" hint.
+  final _saved = ValueNotifier(true);
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _title.addListener(_scheduleSave);
     _body.addListener(_scheduleSave);
+    _body.addListener(_scheduleAnalysis);
     _title.addListener(_updateDirection);
     _body.addListener(_updateDirection);
   }
@@ -48,16 +57,38 @@ class _EditorScreenState extends State<EditorScreen>
 
   static TextDirection? _directionOf(String text) => text.trim().isEmpty
       ? null
-      : (isRtlText(text) ? TextDirection.rtl : TextDirection.ltr);
+      // The start of the text decides; scanning a whole book per keystroke
+      // would make typing lag.
+      : (isRtlText(text.length > 2000 ? text.substring(0, 2000) : text)
+            ? TextDirection.rtl
+            : TextDirection.ltr);
 
   void _updateDirection() {
     _titleDir.value = _directionOf(_title.text);
     _bodyDir.value = _directionOf(_body.text);
   }
 
+  /// What the timing bar analyses. Updated on every keystroke for normal
+  /// scripts; for very long ones only once typing pauses (W5), so typing
+  /// stays smooth.
+  late final _analysed = ValueNotifier(_body.text);
+  Timer? _analysis;
+
+  void _scheduleAnalysis() {
+    _analysis?.cancel();
+    if (_body.text.length < 8000) {
+      _analysed.value = _body.text;
+    } else {
+      _analysis = Timer(const Duration(milliseconds: 500), () {
+        if (mounted) _analysed.value = _body.text;
+      });
+    }
+  }
+
   /// Saves shortly after typing stops, so a crash or a killed app loses at
   /// most a second of writing.
   void _scheduleSave() {
+    _saved.value = false;
     _autosave?.cancel();
     _autosave = Timer(const Duration(seconds: 1), () {
       if (mounted) _save();
@@ -85,7 +116,10 @@ class _EditorScreenState extends State<EditorScreen>
   /// Saves and returns the stored script, or null if it is empty.
   Future<Script?> _save() async {
     var script = _current;
-    if (script.title.isEmpty && script.body.trim().isEmpty) return null;
+    if (script.title.isEmpty && script.body.trim().isEmpty) {
+      _saved.value = true;
+      return null;
+    }
     final state = AppScope.read(context);
     // A template opened and left untouched is not a script yet.
     if (state.byId(script.id) == null &&
@@ -103,8 +137,125 @@ class _EditorScreenState extends State<EditorScreen>
         stored.body != script.body ||
         stored.targetSeconds != script.targetSeconds ||
         stored.status != script.status;
-    if (changed) await state.upsert(script);
+    if (changed) {
+      await state.upsert(script);
+      final stored = state.byId(script.id);
+      if (stored != null) {
+        unawaited(FloatingPrompter.update(state.storage, stored));
+      }
+    }
+    // Typing may have continued while saving.
+    if (mounted && _autosave?.isActive != true) {
+      _saved.value = !state.saveFailed;
+    }
     return state.byId(script.id);
+  }
+
+  /// W4: earlier versions of this script, kept automatically.
+  Future<void> _showVersions() async {
+    final saved = await _save();
+    if (!mounted) return;
+    final state = AppScope.read(context);
+    final versions = saved == null
+        ? const <ScriptVersion>[]
+        : state.versionsOf(saved.id);
+    final l = context.l10n;
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final picked = await showModalBottomSheet<ScriptVersion>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * 0.7,
+          ),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                child: Text(
+                  l.versionHistory,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              if (versions.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                  child: Text(l.noVersions),
+                ),
+              for (final v in versions)
+                ListTile(
+                  title: Text(
+                    DateFormat.yMMMd(locale).add_jm().format(v.savedAt),
+                  ),
+                  subtitle: Text(
+                    '${l.words(countWords(spokenText(v.body)))} · '
+                    '${spokenText(v.body).replaceAll('\n', ' ')}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: TextButton(
+                    onPressed: () => Navigator.pop(context, v),
+                    child: Text(l.restore),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (picked == null || saved == null || !mounted) return;
+    final restored = await state.restoreVersion(saved.id, picked);
+    if (restored == null || !mounted) return;
+    _autosave?.cancel();
+    _title.text = restored.title;
+    _body.text = restored.body;
+    _autosave?.cancel();
+    _saved.value = true;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(l.versionRestored)));
+  }
+
+  /// W6: any length, for long-form videos.
+  Future<void> _customTarget() async {
+    final l = context.l10n;
+    final field = TextEditingController(
+      text: _target == null ? '' : formatDuration(Duration(seconds: _target!)),
+    );
+    final seconds = await showDialog<int>(
+      context: context,
+      builder: (context) {
+        final m = MaterialLocalizations.of(context);
+        void submit() {
+          final v = parseTargetInput(field.text);
+          if (v != null) Navigator.pop(context, v);
+        }
+
+        return AlertDialog(
+          title: Text(l.customTargetTitle),
+          content: TextField(
+            controller: field,
+            autofocus: true,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(hintText: l.customTargetHint),
+            onSubmitted: (_) => submit(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(m.cancelButtonLabel),
+            ),
+            TextButton(onPressed: submit, child: Text(m.okButtonLabel)),
+          ],
+        );
+      },
+    );
+    field.dispose();
+    if (seconds == null || !mounted) return;
+    setState(() => _target = seconds);
+    _scheduleSave();
   }
 
   Future<void> _open(Widget Function(Script) builder) async {
@@ -154,9 +305,12 @@ class _EditorScreenState extends State<EditorScreen>
     _wrap('${needsNewline ? '\n' : ''}$prefix');
   }
 
+  /// W7: pastes from Docs, Word or chats without their invisible clutter.
   Future<void> _paste() async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data?.text case final String text when text.isNotEmpty) _wrap(text);
+    if (data?.text case final String text when text.isNotEmpty) {
+      _wrap(cleanPastedText(text));
+    }
   }
 
   @override
@@ -164,6 +318,9 @@ class _EditorScreenState extends State<EditorScreen>
     WidgetsBinding.instance.removeObserver(this);
     _autosave?.cancel();
     _titleDir.dispose();
+    _analysis?.cancel();
+    _analysed.dispose();
+    _saved.dispose();
     _bodyDir.dispose();
     _title.dispose();
     _body.dispose();
@@ -181,7 +338,42 @@ class _EditorScreenState extends State<EditorScreen>
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(l.script),
+          title: Row(
+            children: [
+              Flexible(child: Text(l.script, overflow: TextOverflow.ellipsis)),
+              const SizedBox(width: 12),
+              // W11: reassure that leaving now loses nothing.
+              Flexible(
+                child: ValueListenableBuilder(
+                  valueListenable: _saved,
+                  builder: (context, saved, _) => AnimatedOpacity(
+                    opacity: saved ? 1 : 0,
+                    duration: const Duration(milliseconds: 300),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.check,
+                          size: 14,
+                          color: theme.colorScheme.outline,
+                        ),
+                        const SizedBox(width: 2),
+                        Flexible(
+                          child: Text(
+                            l.saved,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           actions: [
             IconButton(
               tooltip: l.rehearse,
@@ -192,6 +384,11 @@ class _EditorScreenState extends State<EditorScreen>
               tooltip: l.record,
               icon: const Icon(Icons.videocam_outlined),
               onPressed: () => _open((s) => CameraPrompterScreen(script: s)),
+            ),
+            IconButton(
+              tooltip: l.versionHistory,
+              icon: const Icon(Icons.history),
+              onPressed: _showVersions,
             ),
           ],
         ),
@@ -245,17 +442,49 @@ class _EditorScreenState extends State<EditorScreen>
                           visualDensity: VisualDensity.compact,
                         ),
                       ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      child: ChoiceChip(
+                        label: Text(
+                          _target != null && !targetLengths.contains(_target)
+                              ? targetLabel(l, _target!)
+                              : l.customTarget,
+                        ),
+                        selected:
+                            _target != null && !targetLengths.contains(_target),
+                        onSelected: (_) => _customTarget(),
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-            ListenableBuilder(
-              listenable: _body,
-              builder: (context, _) => _TimingBar(
-                body: _body.text,
-                targetSeconds: _target,
-                wpm: AppScope.of(context).settings.wpm,
-              ),
+            ValueListenableBuilder(
+              valueListenable: _analysed,
+              builder: (context, body, _) {
+                final entitlements = EntitlementsScope.of(context);
+                final grandfathered = AppScope.of(
+                  context,
+                ).isGrandfatheredWordCap(widget.script.id);
+                final overCap = countWords(spokenText(body)) > maxFreeWords;
+                final showBanner =
+                    overCap &&
+                    !canExceedWordCap(
+                      entitlements.isUnlimited,
+                      isGrandfathered: grandfathered,
+                    );
+                return Column(
+                  children: [
+                    if (showBanner) const _WordCapBanner(),
+                    _TimingBar(
+                      body: body,
+                      targetSeconds: _target,
+                      wpm: AppScope.of(context).settings.wpm,
+                    ),
+                  ],
+                );
+              },
             ),
             const Divider(height: 1),
             Expanded(
@@ -345,9 +574,10 @@ class _TimingBar extends StatelessWidget {
     final theme = Theme.of(context);
     final l = context.l10n;
     final words = countWords(spokenText(body));
-    final seconds = words / wpm * 60;
+    final seconds = speakingSeconds(body, wpm);
     final target = targetSeconds;
     final longOnes = longSentenceCount(body);
+    final hasTags = parseScript(body).any((b) => b.type == BlockType.tags);
 
     String status;
     Color color;
@@ -401,6 +631,16 @@ class _TimingBar extends StatelessWidget {
               style: theme.textTheme.bodySmall?.copyWith(color: color),
             ),
           ],
+          if (hasTags)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                l.hashtagHint,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+            ),
           if (longOnes > 0)
             Padding(
               padding: const EdgeInsets.only(top: 4),
@@ -411,6 +651,37 @@ class _TimingBar extends StatelessWidget {
                 ),
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Nudges a free account past the word cap to upgrade. Never blocks typing
+/// itself — this is purely an informational banner with a CTA.
+class _WordCapBanner extends StatelessWidget {
+  const _WordCapBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      color: theme.colorScheme.secondaryContainer,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              l.wordCapBannerText(maxFreeWords),
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+            ),
+          ),
+          TextButton(
+            onPressed: () => showUpgradeFlow(context),
+            child: Text(l.upgrade),
+          ),
         ],
       ),
     );
@@ -435,10 +706,15 @@ class _MarkupToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Material(
-      color: Theme.of(context).colorScheme.surfaceContainer,
-      child: SafeArea(
-        top: false,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+      child: Material(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        elevation: 3,
+        shadowColor: Colors.black38,
+        borderRadius: BorderRadius.circular(20),
+        clipBehavior: Clip.antiAlias,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -465,3 +741,13 @@ class _MarkupToolbar extends StatelessWidget {
     ),
   );
 }
+
+/// Removes what pasting from Google Docs, Word, Notes or WhatsApp brings
+/// along: zero-width characters, non-breaking spaces, tabs, Windows line
+/// ends and list bullets.
+String cleanPastedText(String text) => text
+    .replaceAll('\r\n', '\n')
+    .replaceAll('\r', '\n')
+    .replaceAll(RegExp('[\u200B-\u200D\u2060\uFEFF\u00AD]'), '')
+    .replaceAll(RegExp('[\u00A0\u202F\t]'), ' ')
+    .replaceAll(RegExp(r'^[ ]*[•◦▪▫●○■□‣⁃–—-][ ]+', multiLine: true), '');

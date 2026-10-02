@@ -546,4 +546,345 @@ class AppLocalizationsFa extends AppLocalizations {
   String minutesShort(int n) {
     return '$n د';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'ذخیره نشد — شاید حافظهٔ گوشی پر باشد. تا وقتی برنامه باز است، کارتان حفظ می‌شود.';
+
+  @override
+  String get versionHistory => 'تاریخچهٔ نسخه‌ها';
+
+  @override
+  String get noVersions =>
+      'هنوز نسخهٔ قبلی‌ای نیست. هنگام نوشتن خودکار ذخیره می‌شوند.';
+
+  @override
+  String get restore => 'بازگردانی';
+
+  @override
+  String get versionRestored => 'نسخهٔ قبلی بازگردانده شد';
+
+  @override
+  String get recentlyDeleted => 'اخیراً حذف‌شده';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'متن‌های حذف‌شده $days روز اینجا می‌مانند.',
+      one: 'متن‌های حذف‌شده ۱ روز اینجا می‌مانند.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'حذف برای همیشه';
+
+  @override
+  String deletedOn(String date) {
+    return 'حذف‌شده در $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '«$title» بازگردانده شد';
+  }
+
+  @override
+  String get backUpScripts => 'پشتیبان‌گیری از همهٔ متن‌ها';
+
+  @override
+  String get restoreBackup => 'بازگردانی از پشتیبان';
+
+  @override
+  String get backupShareTitle => 'پشتیبان APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count متن بازگردانده شد',
+      one: '۱ متن بازگردانده شد',
+      zero: 'همهٔ محتوای این پشتیبان از قبل اینجاست',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'این فایل پشتیبان APrompter نیست.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'حتی با $wpm ک/د هم در $target جا نمی‌شود — حدود $words کلمه کم کنید.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'دوربین آماده نبود، برای همین ضبط شروع نشد. دوباره امتحان کنید.';
+
+  @override
+  String get previousSection => 'بخش قبلی';
+
+  @override
+  String get nextSection => 'بخش بعدی';
+
+  @override
+  String get floatingNotificationBody => 'برای باز کردن APrompter بزنید';
+
+  @override
+  String get customTarget => 'سفارشی…';
+
+  @override
+  String get customTargetTitle => 'مدت هدف';
+
+  @override
+  String get customTargetHint => 'دقیقه و ثانیه، مثلاً 5:00';
+
+  @override
+  String get saved => 'ذخیره شد';
+
+  @override
+  String get floatNotOnIos =>
+      'آیفون اجازه نمی‌دهد برنامه‌ها روی برنامه‌های دیگر شناور شوند. از «ضبط» استفاده کنید تا با متن زیر دوربین فیلم بگیرید.';
+
+  @override
+  String get hashtagHint =>
+      'خط‌های هشتگ (#fyp #ad) کم‌رنگ نمایش داده می‌شوند و زمان‌بندی نمی‌شوند. برای بخش از «# » با فاصله استفاده کنید.';
+
+  @override
+  String get appLock => 'قفل برنامه';
+
+  @override
+  String get appLockHint =>
+      'برای باز کردن APrompter اثر انگشت، چهره یا پین گوشی خواسته شود';
+
+  @override
+  String get appLockUnavailable => 'ابتدا روی این گوشی قفل صفحه تنظیم کنید.';
+
+  @override
+  String get unlock => 'باز کردن قفل';
+
+  @override
+  String get unlockReason => 'برای دیدن متن‌هایتان قفل APrompter را باز کنید';
+
+  @override
+  String get autoStopWait => 'مکث بعد از خط آخر';
+
+  @override
+  String get beforeYouRecord => 'پیش از ضبط';
+
+  @override
+  String get recordAnyway => 'ضبط در هر صورت';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'فضای خالی فقط برای حدود $minutes د ویدیو کافی است. فضا آزاد کنید یا کیفیت ویدیو را پایین بیاورید.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'باتری $level٪ است — ممکن است برداشت طولانی قطع شود. اگر می‌توانید شارژر را وصل کنید.';
+  }
+
+  @override
+  String get brightScreen => 'روشنایی کامل هنگام پرامپتر';
+
+  @override
+  String get brightScreenHint => 'خواندن در فضای باز آسان‌تر';
+
+  @override
+  String get cameraBusy =>
+      'برنامهٔ دیگری از دوربین استفاده می‌کند. آن را ببندید و دوباره تلاش کنید.';
+
+  @override
+  String get cameraIntroTitle => 'دوربین و میکروفون';
+
+  @override
+  String get cameraIntroBody =>
+      'برای فیلم‌برداری از شما همراه با متن روی صفحه، APrompter به دوربین و میکروفون نیاز دارد. گوشی در ادامه اجازه می‌خواهد. ویدیوها روی گوشی شما می‌مانند.';
+
+  @override
+  String get continueLabel => 'ادامه';
+
+  @override
+  String get notNow => 'الان نه';
+
+  @override
+  String get colorWhite => 'سفید';
+
+  @override
+  String get colorYellow => 'زرد';
+
+  @override
+  String get colorGreen => 'سبز';
+
+  @override
+  String get colorBlue => 'آبی';
+
+  @override
+  String get colorPink => 'صورتی';
+
+  @override
+  String get colorBlack => 'مشکی';
+
+  @override
+  String get damagedData => 'دادهٔ ناخوانا';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'کنار گذاشته در $date · $size نویسه';
+  }
+
+  @override
+  String get tryToRecover => 'تلاش برای بازیابی';
+
+  @override
+  String get nothingRecovered => 'هیچ متنی از آن خوانده نشد.';
+
+  @override
+  String get floatLowRam =>
+      'این گوشی نمی‌تواند برنامه‌ها را روی برنامه‌های دیگر نشان دهد (حافظهٔ کم یا Android Go). به‌جای آن از ضبط استفاده کنید.';
+
+  @override
+  String get oemTipsTitle => 'فعال نگه داشتن پرامپتر شناور';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'گوشی‌های $brand ممکن است برای صرفه‌جویی در باتری پنجره‌های شناور را ببندند. در تنظیمات → برنامه‌ها → APrompter: نمایش روی برنامه‌های دیگر (و پنجره‌های بازشو) را مجاز کنید، باتری را روی «نامحدود» بگذارید و اعلان‌ها را مجاز کنید.';
+  }
+
+  @override
+  String get focusLine => 'تمرکز روی خط فعلی';
+
+  @override
+  String get focusLineHint => 'خط‌های دیگر را کم‌رنگ می‌کند';
+
+  @override
+  String get stepByLine => 'خط به خط';
+
+  @override
+  String get stepByLineHint =>
+      'هر ضربه یا فشار ریموت یک خط جلو می‌رود — بدون پیمایش خودکار';
+
+  @override
+  String get reduceEffects => 'کاهش جلوه‌ها';
+
+  @override
+  String get reduceEffectsHint =>
+      'بدون محوشدگی و سایه: روان‌تر روی گوشی‌های قدیمی، صرفه‌جویی در باتری';
+
+  @override
+  String get letterSpacing => 'فاصلهٔ حروف';
+
+  @override
+  String get importTextFile => 'وارد کردن فایل متنی';
+
+  @override
+  String get importTextFileHint => 'متن .txt یا .md از فایل‌ها، Drive یا ایمیل';
+
+  @override
+  String get importTextFailed =>
+      'این فایل خوانده نشد. یک فایل متنی ساده (.txt) انتخاب کنید.';
+
+  @override
+  String get mySetup => 'چیدمان من';
+
+  @override
+  String get mySetupHint => 'چیدمانی که ذخیره کرده‌اید';
+
+  @override
+  String get saveMySetup => 'ذخیره به‌عنوان چیدمان من';
+
+  @override
+  String get resetAllSettings => 'بازنشانی همهٔ تنظیمات';
+
+  @override
+  String get runHadJumps =>
+      'در این اجرا بین بخش‌ها پرش کردید، پس سرعتی پیشنهاد نمی‌شود.';
+
+  @override
+  String get keepTake => 'نگه داشتن';
+
+  @override
+  String get retake => 'برداشت دوباره';
+
+  @override
+  String get reviewTakes => 'بازبینی هر برداشت';
+
+  @override
+  String get reviewTakesHint => 'تماشا کنید، بعد نگه دارید یا دوباره بگیرید';
+
+  @override
+  String get takesToGallery => 'ذخیرهٔ برداشت‌ها در گالری';
+
+  @override
+  String get takesToGalleryHint =>
+      'خاموش: برداشت‌ها داخل برنامه می‌مانند، بیرون از Google Photos و iCloud';
+
+  @override
+  String get takesTitle => 'برداشت‌ها';
+
+  @override
+  String get takesEmpty =>
+      'برداشت‌هایی که داخل برنامه نگه داشته شده‌اند اینجا نمایش داده می‌شوند. برای نگه داشتن آن‌ها اینجا، «ذخیرهٔ برداشت‌ها در گالری» را در تنظیمات خاموش کنید.';
+
+  @override
+  String get saveToGallery => 'ذخیره در گالری';
+
+  @override
+  String get savedToGallery => 'در گالری ذخیره شد';
+
+  @override
+  String get deleteTake => 'حذف برداشت';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'برداشت $n در برنامه نگه داشته شد';
+  }
+
+  @override
+  String get signInTitle => 'Sign in to continue';
+
+  @override
+  String get signInBody =>
+      'This only identifies your purchase across your devices — it does not sync your scripts.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInFailed => 'Sign in failed. Try again.';
+
+  @override
+  String get upgradeTitle => 'Go unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Couldn\'t load plans. Check your connection and try again.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed. Try again.';
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }

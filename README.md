@@ -13,24 +13,33 @@ for personas, journeys and scope.
 
 **Write (J1–J2)**
 - Templates: *Hook → Value → CTA*, *Tutorial*, *Product review*, *Storytime*, or blank.
-- Target length (15 s · 30 s · 60 s · 90 s · 3 min) with a live bar:
+- Target length (15 s · 30 s · 60 s · 90 s · 3 min, or any custom length) with a live bar:
   words · spoken time vs. target, "8 s over · cut ~20 words".
 - Hint for long sentences that are hard to say in one breath.
 - Toolbar for prompter markup:
 
   | Markup | Meaning on the prompter |
   |---|---|
-  | `# Hook` | Section cue — jump to it for retakes |
-  | `*word*` | Emphasis (highlighted) |
-  | `[pause]` | Visible beat marker |
+  | `# Hook` | Section cue — jump to it for retakes (`#` + space, or `##`) |
+  | `*word*` / `**word**` | Emphasis (highlighted); `\*` is a literal star |
+  | `[pause]` | Visible beat marker, adds 0.7 s (also `(pause)`, `[ Pause. ]`) |
   | `// smile` | Note to yourself — dimmed, not counted as spoken |
+  | `#fyp #ad` | Hashtag line — dimmed, not timed, kept in the caption |
 
-- Status: Draft → Ready → Recorded, with take count. Search and filter on home.
+- Status: Draft → Ready → Recorded, with take count. Search (accent-insensitive) and
+  filter on home. **Import a text file** (.txt / .md) as a new script; Paste cleans up
+  text from Docs, Word and chats.
 - Duplicate a script, share it, or **copy as caption** (spoken text without markup —
-  ready to paste as the post caption). Deleting can be undone.
+  ready to paste as the post caption, hashtags included).
+- Nothing is lost by accident: autosave with a "Saved" hint, **version history** per
+  script, **Recently deleted** for 30 days, a warning banner if the phone refuses to
+  save (storage full), and **Back up all scripts** / **Restore from a backup** as one
+  JSON file.
 
 **Rehearse & pace (J3)**
-- Speed is in **words per minute**, so changing the text size never changes the pace.
+- Speed is in **words per minute** (40–400), so changing the text size never changes the
+  pace. Only spoken lines take time; notes and sections glide by.
+- **Line by line** mode: each tap or remote press moves one line, nothing scrolls by itself.
 - Pace presets *Calm 120 · Natural 150 · Energetic 180*, ±10 steps, and **Fit to target**.
 - Progress bar and time remaining while reading.
 - After a run: "You took 1:04 → 133 wpm. Use 130 wpm?"
@@ -53,10 +62,19 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
   it and the corner handle to resize it. On Android, the floating window can be dragged
   anywhere over other apps, its width is adjustable, and it reopens where you left it.
   *Settings → Layout → Reset position* puts it back at the top.
-- Video quality 720p / 1080p / 4K, and **auto-stop** 2 s after the last line.
+- Video quality 720p / 1080p / 4K, and **auto-stop** 2, 5 or 10 s after the last line.
+- **Review each take** (keep or retake), keep takes in the gallery or **inside the app**
+  (out of Google Photos / iCloud) with a *Takes* list per script.
+- Warns before recording if storage or battery may not last; tap to focus, long-press to
+  lock focus/exposure, pinch to zoom. The preview shows exactly what is recorded.
+- Rehearse and Record work in **landscape** too; tablets rotate everywhere.
+- Reading comfort: letter spacing, focus on the current line, full brightness, reduce
+  effects. Optional **app lock** (fingerprint / face / PIN).
 - Haptic ticks during the countdown.
-- Bluetooth remote / keyboard: Space · Enter · PageDown = play/pause, PageUp / ← = previous
-  section, → = next section, ↑ / ↓ = faster / slower.
+- Bluetooth remote / keyboard: Space · Enter · PageDown · `B` · `.` = play/pause, PageUp / ←
+  = previous section, → = next section, ↑ / ↓ = faster / slower. Cheap selfie remotes
+  (Volume Up) and media keys (play/pause, next/previous track) work too (Android).
+- The floating window is hidden from screen recordings and live streams (Android).
 
 > **Why no floating mode on iOS?** iOS does not let apps draw over other apps, so on
 > iPhone use **Record** — the built-in camera with the prompter overlaid.
@@ -115,8 +133,20 @@ flutter build apk --release      # or: flutter build appbundle
 flutter build ipa --release      # needs an Apple developer account / signing team
 ```
 
-Before publishing, set your own signing config in `android/app/build.gradle.kts`
-and your team in Xcode (`ios/Runner.xcworkspace`).
+Android release signing reads `android/key.properties` (git-ignored):
+
+```properties
+storeFile=/absolute/path/to/upload-keystore.jks
+storePassword=…
+keyAlias=upload
+keyPassword=…
+```
+
+Create the keystore once with
+`keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload`
+and keep it safe — Play updates must be signed with it. Without `key.properties`,
+release builds fall back to the debug key (fine for testing, not for the store).
+For iOS, set your team in Xcode (`ios/Runner.xcworkspace`).
 
 ### Permissions
 
@@ -128,3 +158,42 @@ and your team in Xcode (`ios/Runner.xcworkspace`).
 
 The Android floating window uses a `specialUse` foreground service. Google Play asks you to
 justify this in the Play Console (the reason is already described in the manifest).
+
+### Paywall setup
+
+Free accounts get 1 active script capped at 500 words; unlocking is a
+RevenueCat-brokered purchase (monthly, yearly, or lifetime) gated behind
+Sign in with Apple / Google — the login exists only so a purchase is
+recognized across devices and across the App Store / Play Store boundary,
+not for script sync.
+
+1. Create a RevenueCat project, add your Apple App Store and Google Play
+   apps to it, and create one entitlement (default id `unlimited`) backed
+   by three products: a monthly subscription, a yearly subscription, and a
+   non-consumable lifetime purchase. Put all three in one Offering's
+   `monthly` / `annual` / `lifetime` package slots.
+2. In Apple Developer → Certificates, IDs & Profiles, enable the "Sign in
+   with Apple" capability for the app id, and add the same capability in
+   Xcode (`Runner` → Signing & Capabilities).
+3. In Google Cloud Console → Credentials, create an OAuth 2.0 **Web**
+   client id (used as `googleServerClientId` even on Android/iOS — this is
+   how `google_sign_in` is configured per its own README), **and** an iOS
+   client id. For the iOS client id, add `GIDClientID` (its value) and a
+   `CFBundleURLSchemes` entry (the reversed client id) to
+   `ios/Runner/Info.plist` — without both, Google sign-in fails natively on
+   iOS even though the Dart code is otherwise correct.
+4. Edit `lib/config/entitlements_config.dart` directly and fill in the
+   RevenueCat API keys, the entitlement id, and the Google client ids.
+   `lib/config/entitlements_config.dart.example` documents the same fields
+   if you ever need to recreate it.
+
+Unlike `android/key.properties` below, none of these four values are
+secrets — a RevenueCat SDK key and an OAuth *client* id are both meant to
+ship inside a public app binary (only an OAuth *client secret*, which this
+app never uses, would need to stay out of git) — so the file is tracked
+with placeholder values rather than git-ignored, and the repo always
+compiles. Sign-in and purchases simply won't work for real until the
+placeholders are replaced.
+
+Release checklist, Play declarations and review notes: [`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md).
+Privacy policy (host it and link it in both stores): [`docs/PRIVACY.md`](docs/PRIVACY.md).

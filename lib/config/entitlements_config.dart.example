@@ -1,0 +1,22 @@
+/// Reference copy of `entitlements_config.dart` (the file the app actually
+/// imports, tracked in git since none of these values are secrets — see
+/// README.md → "Paywall setup"). Restore from this file if that one is
+/// ever deleted; otherwise edit `entitlements_config.dart` directly.
+class EntitlementsConfig {
+  /// RevenueCat public SDK key for iOS (RevenueCat dashboard → Project →
+  /// API keys → Apple App Store).
+  static const revenueCatApiKeyIos = 'REPLACE_WITH_IOS_REVENUECAT_API_KEY';
+
+  /// RevenueCat public SDK key for Android (…→ API keys → Google Play).
+  static const revenueCatApiKeyAndroid =
+      'REPLACE_WITH_ANDROID_REVENUECAT_API_KEY';
+
+  /// The RevenueCat entitlement identifier that means "unlimited" (set up
+  /// under Project → Entitlements in the RevenueCat dashboard).
+  static const entitlementId = 'unlimited';
+
+  /// Google OAuth web client id (Google Cloud Console → Credentials →
+  /// OAuth 2.0 Client IDs → Web client), required by google_sign_in.
+  static const googleServerClientId =
+      'REPLACE_WITH_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com';
+}

@@ -570,4 +570,351 @@ class AppLocalizationsAr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n د';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'تعذّر الحفظ — قد تكون مساحة هاتفك ممتلئة. يبقى عملك محفوظًا ما دام التطبيق مفتوحًا.';
+
+  @override
+  String get versionHistory => 'سجل النسخ';
+
+  @override
+  String get noVersions =>
+      'لا توجد نسخ سابقة بعد. تُحفظ تلقائيًا أثناء الكتابة.';
+
+  @override
+  String get restore => 'استعادة';
+
+  @override
+  String get versionRestored => 'تمت استعادة النسخة السابقة';
+
+  @override
+  String get recentlyDeleted => 'المحذوفة مؤخرًا';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'تبقى النصوص المحذوفة هنا $days يوم.',
+      many: 'تبقى النصوص المحذوفة هنا $days يومًا.',
+      few: 'تبقى النصوص المحذوفة هنا $days أيام.',
+      two: 'تبقى النصوص المحذوفة هنا ليومين.',
+      one: 'تبقى النصوص المحذوفة هنا ليوم واحد.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'حذف نهائي';
+
+  @override
+  String deletedOn(String date) {
+    return 'حُذف في $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'تمت استعادة \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'نسخ احتياطي لكل النصوص';
+
+  @override
+  String get restoreBackup => 'استعادة من نسخة احتياطية';
+
+  @override
+  String get backupShareTitle => 'نسخة APrompter الاحتياطية';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تمت استعادة $count نص',
+      many: 'تمت استعادة $count نصًا',
+      few: 'تمت استعادة $count نصوص',
+      two: 'تمت استعادة نصين',
+      one: 'تمت استعادة نص واحد',
+      zero: 'كل ما في هذه النسخة الاحتياطية موجود بالفعل',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'هذا الملف ليس نسخة احتياطية من APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'حتى بسرعة $wpm ك/د لن يتسع في $target — احذف نحو $words كلمة.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'لم تكن الكاميرا جاهزة، لذا لم يبدأ التسجيل. حاول مرة أخرى.';
+
+  @override
+  String get previousSection => 'القسم السابق';
+
+  @override
+  String get nextSection => 'القسم التالي';
+
+  @override
+  String get floatingNotificationBody => 'اضغط لفتح APrompter';
+
+  @override
+  String get customTarget => 'مخصص…';
+
+  @override
+  String get customTargetTitle => 'المدة المستهدفة';
+
+  @override
+  String get customTargetHint => 'دقائق وثوانٍ، مثل 5:00';
+
+  @override
+  String get saved => 'تم الحفظ';
+
+  @override
+  String get floatNotOnIos =>
+      'لا يسمح iPhone للتطبيقات بالظهور فوق تطبيقات أخرى. استخدم \"تسجيل\" للتصوير والنص أسفل الكاميرا.';
+
+  @override
+  String get hashtagHint =>
+      'تظهر أسطر الوسوم (#fyp #ad) باهتة ولا تُحتسب في التوقيت. استخدم \"# \" مع مسافة لبدء قسم.';
+
+  @override
+  String get appLock => 'قفل التطبيق';
+
+  @override
+  String get appLockHint =>
+      'طلب البصمة أو الوجه أو رمز PIN للهاتف لفتح APrompter';
+
+  @override
+  String get appLockUnavailable => 'اضبط قفل الشاشة على هذا الهاتف أولًا.';
+
+  @override
+  String get unlock => 'فتح القفل';
+
+  @override
+  String get unlockReason => 'افتح قفل APrompter لعرض نصوصك';
+
+  @override
+  String get autoStopWait => 'الانتظار بعد السطر الأخير';
+
+  @override
+  String get beforeYouRecord => 'قبل أن تسجّل';
+
+  @override
+  String get recordAnyway => 'التسجيل على أي حال';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'المساحة الفارغة تكفي لنحو $minutes د من الفيديو فقط. أفرغ بعض المساحة أو اخفض جودة الفيديو.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'البطارية عند $level% — قد تنقطع اللقطة الطويلة. وصّل الشاحن إن أمكن.';
+  }
+
+  @override
+  String get brightScreen => 'سطوع كامل أثناء التلقين';
+
+  @override
+  String get brightScreenHint => 'قراءة أسهل في الخارج';
+
+  @override
+  String get cameraBusy => 'تطبيق آخر يستخدم الكاميرا. أغلقه وأعد المحاولة.';
+
+  @override
+  String get cameraIntroTitle => 'الكاميرا والميكروفون';
+
+  @override
+  String get cameraIntroBody =>
+      'لتصويرك والنص على الشاشة، يحتاج APrompter إلى الكاميرا والميكروفون. سيطلب هاتفك الإذن بعد قليل. تبقى الفيديوهات على هاتفك.';
+
+  @override
+  String get continueLabel => 'متابعة';
+
+  @override
+  String get notNow => 'ليس الآن';
+
+  @override
+  String get colorWhite => 'أبيض';
+
+  @override
+  String get colorYellow => 'أصفر';
+
+  @override
+  String get colorGreen => 'أخضر';
+
+  @override
+  String get colorBlue => 'أزرق';
+
+  @override
+  String get colorPink => 'وردي';
+
+  @override
+  String get colorBlack => 'أسود';
+
+  @override
+  String get damagedData => 'بيانات غير مقروءة';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'حُفظت جانبًا في $date · $size حرفًا';
+  }
+
+  @override
+  String get tryToRecover => 'محاولة الاسترداد';
+
+  @override
+  String get nothingRecovered => 'تعذّرت قراءة أي نص منها.';
+
+  @override
+  String get floatLowRam =>
+      'لا يمكن لهذا الهاتف عرض التطبيقات فوق التطبيقات الأخرى (ذاكرة منخفضة أو Android Go). استخدم التسجيل بدلًا من ذلك.';
+
+  @override
+  String get oemTipsTitle => 'إبقاء الملقّن العائم يعمل';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'قد تغلق هواتف $brand النوافذ العائمة لتوفير البطارية. في الإعدادات → التطبيقات → APrompter: اسمح بالظهور فوق التطبيقات الأخرى (والنوافذ المنبثقة)، واضبط البطارية على \"غير مقيَّد\"، واسمح بالإشعارات.';
+  }
+
+  @override
+  String get focusLine => 'التركيز على السطر الحالي';
+
+  @override
+  String get focusLineHint => 'يخفّت الأسطر الأخرى';
+
+  @override
+  String get stepByLine => 'سطرًا بسطر';
+
+  @override
+  String get stepByLineHint =>
+      'كل نقرة أو ضغطة على جهاز التحكم تنقل سطرًا واحدًا — بلا تمرير تلقائي';
+
+  @override
+  String get reduceEffects => 'تقليل التأثيرات';
+
+  @override
+  String get reduceEffectsHint =>
+      'بلا تلاشٍ أو ظلال: أكثر سلاسة على الهواتف القديمة ويوفّر البطارية';
+
+  @override
+  String get letterSpacing => 'تباعد الأحرف';
+
+  @override
+  String get importTextFile => 'استيراد ملف نصي';
+
+  @override
+  String get importTextFileHint =>
+      'نص بصيغة .txt أو .md من الملفات أو Drive أو البريد';
+
+  @override
+  String get importTextFailed =>
+      'تعذّرت قراءة الملف. اختر ملفًا نصيًا عاديًا (.txt).';
+
+  @override
+  String get mySetup => 'إعدادي';
+
+  @override
+  String get mySetupHint => 'الإعداد الذي حفظته';
+
+  @override
+  String get saveMySetup => 'حفظ كإعدادي';
+
+  @override
+  String get resetAllSettings => 'إعادة ضبط كل الإعدادات';
+
+  @override
+  String get runHadJumps =>
+      'تنقّلت داخل النص في هذه الجولة، لذا لا يمكن اقتراح سرعة.';
+
+  @override
+  String get keepTake => 'احتفاظ';
+
+  @override
+  String get retake => 'إعادة التصوير';
+
+  @override
+  String get reviewTakes => 'مراجعة كل لقطة';
+
+  @override
+  String get reviewTakesHint => 'شاهدها ثم احتفظ بها أو أعدها';
+
+  @override
+  String get takesToGallery => 'حفظ اللقطات في المعرض';
+
+  @override
+  String get takesToGalleryHint =>
+      'عند الإيقاف: تبقى اللقطات داخل التطبيق، بعيدًا عن Google Photos وiCloud';
+
+  @override
+  String get takesTitle => 'اللقطات';
+
+  @override
+  String get takesEmpty =>
+      'تظهر هنا اللقطات المحفوظة داخل التطبيق. أوقف \"حفظ اللقطات في المعرض\" في الإعدادات لإبقائها هنا.';
+
+  @override
+  String get saveToGallery => 'حفظ في المعرض';
+
+  @override
+  String get savedToGallery => 'تم الحفظ في المعرض';
+
+  @override
+  String get deleteTake => 'حذف اللقطة';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'تم الاحتفاظ باللقطة $n في التطبيق';
+  }
+
+  @override
+  String get signInTitle => 'Sign in to continue';
+
+  @override
+  String get signInBody =>
+      'This only identifies your purchase across your devices — it does not sync your scripts.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInFailed => 'Sign in failed. Try again.';
+
+  @override
+  String get upgradeTitle => 'Go unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Couldn\'t load plans. Check your connection and try again.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed. Try again.';
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }

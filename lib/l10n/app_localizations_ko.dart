@@ -538,4 +538,337 @@ class AppLocalizationsKo extends AppLocalizations {
   String minutesShort(int n) {
     return '$n분';
   }
+
+  @override
+  String get storageSaveFailed =>
+      '저장하지 못했어요. 휴대폰 저장 공간이 부족할 수 있어요. 앱이 열려 있는 동안 작업 내용은 유지돼요.';
+
+  @override
+  String get versionHistory => '버전 기록';
+
+  @override
+  String get noVersions => '아직 이전 버전이 없어요. 작성하는 동안 자동으로 저장돼요.';
+
+  @override
+  String get restore => '복원';
+
+  @override
+  String get versionRestored => '이전 버전을 복원했어요';
+
+  @override
+  String get recentlyDeleted => '최근 삭제됨';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '삭제한 대본은 $days일 동안 여기에 보관돼요.',
+      one: '삭제한 대본은 1일 동안 여기에 보관돼요.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '영구 삭제';
+
+  @override
+  String deletedOn(String date) {
+    return '$date 삭제됨';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\'$title\' 복원됨';
+  }
+
+  @override
+  String get backUpScripts => '모든 대본 백업';
+
+  @override
+  String get restoreBackup => '백업에서 복원';
+
+  @override
+  String get backupShareTitle => 'APrompter 백업';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '대본 $count개 복원됨',
+      one: '대본 1개 복원됨',
+      zero: '이 백업의 내용은 이미 모두 있어요',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'APrompter 백업 파일이 아니에요.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm 단어/분으로도 $target에 맞출 수 없어요. 약 $words단어를 줄이세요.';
+  }
+
+  @override
+  String get cameraNotReady => '카메라가 준비되지 않아 촬영이 시작되지 않았어요. 다시 시도해 주세요.';
+
+  @override
+  String get previousSection => '이전 섹션';
+
+  @override
+  String get nextSection => '다음 섹션';
+
+  @override
+  String get floatingNotificationBody => '탭하여 APrompter 열기';
+
+  @override
+  String get customTarget => '직접 설정…';
+
+  @override
+  String get customTargetTitle => '목표 길이';
+
+  @override
+  String get customTargetHint => '분과 초, 예: 5:00';
+
+  @override
+  String get saved => '저장됨';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone에서는 앱을 다른 앱 위에 띄울 수 없어요. \'촬영\'을 사용하면 카메라 아래에 대본을 두고 찍을 수 있어요.';
+
+  @override
+  String get hashtagHint =>
+      '해시태그 줄(#fyp #ad)은 흐리게 표시되고 시간에 포함되지 않아요. 섹션은 \'# \'처럼 공백을 넣어 쓰세요.';
+
+  @override
+  String get appLock => '앱 잠금';
+
+  @override
+  String get appLockHint => 'APrompter를 열 때 지문, 얼굴 또는 휴대폰 PIN을 요구해요';
+
+  @override
+  String get appLockUnavailable => '먼저 이 휴대폰에 화면 잠금을 설정하세요.';
+
+  @override
+  String get unlock => '잠금 해제';
+
+  @override
+  String get unlockReason => '대본을 보려면 APrompter 잠금을 해제하세요';
+
+  @override
+  String get autoStopWait => '마지막 줄 후 대기 시간';
+
+  @override
+  String get beforeYouRecord => '촬영 전에';
+
+  @override
+  String get recordAnyway => '그래도 촬영';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '남은 공간에 약 $minutes분 분량의 동영상만 들어가요. 공간을 비우거나 화질을 낮추세요.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return '배터리 $level% — 긴 테이크는 중간에 끊길 수 있어요. 가능하면 충전기를 연결하세요.';
+  }
+
+  @override
+  String get brightScreen => '프롬프터 중 최대 밝기';
+
+  @override
+  String get brightScreenHint => '야외에서 더 잘 보여요';
+
+  @override
+  String get cameraBusy => '다른 앱이 카메라를 사용 중이에요. 그 앱을 닫고 다시 시도하세요.';
+
+  @override
+  String get cameraIntroTitle => '카메라 및 마이크';
+
+  @override
+  String get cameraIntroBody =>
+      '화면에 대본을 띄운 채 촬영하려면 APrompter에 카메라와 마이크가 필요해요. 곧 휴대폰에서 권한을 물어봐요. 동영상은 휴대폰에만 저장돼요.';
+
+  @override
+  String get continueLabel => '계속';
+
+  @override
+  String get notNow => '나중에';
+
+  @override
+  String get colorWhite => '흰색';
+
+  @override
+  String get colorYellow => '노란색';
+
+  @override
+  String get colorGreen => '초록색';
+
+  @override
+  String get colorBlue => '파란색';
+
+  @override
+  String get colorPink => '분홍색';
+
+  @override
+  String get colorBlack => '검은색';
+
+  @override
+  String get damagedData => '읽을 수 없는 데이터';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date에 따로 보관함 · $size자';
+  }
+
+  @override
+  String get tryToRecover => '복구 시도';
+
+  @override
+  String get nothingRecovered => '대본을 하나도 읽지 못했어요.';
+
+  @override
+  String get floatLowRam =>
+      '이 휴대폰은 다른 앱 위에 앱을 표시할 수 없어요(저메모리 또는 Android Go 기기). 대신 촬영을 사용하세요.';
+
+  @override
+  String get oemTipsTitle => '떠 있는 프롬프터 유지하기';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand 휴대폰은 배터리를 아끼려고 떠 있는 창을 닫을 수 있어요. 설정 → 애플리케이션 → APrompter에서 다른 앱 위에 표시(및 팝업 창)를 허용하고, 배터리를 \'제한 없음\'으로 설정하고, 알림을 허용하세요.';
+  }
+
+  @override
+  String get focusLine => '현재 줄에 집중';
+
+  @override
+  String get focusLineHint => '다른 줄을 어둡게 해요';
+
+  @override
+  String get stepByLine => '한 줄씩';
+
+  @override
+  String get stepByLineHint => '탭하거나 리모컨을 누를 때마다 한 줄씩 이동 — 자동 스크롤 없음';
+
+  @override
+  String get reduceEffects => '효과 줄이기';
+
+  @override
+  String get reduceEffectsHint => '페이드와 그림자 없음: 오래된 휴대폰에서 더 부드럽고 배터리 절약';
+
+  @override
+  String get letterSpacing => '자간';
+
+  @override
+  String get importTextFile => '텍스트 파일 가져오기';
+
+  @override
+  String get importTextFileHint => '파일, 드라이브, 이메일의 .txt 또는 .md 대본';
+
+  @override
+  String get importTextFailed => '파일을 읽지 못했어요. 일반 텍스트(.txt) 파일을 선택하세요.';
+
+  @override
+  String get mySetup => '내 설정';
+
+  @override
+  String get mySetupHint => '저장한 설정';
+
+  @override
+  String get saveMySetup => '내 설정으로 저장';
+
+  @override
+  String get resetAllSettings => '모든 설정 초기화';
+
+  @override
+  String get runHadJumps => '이번 진행 중에 건너뛴 부분이 있어 속도를 제안할 수 없어요.';
+
+  @override
+  String get keepTake => '남기기';
+
+  @override
+  String get retake => '다시 찍기';
+
+  @override
+  String get reviewTakes => '테이크마다 확인';
+
+  @override
+  String get reviewTakesHint => '보고 나서 남기거나 다시 찍어요';
+
+  @override
+  String get takesToGallery => '테이크를 갤러리에 저장';
+
+  @override
+  String get takesToGalleryHint =>
+      '끄면: 테이크가 앱 안에만 남고 Google Photos와 iCloud에 올라가지 않아요';
+
+  @override
+  String get takesTitle => '테이크';
+
+  @override
+  String get takesEmpty =>
+      '앱 안에 남긴 테이크가 여기에 표시돼요. 여기에 남기려면 설정에서 \'테이크를 갤러리에 저장\'을 끄세요.';
+
+  @override
+  String get saveToGallery => '갤러리에 저장';
+
+  @override
+  String get savedToGallery => '갤러리에 저장했어요';
+
+  @override
+  String get deleteTake => '테이크 삭제';
+
+  @override
+  String takeKeptInApp(int n) {
+    return '테이크 $n을(를) 앱에 남겼어요';
+  }
+
+  @override
+  String get signInTitle => 'Sign in to continue';
+
+  @override
+  String get signInBody =>
+      'This only identifies your purchase across your devices — it does not sync your scripts.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInFailed => 'Sign in failed. Try again.';
+
+  @override
+  String get upgradeTitle => 'Go unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Couldn\'t load plans. Check your connection and try again.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed. Try again.';
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }
