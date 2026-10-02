@@ -9,10 +9,12 @@ import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
+import '../services/entitlements.dart';
 import '../services/floating_prompter.dart';
 import '../services/storage.dart';
 import '../widgets/guards.dart';
 import 'camera_prompter_screen.dart';
+import 'paywall_screen.dart';
 import 'read_screen.dart';
 
 /// Write and polish a script (journeys J1 & J2). Saves automatically.
@@ -460,11 +462,29 @@ class _EditorScreenState extends State<EditorScreen>
             ),
             ValueListenableBuilder(
               valueListenable: _analysed,
-              builder: (context, body, _) => _TimingBar(
-                body: body,
-                targetSeconds: _target,
-                wpm: AppScope.of(context).settings.wpm,
-              ),
+              builder: (context, body, _) {
+                final entitlements = EntitlementsScope.of(context);
+                final grandfathered = AppScope.of(
+                  context,
+                ).isGrandfatheredWordCap(widget.script.id);
+                final overCap = countWords(spokenText(body)) > maxFreeWords;
+                final showBanner =
+                    overCap &&
+                    !canExceedWordCap(
+                      entitlements.isUnlimited,
+                      isGrandfathered: grandfathered,
+                    );
+                return Column(
+                  children: [
+                    if (showBanner) const _WordCapBanner(),
+                    _TimingBar(
+                      body: body,
+                      targetSeconds: _target,
+                      wpm: AppScope.of(context).settings.wpm,
+                    ),
+                  ],
+                );
+              },
             ),
             const Divider(height: 1),
             Expanded(
@@ -637,6 +657,37 @@ class _TimingBar extends StatelessWidget {
   }
 }
 
+/// Nudges a free account past the word cap to upgrade. Never blocks typing
+/// itself — this is purely an informational banner with a CTA.
+class _WordCapBanner extends StatelessWidget {
+  const _WordCapBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      color: theme.colorScheme.secondaryContainer,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              l.wordCapBannerText(maxFreeWords),
+              style: TextStyle(color: theme.colorScheme.onSecondaryContainer),
+            ),
+          ),
+          TextButton(
+            onPressed: () => showUpgradeFlow(context),
+            child: Text(l.upgrade),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _MarkupToolbar extends StatelessWidget {
   const _MarkupToolbar({
     required this.onSection,
@@ -655,10 +706,15 @@ class _MarkupToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return Material(
-      color: Theme.of(context).colorScheme.surfaceContainer,
-      child: SafeArea(
-        top: false,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+      child: Material(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+        elevation: 3,
+        shadowColor: Colors.black38,
+        borderRadius: BorderRadius.circular(20),
+        clipBehavior: Clip.antiAlias,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

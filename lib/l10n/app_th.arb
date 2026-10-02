@@ -253,5 +253,7 @@
   "offeringsLoadFailed": "Couldn't load plans. Check your connection and try again.",
   "purchaseFailed": "Purchase failed. Try again.",
   "restoreFailed": "Couldn't restore purchases. Try again.",
-  "restorePurchases": "Restore purchases"
+  "restorePurchases": "Restore purchases",
+  "wordCapBannerText": "Free scripts are capped at {count} words.",
+  "upgrade": "Upgrade"
 }
