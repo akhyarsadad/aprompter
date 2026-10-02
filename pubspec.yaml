@@ -48,6 +48,9 @@ dependencies:
   video_player: ^2.14.0
   path_provider: ^2.1.6
   local_auth: ^3.0.2
+  purchases_flutter: ^10.14.0
+  google_sign_in: ^7.2.0
+  sign_in_with_apple: ^7.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
