@@ -159,5 +159,33 @@ For iOS, set your team in Xcode (`ios/Runner.xcworkspace`).
 The Android floating window uses a `specialUse` foreground service. Google Play asks you to
 justify this in the Play Console (the reason is already described in the manifest).
 
+### Paywall setup
+
+Free accounts get 1 active script capped at 500 words; unlocking is a
+RevenueCat-brokered purchase (monthly, yearly, or lifetime) gated behind
+Sign in with Apple / Google — the login exists only so a purchase is
+recognized across devices and across the App Store / Play Store boundary,
+not for script sync.
+
+1. Create a RevenueCat project, add your Apple App Store and Google Play
+   apps to it, and create one entitlement (default id `unlimited`) backed
+   by three products: a monthly subscription, a yearly subscription, and a
+   non-consumable lifetime purchase. Put all three in one Offering's
+   `monthly` / `annual` / `lifetime` package slots.
+2. In Apple Developer → Certificates, IDs & Profiles, enable the "Sign in
+   with Apple" capability for the app id, and add the same capability in
+   Xcode (`Runner` → Signing & Capabilities).
+3. In Google Cloud Console → Credentials, create an OAuth 2.0 **Web**
+   client id (used as `googleServerClientId` even on Android/iOS — this is
+   how `google_sign_in` is configured per its own README).
+4. Copy `lib/config/entitlements_config.dart.example` to
+   `lib/config/entitlements_config.dart` (git-ignored, like
+   `android/key.properties` below) and fill in the RevenueCat API keys,
+   the entitlement id, and the Google web client id.
+
+Without a real `entitlements_config.dart`, the app builds and runs fine —
+sign-in and purchases will simply fail, the same way a release build falls
+back to the debug signing key without `android/key.properties`.
+
 Release checklist, Play declarations and review notes: [`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md).
 Privacy policy (host it and link it in both stores): [`docs/PRIVACY.md`](docs/PRIVACY.md).
