@@ -32,6 +32,10 @@ Set<String> computeGrandfatheredIds(List<Script> scripts) => {
 /// holds the resulting bool so the rest of the app never touches RevenueCat
 /// types directly.
 class Entitlements extends ChangeNotifier {
+  // `isUnlimited` is the stable public constructor param; the
+  // initializing-formal lint would rename it to the private field name,
+  // breaking callers — suppressed on the line below for that reason.
+  // ignore: prefer_initializing_formals
   Entitlements({bool isUnlimited = false}) : _isUnlimited = isUnlimited;
 
   bool _isUnlimited;
