@@ -20,7 +20,7 @@ void main() {
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
     final storage = await Storage.open();
-    final entitlements = Entitlements();
+    final entitlements = Entitlements(isUnlimited: true);
     await tester.pumpWidget(
       AprompterApp(
         state: AppState(storage),

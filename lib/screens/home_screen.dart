@@ -12,6 +12,7 @@ import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
 import '../services/backup.dart';
+import '../services/entitlements.dart';
 import '../services/floating_prompter.dart';
 import '../services/storage.dart';
 import '../services/system_settings.dart';
@@ -19,6 +20,7 @@ import '../widgets/guards.dart';
 import '../widgets/settings_sheet.dart';
 import 'camera_prompter_screen.dart';
 import 'editor_screen.dart';
+import 'paywall_screen.dart';
 import 'read_screen.dart';
 import 'takes_screen.dart';
 import 'trash_screen.dart';
@@ -267,6 +269,12 @@ const _accents = {
 
 /// J1: pick a template, then open the editor.
 Future<void> _newScript(BuildContext context) async {
+  final state = AppScope.read(context);
+  final entitlements = EntitlementsScope.read(context);
+  if (!canCreateScript(state.scripts, entitlements.isUnlimited)) {
+    await showUpgradeFlow(context);
+    return;
+  }
   final l = context.l10n;
   final template = await showModalBottomSheet<ScriptTemplate>(
     context: context,
@@ -542,12 +550,6 @@ class _ScriptCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    statusIcon(script.status),
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       script.title.isEmpty ? l.untitled : script.title,
@@ -555,6 +557,8 @@ class _ScriptCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  _StatusBadge(status: script.status),
                   PopupMenuButton<_Action>(
                     onSelected: (a) => _onAction(context, a),
                     itemBuilder: (_) => [
@@ -657,6 +661,53 @@ class _ScriptCard extends StatelessWidget {
           ],
         ),
       );
+}
+
+/// Colored dot + label, scannable at a glance without opening the menu.
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.status});
+
+  final ScriptStatus status;
+
+  static Color _color(BuildContext context, ScriptStatus s) {
+    final theme = Theme.of(context);
+    return switch (s) {
+      ScriptStatus.draft => theme.colorScheme.outline,
+      ScriptStatus.ready => theme.colorScheme.primary,
+      ScriptStatus.recorded => Colors.green,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _color(context, status);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            status.label(context.l10n),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _EmptyState extends StatelessWidget {

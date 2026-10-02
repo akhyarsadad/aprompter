@@ -134,7 +134,7 @@ void main() {
     ) async {
       SharedPreferencesStorePlatform.instance = _FullStore();
       final state = AppState(await Storage.open());
-      final entitlements = Entitlements();
+      final entitlements = Entitlements(isUnlimited: true);
       await tester.pumpWidget(
         AprompterApp(
           state: state,

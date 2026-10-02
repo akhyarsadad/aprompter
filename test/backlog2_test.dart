@@ -271,7 +271,7 @@ void main() {
   ) async {
     SharedPreferences.setMockInitialValues({'app_lock': true});
     final state = AppState(await Storage.open());
-    final entitlements = Entitlements();
+    final entitlements = Entitlements(isUnlimited: true);
     await tester.pumpWidget(
       AprompterApp(
         state: state,
@@ -297,7 +297,7 @@ void main() {
     addTearDown(tester.view.reset);
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     final state = AppState(await Storage.open());
-    final entitlements = Entitlements();
+    final entitlements = Entitlements(isUnlimited: true);
     await tester.pumpWidget(
       AprompterApp(
         state: state,
