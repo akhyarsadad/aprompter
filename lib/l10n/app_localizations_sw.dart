@@ -566,4 +566,347 @@ class AppLocalizationsSw extends AppLocalizations {
   String minutesShort(int n) {
     return 'dak $n';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Imeshindwa kuhifadhi — huenda nafasi ya simu imejaa. Kazi yako inabaki wakati programu iko wazi.';
+
+  @override
+  String get versionHistory => 'Historia ya matoleo';
+
+  @override
+  String get noVersions =>
+      'Bado hakuna matoleo ya awali. Huhifadhiwa kiotomatiki unapoandika.';
+
+  @override
+  String get restore => 'Rejesha';
+
+  @override
+  String get versionRestored => 'Toleo la awali limerejeshwa';
+
+  @override
+  String get recentlyDeleted => 'Zilizofutwa hivi karibuni';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Hati zilizofutwa hukaa hapa kwa siku $days.',
+      one: 'Hati zilizofutwa hukaa hapa kwa siku 1.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Futa kabisa';
+
+  @override
+  String deletedOn(String date) {
+    return 'Imefutwa $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" imerejeshwa';
+  }
+
+  @override
+  String get backUpScripts => 'Hifadhi nakala ya hati zote';
+
+  @override
+  String get restoreBackup => 'Rejesha kutoka nakala rudufu';
+
+  @override
+  String get backupShareTitle => 'Nakala rudufu ya APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hati $count zimerejeshwa',
+      one: 'Hati 1 imerejeshwa',
+      zero: 'Kila kitu katika nakala hii tayari kipo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Faili hiyo si nakala rudufu ya APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Hata kwa $wpm m/d haitatosha $target — punguza takriban maneno $words.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera haikuwa tayari, kwa hiyo kurekodi hakukuanza. Jaribu tena.';
+
+  @override
+  String get previousSection => 'Sehemu iliyotangulia';
+
+  @override
+  String get nextSection => 'Sehemu inayofuata';
+
+  @override
+  String get floatingNotificationBody => 'Gusa ili kufungua APrompter';
+
+  @override
+  String get customTarget => 'Maalum…';
+
+  @override
+  String get customTargetTitle => 'Urefu lengwa';
+
+  @override
+  String get customTargetHint => 'Dakika na sekunde, k.m. 5:00';
+
+  @override
+  String get saved => 'Imehifadhiwa';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone hairuhusu programu kuelea juu ya programu nyingine. Tumia Rekodi kurekodi huku hati ikiwa chini ya kamera.';
+
+  @override
+  String get hashtagHint =>
+      'Mistari ya hashtag (#fyp #ad) huonyeshwa hafifu na haipimwi muda. Tumia \"# \" yenye nafasi kwa sehemu.';
+
+  @override
+  String get appLock => 'Kufunga programu';
+
+  @override
+  String get appLockHint =>
+      'Omba alama ya kidole, uso au PIN ya simu ili kufungua APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Weka kwanza kifunga skrini kwenye simu hii.';
+
+  @override
+  String get unlock => 'Fungua';
+
+  @override
+  String get unlockReason => 'Fungua APrompter ili kuona hati zako';
+
+  @override
+  String get autoStopWait => 'Subiri baada ya mstari wa mwisho';
+
+  @override
+  String get beforeYouRecord => 'Kabla ya kurekodi';
+
+  @override
+  String get recordAnyway => 'Rekodi hata hivyo';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Nafasi iliyo wazi inatosha video ya takriban dak $minutes tu. Futa vitu au punguza ubora wa video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Betri iko $level% — picha ndefu inaweza kukatika. Chomeka chaja ukiweza.';
+  }
+
+  @override
+  String get brightScreen => 'Mwangaza kamili wakati wa prompter';
+
+  @override
+  String get brightScreenHint => 'Rahisi kusoma ukiwa nje';
+
+  @override
+  String get cameraBusy =>
+      'Programu nyingine inatumia kamera. Ifunge kisha ujaribu tena.';
+
+  @override
+  String get cameraIntroTitle => 'Kamera na maikrofoni';
+
+  @override
+  String get cameraIntroBody =>
+      'Ili kukurekodi ukiwa na hati kwenye skrini, APrompter inahitaji kamera na maikrofoni. Simu yako itauliza sasa. Video hubaki kwenye simu yako.';
+
+  @override
+  String get continueLabel => 'Endelea';
+
+  @override
+  String get notNow => 'Si sasa';
+
+  @override
+  String get colorWhite => 'Nyeupe';
+
+  @override
+  String get colorYellow => 'Njano';
+
+  @override
+  String get colorGreen => 'Kijani';
+
+  @override
+  String get colorBlue => 'Bluu';
+
+  @override
+  String get colorPink => 'Waridi';
+
+  @override
+  String get colorBlack => 'Nyeusi';
+
+  @override
+  String get damagedData => 'Data isiyosomeka';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Ilitengwa $date · herufi $size';
+  }
+
+  @override
+  String get tryToRecover => 'Jaribu kurejesha';
+
+  @override
+  String get nothingRecovered => 'Hakuna hati iliyoweza kusomwa kutoka humo.';
+
+  @override
+  String get floatLowRam =>
+      'Simu hii haiwezi kuonyesha programu juu ya programu nyingine (kumbukumbu ndogo au simu ya Android Go). Tumia Rekodi badala yake.';
+
+  @override
+  String get oemTipsTitle => 'Weka prompter inayoelea ikifanya kazi';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Simu za $brand zinaweza kufunga madirisha yanayoelea ili kuokoa betri. Katika Mipangilio → Programu → APrompter: ruhusu kuonyesha juu ya programu nyingine (na madirisha ibukizi), weka betri kuwa \"Bila vikwazo\", na uruhusu arifa.';
+  }
+
+  @override
+  String get focusLine => 'Lenga mstari wa sasa';
+
+  @override
+  String get focusLineHint => 'Hufifisha mistari mingine';
+
+  @override
+  String get stepByLine => 'Mstari kwa mstari';
+
+  @override
+  String get stepByLineHint =>
+      'Kila mguso au bonyezo la rimoti husogeza mstari mmoja — bila kusogeza kiotomatiki';
+
+  @override
+  String get reduceEffects => 'Punguza madoido';
+
+  @override
+  String get reduceEffectsHint =>
+      'Bila kufifia wala vivuli: laini zaidi kwenye simu za zamani, huokoa betri';
+
+  @override
+  String get letterSpacing => 'Nafasi kati ya herufi';
+
+  @override
+  String get importTextFile => 'Leta faili la maandishi';
+
+  @override
+  String get importTextFileHint =>
+      'Hati ya .txt au .md kutoka Faili, Drive au barua pepe';
+
+  @override
+  String get importTextFailed =>
+      'Imeshindwa kusoma faili hilo. Chagua faili la maandishi tu (.txt).';
+
+  @override
+  String get mySetup => 'Mpangilio wangu';
+
+  @override
+  String get mySetupHint => 'Mpangilio uliouhifadhi';
+
+  @override
+  String get saveMySetup => 'Hifadhi kama mpangilio wangu';
+
+  @override
+  String get resetAllSettings => 'Weka upya mipangilio yote';
+
+  @override
+  String get runHadJumps =>
+      'Uliruka sehemu katika jaribio hili, kwa hivyo haiwezi kupendekeza kasi.';
+
+  @override
+  String get keepTake => 'Hifadhi';
+
+  @override
+  String get retake => 'Piga tena';
+
+  @override
+  String get reviewTakes => 'Kagua kila picha';
+
+  @override
+  String get reviewTakesHint => 'Itazame, kisha ihifadhi au upige tena';
+
+  @override
+  String get takesToGallery => 'Hifadhi picha kwenye matunzio';
+
+  @override
+  String get takesToGalleryHint =>
+      'Imezimwa: picha hubaki ndani ya programu, nje ya Google Photos na iCloud';
+
+  @override
+  String get takesTitle => 'Picha';
+
+  @override
+  String get takesEmpty =>
+      'Picha zilizohifadhiwa ndani ya programu huonekana hapa. Zima \"Hifadhi picha kwenye matunzio\" kwenye mipangilio ili kuzihifadhi hapa.';
+
+  @override
+  String get saveToGallery => 'Hifadhi kwenye matunzio';
+
+  @override
+  String get savedToGallery => 'Imehifadhiwa kwenye matunzio';
+
+  @override
+  String get deleteTake => 'Futa picha';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Picha $n imehifadhiwa ndani ya programu';
+  }
+
+  @override
+  String get signInTitle => 'Sign in to continue';
+
+  @override
+  String get signInBody =>
+      'This only identifies your purchase across your devices — it does not sync your scripts.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInFailed => 'Sign in failed. Try again.';
+
+  @override
+  String get upgradeTitle => 'Go unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Couldn\'t load plans. Check your connection and try again.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed. Try again.';
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }

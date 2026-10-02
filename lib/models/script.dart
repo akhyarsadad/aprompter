@@ -29,8 +29,12 @@ class Script {
   /// Words that will be spoken (sections, notes and markers excluded).
   int get wordCount => countWords(spokenText(body));
 
+  /// `[pause]` beats in spoken lines.
+  int get pauses => pauseCount(body);
+
+  /// Time to say the script at [wpm], `[pause]` beats included.
   Duration durationAt(double wpm) =>
-      Duration(seconds: wpm <= 0 ? 0 : (wordCount / wpm * 60).round());
+      Duration(seconds: speakingSeconds(body, wpm).round());
 
   List<String> get sections => sectionTitles(body);
 

@@ -542,4 +542,344 @@ class AppLocalizationsTh extends AppLocalizations {
   String minutesShort(int n) {
     return '$n นาที';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'บันทึกไม่ได้ — พื้นที่ในโทรศัพท์อาจเต็ม งานของคุณยังอยู่ตราบที่แอปยังเปิดอยู่';
+
+  @override
+  String get versionHistory => 'ประวัติเวอร์ชัน';
+
+  @override
+  String get noVersions =>
+      'ยังไม่มีเวอร์ชันก่อนหน้า ระบบจะเก็บไว้อัตโนมัติขณะที่คุณเขียน';
+
+  @override
+  String get restore => 'กู้คืน';
+
+  @override
+  String get versionRestored => 'กู้คืนเวอร์ชันก่อนหน้าแล้ว';
+
+  @override
+  String get recentlyDeleted => 'ที่ลบล่าสุด';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'สคริปต์ที่ลบจะอยู่ที่นี่ $days วัน',
+      one: 'สคริปต์ที่ลบจะอยู่ที่นี่ 1 วัน',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'ลบถาวร';
+
+  @override
+  String deletedOn(String date) {
+    return 'ลบเมื่อ $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'กู้คืน \"$title\" แล้ว';
+  }
+
+  @override
+  String get backUpScripts => 'สำรองสคริปต์ทั้งหมด';
+
+  @override
+  String get restoreBackup => 'กู้คืนจากข้อมูลสำรอง';
+
+  @override
+  String get backupShareTitle => 'ข้อมูลสำรอง APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'กู้คืน $count สคริปต์แล้ว',
+      one: 'กู้คืน 1 สคริปต์แล้ว',
+      zero: 'ทุกอย่างในข้อมูลสำรองนี้มีอยู่แล้ว',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'ไฟล์นี้ไม่ใช่ข้อมูลสำรองของ APrompter';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'แม้ที่ $wpm คำ/นาที ก็ยังไม่พอดี $target — ตัดออกราว $words คำ';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'กล้องยังไม่พร้อม จึงไม่ได้เริ่มถ่าย ลองอีกครั้ง';
+
+  @override
+  String get previousSection => 'ส่วนก่อนหน้า';
+
+  @override
+  String get nextSection => 'ส่วนถัดไป';
+
+  @override
+  String get floatingNotificationBody => 'แตะเพื่อเปิด APrompter';
+
+  @override
+  String get customTarget => 'กำหนดเอง…';
+
+  @override
+  String get customTargetTitle => 'ความยาวเป้าหมาย';
+
+  @override
+  String get customTargetHint => 'นาทีและวินาที เช่น 5:00';
+
+  @override
+  String get saved => 'บันทึกแล้ว';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone ไม่อนุญาตให้แอปลอยเหนือแอปอื่น ใช้ \"ถ่าย\" เพื่อถ่ายโดยมีสคริปต์อยู่ใต้กล้อง';
+
+  @override
+  String get hashtagHint =>
+      'บรรทัดแฮชแท็ก (#fyp #ad) จะแสดงจางและไม่นับเวลา ใช้ \"# \" ตามด้วยเว้นวรรคเพื่อสร้างส่วน';
+
+  @override
+  String get appLock => 'ล็อกแอป';
+
+  @override
+  String get appLockHint =>
+      'ขอลายนิ้วมือ ใบหน้า หรือ PIN ของโทรศัพท์ก่อนเปิด APrompter';
+
+  @override
+  String get appLockUnavailable => 'ตั้งค่าล็อกหน้าจอในโทรศัพท์เครื่องนี้ก่อน';
+
+  @override
+  String get unlock => 'ปลดล็อก';
+
+  @override
+  String get unlockReason => 'ปลดล็อก APrompter เพื่อดูสคริปต์ของคุณ';
+
+  @override
+  String get autoStopWait => 'รอหลังบรรทัดสุดท้าย';
+
+  @override
+  String get beforeYouRecord => 'ก่อนเริ่มถ่าย';
+
+  @override
+  String get recordAnyway => 'ถ่ายต่อเลย';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'พื้นที่ว่างพอสำหรับวิดีโอประมาณ $minutes นาทีเท่านั้น ลองล้างพื้นที่หรือลดคุณภาพวิดีโอ';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'แบตเตอรี่เหลือ $level% — เทคยาวอาจถูกตัด เสียบชาร์จถ้าทำได้';
+  }
+
+  @override
+  String get brightScreen => 'ความสว่างเต็มที่ขณะใช้พรอมป์เตอร์';
+
+  @override
+  String get brightScreenHint => 'อ่านง่ายขึ้นเมื่ออยู่กลางแจ้ง';
+
+  @override
+  String get cameraBusy => 'แอปอื่นกำลังใช้กล้องอยู่ ปิดแอปนั้นแล้วลองอีกครั้ง';
+
+  @override
+  String get cameraIntroTitle => 'กล้องและไมโครโฟน';
+
+  @override
+  String get cameraIntroBody =>
+      'APrompter ต้องใช้กล้องและไมโครโฟนเพื่อถ่ายคุณพร้อมสคริปต์บนจอ โทรศัพท์จะถามสิทธิ์ถัดไป วิดีโอจะอยู่ในโทรศัพท์ของคุณ';
+
+  @override
+  String get continueLabel => 'ต่อไป';
+
+  @override
+  String get notNow => 'ไว้ทีหลัง';
+
+  @override
+  String get colorWhite => 'ขาว';
+
+  @override
+  String get colorYellow => 'เหลือง';
+
+  @override
+  String get colorGreen => 'เขียว';
+
+  @override
+  String get colorBlue => 'น้ำเงิน';
+
+  @override
+  String get colorPink => 'ชมพู';
+
+  @override
+  String get colorBlack => 'ดำ';
+
+  @override
+  String get damagedData => 'ข้อมูลที่อ่านไม่ได้';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'แยกเก็บไว้เมื่อ $date · $size ตัวอักษร';
+  }
+
+  @override
+  String get tryToRecover => 'ลองกู้คืน';
+
+  @override
+  String get nothingRecovered => 'อ่านสคริปต์จากข้อมูลนี้ไม่ได้เลย';
+
+  @override
+  String get floatLowRam =>
+      'โทรศัพท์นี้แสดงแอปทับแอปอื่นไม่ได้ (หน่วยความจำต่ำหรือ Android Go) ใช้ปุ่มถ่ายแทน';
+
+  @override
+  String get oemTipsTitle => 'ให้พรอมป์เตอร์แบบลอยทำงานต่อเนื่อง';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'โทรศัพท์ $brand อาจปิดหน้าต่างลอยเพื่อประหยัดแบตเตอรี่ ไปที่ การตั้งค่า → แอป → APrompter: อนุญาตให้แสดงทับแอปอื่น (และหน้าต่างป๊อปอัป) ตั้งแบตเตอรี่เป็น \"ไม่จำกัด\" และอนุญาตการแจ้งเตือน';
+  }
+
+  @override
+  String get focusLine => 'เน้นบรรทัดปัจจุบัน';
+
+  @override
+  String get focusLineHint => 'หรี่บรรทัดอื่น';
+
+  @override
+  String get stepByLine => 'ทีละบรรทัด';
+
+  @override
+  String get stepByLineHint =>
+      'แตะหรือกดรีโมตแต่ละครั้งเลื่อนหนึ่งบรรทัด — ไม่เลื่อนอัตโนมัติ';
+
+  @override
+  String get reduceEffects => 'ลดเอฟเฟกต์';
+
+  @override
+  String get reduceEffectsHint =>
+      'ไม่มีการเฟดหรือเงา: ลื่นขึ้นบนเครื่องรุ่นเก่า ประหยัดแบต';
+
+  @override
+  String get letterSpacing => 'ระยะห่างตัวอักษร';
+
+  @override
+  String get importTextFile => 'นำเข้าไฟล์ข้อความ';
+
+  @override
+  String get importTextFileHint =>
+      'สคริปต์ .txt หรือ .md จากไฟล์ ไดรฟ์ หรืออีเมล';
+
+  @override
+  String get importTextFailed =>
+      'อ่านไฟล์นั้นไม่ได้ เลือกไฟล์ข้อความธรรมดา (.txt)';
+
+  @override
+  String get mySetup => 'ค่าของฉัน';
+
+  @override
+  String get mySetupHint => 'ค่าที่คุณบันทึกไว้';
+
+  @override
+  String get saveMySetup => 'บันทึกเป็นค่าของฉัน';
+
+  @override
+  String get resetAllSettings => 'รีเซ็ตการตั้งค่าทั้งหมด';
+
+  @override
+  String get runHadJumps => 'รอบนี้มีการข้ามไปมา จึงแนะนำความเร็วไม่ได้';
+
+  @override
+  String get keepTake => 'เก็บไว้';
+
+  @override
+  String get retake => 'ถ่ายใหม่';
+
+  @override
+  String get reviewTakes => 'ตรวจดูทุกเทค';
+
+  @override
+  String get reviewTakesHint => 'ดูแล้วเลือกเก็บไว้หรือถ่ายใหม่';
+
+  @override
+  String get takesToGallery => 'บันทึกเทคลงคลังภาพ';
+
+  @override
+  String get takesToGalleryHint =>
+      'ปิด: เทคจะอยู่ในแอป ไม่เข้า Google Photos และ iCloud';
+
+  @override
+  String get takesTitle => 'เทค';
+
+  @override
+  String get takesEmpty =>
+      'เทคที่เก็บไว้ในแอปจะแสดงที่นี่ ปิด \"บันทึกเทคลงคลังภาพ\" ในการตั้งค่าเพื่อเก็บไว้ที่นี่';
+
+  @override
+  String get saveToGallery => 'บันทึกลงคลังภาพ';
+
+  @override
+  String get savedToGallery => 'บันทึกลงคลังภาพแล้ว';
+
+  @override
+  String get deleteTake => 'ลบเทค';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'เก็บเทค $n ไว้ในแอปแล้ว';
+  }
+
+  @override
+  String get signInTitle => 'Sign in to continue';
+
+  @override
+  String get signInBody =>
+      'This only identifies your purchase across your devices — it does not sync your scripts.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInFailed => 'Sign in failed. Try again.';
+
+  @override
+  String get upgradeTitle => 'Go unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Couldn\'t load plans. Check your connection and try again.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed. Try again.';
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }

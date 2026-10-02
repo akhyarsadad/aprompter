@@ -570,4 +570,347 @@ class AppLocalizationsFr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Échec de l\'enregistrement — votre téléphone manque peut-être d\'espace. Votre travail est conservé tant que l\'app reste ouverte.';
+
+  @override
+  String get versionHistory => 'Historique des versions';
+
+  @override
+  String get noVersions =>
+      'Aucune version antérieure pour l\'instant. Elles sont conservées automatiquement pendant que vous écrivez.';
+
+  @override
+  String get restore => 'Restaurer';
+
+  @override
+  String get versionRestored => 'Version antérieure restaurée';
+
+  @override
+  String get recentlyDeleted => 'Supprimés récemment';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Les scripts supprimés restent ici $days jours.',
+      one: 'Les scripts supprimés restent ici 1 jour.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Supprimer définitivement';
+
+  @override
+  String deletedOn(String date) {
+    return 'Supprimé le $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '« $title » restauré';
+  }
+
+  @override
+  String get backUpScripts => 'Sauvegarder tous les scripts';
+
+  @override
+  String get restoreBackup => 'Restaurer une sauvegarde';
+
+  @override
+  String get backupShareTitle => 'Sauvegarde APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts restaurés',
+      one: '1 script restauré',
+      zero: 'Tout le contenu de cette sauvegarde est déjà là',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Ce fichier n\'est pas une sauvegarde APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Même à $wpm mpm, ça ne tiendra pas en $target — coupez environ $words mots.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'La caméra n\'était pas prête, l\'enregistrement n\'a pas démarré. Réessayez.';
+
+  @override
+  String get previousSection => 'Section précédente';
+
+  @override
+  String get nextSection => 'Section suivante';
+
+  @override
+  String get floatingNotificationBody => 'Touchez pour ouvrir APrompter';
+
+  @override
+  String get customTarget => 'Personnalisé…';
+
+  @override
+  String get customTargetTitle => 'Durée cible';
+
+  @override
+  String get customTargetHint => 'Minutes et secondes, ex. 5:00';
+
+  @override
+  String get saved => 'Enregistré';
+
+  @override
+  String get floatNotOnIos =>
+      'L\'iPhone ne permet pas aux apps de flotter sur d\'autres apps. Utilisez Filmer pour tourner avec le script sous la caméra.';
+
+  @override
+  String get hashtagHint =>
+      'Les lignes de hashtags (#fyp #ad) sont atténuées et non chronométrées. Pour une section, utilisez # suivi d\'une espace.';
+
+  @override
+  String get appLock => 'Verrouillage de l\'appli';
+
+  @override
+  String get appLockHint =>
+      'Demander l\'empreinte, le visage ou le code du téléphone pour ouvrir APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Configurez d\'abord un verrouillage d\'écran sur ce téléphone.';
+
+  @override
+  String get unlock => 'Déverrouiller';
+
+  @override
+  String get unlockReason => 'Déverrouillez APrompter pour voir vos scripts';
+
+  @override
+  String get autoStopWait => 'Attente après la dernière ligne';
+
+  @override
+  String get beforeYouRecord => 'Avant de filmer';
+
+  @override
+  String get recordAnyway => 'Filmer quand même';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Votre espace libre ne permet qu\'environ $minutes min de vidéo. Libérez de l\'espace ou baissez la qualité vidéo.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Batterie à $level % — une longue prise risque d\'être coupée. Branchez le chargeur si possible.';
+  }
+
+  @override
+  String get brightScreen => 'Luminosité max pendant le prompteur';
+
+  @override
+  String get brightScreenHint => 'Plus lisible en extérieur';
+
+  @override
+  String get cameraBusy =>
+      'Une autre appli utilise la caméra. Fermez-la et réessayez.';
+
+  @override
+  String get cameraIntroTitle => 'Caméra et micro';
+
+  @override
+  String get cameraIntroBody =>
+      'Pour vous filmer avec le script à l\'écran, APrompter a besoin de la caméra et du micro. Votre téléphone va vous le demander. Les vidéos restent sur votre téléphone.';
+
+  @override
+  String get continueLabel => 'Continuer';
+
+  @override
+  String get notNow => 'Plus tard';
+
+  @override
+  String get colorWhite => 'Blanc';
+
+  @override
+  String get colorYellow => 'Jaune';
+
+  @override
+  String get colorGreen => 'Vert';
+
+  @override
+  String get colorBlue => 'Bleu';
+
+  @override
+  String get colorPink => 'Rose';
+
+  @override
+  String get colorBlack => 'Noir';
+
+  @override
+  String get damagedData => 'Données illisibles';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Mis de côté le $date · $size caractères';
+  }
+
+  @override
+  String get tryToRecover => 'Tenter la récupération';
+
+  @override
+  String get nothingRecovered => 'Aucun script n\'a pu être lu.';
+
+  @override
+  String get floatLowRam =>
+      'Ce téléphone ne peut pas afficher d\'applis par-dessus d\'autres (mémoire faible ou Android Go). Utilisez plutôt Filmer.';
+
+  @override
+  String get oemTipsTitle => 'Garder le prompteur flottant actif';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Les téléphones $brand peuvent fermer les fenêtres flottantes pour économiser la batterie. Dans Paramètres → Applications → APrompter : autorisez l\'affichage par-dessus les autres applis (et les fenêtres pop-up), réglez la batterie sur « Sans restriction » et autorisez les notifications.';
+  }
+
+  @override
+  String get focusLine => 'Mettre la ligne en cours en avant';
+
+  @override
+  String get focusLineHint => 'Atténue les autres lignes';
+
+  @override
+  String get stepByLine => 'Ligne par ligne';
+
+  @override
+  String get stepByLineHint =>
+      'Chaque appui ou clic de télécommande avance d\'une ligne — pas de défilement auto';
+
+  @override
+  String get reduceEffects => 'Réduire les effets';
+
+  @override
+  String get reduceEffectsHint =>
+      'Ni fondus ni ombres : plus fluide sur les anciens téléphones, économise la batterie';
+
+  @override
+  String get letterSpacing => 'Espacement des lettres';
+
+  @override
+  String get importTextFile => 'Importer un fichier texte';
+
+  @override
+  String get importTextFileHint =>
+      'Un script .txt ou .md depuis Fichiers, Drive ou un e-mail';
+
+  @override
+  String get importTextFailed =>
+      'Impossible de lire ce fichier. Choisissez un fichier texte brut (.txt).';
+
+  @override
+  String get mySetup => 'Ma config';
+
+  @override
+  String get mySetupHint => 'La config que vous avez enregistrée';
+
+  @override
+  String get saveMySetup => 'Enregistrer comme ma config';
+
+  @override
+  String get resetAllSettings => 'Réinitialiser tous les réglages';
+
+  @override
+  String get runHadJumps =>
+      'Vous avez sauté des passages, impossible de suggérer un rythme.';
+
+  @override
+  String get keepTake => 'Garder';
+
+  @override
+  String get retake => 'Refaire';
+
+  @override
+  String get reviewTakes => 'Revoir chaque prise';
+
+  @override
+  String get reviewTakesHint => 'Regardez-la, puis gardez-la ou refaites-la';
+
+  @override
+  String get takesToGallery => 'Enregistrer les prises dans la galerie';
+
+  @override
+  String get takesToGalleryHint =>
+      'Désactivé : les prises restent dans l\'appli, hors de Google Photos et iCloud';
+
+  @override
+  String get takesTitle => 'Prises';
+
+  @override
+  String get takesEmpty =>
+      'Les prises gardées dans l\'appli s\'affichent ici. Désactivez « Enregistrer les prises dans la galerie » dans les réglages pour les garder ici.';
+
+  @override
+  String get saveToGallery => 'Enregistrer dans la galerie';
+
+  @override
+  String get savedToGallery => 'Enregistré dans votre galerie';
+
+  @override
+  String get deleteTake => 'Supprimer la prise';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Prise $n gardée dans l\'appli';
+  }
+
+  @override
+  String get signInTitle => 'Sign in to continue';
+
+  @override
+  String get signInBody =>
+      'This only identifies your purchase across your devices — it does not sync your scripts.';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get signInFailed => 'Sign in failed. Try again.';
+
+  @override
+  String get upgradeTitle => 'Go unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Couldn\'t load plans. Check your connection and try again.';
+
+  @override
+  String get purchaseFailed => 'Purchase failed. Try again.';
+
+  @override
+  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }
