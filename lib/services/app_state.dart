@@ -6,6 +6,7 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import 'backup.dart';
+import 'entitlements.dart';
 import 'storage.dart';
 
 /// App-wide state: the script library and prompter settings.
@@ -22,6 +23,19 @@ class AppState extends ChangeNotifier {
   List<TrashedScript> _trash;
   Locale? _locale;
   bool _saveFailed = false;
+
+  /// One-time: scripts already over the free word cap before the paywall
+  /// shipped stay editable forever. Call once at startup, before the first
+  /// frame — see `main()`.
+  Future<void> runWordCapMigrationIfNeeded() async {
+    if (storage.wordCapMigrationDone) return;
+    await storage.saveGrandfatheredWordCapIds(computeGrandfatheredIds(_scripts));
+    await storage.setWordCapMigrationDone();
+  }
+
+  /// Whether script [id] is exempt from the free word cap (Task 2/3).
+  bool isGrandfatheredWordCap(String id) =>
+      storage.grandfatheredWordCapIds.contains(id);
 
   /// The last write to the phone failed (storage full…). Everything is
   /// still in memory; [retrySave] tries again.

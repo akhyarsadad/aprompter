@@ -8,7 +8,9 @@ import 'package:aprompter/models/script.dart';
 import 'package:aprompter/models/templates.dart';
 import 'package:aprompter/screens/home_screen.dart';
 import 'package:aprompter/services/app_state.dart';
+import 'package:aprompter/services/auth_service.dart';
 import 'package:aprompter/services/backup.dart';
+import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
 import 'package:aprompter/widgets/prompter_view.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +134,17 @@ void main() {
     ) async {
       SharedPreferencesStorePlatform.instance = _FullStore();
       final state = AppState(await Storage.open());
-      await tester.pumpWidget(AprompterApp(state: state));
+      final entitlements = Entitlements();
+      await tester.pumpWidget(
+        AprompterApp(
+          state: state,
+          entitlements: entitlements,
+          authService: AuthService(
+            entitlements: entitlements,
+            storage: state.storage,
+          ),
+        ),
+      );
       expect(find.byIcon(Icons.sd_card_alert), findsNothing);
       await state.upsert(_script('a', 'hello'));
       await tester.pump();

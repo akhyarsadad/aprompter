@@ -3,6 +3,8 @@ import 'package:aprompter/main.dart';
 import 'package:aprompter/models/prompter_settings.dart';
 import 'package:aprompter/models/script.dart';
 import 'package:aprompter/services/app_state.dart';
+import 'package:aprompter/services/auth_service.dart';
+import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
 import 'package:aprompter/widgets/prompter_view.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,14 @@ void main() {
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
     final storage = await Storage.open();
-    await tester.pumpWidget(AprompterApp(state: AppState(storage)));
+    final entitlements = Entitlements();
+    await tester.pumpWidget(
+      AprompterApp(
+        state: AppState(storage),
+        entitlements: entitlements,
+        authService: AuthService(entitlements: entitlements, storage: storage),
+      ),
+    );
     return storage;
   }
 

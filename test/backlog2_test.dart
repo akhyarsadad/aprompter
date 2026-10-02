@@ -8,7 +8,9 @@ import 'package:aprompter/models/script.dart';
 import 'package:aprompter/models/script_markup.dart';
 import 'package:aprompter/screens/editor_screen.dart';
 import 'package:aprompter/services/app_state.dart';
+import 'package:aprompter/services/auth_service.dart';
 import 'package:aprompter/services/backup.dart';
+import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
 import 'package:aprompter/widgets/movable_box.dart';
 import 'package:aprompter/widgets/prompter_view.dart';
@@ -269,7 +271,17 @@ void main() {
   ) async {
     SharedPreferences.setMockInitialValues({'app_lock': true});
     final state = AppState(await Storage.open());
-    await tester.pumpWidget(AprompterApp(state: state));
+    final entitlements = Entitlements();
+    await tester.pumpWidget(
+      AprompterApp(
+        state: state,
+        entitlements: entitlements,
+        authService: AuthService(
+          entitlements: entitlements,
+          storage: state.storage,
+        ),
+      ),
+    );
     await tester.pump();
     expect(find.byIcon(Icons.lock_outline), findsOneWidget);
     final l = lookupAppLocalizations(const Locale('en'));
@@ -285,7 +297,17 @@ void main() {
     addTearDown(tester.view.reset);
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     final state = AppState(await Storage.open());
-    await tester.pumpWidget(AprompterApp(state: state));
+    final entitlements = Entitlements();
+    await tester.pumpWidget(
+      AprompterApp(
+        state: state,
+        entitlements: entitlements,
+        authService: AuthService(
+          entitlements: entitlements,
+          storage: state.storage,
+        ),
+      ),
+    );
     await tester.pumpAndSettle();
     final l = lookupAppLocalizations(const Locale('en'));
 

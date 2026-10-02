@@ -1,9 +1,14 @@
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
+import 'config/entitlements_config.dart';
 import 'l10n/l10n.dart';
 import 'overlay/overlay_app.dart';
 import 'screens/home_screen.dart';
 import 'services/app_state.dart';
+import 'services/auth_service.dart';
+import 'services/entitlements.dart';
 import 'services/orientation.dart';
 import 'services/storage.dart';
 import 'widgets/app_lock.dart';
@@ -14,7 +19,28 @@ Future<void> main() async {
   // also allow landscape, tablets allow everything.
   await Orientations.app();
   final storage = await Storage.open();
-  runApp(AprompterApp(state: AppState(storage)));
+  final state = AppState(storage);
+  await state.runWordCapMigrationIfNeeded();
+
+  await Purchases.setLogLevel(LogLevel.warn);
+  await Purchases.configure(
+    PurchasesConfiguration(
+      defaultTargetPlatform == TargetPlatform.iOS
+          ? EntitlementsConfig.revenueCatApiKeyIos
+          : EntitlementsConfig.revenueCatApiKeyAndroid,
+    ),
+  );
+  final entitlements = Entitlements();
+  final authService = AuthService(entitlements: entitlements, storage: storage);
+  await authService.restoreSession();
+
+  runApp(
+    AprompterApp(
+      state: state,
+      entitlements: entitlements,
+      authService: authService,
+    ),
+  );
 }
 
 /// Entry point for the Android floating prompter window.
@@ -25,44 +51,57 @@ void overlayMain() {
 }
 
 class AprompterApp extends StatelessWidget {
-  const AprompterApp({super.key, required this.state});
+  const AprompterApp({
+    super.key,
+    required this.state,
+    required this.entitlements,
+    required this.authService,
+  });
 
   final AppState state;
+  final Entitlements entitlements;
+  final AuthService authService;
 
   @override
   Widget build(BuildContext context) {
     const seed = Color(0xFF7C4DFF);
-    return AppScope(
-      state: state,
-      child: ListenableBuilder(
-        listenable: state,
-        builder: (context, _) => MaterialApp(
-          onGenerateTitle: (context) => context.l10n.appTitle,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: state.locale,
-          localeListResolutionCallback: (locales, _) =>
-              resolveAppLocale(locales),
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(colorSchemeSeed: seed, useMaterial3: true),
-          darkTheme: ThemeData(
-            colorSchemeSeed: seed,
-            brightness: Brightness.dark,
-            useMaterial3: true,
-          ),
-          home: const HomeScreen(),
-          builder: (context, child) => Column(
-            children: [
-              if (state.saveFailed) const _SaveFailedBanner(),
-              Expanded(
-                // The banner already sits under the status bar.
-                child: MediaQuery.removePadding(
-                  context: context,
-                  removeTop: state.saveFailed,
-                  child: AppLockGate(child: child!),
-                ),
+    return AuthServiceScope(
+      service: authService,
+      child: EntitlementsScope(
+        entitlements: entitlements,
+        child: AppScope(
+          state: state,
+          child: ListenableBuilder(
+            listenable: state,
+            builder: (context, _) => MaterialApp(
+              onGenerateTitle: (context) => context.l10n.appTitle,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              locale: state.locale,
+              localeListResolutionCallback: (locales, _) =>
+                  resolveAppLocale(locales),
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(colorSchemeSeed: seed, useMaterial3: true),
+              darkTheme: ThemeData(
+                colorSchemeSeed: seed,
+                brightness: Brightness.dark,
+                useMaterial3: true,
               ),
-            ],
+              home: const HomeScreen(),
+              builder: (context, child) => Column(
+                children: [
+                  if (state.saveFailed) const _SaveFailedBanner(),
+                  Expanded(
+                    // The banner already sits under the status bar.
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeTop: state.saveFailed,
+                      child: AppLockGate(child: child!),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
