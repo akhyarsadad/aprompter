@@ -37,6 +37,17 @@ class AppState extends ChangeNotifier {
   bool isGrandfatheredWordCap(String id) =>
       storage.grandfatheredWordCapIds.contains(id);
 
+  /// Scripts that count toward the free script limit — everything except
+  /// the auto-seeded welcome script, so a brand-new free account's first
+  /// tap of "+ New script" isn't already a paywall (the tutorial content
+  /// doesn't count as "their" script).
+  List<Script> get scriptsCountingTowardFreeLimit {
+    final seedId = storage.loadSeedScriptId();
+    return seedId == null
+        ? scripts
+        : scripts.where((s) => s.id != seedId).toList();
+  }
+
   /// The last write to the phone failed (storage full…). Everything is
   /// still in memory; [retrySave] tries again.
   bool get saveFailed => _saveFailed;

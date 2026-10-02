@@ -57,7 +57,7 @@ class AuthService {
     _uid = uid;
     await storage.saveSignedInUid(uid);
     final result = await Purchases.logIn(uid);
-    _applyCustomerInfo(result.customerInfo);
+    applyCustomerInfo(result.customerInfo);
   }
 
   Future<void> signOut() async {
@@ -69,10 +69,16 @@ class AuthService {
       // Not signed in with Google, or already signed out — fine either way.
     }
     final info = await Purchases.logOut();
-    _applyCustomerInfo(info);
+    applyCustomerInfo(info);
   }
 
-  void _applyCustomerInfo(CustomerInfo info) {
+  /// Updates [entitlements] from the latest known entitlement state. Public
+  /// so it can also be registered as RevenueCat's customer-info listener
+  /// (fires after a purchase, a restore, or any other entitlement change —
+  /// see `main.dart`) and called directly after a purchase/restore in
+  /// `paywall_screen.dart`, so the gate lifts immediately either way,
+  /// without waiting for the next app launch.
+  void applyCustomerInfo(CustomerInfo info) {
     entitlements.setUnlimited(
       info.entitlements.active.containsKey(EntitlementsConfig.entitlementId),
     );

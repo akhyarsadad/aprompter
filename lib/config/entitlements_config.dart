@@ -1,7 +1,6 @@
-/// Reference copy of `entitlements_config.dart` (the file the app actually
-/// imports, tracked in git since none of these values are secrets — see
-/// README.md → "Paywall setup"). Restore from this file if that one is
-/// ever deleted; otherwise edit `entitlements_config.dart` directly.
+/// Copy this file to `entitlements_config.dart` in the same folder
+/// (git-ignored) and fill in your own identifiers. See README.md →
+/// "Paywall setup" for where each value comes from.
 class EntitlementsConfig {
   /// RevenueCat public SDK key for iOS (RevenueCat dashboard → Project →
   /// API keys → Apple App Store).

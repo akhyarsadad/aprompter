@@ -856,6 +856,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1710,4 +1718,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get restorePurchases => 'Restore purchases';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Free scripts are capped at $count words.';
+  }
+
+  @override
+  String get upgrade => 'Upgrade';
 }

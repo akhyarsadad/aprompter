@@ -177,15 +177,23 @@ not for script sync.
    Xcode (`Runner` → Signing & Capabilities).
 3. In Google Cloud Console → Credentials, create an OAuth 2.0 **Web**
    client id (used as `googleServerClientId` even on Android/iOS — this is
-   how `google_sign_in` is configured per its own README).
-4. Copy `lib/config/entitlements_config.dart.example` to
-   `lib/config/entitlements_config.dart` (git-ignored, like
-   `android/key.properties` below) and fill in the RevenueCat API keys,
-   the entitlement id, and the Google web client id.
+   how `google_sign_in` is configured per its own README), **and** an iOS
+   client id. For the iOS client id, add `GIDClientID` (its value) and a
+   `CFBundleURLSchemes` entry (the reversed client id) to
+   `ios/Runner/Info.plist` — without both, Google sign-in fails natively on
+   iOS even though the Dart code is otherwise correct.
+4. Edit `lib/config/entitlements_config.dart` directly and fill in the
+   RevenueCat API keys, the entitlement id, and the Google client ids.
+   `lib/config/entitlements_config.dart.example` documents the same fields
+   if you ever need to recreate it.
 
-Without a real `entitlements_config.dart`, the app builds and runs fine —
-sign-in and purchases will simply fail, the same way a release build falls
-back to the debug signing key without `android/key.properties`.
+Unlike `android/key.properties` below, none of these four values are
+secrets — a RevenueCat SDK key and an OAuth *client* id are both meant to
+ship inside a public app binary (only an OAuth *client secret*, which this
+app never uses, would need to stay out of git) — so the file is tracked
+with placeholder values rather than git-ignored, and the repo always
+compiles. Sign-in and purchases simply won't work for real until the
+placeholders are replaced.
 
 Release checklist, Play declarations and review notes: [`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md).
 Privacy policy (host it and link it in both stores): [`docs/PRIVACY.md`](docs/PRIVACY.md).

@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -22,17 +24,8 @@ Future<void> main() async {
   final state = AppState(storage);
   await state.runWordCapMigrationIfNeeded();
 
-  await Purchases.setLogLevel(LogLevel.warn);
-  await Purchases.configure(
-    PurchasesConfiguration(
-      defaultTargetPlatform == TargetPlatform.iOS
-          ? EntitlementsConfig.revenueCatApiKeyIos
-          : EntitlementsConfig.revenueCatApiKeyAndroid,
-    ),
-  );
   final entitlements = Entitlements();
   final authService = AuthService(entitlements: entitlements, storage: storage);
-  await authService.restoreSession();
 
   runApp(
     AprompterApp(
@@ -41,6 +34,33 @@ Future<void> main() async {
       authService: authService,
     ),
   );
+
+  // Never block the first frame on this: offline, a misconfigured key, or
+  // any other RevenueCat/network failure must leave the app fully usable
+  // on the free tier, not stuck before `runApp` ever shows anything — this
+  // used to run (and could throw) before `runApp`, which hung launch
+  // entirely for a signed-in user who opened the app offline.
+  unawaited(_initPurchases(authService));
+}
+
+Future<void> _initPurchases(AuthService authService) async {
+  try {
+    await Purchases.setLogLevel(LogLevel.warn);
+    await Purchases.configure(
+      PurchasesConfiguration(
+        defaultTargetPlatform == TargetPlatform.iOS
+            ? EntitlementsConfig.revenueCatApiKeyIos
+            : EntitlementsConfig.revenueCatApiKeyAndroid,
+      ),
+    );
+    // Fires after any entitlement-changing event (login, logout, purchase,
+    // restore) for as long as the app runs, so a purchase or restore made
+    // from paywall_screen.dart unlocks the app with no restart needed.
+    Purchases.addCustomerInfoUpdateListener(authService.applyCustomerInfo);
+    await authService.restoreSession();
+  } catch (_) {
+    // Stays on the free tier until the next successful launch.
+  }
 }
 
 /// Entry point for the Android floating prompter window.

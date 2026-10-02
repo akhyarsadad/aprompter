@@ -142,6 +142,7 @@ class Storage {
     if (index == null) {
       final welcome = _welcomeScript();
       saveScript(welcome).ignore();
+      saveSeedScriptId(welcome.id).ignore();
       return [welcome];
     }
     final scripts = <Script>[];
@@ -371,6 +372,17 @@ class Storage {
 
   Future<void> saveGrandfatheredWordCapIds(Set<String> ids) =>
       _prefs.setStringList(_grandfatheredWordCapKey, ids.toList());
+
+  static const _seedScriptIdKey = 'seed_script_id';
+
+  /// The auto-seeded welcome script's id, so a free account's one script
+  /// slot isn't already spent by the tutorial content on first launch.
+  /// Null once the library existed before this was tracked, or was never
+  /// freshly seeded (e.g. restored from a backup).
+  String? loadSeedScriptId() => _prefs.getString(_seedScriptIdKey);
+
+  Future<void> saveSeedScriptId(String id) =>
+      _prefs.setString(_seedScriptIdKey, id);
 
   static const _signedInUidKey = 'signed_in_uid';
 

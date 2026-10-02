@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -89,12 +91,18 @@ class _SignInSheetState extends State<_SignInSheet> {
               Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
               const SizedBox(height: 12),
             ],
-            FilledButton.icon(
-              onPressed: _busy ? null : () => _run(auth.signInWithApple),
-              icon: const Icon(Icons.apple),
-              label: Text(l.continueWithApple),
-            ),
-            const SizedBox(height: 8),
+            // Sign in with Apple needs `webAuthenticationOptions` (a Services
+            // ID plus a server redirect endpoint) to work on Android, which
+            // this no-backend design doesn't have — it throws there instead
+            // of cancelling, so the button isn't offered on Android at all.
+            if (defaultTargetPlatform != TargetPlatform.android) ...[
+              FilledButton.icon(
+                onPressed: _busy ? null : () => _run(auth.signInWithApple),
+                icon: const Icon(Icons.apple),
+                label: Text(l.continueWithApple),
+              ),
+              const SizedBox(height: 8),
+            ],
             OutlinedButton.icon(
               onPressed: _busy ? null : () => _run(auth.signInWithGoogle),
               icon: const Icon(Icons.g_mobiledata),
@@ -140,7 +148,11 @@ class _PaywallSheetState extends State<_PaywallSheet> {
       _error = null;
     });
     try {
-      await Purchases.purchase(PurchaseParams.package(package));
+      final result = await Purchases.purchase(PurchaseParams.package(package));
+      // The customer-info listener in main.dart also applies this, but
+      // doing it here too means the gate lifts before this sheet even
+      // closes, with no dependence on listener timing.
+      if (mounted) AuthServiceScope.of(context).applyCustomerInfo(result.customerInfo);
       if (mounted) Navigator.pop(context);
     } catch (e) {
       // A cancelled purchase is a normal, frequent outcome — same rule as a
@@ -163,7 +175,8 @@ class _PaywallSheetState extends State<_PaywallSheet> {
       _error = null;
     });
     try {
-      await Purchases.restorePurchases();
+      final info = await Purchases.restorePurchases();
+      if (mounted) AuthServiceScope.of(context).applyCustomerInfo(info);
       if (mounted) Navigator.pop(context);
     } catch (_) {
       if (mounted) setState(() => _error = context.l10n.restoreFailed);

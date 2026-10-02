@@ -271,7 +271,10 @@ const _accents = {
 Future<void> _newScript(BuildContext context) async {
   final state = AppScope.read(context);
   final entitlements = EntitlementsScope.read(context);
-  if (!canCreateScript(state.scripts, entitlements.isUnlimited)) {
+  if (!canCreateScript(
+    state.scriptsCountingTowardFreeLimit,
+    entitlements.isUnlimited,
+  )) {
     await showUpgradeFlow(context);
     return;
   }
@@ -473,6 +476,14 @@ class _ScriptCard extends StatelessWidget {
       case _Action.edit:
         _edit(context, script);
       case _Action.duplicate:
+        final entitlements = EntitlementsScope.read(context);
+        if (!canCreateScript(
+          state.scriptsCountingTowardFreeLimit,
+          entitlements.isUnlimited,
+        )) {
+          await showUpgradeFlow(context);
+          return;
+        }
         final copy = await state.duplicate(
           script.id,
           titleSuffix: l.copySuffix,

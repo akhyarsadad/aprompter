@@ -1672,6 +1672,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Restore purchases'**
   String get restorePurchases;
+
+  /// No description provided for @wordCapBannerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Free scripts are capped at {count} words.'**
+  String wordCapBannerText(int count);
+
+  /// No description provided for @upgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade'**
+  String get upgrade;
 }
 
 class _AppLocalizationsDelegate
