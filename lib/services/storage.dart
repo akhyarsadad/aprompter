@@ -354,6 +354,33 @@ class Storage {
   bool get cameraIntroSeen => _prefs.getBool(_cameraIntroKey) ?? false;
   Future<void> setCameraIntroSeen() => _prefs.setBool(_cameraIntroKey, true);
 
+  static const _wordCapMigrationKey = 'word_cap_migration_done';
+
+  /// Whether the one-time free-word-cap grandfathering snapshot has run.
+  bool get wordCapMigrationDone =>
+      _prefs.getBool(_wordCapMigrationKey) ?? false;
+  Future<void> setWordCapMigrationDone() =>
+      _prefs.setBool(_wordCapMigrationKey, true);
+
+  static const _grandfatheredWordCapKey = 'grandfathered_word_cap_ids';
+
+  /// Script ids exempt from the free word cap because they already had
+  /// more than the cap's words before the paywall shipped.
+  Set<String> get grandfatheredWordCapIds =>
+      (_prefs.getStringList(_grandfatheredWordCapKey) ?? const []).toSet();
+
+  Future<void> saveGrandfatheredWordCapIds(Set<String> ids) =>
+      _prefs.setStringList(_grandfatheredWordCapKey, ids.toList());
+
+  static const _signedInUidKey = 'signed_in_uid';
+
+  /// The signed-in person's stable identity (Apple/Google), or null.
+  String? loadSignedInUid() => _prefs.getString(_signedInUidKey);
+
+  Future<void> saveSignedInUid(String? uid) => uid == null
+      ? _prefs.remove(_signedInUidKey)
+      : _prefs.setString(_signedInUidKey, uid);
+
   static const _mySetupKey = 'my_setup';
 
   /// The creator's saved setup (S1), or null.
