@@ -871,46 +871,67 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Ga onbeperkt';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Ontgrendel onbeperkt veel en onbeperkt lange scripts met een abonnement of een eenmalige aankoop.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Kan abonnementen niet laden. Controleer je verbinding en probeer het opnieuw.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Aankoop mislukt. Probeer het opnieuw.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed =>
+      'Kan aankopen niet herstellen. Probeer het opnieuw.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Aankopen herstellen';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Gratis scripts zijn beperkt tot $count woorden.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Upgraden';
+
+  @override
+  String planMonthly(String price) {
+    return 'Maandelijks · $price / maand';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Jaarlijks · $price / jaar';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Levenslang · $price eenmalig';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Bespaar $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Maand- en jaarabonnementen worden automatisch verlengd tegen dezelfde prijs tot je opzegt. Zeg op elk moment op in je $store-accountinstellingen. Levenslang is een eenmalige aankoop.';
+  }
+
+  @override
+  String get termsOfUse => 'Gebruiksvoorwaarden';
+
+  @override
+  String get privacyPolicy => 'Privacybeleid';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Geen eerdere aankoop gevonden voor dit $store-account.';
+  }
 }

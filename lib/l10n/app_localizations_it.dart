@@ -866,46 +866,66 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Passa a illimitato';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Sblocca copioni illimitati e senza limiti di lunghezza con un abbonamento o un acquisto una tantum.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Impossibile caricare i piani. Controlla la connessione e riprova.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Acquisto non riuscito. Riprova.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Impossibile ripristinare gli acquisti. Riprova.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Ripristina acquisti';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'I copioni gratuiti hanno un limite di $count parole.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Sblocca';
+
+  @override
+  String planMonthly(String price) {
+    return 'Mensile · $price / mese';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Annuale · $price / anno';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'A vita · $price una tantum';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Risparmia il $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'I piani mensile e annuale si rinnovano automaticamente allo stesso prezzo finché non li annulli. Annulla quando vuoi dalle impostazioni del tuo account $store. A vita è un acquisto una tantum.';
+  }
+
+  @override
+  String get termsOfUse => 'Termini di utilizzo';
+
+  @override
+  String get privacyPolicy => 'Informativa sulla privacy';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Nessun acquisto precedente trovato su questo account $store.';
+  }
 }

@@ -384,15 +384,6 @@ class Storage {
   Future<void> saveSeedScriptId(String id) =>
       _prefs.setString(_seedScriptIdKey, id);
 
-  static const _signedInUidKey = 'signed_in_uid';
-
-  /// The signed-in person's stable identity (Apple/Google), or null.
-  String? loadSignedInUid() => _prefs.getString(_signedInUidKey);
-
-  Future<void> saveSignedInUid(String? uid) => uid == null
-      ? _prefs.remove(_signedInUidKey)
-      : _prefs.setString(_signedInUidKey, uid);
-
   static const _mySetupKey = 'my_setup';
 
   /// The creator's saved setup (S1), or null.

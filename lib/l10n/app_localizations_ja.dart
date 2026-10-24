@@ -830,46 +830,64 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
+  String get upgradeTitle => '無制限にする';
 
   @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
+  String get upgradeBody => 'サブスクリプションまたは買い切りで、台本の数と長さの制限を解除できます。';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get offeringsLoadFailed => 'プランを読み込めませんでした。接続を確認して、もう一度お試しください。';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get purchaseFailed => '購入できませんでした。もう一度お試しください。';
 
   @override
-  String get signInFailed => 'Sign in failed. Try again.';
+  String get restoreFailed => '購入を復元できませんでした。もう一度お試しください。';
 
   @override
-  String get upgradeTitle => 'Go unlimited';
-
-  @override
-  String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
-
-  @override
-  String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
-
-  @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
-
-  @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
-
-  @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => '購入を復元';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return '無料の台本は$count語までです。';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'アップグレード';
+
+  @override
+  String planMonthly(String price) {
+    return '月額 · $price / 月';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '年額 · $price / 年';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '買い切り · $price（1回のみ）';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent%お得';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '月額・年額プランは解約するまで同じ価格で自動更新されます。$storeのアカウント設定からいつでも解約できます。買い切りは1回限りの購入です。';
+  }
+
+  @override
+  String get termsOfUse => '利用規約';
+
+  @override
+  String get privacyPolicy => 'プライバシーポリシー';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'この$storeアカウントには以前の購入が見つかりませんでした。';
+  }
 }

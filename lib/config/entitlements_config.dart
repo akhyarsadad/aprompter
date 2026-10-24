@@ -1,6 +1,7 @@
-/// Copy this file to `entitlements_config.dart` in the same folder
-/// (git-ignored) and fill in your own identifiers. See README.md →
-/// "Paywall setup" for where each value comes from.
+/// Store and paywall identifiers. None of these are secrets (a RevenueCat
+/// public SDK key is meant to ship inside the app), so this file is tracked
+/// in git. Fill in the placeholders before a release — see README.md →
+/// "Paywall setup" and docs/STORE_RELEASE.md.
 class EntitlementsConfig {
   /// RevenueCat public SDK key for iOS (RevenueCat dashboard → Project →
   /// API keys → Apple App Store).
@@ -14,8 +15,10 @@ class EntitlementsConfig {
   /// under Project → Entitlements in the RevenueCat dashboard).
   static const entitlementId = 'unlimited';
 
-  /// Google OAuth web client id (Google Cloud Console → Credentials →
-  /// OAuth 2.0 Client IDs → Web client), required by google_sign_in.
-  static const googleServerClientId =
-      'REPLACE_WITH_GOOGLE_WEB_CLIENT_ID.apps.googleusercontent.com';
+  /// Shown on the paywall; both stores require working links to these
+  /// before an app with subscriptions is approved.
+  static const termsUrl =
+      'https://github.com/akhyarsadad/aprompter/blob/main/docs/TERMS.md';
+  static const privacyUrl =
+      'https://github.com/akhyarsadad/aprompter/blob/main/docs/PRIVACY.md';
 }

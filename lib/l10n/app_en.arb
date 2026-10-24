@@ -507,11 +507,6 @@
       }
     }
   },
-  "signInTitle": "Sign in to continue",
-  "signInBody": "This only identifies your purchase across your devices — it does not sync your scripts.",
-  "continueWithApple": "Continue with Apple",
-  "continueWithGoogle": "Continue with Google",
-  "signInFailed": "Sign in failed. Try again.",
   "upgradeTitle": "Go unlimited",
   "upgradeBody": "Unlock unlimited scripts and length with a subscription or a one-time purchase.",
   "offeringsLoadFailed": "Couldn't load plans. Check your connection and try again.",
@@ -526,5 +521,55 @@
       }
     }
   },
-  "upgrade": "Upgrade"
+  "upgrade": "Upgrade",
+  "planMonthly": "Monthly · {price} / month",
+  "@planMonthly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "planYearly": "Yearly · {price} / year",
+  "@planYearly": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "planLifetime": "Lifetime · {price} once",
+  "@planLifetime": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "planSave": "Save {percent}%",
+  "@planSave": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "subscriptionTerms": "Monthly and yearly plans renew automatically at the same price until you cancel. Cancel anytime in your {store} account settings. Lifetime is a one-time purchase.",
+  "@subscriptionTerms": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  },
+  "termsOfUse": "Terms of Use",
+  "privacyPolicy": "Privacy Policy",
+  "nothingToRestore": "No earlier purchase found on this {store} account.",
+  "@nothingToRestore": {
+    "placeholders": {
+      "store": {
+        "type": "String"
+      }
+    }
+  }
 }

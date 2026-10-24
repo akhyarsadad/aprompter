@@ -849,46 +849,66 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Sınırsıza geç';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Abonelik veya tek seferlik satın alma ile sınırsız sayıda ve uzunlukta senaryonun kilidini aç.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Planlar yüklenemedi. Bağlantını kontrol edip tekrar dene.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Satın alma başarısız oldu. Tekrar dene.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Satın alımlar geri yüklenemedi. Tekrar dene.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Satın alımları geri yükle';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Ücretsiz senaryolar $count kelimeyle sınırlıdır.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Yükselt';
+
+  @override
+  String planMonthly(String price) {
+    return 'Aylık · $price / ay';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Yıllık · $price / yıl';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Ömür boyu · $price tek seferlik';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '%$percent tasarruf';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Aylık ve yıllık planlar iptal edene kadar aynı fiyattan otomatik olarak yenilenir. İstediğin zaman $store hesap ayarlarından iptal edebilirsin. Ömür boyu, tek seferlik bir satın almadır.';
+  }
+
+  @override
+  String get termsOfUse => 'Kullanım Koşulları';
+
+  @override
+  String get privacyPolicy => 'Gizlilik Politikası';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Bu $store hesabında önceki bir satın alma bulunamadı.';
+  }
 }

@@ -878,46 +878,67 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Bez ograniczeń';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Odblokuj nieograniczoną liczbę i długość scenariuszy w subskrypcji lub jednorazowym zakupie.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Nie udało się wczytać planów. Sprawdź połączenie i spróbuj ponownie.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Zakup się nie powiódł. Spróbuj ponownie.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed =>
+      'Nie udało się przywrócić zakupów. Spróbuj ponownie.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Przywróć zakupy';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Darmowe scenariusze mają limit $count słów.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Odblokuj';
+
+  @override
+  String planMonthly(String price) {
+    return 'Miesięcznie · $price / mies.';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Rocznie · $price / rok';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Dożywotnio · $price jednorazowo';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Oszczędzasz $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Plany miesięczny i roczny odnawiają się automatycznie w tej samej cenie, dopóki ich nie anulujesz. Anuluj w dowolnej chwili w ustawieniach konta $store. Plan dożywotni to jednorazowy zakup.';
+  }
+
+  @override
+  String get termsOfUse => 'Warunki korzystania';
+
+  @override
+  String get privacyPolicy => 'Polityka prywatności';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Nie znaleziono wcześniejszych zakupów na tym koncie $store.';
+  }
 }

@@ -1607,36 +1607,6 @@ abstract class AppLocalizations {
   /// **'Take {n} kept in the app'**
   String takeKeptInApp(int n);
 
-  /// No description provided for @signInTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in to continue'**
-  String get signInTitle;
-
-  /// No description provided for @signInBody.
-  ///
-  /// In en, this message translates to:
-  /// **'This only identifies your purchase across your devices — it does not sync your scripts.'**
-  String get signInBody;
-
-  /// No description provided for @continueWithApple.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue with Apple'**
-  String get continueWithApple;
-
-  /// No description provided for @continueWithGoogle.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue with Google'**
-  String get continueWithGoogle;
-
-  /// No description provided for @signInFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'Sign in failed. Try again.'**
-  String get signInFailed;
-
   /// No description provided for @upgradeTitle.
   ///
   /// In en, this message translates to:
@@ -1684,6 +1654,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upgrade'**
   String get upgrade;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly · {price} / month'**
+  String planMonthly(String price);
+
+  /// No description provided for @planYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly · {price} / year'**
+  String planYearly(String price);
+
+  /// No description provided for @planLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime · {price} once'**
+  String planLifetime(String price);
+
+  /// No description provided for @planSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {percent}%'**
+  String planSave(int percent);
+
+  /// No description provided for @subscriptionTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly and yearly plans renew automatically at the same price until you cancel. Cancel anytime in your {store} account settings. Lifetime is a one-time purchase.'**
+  String subscriptionTerms(String store);
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @nothingToRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier purchase found on this {store} account.'**
+  String nothingToRestore(String store);
 }
 
 class _AppLocalizationsDelegate

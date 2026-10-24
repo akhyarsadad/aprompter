@@ -845,46 +845,66 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'আনলিমিটেড নিন';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'সাবস্ক্রিপশন বা একবারের কেনাকাটায় সীমাহীন স্ক্রিপ্ট ও দৈর্ঘ্য আনলক করুন।';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'প্ল্যান লোড করা যায়নি। সংযোগ দেখে আবার চেষ্টা করুন।';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'কেনা যায়নি। আবার চেষ্টা করুন।';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'কেনাকাটা ফিরিয়ে আনা যায়নি। আবার চেষ্টা করুন।';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'কেনাকাটা পুনরুদ্ধার করুন';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'ফ্রি স্ক্রিপ্ট সর্বোচ্চ $count শব্দের হতে পারে।';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'আপগ্রেড';
+
+  @override
+  String planMonthly(String price) {
+    return 'মাসিক · $price / মাস';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'বার্ষিক · $price / বছর';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'আজীবন · $price একবার';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent% সাশ্রয়';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'মাসিক ও বার্ষিক প্ল্যান বাতিল না করা পর্যন্ত একই দামে নিজে থেকেই নবায়ন হয়। যেকোনো সময় আপনার $store অ্যাকাউন্টের সেটিংসে বাতিল করুন। আজীবন প্ল্যান একবারের কেনাকাটা।';
+  }
+
+  @override
+  String get termsOfUse => 'ব্যবহারের শর্তাবলি';
+
+  @override
+  String get privacyPolicy => 'গোপনীয়তা নীতি';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'এই $store অ্যাকাউন্টে আগের কোনো কেনাকাটা পাওয়া যায়নি।';
+  }
 }

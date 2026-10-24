@@ -28,7 +28,7 @@ Set<String> computeGrandfatheredIds(List<Script> scripts) => {
 };
 
 /// Whether this device currently has the "unlimited" entitlement. Backed by
-/// RevenueCat elsewhere ([lib/services/auth_service.dart]); this class only
+/// RevenueCat elsewhere ([lib/services/purchase_service.dart]); this class only
 /// holds the resulting bool so the rest of the app never touches RevenueCat
 /// types directly.
 class Entitlements extends ChangeNotifier {

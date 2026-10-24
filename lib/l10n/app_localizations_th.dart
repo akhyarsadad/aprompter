@@ -840,46 +840,66 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'ใช้งานไม่จำกัด';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'ปลดล็อกสคริปต์และความยาวไม่จำกัดด้วยการสมัครสมาชิกหรือการซื้อครั้งเดียว';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'โหลดแผนไม่ได้ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'ซื้อไม่สำเร็จ ลองอีกครั้ง';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'กู้คืนการซื้อไม่ได้ ลองอีกครั้ง';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'กู้คืนการซื้อ';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'สคริปต์ฟรีจำกัดที่ $count คำ';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'อัปเกรด';
+
+  @override
+  String planMonthly(String price) {
+    return 'รายเดือน · $price / เดือน';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'รายปี · $price / ปี';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'ตลอดชีพ · $price จ่ายครั้งเดียว';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'ประหยัด $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'แผนรายเดือนและรายปีจะต่ออายุอัตโนมัติในราคาเดิมจนกว่าคุณจะยกเลิก ยกเลิกได้ทุกเมื่อในการตั้งค่าบัญชี $store ของคุณ แผนตลอดชีพเป็นการซื้อครั้งเดียว';
+  }
+
+  @override
+  String get termsOfUse => 'ข้อกำหนดการใช้งาน';
+
+  @override
+  String get privacyPolicy => 'นโยบายความเป็นส่วนตัว';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'ไม่พบการซื้อก่อนหน้าในบัญชี $store นี้';
+  }
 }

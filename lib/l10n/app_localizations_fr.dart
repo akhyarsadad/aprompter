@@ -871,46 +871,66 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Passez en illimité';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Débloquez des scripts illimités, sans limite de longueur, avec un abonnement ou un achat unique.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Impossible de charger les offres. Vérifiez votre connexion et réessayez.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'L\'achat a échoué. Réessayez.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Impossible de restaurer les achats. Réessayez.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Restaurer les achats';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Les scripts gratuits sont limités à $count mots.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Débloquer';
+
+  @override
+  String planMonthly(String price) {
+    return 'Mensuel · $price / mois';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Annuel · $price / an';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'À vie · $price en une fois';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Économisez $percent %';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Les formules mensuelle et annuelle se renouvellent automatiquement au même prix jusqu\'à leur résiliation. Résiliez à tout moment dans les réglages de votre compte $store. L\'offre à vie est un achat unique.';
+  }
+
+  @override
+  String get termsOfUse => 'Conditions d\'utilisation';
+
+  @override
+  String get privacyPolicy => 'Politique de confidentialité';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Aucun achat précédent trouvé sur ce compte $store.';
+  }
 }

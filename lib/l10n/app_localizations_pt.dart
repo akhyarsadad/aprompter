@@ -866,46 +866,67 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Desbloqueie o ilimitado';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Desbloqueie roteiros ilimitados e sem limite de tamanho com uma assinatura ou uma compra única.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Não foi possível carregar os planos. Verifique sua conexão e tente de novo.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'A compra falhou. Tente de novo.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed =>
+      'Não foi possível restaurar as compras. Tente de novo.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Restaurar compras';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Roteiros gratuitos têm limite de $count palavras.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Fazer upgrade';
+
+  @override
+  String planMonthly(String price) {
+    return 'Mensal · $price / mês';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Anual · $price / ano';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Vitalício · $price pagamento único';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Economize $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Os planos mensal e anual são renovados automaticamente pelo mesmo preço até você cancelar. Cancele quando quiser nas configurações da sua conta $store. O vitalício é uma compra única.';
+  }
+
+  @override
+  String get termsOfUse => 'Termos de Uso';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Nenhuma compra anterior encontrada nesta conta $store.';
+  }
 }

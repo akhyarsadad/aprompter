@@ -847,46 +847,66 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Dùng không giới hạn';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Mở khóa số lượng và độ dài kịch bản không giới hạn bằng gói thuê bao hoặc mua một lần.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Không tải được các gói. Kiểm tra kết nối rồi thử lại.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Mua không thành công. Thử lại.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Không khôi phục được giao dịch mua. Thử lại.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Khôi phục giao dịch mua';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Kịch bản miễn phí giới hạn $count từ.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Nâng cấp';
+
+  @override
+  String planMonthly(String price) {
+    return 'Hằng tháng · $price / tháng';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Hằng năm · $price / năm';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Trọn đời · $price một lần';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Tiết kiệm $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Gói tháng và gói năm tự động gia hạn với cùng mức giá cho đến khi bạn hủy. Hủy bất cứ lúc nào trong phần cài đặt tài khoản $store của bạn. Gói trọn đời là giao dịch mua một lần.';
+  }
+
+  @override
+  String get termsOfUse => 'Điều khoản sử dụng';
+
+  @override
+  String get privacyPolicy => 'Chính sách quyền riêng tư';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Không tìm thấy giao dịch mua trước đây trong tài khoản $store này.';
+  }
 }

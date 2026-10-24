@@ -878,46 +878,66 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Без обмежень';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Відкрийте необмежену кількість сценаріїв будь-якої довжини за підпискою або разовою покупкою.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Не вдалося завантажити тарифи. Перевірте з\'єднання і спробуйте ще раз.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Покупка не вдалася. Спробуйте ще раз.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Не вдалося відновити покупки. Спробуйте ще раз.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Відновити покупки';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Безкоштовні сценарії обмежено $count словами.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Покращити';
+
+  @override
+  String planMonthly(String price) {
+    return 'Щомісяця · $price / міс.';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Щороку · $price / рік';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Назавжди · $price разово';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Економія $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Місячний і річний тарифи автоматично поновлюються за тією ж ціною, доки ви їх не скасуєте. Скасувати можна будь-коли в налаштуваннях облікового запису $store. «Назавжди» — разова покупка.';
+  }
+
+  @override
+  String get termsOfUse => 'Умови використання';
+
+  @override
+  String get privacyPolicy => 'Політика конфіденційності';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'У цьому обліковому записі $store не знайдено попередніх покупок.';
+  }
 }

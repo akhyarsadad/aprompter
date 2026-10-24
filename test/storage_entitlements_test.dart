@@ -28,15 +28,6 @@ void main() {
     expect(storage.grandfatheredWordCapIds, {'a', 'b'});
   });
 
-  test('signed-in uid defaults to null, then persists and clears', () async {
-    final storage = await Storage.open();
-    expect(storage.loadSignedInUid(), isNull);
-    await storage.saveSignedInUid('user-123');
-    expect(storage.loadSignedInUid(), 'user-123');
-    await storage.saveSignedInUid(null);
-    expect(storage.loadSignedInUid(), isNull);
-  });
-
   test(
     'a fresh install records the auto-seeded welcome script as the seed id',
     () async {

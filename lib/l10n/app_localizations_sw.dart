@@ -867,46 +867,66 @@ class AppLocalizationsSw extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Tumia bila kikomo';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Fungua hati zisizo na kikomo cha idadi wala urefu kwa usajili au ununuzi wa mara moja.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Imeshindwa kupakia mipango. Angalia muunganisho wako kisha ujaribu tena.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Ununuzi umeshindwa. Jaribu tena.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Imeshindwa kurejesha ununuzi. Jaribu tena.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Rejesha ununuzi';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Hati za bure zina kikomo cha maneno $count.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Pandisha daraja';
+
+  @override
+  String planMonthly(String price) {
+    return 'Kila mwezi · $price / mwezi';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Kila mwaka · $price / mwaka';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Maisha yote · $price mara moja';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Okoa $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Mipango ya kila mwezi na kila mwaka hujisasisha kiotomatiki kwa bei ileile hadi utakapoighairi. Ghairi wakati wowote kwenye mipangilio ya akaunti yako ya $store. Maisha yote ni ununuzi wa mara moja.';
+  }
+
+  @override
+  String get termsOfUse => 'Masharti ya Matumizi';
+
+  @override
+  String get privacyPolicy => 'Sera ya Faragha';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Hakuna ununuzi wa awali uliopatikana kwenye akaunti hii ya $store.';
+  }
 }

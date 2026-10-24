@@ -868,46 +868,67 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Unbegrenzt nutzen';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Schalte unbegrenzt viele und beliebig lange Skripte frei – per Abo oder einmaligem Kauf.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Pläne konnten nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Kauf fehlgeschlagen. Versuche es erneut.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed =>
+      'Käufe konnten nicht wiederhergestellt werden. Versuche es erneut.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Käufe wiederherstellen';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Kostenlose Skripte sind auf $count Wörter begrenzt.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Freischalten';
+
+  @override
+  String planMonthly(String price) {
+    return 'Monatlich · $price / Monat';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Jährlich · $price / Jahr';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Lebenslang · $price einmalig';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent % sparen';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Monats- und Jahresabos verlängern sich automatisch zum gleichen Preis, bis du kündigst. Kündige jederzeit in deinen $store-Kontoeinstellungen. Lebenslang ist ein einmaliger Kauf.';
+  }
+
+  @override
+  String get termsOfUse => 'Nutzungsbedingungen';
+
+  @override
+  String get privacyPolicy => 'Datenschutzerklärung';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Für dieses $store-Konto wurde kein früherer Kauf gefunden.';
+  }
 }

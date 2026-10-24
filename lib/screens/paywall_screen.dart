@@ -2,29 +2,20 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../config/entitlements_config.dart';
 import '../l10n/l10n.dart';
-import '../services/auth_service.dart';
 import '../services/entitlements.dart';
+import '../services/purchase_service.dart';
 
-/// Shows sign-in first if needed, then the plan picker. Returns true once
-/// the person ends up unlimited (bought, restored, or already was).
+/// Shows the plan picker. Returns true once the person ends up unlimited
+/// (bought, restored, or already was). There is no sign-in: a purchase
+/// belongs to the store account and comes back with "Restore purchases".
 Future<bool> showUpgradeFlow(BuildContext context) async {
   final entitlements = EntitlementsScope.read(context);
   if (entitlements.isUnlimited) return true;
-  final auth = AuthServiceScope.of(context);
-  if (auth.signedInUid == null) {
-    final signedIn = await showModalBottomSheet<bool>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => const _SignInSheet(),
-    );
-    if (signedIn != true || !context.mounted) return entitlements.isUnlimited;
-  }
-  if (!context.mounted) return entitlements.isUnlimited;
   await showModalBottomSheet<void>(
     context: context,
     showDragHandle: true,
@@ -34,88 +25,16 @@ Future<bool> showUpgradeFlow(BuildContext context) async {
   return entitlements.isUnlimited;
 }
 
-class _SignInSheet extends StatefulWidget {
-  const _SignInSheet();
+/// The store that handles billing and cancellation on this phone.
+String get _storeName =>
+    defaultTargetPlatform == TargetPlatform.iOS ? 'App Store' : 'Google Play';
 
-  @override
-  State<_SignInSheet> createState() => _SignInSheetState();
-}
-
-class _SignInSheetState extends State<_SignInSheet> {
-  bool _busy = false;
-  String? _error;
-
-  /// True for "the person backed out on purpose" — never shown as an error,
-  /// per the spec: a cancelled sign-in returns silently, no error toast.
-  static bool _isCancellation(Object error) =>
-      (error is GoogleSignInException &&
-          error.code == GoogleSignInExceptionCode.canceled) ||
-      (error is SignInWithAppleAuthorizationException &&
-          error.code == AuthorizationErrorCode.canceled);
-
-  Future<void> _run(Future<void> Function() signIn) async {
-    setState(() {
-      _busy = true;
-      _error = null;
-    });
-    try {
-      await signIn();
-      if (mounted) Navigator.pop(context, true);
-    } catch (e) {
-      if (_isCancellation(e)) {
-        // Normal, frequent outcome: just stay on this sheet, no message.
-      } else if (mounted) {
-        setState(() => _error = context.l10n.signInFailed);
-      }
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l = context.l10n;
-    final auth = AuthServiceScope.of(context);
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(l.signInTitle, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Text(l.signInBody),
-            const SizedBox(height: 20),
-            if (_error != null) ...[
-              Text(
-                _error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-              const SizedBox(height: 12),
-            ],
-            // Sign in with Apple needs `webAuthenticationOptions` (a Services
-            // ID plus a server redirect endpoint) to work on Android, which
-            // this no-backend design doesn't have — it throws there instead
-            // of cancelling, so the button isn't offered on Android at all.
-            if (defaultTargetPlatform != TargetPlatform.android) ...[
-              FilledButton.icon(
-                onPressed: _busy ? null : () => _run(auth.signInWithApple),
-                icon: const Icon(Icons.apple),
-                label: Text(l.continueWithApple),
-              ),
-              const SizedBox(height: 8),
-            ],
-            OutlinedButton.icon(
-              onPressed: _busy ? null : () => _run(auth.signInWithGoogle),
-              icon: const Icon(Icons.g_mobiledata),
-              label: Text(l.continueWithGoogle),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+/// Whole-percent saving of the yearly plan over twelve months, or null when
+/// it can't be computed or isn't worth showing.
+int? yearlySavingPercent({required double monthly, required double yearly}) {
+  if (monthly <= 0 || yearly <= 0) return null;
+  final percent = ((1 - yearly / (monthly * 12)) * 100).floor();
+  return percent >= 5 ? percent : null;
 }
 
 class _PaywallSheet extends StatefulWidget {
@@ -127,6 +46,7 @@ class _PaywallSheet extends StatefulWidget {
 
 class _PaywallSheetState extends State<_PaywallSheet> {
   Offering? _offering;
+  bool _loading = true;
   String? _error;
   bool _busy = false;
 
@@ -136,13 +56,30 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     _load();
   }
 
+  void _retry() {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    _load();
+  }
+
   Future<void> _load() async {
+    Offering? offering;
     try {
-      final offerings = await Purchases.getOfferings();
-      if (mounted) setState(() => _offering = offerings.current);
+      offering = (await Purchases.getOfferings()).current;
     } catch (_) {
-      if (mounted) setState(() => _error = context.l10n.offeringsLoadFailed);
+      offering = null;
     }
+    if (!mounted) return;
+    // No current offering (or one without plans) is a setup problem, not a
+    // reason to spin forever: say so and offer a retry.
+    final usable = offering != null && offering.availablePackages.isNotEmpty;
+    setState(() {
+      _loading = false;
+      _offering = usable ? offering : null;
+      if (!usable) _error = context.l10n.offeringsLoadFailed;
+    });
   }
 
   Future<void> _buy(Package package) async {
@@ -155,12 +92,12 @@ class _PaywallSheetState extends State<_PaywallSheet> {
       // The customer-info listener in main.dart also applies this, but
       // doing it here too means the gate lifts before this sheet even
       // closes, with no dependence on listener timing.
-      if (mounted)
-        AuthServiceScope.of(context).applyCustomerInfo(result.customerInfo);
-      if (mounted) Navigator.pop(context);
+      if (!mounted) return;
+      PurchaseServiceScope.of(context).applyCustomerInfo(result.customerInfo);
+      Navigator.pop(context);
     } catch (e) {
-      // A cancelled purchase is a normal, frequent outcome — same rule as a
-      // cancelled sign-in: stay on this sheet, no error shown.
+      // A cancelled purchase is a normal, frequent outcome: stay on this
+      // sheet, no error shown.
       final cancelled =
           e is PlatformException &&
           PurchasesErrorHelper.getErrorCode(e) ==
@@ -180,8 +117,13 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     });
     try {
       final info = await Purchases.restorePurchases();
-      if (mounted) AuthServiceScope.of(context).applyCustomerInfo(info);
-      if (mounted) Navigator.pop(context);
+      if (!mounted) return;
+      PurchaseServiceScope.of(context).applyCustomerInfo(info);
+      if (EntitlementsScope.read(context).isUnlimited) {
+        Navigator.pop(context);
+      } else {
+        setState(() => _error = context.l10n.nothingToRestore(_storeName));
+      }
     } catch (_) {
       if (mounted) setState(() => _error = context.l10n.restoreFailed);
     } finally {
@@ -189,46 +131,98 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     }
   }
 
+  Future<void> _open(String url) async {
+    try {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    } catch (_) {
+      // No browser available — nothing useful to show in a sheet.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
+    final theme = Theme.of(context);
     final offering = _offering;
+    final monthly = offering?.monthly;
+    final annual = offering?.annual;
+    final lifetime = offering?.lifetime;
+    final saving = monthly == null || annual == null
+        ? null
+        : yearlySavingPercent(
+            monthly: monthly.storeProduct.price,
+            yearly: annual.storeProduct.price,
+          );
+    final plans = [
+      if (annual != null)
+        _PlanButton(
+          label: l.planYearly(annual.storeProduct.priceString),
+          badge: saving == null ? null : l.planSave(saving),
+          primary: true,
+          onTap: _busy ? null : () => _buy(annual),
+        ),
+      if (monthly != null)
+        _PlanButton(
+          label: l.planMonthly(monthly.storeProduct.priceString),
+          onTap: _busy ? null : () => _buy(monthly),
+        ),
+      if (lifetime != null)
+        _PlanButton(
+          label: l.planLifetime(lifetime.storeProduct.priceString),
+          onTap: _busy ? null : () => _buy(lifetime),
+        ),
+    ];
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(l.upgradeTitle, style: Theme.of(context).textTheme.titleLarge),
+            Text(l.upgradeTitle, style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(l.upgradeBody),
             const SizedBox(height: 20),
             if (_error != null) ...[
-              Text(
-                _error!,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
+              Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
               const SizedBox(height: 12),
             ],
-            if (offering == null && _error == null)
+            if (_loading)
               const Center(child: CircularProgressIndicator())
-            else ...[
-              if (offering?.monthly case final p?)
-                _PlanButton(package: p, onTap: _busy ? null : () => _buy(p)),
-              if (offering?.annual case final p?) ...[
-                const SizedBox(height: 8),
-                _PlanButton(package: p, onTap: _busy ? null : () => _buy(p)),
+            else if (offering == null)
+              OutlinedButton(
+                onPressed: _busy ? null : _retry,
+                child: Text(l.tryAgain),
+              )
+            else
+              for (final (i, plan) in plans.indexed) ...[
+                if (i > 0) const SizedBox(height: 8),
+                plan,
               ],
-              if (offering?.lifetime case final p?) ...[
-                const SizedBox(height: 8),
-                _PlanButton(package: p, onTap: _busy ? null : () => _buy(p)),
-              ],
-            ],
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
+            // Store rules: price, length and auto-renewal stated next to
+            // the buy buttons, plus working Terms and Privacy links.
+            Text(
+              l.subscriptionTerms(_storeName),
+              style: theme.textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8),
             TextButton(
               onPressed: _busy ? null : _restore,
               child: Text(l.restorePurchases),
+            ),
+            Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () => _open(EntitlementsConfig.termsUrl),
+                  child: Text(l.termsOfUse),
+                ),
+                TextButton(
+                  onPressed: () => _open(EntitlementsConfig.privacyUrl),
+                  child: Text(l.privacyPolicy),
+                ),
+              ],
             ),
           ],
         ),
@@ -238,16 +232,53 @@ class _PaywallSheetState extends State<_PaywallSheet> {
 }
 
 class _PlanButton extends StatelessWidget {
-  const _PlanButton({required this.package, required this.onTap});
+  const _PlanButton({
+    required this.label,
+    required this.onTap,
+    this.badge,
+    this.primary = false,
+  });
 
-  final Package package;
+  final String label;
   final VoidCallback? onTap;
+  final String? badge;
+  final bool primary;
 
   @override
-  Widget build(BuildContext context) => FilledButton(
-    onPressed: onTap,
-    child: Text(
-      '${package.storeProduct.title} — ${package.storeProduct.priceString}',
-    ),
-  );
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final child = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 8,
+        runSpacing: 4,
+        children: [
+          Text(label, textAlign: TextAlign.center),
+          if (badge != null)
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: scheme.tertiaryContainer,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                child: Text(
+                  badge!,
+                  style: TextStyle(
+                    color: scheme.onTertiaryContainer,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+    return primary
+        ? FilledButton(onPressed: onTap, child: child)
+        : FilledButton.tonal(onPressed: onTap, child: child);
+  }
 }

@@ -846,46 +846,66 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Jadi tanpa batas';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Buka naskah tanpa batas jumlah dan panjang dengan langganan atau pembelian sekali bayar.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Paket tidak bisa dimuat. Periksa koneksimu lalu coba lagi.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Pembelian gagal. Coba lagi.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Pembelian tidak bisa dipulihkan. Coba lagi.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'Pulihkan pembelian';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Naskah gratis dibatasi $count kata.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Tingkatkan';
+
+  @override
+  String planMonthly(String price) {
+    return 'Bulanan · $price / bulan';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Tahunan · $price / tahun';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Seumur hidup · $price sekali bayar';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Hemat $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Paket bulanan dan tahunan diperpanjang otomatis dengan harga yang sama sampai kamu membatalkannya. Batalkan kapan saja di pengaturan akun $store kamu. Seumur hidup adalah pembelian sekali bayar.';
+  }
+
+  @override
+  String get termsOfUse => 'Ketentuan Penggunaan';
+
+  @override
+  String get privacyPolicy => 'Kebijakan Privasi';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Tidak ada pembelian sebelumnya di akun $store ini.';
+  }
 }

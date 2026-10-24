@@ -872,46 +872,66 @@ class AppLocalizationsFil extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'Mag-unlimited';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'I-unlock ang walang limitasyong script at haba sa pamamagitan ng subscription o isang beses na bayad.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'Hindi ma-load ang mga plano. Tingnan ang iyong koneksyon at subukan ulit.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'Hindi natuloy ang pagbili. Subukan ulit.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'Hindi ma-restore ang mga binili. Subukan ulit.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'I-restore ang mga binili';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'Hanggang $count salita lang ang mga libreng script.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'Mag-upgrade';
+
+  @override
+  String planMonthly(String price) {
+    return 'Buwanan · $price / buwan';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Taunan · $price / taon';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Panghabambuhay · $price isang beses';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Makatipid ng $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Awtomatikong nagre-renew ang buwanan at taunang plano sa parehong presyo hanggang kanselahin mo. Kanselahin anumang oras sa settings ng iyong $store account. Isang beses na bayad ang Panghabambuhay.';
+  }
+
+  @override
+  String get termsOfUse => 'Mga Tuntunin ng Paggamit';
+
+  @override
+  String get privacyPolicy => 'Patakaran sa Privacy';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Walang nakitang naunang binili sa $store account na ito.';
+  }
 }

@@ -6,7 +6,7 @@ import 'package:aprompter/l10n/l10n.dart';
 import 'package:aprompter/models/script.dart';
 import 'package:aprompter/screens/editor_screen.dart';
 import 'package:aprompter/services/app_state.dart';
-import 'package:aprompter/services/auth_service.dart';
+import 'package:aprompter/services/purchase_service.dart';
 import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
 
@@ -25,13 +25,13 @@ Future<AppState> _pump(
   // once, before any further editing.
   if (runMigrationBeforeEditing) await state.runWordCapMigrationIfNeeded();
   final entitlements = Entitlements(isUnlimited: isUnlimited);
-  final authService = AuthService(entitlements: entitlements, storage: storage);
+  final purchaseService = PurchaseService(entitlements: entitlements);
   // Scopes must wrap MaterialApp itself, not just `home:` — the upgrade
   // button's showUpgradeFlow pushes a modal bottom sheet onto the
   // Navigator's shared Overlay, a sibling of the `home` route's subtree.
   await tester.pumpWidget(
-    AuthServiceScope(
-      service: authService,
+    PurchaseServiceScope(
+      service: purchaseService,
       child: EntitlementsScope(
         entitlements: entitlements,
         child: AppScope(

@@ -865,22 +865,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
   String get upgradeTitle => 'Go unlimited';
 
   @override
@@ -907,4 +891,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get upgrade => 'Upgrade';
+
+  @override
+  String planMonthly(String price) {
+    return 'Monthly · $price / month';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Yearly · $price / year';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Lifetime · $price once';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Save $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Monthly and yearly plans renew automatically at the same price until you cancel. Cancel anytime in your $store account settings. Lifetime is a one-time purchase.';
+  }
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'No earlier purchase found on this $store account.';
+  }
 }

@@ -845,46 +845,66 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'نامحدود شوید';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'با اشتراک یا خرید یک‌باره، تعداد و طول متن‌ها را نامحدود کنید.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'بارگیری طرح‌ها ممکن نشد. اتصال خود را بررسی کنید و دوباره امتحان کنید.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'خرید انجام نشد. دوباره امتحان کنید.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'بازیابی خریدها ممکن نشد. دوباره امتحان کنید.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'بازیابی خریدها';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'متن‌های رایگان حداکثر $count کلمه دارند.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'ارتقا';
+
+  @override
+  String planMonthly(String price) {
+    return 'ماهانه · $price / ماه';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'سالانه · $price / سال';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'مادام‌العمر · $price یک‌باره';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent٪ صرفه‌جویی';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'طرح‌های ماهانه و سالانه تا زمانی که لغوشان نکنید با همان قیمت خودکار تمدید می‌شوند. هر زمان خواستید از تنظیمات حساب $store لغو کنید. طرح مادام‌العمر یک خرید یک‌باره است.';
+  }
+
+  @override
+  String get termsOfUse => 'شرایط استفاده';
+
+  @override
+  String get privacyPolicy => 'سیاست حفظ حریم خصوصی';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'هیچ خرید قبلی در این حساب $store پیدا نشد.';
+  }
 }

@@ -859,46 +859,66 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'לעבור לגרסה ללא הגבלה';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'פתחו מספר תסריטים ואורך ללא הגבלה במנוי או ברכישה חד-פעמית.';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'לא ניתן לטעון את התוכניות. בדקו את החיבור ונסו שוב.';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'הרכישה נכשלה. נסו שוב.';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'לא ניתן לשחזר רכישות. נסו שוב.';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'שחזור רכישות';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'תסריטים בחינם מוגבלים ל-$count מילים.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'שדרוג';
+
+  @override
+  String planMonthly(String price) {
+    return 'חודשי · $price / חודש';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'שנתי · $price / שנה';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'לכל החיים · $price חד-פעמי';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'חיסכון של $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'התוכניות החודשית והשנתית מתחדשות אוטומטית באותו מחיר עד שתבטלו. אפשר לבטל בכל עת בהגדרות החשבון שלכם ב-$store. \'לכל החיים\' היא רכישה חד-פעמית.';
+  }
+
+  @override
+  String get termsOfUse => 'תנאי שימוש';
+
+  @override
+  String get privacyPolicy => 'מדיניות פרטיות';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'לא נמצאו רכישות קודמות בחשבון $store הזה.';
+  }
 }

@@ -10,7 +10,7 @@ import 'l10n/l10n.dart';
 import 'overlay/overlay_app.dart';
 import 'screens/home_screen.dart';
 import 'services/app_state.dart';
-import 'services/auth_service.dart';
+import 'services/purchase_service.dart';
 import 'services/entitlements.dart';
 import 'services/orientation.dart';
 import 'services/storage.dart';
@@ -26,25 +26,23 @@ Future<void> main() async {
   await state.runWordCapMigrationIfNeeded();
 
   final entitlements = Entitlements();
-  final authService = AuthService(entitlements: entitlements, storage: storage);
+  final purchaseService = PurchaseService(entitlements: entitlements);
 
   runApp(
     AprompterApp(
       state: state,
       entitlements: entitlements,
-      authService: authService,
+      purchaseService: purchaseService,
     ),
   );
 
   // Never block the first frame on this: offline, a misconfigured key, or
   // any other RevenueCat/network failure must leave the app fully usable
-  // on the free tier, not stuck before `runApp` ever shows anything — this
-  // used to run (and could throw) before `runApp`, which hung launch
-  // entirely for a signed-in user who opened the app offline.
-  unawaited(_initPurchases(authService));
+  // on the free tier, not stuck before `runApp` ever shows anything.
+  unawaited(_initPurchases(purchaseService));
 }
 
-Future<void> _initPurchases(AuthService authService) async {
+Future<void> _initPurchases(PurchaseService purchaseService) async {
   try {
     await Purchases.setLogLevel(LogLevel.warn);
     await Purchases.configure(
@@ -54,11 +52,12 @@ Future<void> _initPurchases(AuthService authService) async {
             : EntitlementsConfig.revenueCatApiKeyAndroid,
       ),
     );
-    // Fires after any entitlement-changing event (login, logout, purchase,
-    // restore) for as long as the app runs, so a purchase or restore made
-    // from paywall_screen.dart unlocks the app with no restart needed.
-    Purchases.addCustomerInfoUpdateListener(authService.applyCustomerInfo);
-    await authService.restoreSession();
+    // Fires after any entitlement-changing event (purchase, restore,
+    // renewal, expiry) for as long as the app runs, so a purchase or
+    // restore made from paywall_screen.dart unlocks the app with no restart.
+    Purchases.addCustomerInfoUpdateListener(purchaseService.applyCustomerInfo);
+    // A subscription bought earlier on this store account unlocks at launch.
+    purchaseService.applyCustomerInfo(await Purchases.getCustomerInfo());
   } catch (_) {
     // Stays on the free tier until the next successful launch.
   }
@@ -76,18 +75,18 @@ class AprompterApp extends StatelessWidget {
     super.key,
     required this.state,
     required this.entitlements,
-    required this.authService,
+    required this.purchaseService,
   });
 
   final AppState state;
   final Entitlements entitlements;
-  final AuthService authService;
+  final PurchaseService purchaseService;
 
   @override
   Widget build(BuildContext context) {
     const seed = Color(0xFF7C4DFF);
-    return AuthServiceScope(
-      service: authService,
+    return PurchaseServiceScope(
+      service: purchaseService,
       child: EntitlementsScope(
         entitlements: entitlements,
         child: AppScope(

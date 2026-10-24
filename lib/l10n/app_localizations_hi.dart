@@ -864,46 +864,66 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
-
-  @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
-
-  @override
-  String get continueWithApple => 'Continue with Apple';
-
-  @override
-  String get continueWithGoogle => 'Continue with Google';
-
-  @override
-  String get signInFailed => 'Sign in failed. Try again.';
-
-  @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'अनलिमिटेड पाएँ';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'सब्सक्रिप्शन या एक बार की खरीद से असीमित स्क्रिप्ट और लंबाई अनलॉक करें।';
 
   @override
   String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
+      'प्लान लोड नहीं हो सके। अपना कनेक्शन जाँचें और फिर कोशिश करें।';
 
   @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
+  String get purchaseFailed => 'खरीद नहीं हो सकी। फिर कोशिश करें।';
 
   @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
+  String get restoreFailed => 'खरीदारी बहाल नहीं हो सकी। फिर कोशिश करें।';
 
   @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => 'खरीदारी बहाल करें';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'मुफ़्त स्क्रिप्ट में ज़्यादा से ज़्यादा $count शब्द हो सकते हैं।';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => 'अपग्रेड करें';
+
+  @override
+  String planMonthly(String price) {
+    return 'मासिक · $price / महीना';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'वार्षिक · $price / साल';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'लाइफ़टाइम · $price एक बार';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent% बचाएँ';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'मासिक और वार्षिक प्लान रद्द करने तक उसी कीमत पर अपने-आप रिन्यू होते हैं। अपनी $store खाता सेटिंग में कभी भी रद्द करें। लाइफ़टाइम एक बार की खरीद है।';
+  }
+
+  @override
+  String get termsOfUse => 'उपयोग की शर्तें';
+
+  @override
+  String get privacyPolicy => 'निजता नीति';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'इस $store खाते पर कोई पिछली खरीद नहीं मिली।';
+  }
 }

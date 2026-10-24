@@ -8,7 +8,7 @@ import 'package:aprompter/models/script.dart';
 import 'package:aprompter/models/script_markup.dart';
 import 'package:aprompter/screens/editor_screen.dart';
 import 'package:aprompter/services/app_state.dart';
-import 'package:aprompter/services/auth_service.dart';
+import 'package:aprompter/services/purchase_service.dart';
 import 'package:aprompter/services/backup.dart';
 import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
@@ -276,10 +276,7 @@ void main() {
       AprompterApp(
         state: state,
         entitlements: entitlements,
-        authService: AuthService(
-          entitlements: entitlements,
-          storage: state.storage,
-        ),
+        purchaseService: PurchaseService(entitlements: entitlements),
       ),
     );
     await tester.pump();
@@ -302,10 +299,7 @@ void main() {
       AprompterApp(
         state: state,
         entitlements: entitlements,
-        authService: AuthService(
-          entitlements: entitlements,
-          storage: state.storage,
-        ),
+        purchaseService: PurchaseService(entitlements: entitlements),
       ),
     );
     await tester.pumpAndSettle();

@@ -829,46 +829,64 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
+  String get upgradeTitle => '무제한으로 이용하기';
 
   @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
+  String get upgradeBody => '구독 또는 1회 구매로 대본 개수와 길이 제한을 없애세요.';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get offeringsLoadFailed => '플랜을 불러오지 못했어요. 연결 상태를 확인하고 다시 시도하세요.';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get purchaseFailed => '구매하지 못했어요. 다시 시도하세요.';
 
   @override
-  String get signInFailed => 'Sign in failed. Try again.';
+  String get restoreFailed => '구매 내역을 복원하지 못했어요. 다시 시도하세요.';
 
   @override
-  String get upgradeTitle => 'Go unlimited';
-
-  @override
-  String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
-
-  @override
-  String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
-
-  @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
-
-  @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
-
-  @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => '구매 복원';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return '무료 대본은 최대 $count단어까지예요.';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => '업그레이드';
+
+  @override
+  String planMonthly(String price) {
+    return '월간 · $price / 월';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '연간 · $price / 년';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '평생 · $price 1회 결제';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent% 절약';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '월간 및 연간 플랜은 해지할 때까지 같은 가격으로 자동 갱신돼요. $store 계정 설정에서 언제든지 해지할 수 있어요. 평생 이용권은 1회 구매예요.';
+  }
+
+  @override
+  String get termsOfUse => '이용약관';
+
+  @override
+  String get privacyPolicy => '개인정보 처리방침';
+
+  @override
+  String nothingToRestore(String store) {
+    return '이 $store 계정에서 이전 구매 내역을 찾지 못했어요.';
+  }
 }

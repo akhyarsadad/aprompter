@@ -822,48 +822,66 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
+  String get upgradeTitle => '解锁无限制';
 
   @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
+  String get upgradeBody => '通过订阅或一次性购买，解锁不限数量、不限长度的脚本。';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get offeringsLoadFailed => '无法加载方案。请检查网络连接后重试。';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get purchaseFailed => '购买失败，请重试。';
 
   @override
-  String get signInFailed => 'Sign in failed. Try again.';
+  String get restoreFailed => '无法恢复购买，请重试。';
 
   @override
-  String get upgradeTitle => 'Go unlimited';
-
-  @override
-  String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
-
-  @override
-  String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
-
-  @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
-
-  @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
-
-  @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => '恢复购买';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return '免费脚本最多 $count 个词。';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => '升级';
+
+  @override
+  String planMonthly(String price) {
+    return '每月 · $price / 月';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '每年 · $price / 年';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '终身 · $price 一次性';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '节省 $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '月度和年度方案会以相同价格自动续订，直到你取消。你可以随时在 $store 账户设置中取消。终身方案为一次性购买。';
+  }
+
+  @override
+  String get termsOfUse => '使用条款';
+
+  @override
+  String get privacyPolicy => '隐私政策';
+
+  @override
+  String nothingToRestore(String store) {
+    return '在此 $store 账户中未找到以往的购买记录。';
+  }
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1684,46 +1702,64 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get signInTitle => 'Sign in to continue';
+  String get upgradeTitle => '解鎖無限制';
 
   @override
-  String get signInBody =>
-      'This only identifies your purchase across your devices — it does not sync your scripts.';
+  String get upgradeBody => '透過訂閱或一次性購買，解鎖不限數量、不限長度的腳本。';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get offeringsLoadFailed => '無法載入方案。請檢查網路連線後再試一次。';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get purchaseFailed => '購買失敗，請再試一次。';
 
   @override
-  String get signInFailed => 'Sign in failed. Try again.';
+  String get restoreFailed => '無法恢復購買項目，請再試一次。';
 
   @override
-  String get upgradeTitle => 'Go unlimited';
-
-  @override
-  String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
-
-  @override
-  String get offeringsLoadFailed =>
-      'Couldn\'t load plans. Check your connection and try again.';
-
-  @override
-  String get purchaseFailed => 'Purchase failed. Try again.';
-
-  @override
-  String get restoreFailed => 'Couldn\'t restore purchases. Try again.';
-
-  @override
-  String get restorePurchases => 'Restore purchases';
+  String get restorePurchases => '恢復購買項目';
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return '免費腳本最多 $count 個字詞。';
   }
 
   @override
-  String get upgrade => 'Upgrade';
+  String get upgrade => '升級';
+
+  @override
+  String planMonthly(String price) {
+    return '每月 · $price / 月';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '每年 · $price / 年';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '終身 · $price 一次付清';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '省下 $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '月方案和年方案會以相同價格自動續訂，直到你取消為止。你可以隨時在 $store 帳號設定中取消。終身方案為一次性購買。';
+  }
+
+  @override
+  String get termsOfUse => '使用條款';
+
+  @override
+  String get privacyPolicy => '隱私權政策';
+
+  @override
+  String nothingToRestore(String store) {
+    return '在這個 $store 帳號中找不到先前的購買項目。';
+  }
 }
