@@ -1,5 +1,10 @@
 # Paywall + SSO Gate Implementation Plan
 
+> **Superseded (24 October 2026):** the Sign in with Apple / Google gate described here was
+> removed before release — App Review rejects apps that require registration before an
+> in-app purchase (Guideline 5.1.1). Purchases now belong to the store account and are
+> restored with *Restore purchases*. See `docs/STORE_RELEASE.md`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Add a free/paid split to APrompter — 1 active script capped at 500 spoken words for free, unlocked via Apple/Google sign-in (as a cross-device/cross-store entitlement key, not for sync) plus RevenueCat-brokered subscription or lifetime purchase.

@@ -1,11 +1,12 @@
 # APrompter — Privacy policy
 
-_Last updated: 2 October 2026_
+_Last updated: 24 October 2026_
 
 APrompter is a teleprompter app. This policy explains what it does with your data.
-Short version: **your scripts and videos never leave your phone. The only thing that
-does is a one-time sign-in identifier, and only if you choose to unlock unlimited
-scripts — see "Unlocking unlimited scripts" below.**
+Short version: **your scripts and videos never leave your phone. There is no account and no
+sign-in. The only network traffic is the app checking, each time it starts and when you
+open the upgrade screen, whether this store account has APrompter Unlimited — see
+"APrompter Unlimited" below.**
 
 ## What the app stores, and where
 
@@ -16,27 +17,35 @@ scripts — see "Unlocking unlimited scripts" below.**
 | Videos you record | Your phone's gallery (album "APrompter"), or inside the app if you turn off *Save takes to the gallery* | You, and any gallery sync you have turned on (Google Photos, iCloud Photos) |
 | Backup files you export | Wherever you send them (Files, Drive, email, chat) | You decide |
 
-APrompter has **no account of its own, no analytics, no ads and no tracking**, and makes
-no network requests except the ones described below for unlocking unlimited scripts.
+APrompter has **no account, no analytics, no ads and no tracking**, and makes no network
+requests except the ones described below for APrompter Unlimited.
 
-## Unlocking unlimited scripts
+## APrompter Unlimited (purchases)
 
-Free use is limited to one script, capped at 500 words. Removing that limit is a
-one-time or recurring purchase, handled by our payment provider, RevenueCat, and (so a
-purchase is recognized on whichever of your devices or app stores you're using)
-preceded by signing in with your Apple or Google account.
+Free use is limited to one script of up to 500 words. Removing that limit is a subscription
+or a one-time purchase made through the Apple App Store or Google Play. The app uses
+RevenueCat, a payment-infrastructure provider, to check what you've bought.
 
-- **What's sent, and to whom:** a stable identifier from your Apple or Google sign-in
-  is sent to RevenueCat, which uses it to tie your purchase to that identifier instead
-  of to this one device. RevenueCat also receives your purchase/subscription status
-  from Apple or Google, the normal way any app's in-app purchases work.
-- **What's not sent:** your scripts, videos, settings, or anything else in the table
-  above. Signing in does not back up or sync your scripts — it exists only to unlock
-  the purchase across your devices.
-- **Who to ask about RevenueCat's own handling of this identifier:**
-  https://www.revenuecat.com/privacy/
-- Free use of the app (writing, rehearsing, recording, within the free limit) needs
-  none of this and makes no network requests at all.
+- **What's sent, and to whom:** RevenueCat receives a random identifier that the app creates
+  on your phone (not your name, email or phone number), your purchase and subscription status
+  and receipts from Apple or Google, and basic technical data needed to deliver them (such as
+  app version, device type, country/storefront and IP address).
+  RevenueCat's own policy: https://www.revenuecat.com/privacy/
+- **What's not sent:** your scripts, notes, videos, settings, or anything else in the table
+  above. There is no sign-in, so the developer never learns who you are.
+- **Payment details** (card, billing address) are handled entirely by Apple or Google; the app
+  and RevenueCat never see them.
+- **Restoring:** a purchase belongs to your App Store or Google Play account. *Restore
+  purchases* asks the store for it again; nothing else is involved.
+
+## Importing and sharing
+
+- **Into APrompter:** when you share a note or file to APrompter (or paste, or pick a file),
+  it is read and converted on your phone. On iPhone, the share extension hands it to the app
+  through a private folder on the phone that only APrompter can read, and it is deleted from
+  there as soon as the app has imported it. Nothing is uploaded.
+- **Out of APrompter:** *Share* and *Save as text file* hand your script to the app or place you
+  pick (Notes, Keep, Files, Drive, email…). What happens to it there is up to that app.
 
 ## Permissions and why
 
@@ -61,9 +70,9 @@ preceded by signing in with your Apple or Google account.
 
 ## Children
 
-APrompter does not collect personal data from anyone, including children, beyond the
-sign-in identifier described above — sent only if someone chooses to purchase
-unlimited scripts, never as part of ordinary free use.
+APrompter does not collect personal data from anyone, including children. The only data
+that leaves the phone is the anonymous purchase information described under
+"APrompter Unlimited".
 
 ## Deleting your data
 

@@ -1,5 +1,10 @@
 # Paywall + SSO gate — design
 
+> **Superseded (24 October 2026):** the Sign in with Apple / Google gate described here was
+> removed before release — App Review rejects apps that require registration before an
+> in-app purchase (Guideline 5.1.1). Purchases now belong to the store account and are
+> restored with *Restore purchases*. See `docs/STORE_RELEASE.md`.
+
 ## Goal
 
 Add a free/paid split to APrompter. The login exists for exactly one reason:

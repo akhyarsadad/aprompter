@@ -27,10 +27,20 @@ for personas, journeys and scope.
   | `#fyp #ad` | Hashtag line — dimmed, not timed, kept in the caption |
 
 - Status: Draft → Ready → Recorded, with take count. Search (accent-insensitive) and
-  filter on home. **Import a text file** (.txt / .md) as a new script; Paste cleans up
-  text from Docs, Word and chats.
+  filter on home. Paste cleans up text from Docs, Word and chats.
 - Duplicate a script, share it, or **copy as caption** (spoken text without markup —
   ready to paste as the post caption, hashtags included).
+
+**Import & export — from and to any notes app or text file**
+- **Share to APrompter** from Apple Notes, Google Keep, Samsung Notes, Notion, Word, Docs,
+  Mail, Files… (Android share sheet and "Open with"; iPhone share extension). The note
+  becomes a new script and opens in the editor.
+- **Paste as new script** in one tap, or **Import files** (several at once): `.txt`, `.md`
+  (Notion / Obsidian / Bear exports), `.rtf`, `.docx`, `.odt`, `.html`, Evernote `.enex`,
+  `.srt` / `.vtt` subtitles, and APrompter backups. Any text encoding; headings become
+  sections, bold becomes emphasis, list bullets and links are cleaned up.
+- **Save as text file** or **Share** a script to Notes, Keep, Files, Drive or email —
+  importing that file again gives the same script.
 - Nothing is lost by accident: autosave with a "Saved" hint, **version history** per
   script, **Recently deleted** for 30 days, a warning banner if the phone refuses to
   save (storage full), and **Back up all scripts** / **Restore from a backup** as one
@@ -108,11 +118,11 @@ Unzip it and install the `.apk` on your phone (allow "install unknown apps").
 ```
 lib/
   main.dart                     app entry + `overlayMain` (Android floating window entry)
-  l10n/                         English & Indonesian strings (ARB) + helpers
+  l10n/                         strings for 28 languages (ARB) + helpers
   models/                       Script, markup parser, settings & presets, templates
-  services/                     storage (shared_preferences), app state, floating prompter
+  services/                     storage, app state, import, purchases, floating prompter
   widgets/                      PrompterView (auto-scrolling text), controls, settings sheet
-  screens/                      home, editor, camera recorder, rehearse
+  screens/                      home, editor, camera recorder, rehearse, paywall
   overlay/overlay_app.dart      UI of the floating window over other apps
 ```
 
@@ -146,12 +156,14 @@ Create the keystore once with
 `keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload`
 and keep it safe — Play updates must be signed with it. Without `key.properties`,
 release builds fall back to the debug key (fine for testing, not for the store).
-For iOS, set your team in Xcode (`ios/Runner.xcworkspace`).
+For iOS, set your team in Xcode (`ios/Runner.xcworkspace`) for both the *Runner* and
+*ShareExtension* targets.
 
 ### Permissions
 
 - **Android:** camera, microphone, "Display over other apps" (asked when you first tap
-  *Float*), notifications (the floating window runs as a foreground service).
+  *Float*), notifications (the floating window runs as a foreground service), internet
+  (only to check purchases).
 - **iOS:** camera, microphone, add to photo library — descriptions are in `ios/Runner/Info.plist`.
 
 ### Store notes
@@ -161,39 +173,21 @@ justify this in the Play Console (the reason is already described in the manifes
 
 ### Paywall setup
 
-Free accounts get 1 active script capped at 500 words; unlocking is a
-RevenueCat-brokered purchase (monthly, yearly, or lifetime) gated behind
-Sign in with Apple / Google — the login exists only so a purchase is
-recognized across devices and across the App Store / Play Store boundary,
-not for script sync.
+Free use: 1 script (the sample script doesn't count) of up to 500 words. **APrompter
+Unlimited** removes the limits: monthly 2.99, yearly 15.99, lifetime 39.99 (USD, before
+tax), sold through the App Store / Google Play and checked with RevenueCat.
 
-1. Create a RevenueCat project, add your Apple App Store and Google Play
-   apps to it, and create one entitlement (default id `unlimited`) backed
-   by three products: a monthly subscription, a yearly subscription, and a
-   non-consumable lifetime purchase. Put all three in one Offering's
-   `monthly` / `annual` / `lifetime` package slots.
-2. In Apple Developer → Certificates, IDs & Profiles, enable the "Sign in
-   with Apple" capability for the app id, and add the same capability in
-   Xcode (`Runner` → Signing & Capabilities).
-3. In Google Cloud Console → Credentials, create an OAuth 2.0 **Web**
-   client id (used as `googleServerClientId` even on Android/iOS — this is
-   how `google_sign_in` is configured per its own README), **and** an iOS
-   client id. For the iOS client id, add `GIDClientID` (its value) and a
-   `CFBundleURLSchemes` entry (the reversed client id) to
-   `ios/Runner/Info.plist` — without both, Google sign-in fails natively on
-   iOS even though the Dart code is otherwise correct.
-4. Edit `lib/config/entitlements_config.dart` directly and fill in the
-   RevenueCat API keys, the entitlement id, and the Google client ids.
-   `lib/config/entitlements_config.dart.example` documents the same fields
-   if you ever need to recreate it.
+There is **no sign-in**. A purchase belongs to the store account (Apple ID / Google
+account); **Restore purchases** on the upgrade screen brings it back on a new phone or
+after a reinstall. Scripts never leave the phone.
 
-Unlike `android/key.properties` below, none of these four values are
-secrets — a RevenueCat SDK key and an OAuth *client* id are both meant to
-ship inside a public app binary (only an OAuth *client secret*, which this
-app never uses, would need to stay out of git) — so the file is tracked
-with placeholder values rather than git-ignored, and the repo always
-compiles. Sign-in and purchases simply won't work for real until the
-placeholders are replaced.
+To make purchases work, fill the two RevenueCat SDK keys in
+`lib/config/entitlements_config.dart`. Store products, RevenueCat setup, legal pages and
+both privacy forms are described step by step in
+[`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md). The keys are public SDK keys, not
+secrets, so the file is tracked with placeholders and the repo always compiles; until
+they're filled in, the upgrade screen says "Couldn't load plans".
 
 Release checklist, Play declarations and review notes: [`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md).
-Privacy policy (host it and link it in both stores): [`docs/PRIVACY.md`](docs/PRIVACY.md).
+Privacy policy and Terms of Use (linked from the upgrade screen and both stores):
+[`docs/PRIVACY.md`](docs/PRIVACY.md), [`docs/TERMS.md`](docs/TERMS.md).
