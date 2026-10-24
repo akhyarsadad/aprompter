@@ -72,7 +72,60 @@ void main() {
         updatedAt: DateTime(2026),
       );
       expect(script.wordCount, 8);
-      expect(script.durationAt(120), const Duration(seconds: 4));
+      // 8 words at 120 wpm = 4 s, plus one [pause].
+      expect(script.durationAt(120), const Duration(seconds: 5));
+    });
+
+    test(
+      'hashtag lines are not sections, are not spoken, stay in captions',
+      () {
+        const body = '# Hook\nBuy it now\n#fyp #viral\n#ad';
+        expect(parseScript(body).map((b) => b.type), [
+          BlockType.section,
+          BlockType.line,
+          BlockType.tags,
+          BlockType.tags,
+        ]);
+        expect(sectionTitles(body), ['Hook']);
+        expect(spokenText(body), 'Buy it now');
+        expect(captionText(body), 'Buy it now\n#fyp #viral\n#ad');
+        expect(sectionTitles('##CTA\n#1 tip: drink water'), ['CTA']);
+      },
+    );
+
+    test('an empty # line is not a section', () {
+      expect(sectionTitles('#\n# \nHello'), isEmpty);
+    });
+
+    test('asterisks only emphasise when they hug words', () {
+      List<SpanType> types(String line) =>
+          parseScript(line).single.spans.map((s) => s.type).toList();
+      expect(types('2*3*4 = 24'), [SpanType.text]);
+      expect(types('* tip one * and more'), [SpanType.text]);
+      expect(types(r'a \*literal\* star'), [SpanType.text]);
+      expect(
+        parseScript(r'a \*literal\* star').single.spans.single.text,
+        'a *literal* star',
+      );
+      expect(types('very **bold** move'), [
+        SpanType.text,
+        SpanType.emphasis,
+        SpanType.text,
+      ]);
+      expect(parseScript('very **bold** move').single.spans[1].text, 'bold');
+      expect(types('*one* and *two*'), [
+        SpanType.emphasis,
+        SpanType.text,
+        SpanType.emphasis,
+      ]);
+    });
+
+    test('pause markers are forgiving and add time', () {
+      for (final p in ['[pause]', '[ Pause. ]', '(pause)', '[PAUSE]']) {
+        expect(pauseCount('Wait $p now'), 1, reason: p);
+        expect(spokenText('Wait $p now'), 'Wait  now', reason: p);
+      }
+      expect(speakingSeconds('one two [pause] three', 60), closeTo(3.7, 1e-9));
     });
 
     test('flags long sentences', () {

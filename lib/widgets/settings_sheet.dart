@@ -5,6 +5,7 @@ import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../services/app_state.dart';
+import 'app_lock.dart';
 import 'prompter_view.dart';
 
 /// Bottom sheet for tuning the prompter: setups, pace, text, layout and
@@ -38,6 +39,17 @@ String presetHint(AppLocalizations l, SetupPreset p) => switch (p) {
   SetupPreset.glass => l.presetGlassHint,
 };
 
+/// A6: colours have names for screen readers.
+String colorName(AppLocalizations l, int color) => switch (color) {
+  0xFFFFFFFF => l.colorWhite,
+  0xFFFFEB3B => l.colorYellow,
+  0xFF00E676 => l.colorGreen,
+  0xFF40C4FF => l.colorBlue,
+  0xFFFF80AB => l.colorPink,
+  0xFF000000 => l.colorBlack,
+  _ => l.textColor,
+};
+
 String paceName(AppLocalizations l, PacePreset p) => switch (p) {
   PacePreset.calm => l.paceCalm,
   PacePreset.natural => l.paceNatural,
@@ -67,6 +79,9 @@ class _SettingsSheetState extends State<_SettingsSheet> {
     widget.onChanged(s);
   }
 
+  late PrompterSettings? _mySetup = AppScope.read(context).storage
+      .loadMySetup();
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
@@ -74,11 +89,25 @@ class _SettingsSheetState extends State<_SettingsSheet> {
     final script = widget.script;
     final target = script?.targetSeconds;
     final words = script?.wordCount ?? 0;
-    final fitWpm = target != null && target > 0 && words > 0
+    // Pace that makes the script last exactly the target, pauses included.
+    final speakable = target == null
+        ? 0.0
+        : target - (script?.pauses ?? 0) * pauseSeconds;
+    final neededWpm = target != null && words > 0
+        ? (speakable <= 0 ? double.infinity : words / speakable * 60)
+        : null;
+    final fitWpm =
+        neededWpm != null &&
+            neededWpm <= PrompterSettings.maxWpm + PrompterSettings.wpmStep / 2
         ? PrompterSettings.clampWpm(
-            (words / target * 60 / PrompterSettings.wpmStep).round() *
+            (neededWpm / PrompterSettings.wpmStep).round() *
                 PrompterSettings.wpmStep,
           )
+        : null;
+    // T2: say so when no pace can make it fit, instead of silently capping.
+    final cutWords = neededWpm != null && fitWpm == null
+        ? (words - PrompterSettings.maxWpm * speakable.clamp(0, 1e9) / 60)
+              .ceil()
         : null;
     final previewBlocks = parseScript(
       '# ${l.secHook}\n${l.welcomeBody.split('\n')[1]}\n// ${l.noteHook}',
@@ -107,9 +136,11 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                 children: [
                   Positioned.fill(
                     child: ColoredBox(
-                      color: Colors.black.withValues(
-                        alpha: _s.backgroundOpacity,
-                      ),
+                      color:
+                          (PrompterSettings.isDark(_s.textColor)
+                                  ? Colors.white
+                                  : Colors.black)
+                              .withValues(alpha: _s.backgroundOpacity),
                     ),
                   ),
                   Positioned.fill(
@@ -156,8 +187,28 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                               description: presetHint(l, p),
                               onTap: () => _update(p.apply(_s)),
                             ),
+                          // S1: the creator's own setup, kept apart from
+                          // the one in use.
+                          if (_mySetup case final mine?)
+                            _PresetCard(
+                              icon: Icons.person_outline,
+                              name: l.mySetup,
+                              description: l.mySetupHint,
+                              onTap: () => _update(mine.copyWith(wpm: _s.wpm)),
+                            ),
                         ],
                       ),
+                    ),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: TextButton.icon(
+                      onPressed: () async {
+                        await AppScope.read(context).storage.saveMySetup(_s);
+                        setState(() => _mySetup = _s);
+                      },
+                      icon: const Icon(Icons.bookmark_add_outlined),
+                      label: Text(l.saveMySetup),
                     ),
                   ),
                   _header(context, l.pace),
@@ -209,6 +260,20 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                         ),
                     ],
                   ),
+                  if (cutWords != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        l.fitImpossible(
+                          PrompterSettings.maxWpm.round(),
+                          formatDuration(Duration(seconds: target!)),
+                          cutWords,
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.error,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -244,6 +309,16 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     display: _s.lineHeight.toStringAsFixed(1),
                     onChanged: (v) => _update(_s.copyWith(lineHeight: v)),
                   ),
+                  _slider(
+                    label: l.letterSpacing,
+                    value: _s.letterSpacing,
+                    min: 0,
+                    max: PrompterSettings.maxLetterSpacing,
+                    display: _s.letterSpacing.toStringAsFixed(1),
+                    onChanged: (v) => _update(
+                      _s.copyWith(letterSpacing: (v * 2).round() / 2),
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -256,7 +331,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                               Semantics(
                                 button: true,
                                 selected: _s.textColor == c,
-                                label: l.textColor,
+                                label: '${l.textColor}: ${colorName(l, c)}',
                                 child: GestureDetector(
                                   onTap: () =>
                                       _update(_s.copyWith(textColor: c)),
@@ -350,20 +425,67 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     value: _s.mirror,
                     onChanged: (v) => _update(_s.copyWith(mirror: v)),
                   ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.focusLine),
+                    subtitle: Text(l.focusLineHint),
+                    value: _s.focusLine,
+                    onChanged: (v) => _update(_s.copyWith(focusLine: v)),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.stepByLine),
+                    subtitle: Text(l.stepByLineHint),
+                    value: _s.stepByLine,
+                    onChanged: (v) => _update(_s.copyWith(stepByLine: v)),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.brightScreen),
+                    subtitle: Text(l.brightScreenHint),
+                    value: _s.brightScreen,
+                    onChanged: (v) => _update(_s.copyWith(brightScreen: v)),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.reduceEffects),
+                    subtitle: Text(l.reduceEffectsHint),
+                    value: _s.reduceEffects,
+                    onChanged: (v) => _update(_s.copyWith(reduceEffects: v)),
+                  ),
                   _header(context, l.app),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.translate),
                     title: Text(l.appLanguage),
+                    // S3: say which language "phone language" is.
                     subtitle: Text(
                       AppScope.of(context).locale == null
-                          ? l.systemDefault
+                          ? '${l.systemDefault} · ${_phoneLanguage()}'
                           : languageNames[localeTag(
                                   AppScope.of(context).locale!,
                                 )] ??
                                 '',
                     ),
                     onTap: () => _pickLanguage(context),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    secondary: const Icon(Icons.lock_outline),
+                    title: Text(l.appLock),
+                    subtitle: Text(l.appLockHint),
+                    value: AppScope.of(context).appLock,
+                    onChanged: (on) async {
+                      final state = AppScope.read(context);
+                      final messenger = ScaffoldMessenger.of(context);
+                      if (on && !await canUseAppLock()) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(l.appLockUnavailable)),
+                        );
+                        return;
+                      }
+                      await state.setAppLock(on);
+                    },
                   ),
                   _header(context, l.recording),
                   Row(
@@ -389,6 +511,42 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     onChanged: (v) =>
                         _update(_s.copyWith(autoStopRecording: v)),
                   ),
+                  if (_s.autoStopRecording)
+                    Wrap(
+                      spacing: 8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(l.autoStopWait),
+                        for (final d in PrompterSettings.autoStopDelays)
+                          ChoiceChip(
+                            label: Text(l.secondsShort(d)),
+                            selected: _s.autoStopDelay == d,
+                            onSelected: (_) =>
+                                _update(_s.copyWith(autoStopDelay: d)),
+                          ),
+                      ],
+                    ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.reviewTakes),
+                    subtitle: Text(l.reviewTakesHint),
+                    value: _s.reviewTakes,
+                    onChanged: (v) => _update(_s.copyWith(reviewTakes: v)),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(l.takesToGallery),
+                    subtitle: Text(l.takesToGalleryHint),
+                    value: _s.takesToGallery,
+                    onChanged: (v) => _update(_s.copyWith(takesToGallery: v)),
+                  ),
+                  const SizedBox(height: 16),
+                  // S2: back to defaults; the pace is personal, so it stays.
+                  OutlinedButton.icon(
+                    onPressed: () => _update(PrompterSettings(wpm: _s.wpm)),
+                    icon: const Icon(Icons.restart_alt),
+                    label: Text(l.resetAllSettings),
+                  ),
                 ],
               ),
             ),
@@ -397,6 +555,12 @@ class _SettingsSheetState extends State<_SettingsSheet> {
       ),
     );
   }
+
+  String _phoneLanguage() =>
+      languageNames[localeTag(
+        resolveAppLocale(WidgetsBinding.instance.platformDispatcher.locales),
+      )] ??
+      '';
 
   Future<void> _pickLanguage(BuildContext context) async {
     final state = AppScope.read(context);

@@ -570,4 +570,368 @@ class AppLocalizationsNl extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Opslaan mislukt — misschien is je telefoon vol. Je werk blijft bewaard zolang de app open is.';
+
+  @override
+  String get versionHistory => 'Versiegeschiedenis';
+
+  @override
+  String get noVersions =>
+      'Nog geen eerdere versies. Ze worden automatisch bewaard terwijl je schrijft.';
+
+  @override
+  String get restore => 'Herstellen';
+
+  @override
+  String get versionRestored => 'Eerdere versie hersteld';
+
+  @override
+  String get recentlyDeleted => 'Recent verwijderd';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Verwijderde scripts blijven hier $days dagen.',
+      one: 'Verwijderde scripts blijven hier 1 dag.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Definitief verwijderen';
+
+  @override
+  String deletedOn(String date) {
+    return 'Verwijderd op $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" hersteld';
+  }
+
+  @override
+  String get backUpScripts => 'Back-up van alle scripts';
+
+  @override
+  String get restoreBackup => 'Herstellen uit back-up';
+
+  @override
+  String get backupShareTitle => 'APrompter-back-up';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts hersteld',
+      one: '1 script hersteld',
+      zero: 'Alles uit deze back-up staat er al',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Dat bestand is geen APrompter-back-up.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Zelfs met $wpm wpm past dit niet in $target — schrap ongeveer $words woorden.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'De camera was niet klaar, dus de opname is niet gestart. Probeer het opnieuw.';
+
+  @override
+  String get previousSection => 'Vorige sectie';
+
+  @override
+  String get nextSection => 'Volgende sectie';
+
+  @override
+  String get floatingNotificationBody => 'Tik om APrompter te openen';
+
+  @override
+  String get customTarget => 'Aangepast…';
+
+  @override
+  String get customTargetTitle => 'Doellengte';
+
+  @override
+  String get customTargetHint => 'Minuten en seconden, bijv. 5:00';
+
+  @override
+  String get saved => 'Opgeslagen';
+
+  @override
+  String get floatNotOnIos =>
+      'Op iPhone kunnen apps niet over andere apps zweven. Gebruik Opnemen om te filmen met het script onder de camera.';
+
+  @override
+  String get hashtagHint =>
+      'Hashtagregels (#fyp #ad) worden gedimd en niet getimed. Gebruik \"# \" met een spatie voor een sectie.';
+
+  @override
+  String get appLock => 'App-vergrendeling';
+
+  @override
+  String get appLockHint =>
+      'Vraag om vingerafdruk, gezicht of telefoon-pincode om APrompter te openen';
+
+  @override
+  String get appLockUnavailable =>
+      'Stel eerst een schermvergrendeling in op deze telefoon.';
+
+  @override
+  String get unlock => 'Ontgrendelen';
+
+  @override
+  String get unlockReason => 'Ontgrendel APrompter om je scripts te zien';
+
+  @override
+  String get autoStopWait => 'Wachten na de laatste regel';
+
+  @override
+  String get beforeYouRecord => 'Voordat je opneemt';
+
+  @override
+  String get recordAnyway => 'Toch opnemen';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Je vrije ruimte is maar genoeg voor ongeveer $minutes min video. Maak ruimte vrij of verlaag de videokwaliteit.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Batterij op $level% — een lange take kan worden afgebroken. Sluit de lader aan als het kan.';
+  }
+
+  @override
+  String get brightScreen => 'Volle helderheid tijdens prompten';
+
+  @override
+  String get brightScreenHint => 'Makkelijker te lezen buiten';
+
+  @override
+  String get cameraBusy =>
+      'Een andere app gebruikt de camera. Sluit die en probeer het opnieuw.';
+
+  @override
+  String get cameraIntroTitle => 'Camera en microfoon';
+
+  @override
+  String get cameraIntroBody =>
+      'Om je te filmen met het script op het scherm heeft APrompter je camera en microfoon nodig. Je telefoon vraagt dit zo. Video\'s blijven op je telefoon.';
+
+  @override
+  String get continueLabel => 'Doorgaan';
+
+  @override
+  String get notNow => 'Niet nu';
+
+  @override
+  String get colorWhite => 'Wit';
+
+  @override
+  String get colorYellow => 'Geel';
+
+  @override
+  String get colorGreen => 'Groen';
+
+  @override
+  String get colorBlue => 'Blauw';
+
+  @override
+  String get colorPink => 'Roze';
+
+  @override
+  String get colorBlack => 'Zwart';
+
+  @override
+  String get damagedData => 'Onleesbare gegevens';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Apart gezet op $date · $size tekens';
+  }
+
+  @override
+  String get tryToRecover => 'Proberen te herstellen';
+
+  @override
+  String get nothingRecovered => 'Er konden geen scripts uit worden gelezen.';
+
+  @override
+  String get floatLowRam =>
+      'Deze telefoon kan geen apps boven andere apps tonen (weinig geheugen of Android Go). Gebruik in plaats daarvan Opnemen.';
+
+  @override
+  String get oemTipsTitle => 'Houd de zwevende prompter actief';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand-telefoons sluiten zwevende vensters soms om batterij te sparen. Ga naar Instellingen → Apps → APrompter: sta weergeven boven andere apps toe (en pop-upvensters), zet batterij op \"Onbeperkt\" en sta meldingen toe.';
+  }
+
+  @override
+  String get focusLine => 'Focus op de huidige regel';
+
+  @override
+  String get focusLineHint => 'Dimt de andere regels';
+
+  @override
+  String get stepByLine => 'Regel voor regel';
+
+  @override
+  String get stepByLineHint =>
+      'Elke tik of druk op de afstandsbediening gaat één regel verder — geen automatisch scrollen';
+
+  @override
+  String get reduceEffects => 'Effecten beperken';
+
+  @override
+  String get reduceEffectsHint =>
+      'Geen vervagingen of schaduwen: soepeler op oudere telefoons, spaart batterij';
+
+  @override
+  String get letterSpacing => 'Letterafstand';
+
+  @override
+  String get importTextFile => 'Tekstbestand importeren';
+
+  @override
+  String get importTextFileHint =>
+      'Een .txt- of .md-script uit Bestanden, Drive of e-mail';
+
+  @override
+  String get importTextFailed =>
+      'Kan dat bestand niet lezen. Kies een platte-tekstbestand (.txt).';
+
+  @override
+  String get mySetup => 'Mijn opstelling';
+
+  @override
+  String get mySetupHint => 'De opstelling die je hebt opgeslagen';
+
+  @override
+  String get saveMySetup => 'Opslaan als mijn opstelling';
+
+  @override
+  String get resetAllSettings => 'Alle instellingen resetten';
+
+  @override
+  String get runHadJumps =>
+      'Je bent tijdens deze run heen en weer gesprongen, dus er is geen tempo-advies.';
+
+  @override
+  String get keepTake => 'Bewaren';
+
+  @override
+  String get retake => 'Opnieuw';
+
+  @override
+  String get reviewTakes => 'Elke take bekijken';
+
+  @override
+  String get reviewTakesHint => 'Bekijk hem en bewaar hem of doe hem opnieuw';
+
+  @override
+  String get takesToGallery => 'Takes opslaan in de galerij';
+
+  @override
+  String get takesToGalleryHint =>
+      'Uit: takes blijven in de app, buiten Google Photos en iCloud';
+
+  @override
+  String get takesTitle => 'Takes';
+
+  @override
+  String get takesEmpty =>
+      'Takes die in de app blijven, verschijnen hier. Zet \"Takes opslaan in de galerij\" uit in de instellingen om ze hier te houden.';
+
+  @override
+  String get saveToGallery => 'Opslaan in galerij';
+
+  @override
+  String get savedToGallery => 'Opgeslagen in je galerij';
+
+  @override
+  String get deleteTake => 'Take verwijderen';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Take $n bewaard in de app';
+  }
+
+  @override
+  String get upgradeTitle => 'Ga onbeperkt';
+
+  @override
+  String get upgradeBody =>
+      'Ontgrendel onbeperkt veel en onbeperkt lange scripts met een abonnement of een eenmalige aankoop.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Kan abonnementen niet laden. Controleer je verbinding en probeer het opnieuw.';
+
+  @override
+  String get purchaseFailed => 'Aankoop mislukt. Probeer het opnieuw.';
+
+  @override
+  String get restoreFailed =>
+      'Kan aankopen niet herstellen. Probeer het opnieuw.';
+
+  @override
+  String get restorePurchases => 'Aankopen herstellen';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Gratis scripts zijn beperkt tot $count woorden.';
+  }
+
+  @override
+  String get upgrade => 'Upgraden';
+
+  @override
+  String planMonthly(String price) {
+    return 'Maandelijks · $price / maand';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Jaarlijks · $price / jaar';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Levenslang · $price eenmalig';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Bespaar $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Maand- en jaarabonnementen worden automatisch verlengd tegen dezelfde prijs tot je opzegt. Zeg op elk moment op in je $store-accountinstellingen. Levenslang is een eenmalige aankoop.';
+  }
+
+  @override
+  String get termsOfUse => 'Gebruiksvoorwaarden';
+
+  @override
+  String get privacyPolicy => 'Privacybeleid';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Geen eerdere aankoop gevonden voor dit $store-account.';
+  }
 }
