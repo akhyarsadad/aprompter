@@ -88,7 +88,10 @@ class _SignInSheetState extends State<_SignInSheet> {
             Text(l.signInBody),
             const SizedBox(height: 20),
             if (_error != null) ...[
-              Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
               const SizedBox(height: 12),
             ],
             // Sign in with Apple needs `webAuthenticationOptions` (a Services
@@ -152,7 +155,8 @@ class _PaywallSheetState extends State<_PaywallSheet> {
       // The customer-info listener in main.dart also applies this, but
       // doing it here too means the gate lifts before this sheet even
       // closes, with no dependence on listener timing.
-      if (mounted) AuthServiceScope.of(context).applyCustomerInfo(result.customerInfo);
+      if (mounted)
+        AuthServiceScope.of(context).applyCustomerInfo(result.customerInfo);
       if (mounted) Navigator.pop(context);
     } catch (e) {
       // A cancelled purchase is a normal, frequent outcome — same rule as a
@@ -201,7 +205,10 @@ class _PaywallSheetState extends State<_PaywallSheet> {
             Text(l.upgradeBody),
             const SizedBox(height: 20),
             if (_error != null) ...[
-              Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
               const SizedBox(height: 12),
             ],
             if (offering == null && _error == null)

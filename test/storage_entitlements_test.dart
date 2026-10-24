@@ -11,12 +11,15 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  test('word cap migration flag defaults to false, then persists true', () async {
-    final storage = await Storage.open();
-    expect(storage.wordCapMigrationDone, isFalse);
-    await storage.setWordCapMigrationDone();
-    expect(storage.wordCapMigrationDone, isTrue);
-  });
+  test(
+    'word cap migration flag defaults to false, then persists true',
+    () async {
+      final storage = await Storage.open();
+      expect(storage.wordCapMigrationDone, isFalse);
+      await storage.setWordCapMigrationDone();
+      expect(storage.wordCapMigrationDone, isTrue);
+    },
+  );
 
   test('grandfathered word cap ids default to empty, then persist', () async {
     final storage = await Storage.open();
@@ -44,9 +47,12 @@ void main() {
     },
   );
 
-  test('seed script id is null when the library was not freshly seeded', () async {
-    SharedPreferences.setMockInitialValues({'script_index': <String>[]});
-    final storage = await Storage.open();
-    expect(storage.loadSeedScriptId(), isNull);
-  });
+  test(
+    'seed script id is null when the library was not freshly seeded',
+    () async {
+      SharedPreferences.setMockInitialValues({'script_index': <String>[]});
+      final storage = await Storage.open();
+      expect(storage.loadSeedScriptId(), isNull);
+    },
+  );
 }

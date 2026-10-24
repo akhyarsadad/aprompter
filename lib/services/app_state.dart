@@ -29,7 +29,9 @@ class AppState extends ChangeNotifier {
   /// frame — see `main()`.
   Future<void> runWordCapMigrationIfNeeded() async {
     if (storage.wordCapMigrationDone) return;
-    await storage.saveGrandfatheredWordCapIds(computeGrandfatheredIds(_scripts));
+    await storage.saveGrandfatheredWordCapIds(
+      computeGrandfatheredIds(_scripts),
+    );
     await storage.setWordCapMigrationDone();
   }
 

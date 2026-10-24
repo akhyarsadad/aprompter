@@ -59,17 +59,17 @@ void main() {
   // below — so none of these tests override it.
 
   testWidgets(
-      'a fresh free account can still create its first real script — the '
-      'auto-seeded welcome script does not spend the one free slot',
-      (tester) async {
-    await _pump(tester, isUnlimited: false);
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pumpAndSettle();
-    expect(find.text('Continue with Google'), findsNothing);
-  });
+    'a fresh free account can still create its first real script — the '
+    'auto-seeded welcome script does not spend the one free slot',
+    (tester) async {
+      await _pump(tester, isUnlimited: false);
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      expect(find.text('Continue with Google'), findsNothing);
+    },
+  );
 
-  testWidgets(
-      'free account already at the real-script limit shows the upgrade '
+  testWidgets('free account already at the real-script limit shows the upgrade '
       'sheet instead of the template picker', (tester) async {
     await _pump(tester, isUnlimited: false, extraScripts: 1);
     await tester.tap(find.byIcon(Icons.add));
@@ -79,18 +79,20 @@ void main() {
   });
 
   testWidgets(
-      'the sign-in sheet never offers Apple on Android — getAppleIDCredential '
-      'throws there without web auth options this app does not configure',
-      (tester) async {
-    await _pump(tester, isUnlimited: false, extraScripts: 1);
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pumpAndSettle();
-    expect(find.text('Continue with Apple'), findsNothing);
-    expect(find.text('Continue with Google'), findsOneWidget);
-  });
+    'the sign-in sheet never offers Apple on Android — getAppleIDCredential '
+    'throws there without web auth options this app does not configure',
+    (tester) async {
+      await _pump(tester, isUnlimited: false, extraScripts: 1);
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      expect(find.text('Continue with Apple'), findsNothing);
+      expect(find.text('Continue with Google'), findsOneWidget);
+    },
+  );
 
-  testWidgets('unlimited account opens the template picker normally',
-      (tester) async {
+  testWidgets('unlimited account opens the template picker normally', (
+    tester,
+  ) async {
     await _pump(tester, isUnlimited: true);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
@@ -98,14 +100,16 @@ void main() {
   });
 
   testWidgets(
-      'Duplicate on a free account at the limit shows the upgrade sheet '
-      'instead of actually duplicating', (tester) async {
-    final state = await _pump(tester, isUnlimited: false, extraScripts: 1);
-    await tester.tap(find.byIcon(Icons.more_vert).first);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Duplicate'));
-    await tester.pumpAndSettle();
-    expect(find.text('Continue with Google'), findsOneWidget);
-    expect(state.scripts, hasLength(2)); // seed + the one extra, no copy made
-  });
+    'Duplicate on a free account at the limit shows the upgrade sheet '
+    'instead of actually duplicating',
+    (tester) async {
+      final state = await _pump(tester, isUnlimited: false, extraScripts: 1);
+      await tester.tap(find.byIcon(Icons.more_vert).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Duplicate'));
+      await tester.pumpAndSettle();
+      expect(find.text('Continue with Google'), findsOneWidget);
+      expect(state.scripts, hasLength(2)); // seed + the one extra, no copy made
+    },
+  );
 }

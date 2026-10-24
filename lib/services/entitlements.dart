@@ -57,9 +57,9 @@ class EntitlementsScope extends InheritedNotifier<Entitlements> {
     required super.child,
   }) : super(notifier: entitlements);
 
-  static Entitlements of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<EntitlementsScope>()!
-          .notifier!;
+  static Entitlements of(BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<EntitlementsScope>()!
+      .notifier!;
 
   static Entitlements read(BuildContext context) =>
       context.getInheritedWidgetOfExactType<EntitlementsScope>()!.notifier!;

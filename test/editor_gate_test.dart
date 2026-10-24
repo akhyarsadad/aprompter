@@ -57,8 +57,9 @@ Script _script({required int words}) => Script(
 );
 
 void main() {
-  testWidgets('free account sees the upgrade banner past the word cap',
-      (tester) async {
+  testWidgets('free account sees the upgrade banner past the word cap', (
+    tester,
+  ) async {
     await _pump(tester, script: _script(words: 501), isUnlimited: false);
     expect(find.text('Upgrade'), findsOneWidget);
   });
@@ -73,8 +74,7 @@ void main() {
     expect(find.text('Upgrade'), findsNothing);
   });
 
-  testWidgets(
-      'a script already over the cap before the gate shipped is '
+  testWidgets('a script already over the cap before the gate shipped is '
       'grandfathered: no banner even on a free account', (tester) async {
     await _pump(
       tester,

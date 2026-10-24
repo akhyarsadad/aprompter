@@ -464,9 +464,8 @@ class _EditorScreenState extends State<EditorScreen>
               valueListenable: _analysed,
               builder: (context, body, _) {
                 final entitlements = EntitlementsScope.of(context);
-                final grandfathered = AppScope.of(
-                  context,
-                ).isGrandfatheredWordCap(widget.script.id);
+                final grandfathered = AppScope.of(context)
+                    .isGrandfatheredWordCap(widget.script.id);
                 final overCap = countWords(spokenText(body)) > maxFreeWords;
                 final showBanner =
                     overCap &&

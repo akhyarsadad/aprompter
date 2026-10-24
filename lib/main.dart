@@ -1,6 +1,7 @@
 import 'dart:async' show unawaited;
 
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
