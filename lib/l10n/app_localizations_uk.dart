@@ -553,7 +553,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Перетягніть смужку зверху суфлера, щоб поставити його будь-де, і кут — щоб змінити розмір. На Android плаваюче вікно можна перетягнути будь-куди, і воно запам\'ятає місце.';
+      'Перетягніть смужку зверху суфлера, щоб поставити його будь-де, і кут — щоб змінити розмір.';
 
   @override
   String get app => 'Застосунок';
@@ -678,7 +678,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'На iPhone застосунки не можуть бути поверх інших. Використовуйте «Запис», щоб знімати зі сценарієм під камерою.';
+      'На iPhone та iPad застосунки не можуть бути поверх інших. Використовуйте «Запис», щоб знімати зі сценарієм під камерою.';
 
   @override
   String get hashtagHint =>
@@ -949,11 +949,11 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Без обмежень';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Відкрийте необмежену кількість сценаріїв будь-якої довжини за підпискою або разовою покупкою.';
+      'Необмежена кількість сценаріїв — за підпискою або разовою покупкою.';
 
   @override
   String get offeringsLoadFailed =>
@@ -970,7 +970,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Безкоштовні сценарії обмежено $count словами.';
+    return 'У цьому сценарії понад $count слів. Довгі сценарії входять до APrompter Unlimited.';
   }
 
   @override
@@ -998,7 +998,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Місячний і річний тарифи автоматично поновлюються за тією ж ціною, доки ви їх не скасуєте. Скасувати можна будь-коли в налаштуваннях облікового запису $store. «Назавжди» — разова покупка.';
+    return 'Місячний і річний тарифи автоматично поновлюються на той самий строк, доки ви їх не скасуєте. Щоб уникнути наступного списання, скасуйте щонайменше за 24 години до кінця періоду в налаштуваннях облікового запису $store. «Назавжди» — разова покупка.';
   }
 
   @override
@@ -1028,4 +1028,12 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get deleteForeverTakes =>
       'Його дублі, збережені в застосунку, теж буде видалено.';
+
+  @override
+  String get purchasePending =>
+      'Платіж очікує підтвердження. APrompter Unlimited відкриється автоматично, щойно його схвалять.';
+
+  @override
+  String get positionHintFloat =>
+      'Плаваюче вікно можна перетягнути будь-куди, і воно запам\'ятає місце.';
 }

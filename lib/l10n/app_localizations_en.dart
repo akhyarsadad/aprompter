@@ -545,7 +545,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.';
+      'Drag the bar on top of the prompter to move it anywhere, and the corner to resize.';
 
   @override
   String get app => 'App';
@@ -666,7 +666,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone doesn\'t let apps float over other apps. Use Record to film with the script under the camera.';
+      'Apps can\'t float over other apps on iPhone and iPad. Use Record to film with the script under the camera.';
 
   @override
   String get hashtagHint =>
@@ -928,11 +928,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Go unlimited';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Unlock unlimited scripts and length with a subscription or a one-time purchase.';
+      'Unlimited scripts, with a subscription or a one-time purchase.';
 
   @override
   String get offeringsLoadFailed =>
@@ -949,7 +949,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Free scripts are capped at $count words.';
+    return 'This script is over $count words. Long scripts are part of APrompter Unlimited.';
   }
 
   @override
@@ -977,7 +977,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Monthly and yearly plans renew automatically at the same price until you cancel. Cancel anytime in your $store account settings. Lifetime is a one-time purchase.';
+    return 'Monthly and yearly plans renew automatically for the same period until you cancel. To avoid the next charge, cancel at least 24 hours before the period ends in your $store account settings. Lifetime is a one-time purchase.';
   }
 
   @override
@@ -1006,4 +1006,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteForeverTakes => 'Its takes kept in the app are deleted too.';
+
+  @override
+  String get purchasePending =>
+      'Payment pending. APrompter Unlimited unlocks automatically once it\'s approved.';
+
+  @override
+  String get positionHintFloat =>
+      'The floating window can be dragged anywhere and remembers its spot.';
 }

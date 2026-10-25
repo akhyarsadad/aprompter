@@ -1,3 +1,5 @@
+import 'dart:async' show TimeoutException;
+
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
@@ -10,11 +12,48 @@ import '../l10n/l10n.dart';
 import '../services/entitlements.dart';
 import '../services/purchase_service.dart';
 
+/// How long [showUpgradeFlow] waits for RevenueCat's first answer after
+/// launch before showing the plans anyway.
+const storeAnswerTimeout = Duration(seconds: 3);
+
+/// The upgrade flow under way for an [Entitlements], waiting for the store
+/// or showing the plans. Keyed by the instance, so each app (and each
+/// widget test) has its own.
+final _flowsUnderWay = Expando<Future<bool>>();
+
 /// Shows the plan picker. Returns true once the person ends up unlimited
-/// (bought, restored, or already was). There is no sign-in: a purchase
-/// belongs to the store account and comes back with "Restore purchases".
-Future<bool> showUpgradeFlow(BuildContext context) async {
+/// (bought, restored, or already was), for the caller to carry on with what
+/// it was doing. There is no sign-in: a purchase belongs to the store
+/// account and comes back with "Restore purchases".
+///
+/// A call while the flow is already under way (a second tap during the
+/// wait for the store, a share arriving meanwhile) joins it instead of
+/// stacking a second sheet: it waits for that flow to end and returns
+/// false, as the first caller is the one that carries on.
+Future<bool> showUpgradeFlow(BuildContext context) {
   final entitlements = EntitlementsScope.read(context);
+  final underWay = _flowsUnderWay[entitlements];
+  if (underWay != null) return underWay.then((_) => false);
+  final flow = _upgradeFlow(context, entitlements);
+  _flowsUnderWay[entitlements] = flow;
+  return flow.whenComplete(() => _flowsUnderWay[entitlements] = null);
+}
+
+Future<bool> _upgradeFlow(
+  BuildContext context,
+  Entitlements entitlements,
+) async {
+  if (!entitlements.isKnown) {
+    // Right after launch RevenueCat may not have answered yet: a subscriber
+    // who shares a note or taps quickly mustn't be offered what they own.
+    try {
+      await entitlements.whenKnown.timeout(storeAnswerTimeout);
+    } on TimeoutException {
+      // Still no answer: show the plans. The sheet closes itself if
+      // Unlimited arrives while it is open.
+    }
+    if (!context.mounted) return entitlements.isUnlimited;
+  }
   if (entitlements.isUnlimited) return true;
   await showModalBottomSheet<void>(
     context: context,
@@ -44,16 +83,52 @@ class _PaywallSheet extends StatefulWidget {
   State<_PaywallSheet> createState() => _PaywallSheetState();
 }
 
+/// RevenueCat's error code for [error], or null when it isn't one.
+PurchasesErrorCode? _purchasesErrorCode(Object error) {
+  if (error is! PlatformException) return null;
+  try {
+    return PurchasesErrorHelper.getErrorCode(error);
+  } on FormatException {
+    return null;
+  }
+}
+
 class _PaywallSheetState extends State<_PaywallSheet> {
   Offering? _offering;
   bool _loading = true;
   String? _error;
   bool _busy = false;
 
+  /// A purchase is waiting for the store or a bank to approve it.
+  bool _pending = false;
+
   @override
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Unlimited can arrive while the plans are open: RevenueCat answering
+    // after launch, a pending payment approved, a purchase made elsewhere.
+    // Nothing is left to buy then, so the sheet goes away by itself.
+    if (EntitlementsScope.of(context).isUnlimited) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _close();
+      });
+    }
+  }
+
+  /// Closes this sheet, once: a purchase, a restore and RevenueCat's own
+  /// update can all report Unlimited at the same moment, and a second pop
+  /// would close the screen underneath. (The route's own `isCurrent` turns
+  /// false the moment it is popped; `ModalRoute.isCurrentOf` would only
+  /// catch up on the next frame.)
+  void _close() {
+    final route = ModalRoute.of(context);
+    if (route != null && route.isCurrent) Navigator.pop(context);
   }
 
   void _retry() {
@@ -86,7 +161,9 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     setState(() {
       _busy = true;
       _error = null;
+      _pending = false;
     });
+    var restore = false;
     try {
       final result = await Purchases.purchase(PurchaseParams.package(package));
       // The customer-info listener in main.dart also applies this, but
@@ -94,33 +171,43 @@ class _PaywallSheetState extends State<_PaywallSheet> {
       // closes, with no dependence on listener timing.
       if (!mounted) return;
       PurchaseServiceScope.of(context).applyCustomerInfo(result.customerInfo);
-      Navigator.pop(context);
+      _close();
     } catch (e) {
-      // A cancelled purchase is a normal, frequent outcome: stay on this
-      // sheet, no error shown.
-      final cancelled =
-          e is PlatformException &&
-          PurchasesErrorHelper.getErrorCode(e) ==
-              PurchasesErrorCode.purchaseCancelledError;
-      if (!cancelled && mounted) {
-        setState(() => _error = context.l10n.purchaseFailed);
+      if (!mounted) return;
+      switch (_purchasesErrorCode(e)) {
+        case PurchasesErrorCode.purchaseCancelledError:
+          // A normal, frequent outcome: stay on this sheet, no error shown.
+          break;
+        case PurchasesErrorCode.paymentPendingError:
+          // Cash, bank transfer, a parent's approval: not failed, just not
+          // done yet. The customer-info listener in main.dart unlocks the
+          // app, and closes this sheet, once the store approves it.
+          setState(() => _pending = true);
+        case PurchasesErrorCode.productAlreadyPurchasedError:
+          // The store account already owns it (another phone, before a
+          // reinstall): bring it back instead of saying it failed.
+          restore = true;
+        default:
+          setState(() => _error = context.l10n.purchaseFailed);
       }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+    if (restore && mounted) await _restore();
   }
 
   Future<void> _restore() async {
     setState(() {
       _busy = true;
       _error = null;
+      _pending = false;
     });
     try {
       final info = await Purchases.restorePurchases();
       if (!mounted) return;
       PurchaseServiceScope.of(context).applyCustomerInfo(info);
       if (EntitlementsScope.read(context).isUnlimited) {
-        Navigator.pop(context);
+        _close();
       } else {
         setState(() => _error = context.l10n.nothingToRestore(_storeName));
       }
@@ -185,6 +272,13 @@ class _PaywallSheetState extends State<_PaywallSheet> {
             const SizedBox(height: 20),
             if (_error != null) ...[
               Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
+              const SizedBox(height: 12),
+            ],
+            if (_pending) ...[
+              Text(
+                l.purchasePending,
+                style: TextStyle(color: theme.colorScheme.primary),
+              ),
               const SizedBox(height: 12),
             ],
             if (_loading)

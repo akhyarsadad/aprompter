@@ -528,7 +528,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Seret bar di atas prompter untuk mengalihkannya ke mana-mana, dan sudutnya untuk mengubah saiz. Di Android, tetingkap terapung boleh diseret ke mana-mana dan mengingati kedudukannya.';
+      'Seret bar di atas prompter untuk mengalihkannya ke mana-mana, dan sudutnya untuk mengubah saiz.';
 
   @override
   String get app => 'Apl';
@@ -649,7 +649,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone tidak membenarkan apl terapung di atas apl lain. Gunakan Rakam untuk merakam dengan skrip di bawah kamera.';
+      'iPhone dan iPad tidak membenarkan apl terapung di atas apl lain. Gunakan Rakam untuk merakam dengan skrip di bawah kamera.';
 
   @override
   String get hashtagHint =>
@@ -912,11 +912,11 @@ class AppLocalizationsMs extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Guna tanpa had';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Buka skrip tanpa had bilangan dan panjang dengan langganan atau pembelian sekali bayar.';
+      'Skrip tanpa had, dengan langganan atau pembelian sekali bayar.';
 
   @override
   String get offeringsLoadFailed =>
@@ -933,7 +933,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Skrip percuma dihadkan kepada $count perkataan.';
+    return 'Skrip ini melebihi $count perkataan. Skrip panjang ialah sebahagian daripada APrompter Unlimited.';
   }
 
   @override
@@ -961,7 +961,7 @@ class AppLocalizationsMs extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Pelan bulanan dan tahunan diperbaharui secara automatik pada harga yang sama sehingga anda membatalkannya. Batalkan bila-bila masa dalam tetapan akaun $store anda. Seumur hidup ialah pembelian sekali bayar.';
+    return 'Pelan bulanan dan tahunan diperbaharui secara automatik bagi tempoh yang sama sehingga anda membatalkannya. Untuk mengelakkan caj seterusnya, batalkan sekurang-kurangnya 24 jam sebelum tempoh tamat dalam tetapan akaun $store anda. Seumur hidup ialah pembelian sekali bayar.';
   }
 
   @override
@@ -991,4 +991,12 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String get deleteForeverTakes =>
       'Rakamannya yang disimpan dalam apl juga akan dipadam.';
+
+  @override
+  String get purchasePending =>
+      'Pembayaran belum selesai. APrompter Unlimited dibuka secara automatik sebaik sahaja ia diluluskan.';
+
+  @override
+  String get positionHintFloat =>
+      'Tetingkap terapung boleh diseret ke mana-mana dan mengingati kedudukannya.';
 }

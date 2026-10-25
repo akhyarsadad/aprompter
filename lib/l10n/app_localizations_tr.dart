@@ -528,7 +528,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Prompter\'ı istediğin yere taşımak için üstteki çubuğu, boyutlandırmak için köşeyi sürükle. Android\'de yüzen pencere her yere sürüklenebilir ve yerini hatırlar.';
+      'Prompter\'ı istediğin yere taşımak için üstteki çubuğu, boyutlandırmak için köşeyi sürükle.';
 
   @override
   String get app => 'Uygulama';
@@ -649,7 +649,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone, uygulamaların diğer uygulamaların üzerinde durmasına izin vermez. Senaryo kameranın altındayken çekmek için Kaydet\'i kullan.';
+      'iPhone ve iPad, uygulamaların diğer uygulamaların üzerinde durmasına izin vermez. Senaryo kameranın altındayken çekmek için Kaydet\'i kullan.';
 
   @override
   String get hashtagHint =>
@@ -912,11 +912,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Sınırsıza geç';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Abonelik veya tek seferlik satın alma ile sınırsız sayıda ve uzunlukta senaryonun kilidini aç.';
+      'Abonelik veya tek seferlik satın alma ile sınırsız senaryo.';
 
   @override
   String get offeringsLoadFailed =>
@@ -933,7 +933,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Ücretsiz senaryolar $count kelimeyle sınırlıdır.';
+    return 'Bu senaryo $count kelimeyi aşıyor. Uzun senaryolar APrompter Unlimited\'ın bir parçasıdır.';
   }
 
   @override
@@ -961,7 +961,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Aylık ve yıllık planlar iptal edene kadar aynı fiyattan otomatik olarak yenilenir. İstediğin zaman $store hesap ayarlarından iptal edebilirsin. Ömür boyu, tek seferlik bir satın almadır.';
+    return 'Aylık ve yıllık planlar iptal edene kadar aynı süre için otomatik olarak yenilenir. Bir sonraki ücreti önlemek için dönem bitmeden en az 24 saat önce $store hesap ayarlarından iptal et. Ömür boyu, tek seferlik bir satın almadır.';
   }
 
   @override
@@ -990,4 +990,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get deleteForeverTakes => 'Uygulamada saklanan çekimleri de silinir.';
+
+  @override
+  String get purchasePending =>
+      'Ödeme beklemede. Onaylandığında APrompter Unlimited otomatik olarak açılır.';
+
+  @override
+  String get positionHintFloat =>
+      'Yüzen pencere her yere sürüklenebilir ve yerini hatırlar.';
 }

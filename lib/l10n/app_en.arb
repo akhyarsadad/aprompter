@@ -325,7 +325,7 @@
   "resizePrompter": "Drag to resize the prompter",
   "prompterWidth": "Prompter width",
   "resetPosition": "Reset position (top, full width)",
-  "positionHint": "Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.",
+  "positionHint": "Drag the bar on top of the prompter to move it anywhere, and the corner to resize.",
   "app": "App",
   "appLanguage": "App language",
   "systemDefault": "Phone language",
@@ -410,7 +410,7 @@
   "customTargetTitle": "Target length",
   "customTargetHint": "Minutes and seconds, e.g. 5:00",
   "saved": "Saved",
-  "floatNotOnIos": "iPhone doesn't let apps float over other apps. Use Record to film with the script under the camera.",
+  "floatNotOnIos": "Apps can't float over other apps on iPhone and iPad. Use Record to film with the script under the camera.",
   "hashtagHint": "Hashtag lines (#fyp #ad) are shown dimmed and not timed. Use \"# \" with a space for a section.",
   "appLock": "App lock",
   "appLockHint": "Ask for fingerprint, face or phone PIN to open APrompter",
@@ -534,13 +534,13 @@
       }
     }
   },
-  "upgradeTitle": "Go unlimited",
-  "upgradeBody": "Unlock unlimited scripts and length with a subscription or a one-time purchase.",
+  "upgradeTitle": "APrompter Unlimited",
+  "upgradeBody": "Unlimited scripts, with a subscription or a one-time purchase.",
   "offeringsLoadFailed": "Couldn't load plans. Check your connection and try again.",
   "purchaseFailed": "Purchase failed. Try again.",
   "restoreFailed": "Couldn't restore purchases. Try again.",
   "restorePurchases": "Restore purchases",
-  "wordCapBannerText": "Free scripts are capped at {count} words.",
+  "wordCapBannerText": "This script is over {count} words. Long scripts are part of APrompter Unlimited.",
   "@wordCapBannerText": {
     "placeholders": {
       "count": {
@@ -581,7 +581,7 @@
       }
     }
   },
-  "subscriptionTerms": "Monthly and yearly plans renew automatically at the same price until you cancel. Cancel anytime in your {store} account settings. Lifetime is a one-time purchase.",
+  "subscriptionTerms": "Monthly and yearly plans renew automatically for the same period until you cancel. To avoid the next charge, cancel at least 24 hours before the period ends in your {store} account settings. Lifetime is a one-time purchase.",
   "@subscriptionTerms": {
     "placeholders": {
       "store": {
@@ -609,5 +609,7 @@
       }
     }
   },
-  "deleteForeverTakes": "Its takes kept in the app are deleted too."
+  "deleteForeverTakes": "Its takes kept in the app are deleted too.",
+  "purchasePending": "Payment pending. APrompter Unlimited unlocks automatically once it's approved.",
+  "positionHintFloat": "The floating window can be dragged anywhere and remembers its spot."
 }

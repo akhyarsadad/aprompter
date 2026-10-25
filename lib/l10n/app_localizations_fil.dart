@@ -550,7 +550,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'I-drag ang bar sa itaas ng prompter para ilipat ito kahit saan, at ang sulok para baguhin ang laki. Sa Android, puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto.';
+      'I-drag ang bar sa itaas ng prompter para ilipat ito kahit saan, at ang sulok para baguhin ang laki.';
 
   @override
   String get app => 'App';
@@ -671,7 +671,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'Hindi pinapayagan ng iPhone na lumutang ang app sa ibabaw ng ibang app. Gamitin ang I-record para mag-film na nasa ilalim ng camera ang script.';
+      'Hindi pinapayagan ng iPhone at iPad na lumutang ang app sa ibabaw ng ibang app. Gamitin ang I-record para mag-film na nasa ilalim ng camera ang script.';
 
   @override
   String get hashtagHint =>
@@ -936,11 +936,11 @@ class AppLocalizationsFil extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Mag-unlimited';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'I-unlock ang walang limitasyong script at haba sa pamamagitan ng subscription o isang beses na bayad.';
+      'Walang limitasyong script, sa pamamagitan ng subscription o isang beses na bayad.';
 
   @override
   String get offeringsLoadFailed =>
@@ -957,7 +957,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Hanggang $count salita lang ang mga libreng script.';
+    return 'Lampas na sa $count salita ang script na ito. Bahagi ng APrompter Unlimited ang mahahabang script.';
   }
 
   @override
@@ -985,7 +985,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Awtomatikong nagre-renew ang buwanan at taunang plano sa parehong presyo hanggang kanselahin mo. Kanselahin anumang oras sa settings ng iyong $store account. Isang beses na bayad ang Panghabambuhay.';
+    return 'Awtomatikong nagre-renew ang buwanan at taunang plano para sa parehong tagal hanggang kanselahin mo. Para hindi ka na masingil sa susunod, magkansela nang hindi bababa sa 24 na oras bago matapos ang panahon sa settings ng iyong $store account. Isang beses na bayad ang Panghabambuhay.';
   }
 
   @override
@@ -1015,4 +1015,12 @@ class AppLocalizationsFil extends AppLocalizations {
   @override
   String get deleteForeverTakes =>
       'Mabubura rin ang mga take nito na nasa loob ng app.';
+
+  @override
+  String get purchasePending =>
+      'Nakabinbin ang bayad. Awtomatikong mabubuksan ang APrompter Unlimited kapag naaprubahan na ito.';
+
+  @override
+  String get positionHintFloat =>
+      'Puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto.';
 }

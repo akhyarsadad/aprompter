@@ -540,7 +540,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'גררו את הפס שבראש הפרומפטר כדי להזיז אותו לכל מקום, ואת הפינה כדי לשנות גודל. באנדרואיד אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו.';
+      'גררו את הפס שבראש הפרומפטר כדי להזיז אותו לכל מקום, ואת הפינה כדי לשנות גודל.';
 
   @override
   String get app => 'אפליקציה';
@@ -662,7 +662,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'ב־iPhone אפליקציות לא יכולות לצוף מעל אפליקציות אחרות. השתמשו ב\"צילום\" כדי לצלם עם התסריט מתחת למצלמה.';
+      'ב־iPhone וב־iPad אפליקציות לא יכולות לצוף מעל אפליקציות אחרות. השתמשו ב\"צילום\" כדי לצלם עם התסריט מתחת למצלמה.';
 
   @override
   String get hashtagHint =>
@@ -922,11 +922,10 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'לעבור לגרסה ללא הגבלה';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody =>
-      'פתחו מספר תסריטים ואורך ללא הגבלה במנוי או ברכישה חד-פעמית.';
+  String get upgradeBody => 'תסריטים ללא הגבלה, במנוי או ברכישה חד-פעמית.';
 
   @override
   String get offeringsLoadFailed =>
@@ -943,7 +942,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'תסריטים בחינם מוגבלים ל-$count מילים.';
+    return 'התסריט הזה ארוך מ-$count מילים. תסריטים ארוכים הם חלק מ-APrompter Unlimited.';
   }
 
   @override
@@ -971,7 +970,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'התוכניות החודשית והשנתית מתחדשות אוטומטית באותו מחיר עד שתבטלו. אפשר לבטל בכל עת בהגדרות החשבון שלכם ב-$store. \'לכל החיים\' היא רכישה חד-פעמית.';
+    return 'התוכניות החודשית והשנתית מתחדשות אוטומטית לאותה תקופה עד שתבטלו. כדי להימנע מהחיוב הבא, בטלו לפחות 24 שעות לפני סוף התקופה בהגדרות החשבון שלכם ב-$store. \'לכל החיים\' היא רכישה חד-פעמית.';
   }
 
   @override
@@ -1000,4 +999,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get deleteForeverTakes => 'גם הטייקים שלו שנשמרו באפליקציה יימחקו.';
+
+  @override
+  String get purchasePending =>
+      'התשלום ממתין לאישור. APrompter Unlimited ייפתח אוטומטית ברגע שיאושר.';
+
+  @override
+  String get positionHintFloat =>
+      'אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו.';
 }

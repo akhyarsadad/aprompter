@@ -110,7 +110,7 @@ void main() {
       await _pump(tester, isUnlimited: false);
       await tester.tap(find.byIcon(Icons.add));
       await tester.pumpAndSettle();
-      expect(find.text('Go unlimited'), findsNothing);
+      expect(find.text('APrompter Unlimited'), findsNothing);
     },
   );
 
@@ -120,7 +120,7 @@ void main() {
     await _pump(tester, isUnlimited: false, extraScripts: 1);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
-    expect(find.text('Go unlimited'), findsOneWidget);
+    expect(find.text('APrompter Unlimited'), findsOneWidget);
     expect(find.byType(BottomSheet), findsOneWidget);
   });
 
@@ -177,7 +177,36 @@ void main() {
     await _pump(tester, isUnlimited: true);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
-    expect(find.text('Go unlimited'), findsNothing);
+    expect(find.text('APrompter Unlimited'), findsNothing);
+  });
+
+  Finder libraryMenu() => find.descendant(
+    of: find.byType(AppBar),
+    matching: find.byIcon(Icons.more_vert),
+  );
+
+  testWidgets('the library menu opens the plans before any limit is hit', (
+    tester,
+  ) async {
+    _mockStore(tester, plans: true);
+    await _pump(tester, isUnlimited: false);
+    await tester.tap(libraryMenu());
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.workspace_premium_outlined), findsOneWidget);
+    await tester.tap(find.text('Upgrade'));
+    await tester.pumpAndSettle();
+    expect(find.text('APrompter Unlimited'), findsOneWidget);
+    expect(find.text(r'Yearly · $15.99 / year'), findsOneWidget);
+  });
+
+  testWidgets('an unlimited account has no Upgrade in the library menu', (
+    tester,
+  ) async {
+    await _pump(tester, isUnlimited: true);
+    await tester.tap(libraryMenu());
+    await tester.pumpAndSettle();
+    expect(find.text('Recently deleted'), findsOneWidget);
+    expect(find.text('Upgrade'), findsNothing);
   });
 
   testWidgets(
@@ -190,7 +219,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Duplicate'));
       await tester.pumpAndSettle();
-      expect(find.text('Go unlimited'), findsOneWidget);
+      expect(find.text('APrompter Unlimited'), findsOneWidget);
       expect(state.scripts, hasLength(2)); // seed + the one extra, no copy made
     },
   );

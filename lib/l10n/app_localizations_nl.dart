@@ -550,7 +550,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Sleep de balk boven aan de prompter om hem overal neer te zetten, en de hoek om het formaat te wijzigen. Op Android kun je het zwevende venster overal heen slepen en onthoudt het zijn plek.';
+      'Sleep de balk boven aan de prompter om hem overal neer te zetten, en de hoek om het formaat te wijzigen.';
 
   @override
   String get app => 'App';
@@ -671,7 +671,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'Op iPhone kunnen apps niet over andere apps zweven. Gebruik Opnemen om te filmen met het script onder de camera.';
+      'Op iPhone en iPad kunnen apps niet over andere apps zweven. Gebruik Opnemen om te filmen met het script onder de camera.';
 
   @override
   String get hashtagHint =>
@@ -935,11 +935,11 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Ga onbeperkt';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Ontgrendel onbeperkt veel en onbeperkt lange scripts met een abonnement of een eenmalige aankoop.';
+      'Onbeperkt scripts, met een abonnement of een eenmalige aankoop.';
 
   @override
   String get offeringsLoadFailed =>
@@ -957,7 +957,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Gratis scripts zijn beperkt tot $count woorden.';
+    return 'Dit script heeft meer dan $count woorden. Lange scripts horen bij APrompter Unlimited.';
   }
 
   @override
@@ -985,7 +985,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Maand- en jaarabonnementen worden automatisch verlengd tegen dezelfde prijs tot je opzegt. Zeg op elk moment op in je $store-accountinstellingen. Levenslang is een eenmalige aankoop.';
+    return 'Maand- en jaarabonnementen worden automatisch met dezelfde periode verlengd tot je opzegt. Zeg minstens 24 uur voor het einde van de periode op in je $store-accountinstellingen om de volgende afschrijving te voorkomen. Levenslang is een eenmalige aankoop.';
   }
 
   @override
@@ -1015,4 +1015,12 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get deleteForeverTakes =>
       'De takes ervan die in de app staan, worden ook verwijderd.';
+
+  @override
+  String get purchasePending =>
+      'Betaling in behandeling. APrompter Unlimited wordt automatisch ontgrendeld zodra die is goedgekeurd.';
+
+  @override
+  String get positionHintFloat =>
+      'Je kunt het zwevende venster overal heen slepen en het onthoudt zijn plek.';
 }

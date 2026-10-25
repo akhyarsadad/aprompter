@@ -518,7 +518,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get positionHint =>
-      '프롬프터 위쪽 막대를 끌면 원하는 곳으로 옮기고, 모서리를 끌면 크기를 바꿀 수 있어요. Android에서는 떠 있는 창을 어디로든 옮길 수 있고 위치도 기억해요.';
+      '프롬프터 위쪽 막대를 끌면 원하는 곳으로 옮기고, 모서리를 끌면 크기를 바꿀 수 있어요.';
 
   @override
   String get app => '앱';
@@ -637,7 +637,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone에서는 앱을 다른 앱 위에 띄울 수 없어요. \'촬영\'을 사용하면 카메라 아래에 대본을 두고 찍을 수 있어요.';
+      'iPhone과 iPad에서는 앱을 다른 앱 위에 띄울 수 없어요. \'촬영\'을 사용하면 카메라 아래에 대본을 두고 찍을 수 있어요.';
 
   @override
   String get hashtagHint =>
@@ -891,10 +891,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => '무제한으로 이용하기';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody => '구독 또는 1회 구매로 대본 개수와 길이 제한을 없애세요.';
+  String get upgradeBody => '구독 또는 1회 구매로 대본을 무제한으로 만들 수 있어요.';
 
   @override
   String get offeringsLoadFailed => '플랜을 불러오지 못했어요. 연결 상태를 확인하고 다시 시도하세요.';
@@ -910,7 +910,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return '무료 대본은 최대 $count단어까지예요.';
+    return '이 대본은 $count단어를 넘었어요. 긴 대본은 APrompter Unlimited에 포함돼요.';
   }
 
   @override
@@ -938,7 +938,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return '월간 및 연간 플랜은 해지할 때까지 같은 가격으로 자동 갱신돼요. $store 계정 설정에서 언제든지 해지할 수 있어요. 평생 이용권은 1회 구매예요.';
+    return '월간 및 연간 플랜은 해지할 때까지 같은 기간으로 자동 갱신돼요. 다음 결제를 피하려면 기간이 끝나기 최소 24시간 전에 $store 계정 설정에서 해지하세요. 평생 이용권은 1회 구매예요.';
   }
 
   @override
@@ -965,4 +965,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get deleteForeverTakes => '앱에 보관된 이 대본의 테이크도 함께 삭제돼요.';
+
+  @override
+  String get purchasePending =>
+      '결제가 대기 중이에요. 승인되면 APrompter Unlimited가 자동으로 열려요.';
+
+  @override
+  String get positionHintFloat => '떠 있는 창은 어디로든 옮길 수 있고 위치도 기억해요.';
 }

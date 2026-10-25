@@ -522,7 +522,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'ลากแถบด้านบนของพรอมป์เตอร์เพื่อย้ายไปที่ไหนก็ได้ และลากมุมเพื่อปรับขนาด บน Android หน้าต่างลอยลากไปได้ทุกที่และจำตำแหน่งไว้';
+      'ลากแถบด้านบนของพรอมป์เตอร์เพื่อย้ายไปที่ไหนก็ได้ และลากมุมเพื่อปรับขนาด';
 
   @override
   String get app => 'แอป';
@@ -643,7 +643,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone ไม่อนุญาตให้แอปลอยเหนือแอปอื่น ใช้ \"ถ่าย\" เพื่อถ่ายโดยมีสคริปต์อยู่ใต้กล้อง';
+      'iPhone และ iPad ไม่อนุญาตให้แอปลอยเหนือแอปอื่น ใช้ \"ถ่าย\" เพื่อถ่ายโดยมีสคริปต์อยู่ใต้กล้อง';
 
   @override
   String get hashtagHint =>
@@ -902,11 +902,11 @@ class AppLocalizationsTh extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'ใช้งานไม่จำกัด';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'ปลดล็อกสคริปต์และความยาวไม่จำกัดด้วยการสมัครสมาชิกหรือการซื้อครั้งเดียว';
+      'สคริปต์ไม่จำกัด ด้วยการสมัครสมาชิกหรือการซื้อครั้งเดียว';
 
   @override
   String get offeringsLoadFailed =>
@@ -923,7 +923,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'สคริปต์ฟรีจำกัดที่ $count คำ';
+    return 'สคริปต์นี้ยาวเกิน $count คำ สคริปต์ยาวเป็นส่วนหนึ่งของ APrompter Unlimited';
   }
 
   @override
@@ -951,7 +951,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'แผนรายเดือนและรายปีจะต่ออายุอัตโนมัติในราคาเดิมจนกว่าคุณจะยกเลิก ยกเลิกได้ทุกเมื่อในการตั้งค่าบัญชี $store ของคุณ แผนตลอดชีพเป็นการซื้อครั้งเดียว';
+    return 'แผนรายเดือนและรายปีจะต่ออายุอัตโนมัติในระยะเวลาเท่าเดิมจนกว่าคุณจะยกเลิก หากไม่ต้องการถูกเรียกเก็บเงินครั้งถัดไป ให้ยกเลิกอย่างน้อย 24 ชั่วโมงก่อนสิ้นสุดรอบในการตั้งค่าบัญชี $store ของคุณ แผนตลอดชีพเป็นการซื้อครั้งเดียว';
   }
 
   @override
@@ -979,4 +979,11 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get deleteForeverTakes => 'เทคของสคริปต์นี้ที่เก็บไว้ในแอปจะถูกลบด้วย';
+
+  @override
+  String get purchasePending =>
+      'การชำระเงินรอดำเนินการ APrompter Unlimited จะปลดล็อกโดยอัตโนมัติเมื่อได้รับการอนุมัติ';
+
+  @override
+  String get positionHintFloat => 'หน้าต่างลอยลากไปได้ทุกที่และจำตำแหน่งไว้';
 }

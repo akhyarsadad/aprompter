@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
@@ -28,6 +29,10 @@ import 'read_screen.dart';
 import 'takes_screen.dart';
 import 'trash_screen.dart';
 
+/// How long a share's free-plan answer outlives the import that got it,
+/// for batches native code reads after that (a slow cloud download).
+const _importGateQuiet = Duration(seconds: 30);
+
 /// Script library (journey J7).
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,12 +51,28 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _takeAgain = false;
   bool _waitingForUnlock = false;
 
+  /// The free plan's answer for the share coming in. Native code reads a
+  /// big share's next files only once Dart has taken the previous ones, so
+  /// its last batches can arrive after the run of [_takeShares] that asked
+  /// to upgrade has ended: they get the same answer, without the sheet
+  /// again. Sharing something else means leaving the app for the other one,
+  /// which starts afresh, and so does a quiet [_importGateQuiet] (two apps
+  /// side by side).
+  _ImportGate? _importGate;
+  Timer? _importGateExpiry;
+
+  void _forgetImportGate() {
+    _importGateExpiry?.cancel();
+    _importGate = null;
+  }
+
   // F9: pace changed in the floating window is picked up on return.
   late final _lifecycle = AppLifecycleListener(
     onResume: () {
       AppScope.read(context).reloadSettings();
       _scheduleTake();
     },
+    onHide: _forgetImportGate,
   );
 
   @override
@@ -85,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
+    _importGateExpiry?.cancel();
     _shares.dispose();
     _lifecycle.dispose();
     super.dispose();
@@ -104,17 +126,27 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
     _taking = true;
+    var took = false;
     try {
       do {
         _takeAgain = false;
         final shares = await _shares.takePending();
         if (shares.isEmpty || !mounted) continue;
+        took = true;
+        // Native code can hand one big share over in several batches: they
+        // are still one import, which asks to upgrade at most once.
+        _importGateExpiry?.cancel();
+        final gate = _importGate ??= _ImportGate();
         final results = [for (final share in shares) await importShare(share)];
         if (!mounted) return;
-        await _addImports(context, results);
+        await _addImports(context, results, gate: gate);
       } while (_takeAgain && mounted);
     } finally {
       _taking = false;
+      if (took && mounted && _importGate != null) {
+        _importGateExpiry?.cancel();
+        _importGateExpiry = Timer(_importGateQuiet, _forgetImportGate);
+      }
     }
   }
 
@@ -122,6 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final state = AppScope.of(context);
+    final unlimited = EntitlementsScope.of(context).isUnlimited;
     final q = foldForSearch(_query);
     final scripts = state.scripts
         .where((s) => _filter == null || s.status == _filter)
@@ -149,6 +182,14 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton<_LibraryAction>(
             onSelected: (a) => _onLibraryAction(context, a),
             itemBuilder: (_) => [
+              // The plans, without first having to hit a limit.
+              if (!unlimited) ...[
+                PopupMenuItem(
+                  value: _LibraryAction.upgrade,
+                  child: _MenuRow(Icons.workspace_premium_outlined, l.upgrade),
+                ),
+                const PopupMenuDivider(),
+              ],
               PopupMenuItem(
                 value: _LibraryAction.trash,
                 child: _MenuRow(Icons.delete_sweep_outlined, l.recentlyDeleted),
@@ -228,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-enum _LibraryAction { trash, backup, restore }
+enum _LibraryAction { upgrade, trash, backup, restore }
 
 Future<void> _onLibraryAction(
   BuildContext context,
@@ -238,6 +279,8 @@ Future<void> _onLibraryAction(
   final state = AppScope.read(context);
   final messenger = ScaffoldMessenger.of(context);
   switch (action) {
+    case _LibraryAction.upgrade:
+      await showUpgradeFlow(context);
     case _LibraryAction.trash:
       await Navigator.push(
         context,
@@ -339,8 +382,9 @@ Future<void> _newScript(BuildContext context) async {
     state.scriptsCountingTowardFreeLimit,
     entitlements.isUnlimited,
   )) {
-    await showUpgradeFlow(context);
-    return;
+    // Bought, restored, or the store has just confirmed a subscription it
+    // hadn't answered for yet: carry on to the templates.
+    if (!await showUpgradeFlow(context) || !context.mounted) return;
   }
   final l = context.l10n;
   final choice = await showModalBottomSheet<Object>(
@@ -525,10 +569,14 @@ Future<void> _importFiles(BuildContext context) async {
 /// Backups merge without the free-plan check, like "Restore from a backup"
 /// in the library menu, which takes the very same file: they bring back the
 /// person's own scripts.
+///
+/// [gate] carries the free-plan answer across calls that make up one
+/// import; by default every call is an import of its own.
 Future<void> _addImports(
   BuildContext context,
-  List<ImportResult> results,
-) async {
+  List<ImportResult> results, {
+  _ImportGate? gate,
+}) async {
   final l = context.l10n;
   final state = AppScope.read(context);
   final entitlements = EntitlementsScope.read(context);
@@ -537,8 +585,7 @@ Future<void> _addImports(
   var created = 0;
   int? restored;
   ImportFailure? failure;
-  var askedToUpgrade = false;
-  var blocked = false;
+  final g = gate ?? _ImportGate();
 
   bool canAdd() => canCreateScript(
     state.scriptsCountingTowardFreeLimit,
@@ -569,14 +616,14 @@ Future<void> _addImports(
             continue;
           }
           // Past the free plan nothing new is added, but backups and
-          // failures later in the batch still come through.
-          if (blocked) continue;
-          if (!canAdd() && !askedToUpgrade && context.mounted) {
-            askedToUpgrade = true;
+          // failures later in the batch still come through. Asked once per
+          // share; Unlimited bought meanwhile lets the rest in.
+          if (!canAdd() && !g.askedToUpgrade && context.mounted) {
+            g.askedToUpgrade = true;
             await showUpgradeFlow(context);
           }
           if (!canAdd()) {
-            blocked = true;
+            g.blocked = true;
             continue;
           }
           final script = Storage.newScript().copyWith(
@@ -596,7 +643,8 @@ Future<void> _addImports(
       SnackBar(content: Text(l.importedScripts(restored))),
     );
   }
-  if (blocked) {
+  if (g.blocked && !g.toldBlocked) {
+    g.toldBlocked = true;
     // Nothing is lost: the note or file is still in the other app.
     messenger.showSnackBar(
       SnackBar(
@@ -619,6 +667,16 @@ Future<void> _addImports(
       SnackBar(content: Text(l.importedNewScripts(created))),
     );
   }
+}
+
+/// The free plan's answer during one import, which can span several calls
+/// to [_addImports] (a share native code hands over in batches): the
+/// upgrade sheet is offered at most once, and once declined the rest of the
+/// import adds nothing new and says so once.
+class _ImportGate {
+  bool askedToUpgrade = false;
+  bool blocked = false;
+  bool toldBlocked = false;
 }
 
 String _failureText(AppLocalizations l, ImportFailure failure) =>
@@ -696,8 +754,8 @@ class _ScriptCard extends StatelessWidget {
           state.scriptsCountingTowardFreeLimit,
           entitlements.isUnlimited,
         )) {
-          await showUpgradeFlow(context);
-          return;
+          // Unlimited now (bought, restored, or confirmed late): duplicate.
+          if (!await showUpgradeFlow(context) || !context.mounted) return;
         }
         final copy = await state.duplicate(
           script.id,

@@ -526,7 +526,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Kéo thanh trên cùng của máy nhắc chữ để đặt ở bất kỳ đâu, và kéo góc để đổi kích thước. Trên Android, cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó.';
+      'Kéo thanh trên cùng của máy nhắc chữ để đặt ở bất kỳ đâu, và kéo góc để đổi kích thước.';
 
   @override
   String get app => 'Ứng dụng';
@@ -647,7 +647,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone không cho ứng dụng nổi trên ứng dụng khác. Dùng Quay để quay với kịch bản ngay dưới camera.';
+      'iPhone và iPad không cho ứng dụng nổi trên ứng dụng khác. Dùng Quay để quay với kịch bản ngay dưới camera.';
 
   @override
   String get hashtagHint =>
@@ -910,11 +910,11 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Dùng không giới hạn';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Mở khóa số lượng và độ dài kịch bản không giới hạn bằng gói thuê bao hoặc mua một lần.';
+      'Kịch bản không giới hạn, với gói thuê bao hoặc mua một lần.';
 
   @override
   String get offeringsLoadFailed =>
@@ -931,7 +931,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Kịch bản miễn phí giới hạn $count từ.';
+    return 'Kịch bản này dài hơn $count từ. Kịch bản dài là một phần của APrompter Unlimited.';
   }
 
   @override
@@ -959,7 +959,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Gói tháng và gói năm tự động gia hạn với cùng mức giá cho đến khi bạn hủy. Hủy bất cứ lúc nào trong phần cài đặt tài khoản $store của bạn. Gói trọn đời là giao dịch mua một lần.';
+    return 'Gói tháng và gói năm tự động gia hạn với cùng thời hạn cho đến khi bạn hủy. Để tránh bị tính phí kỳ tiếp theo, hãy hủy ít nhất 24 giờ trước khi kỳ hiện tại kết thúc trong phần cài đặt tài khoản $store của bạn. Gói trọn đời là giao dịch mua một lần.';
   }
 
   @override
@@ -989,4 +989,12 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get deleteForeverTakes =>
       'Các lần quay của kịch bản này lưu trong ứng dụng cũng sẽ bị xóa.';
+
+  @override
+  String get purchasePending =>
+      'Thanh toán đang chờ xử lý. APrompter Unlimited sẽ tự động mở khóa sau khi được chấp thuận.';
+
+  @override
+  String get positionHintFloat =>
+      'Cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó.';
 }

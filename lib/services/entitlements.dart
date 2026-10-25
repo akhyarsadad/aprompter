@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 
 import '../models/script.dart';
@@ -31,15 +33,37 @@ Set<String> computeGrandfatheredIds(List<Script> scripts) => {
 /// RevenueCat elsewhere ([lib/services/purchase_service.dart]); this class only
 /// holds the resulting bool so the rest of the app never touches RevenueCat
 /// types directly.
+///
+/// At launch `main.dart` starts it from the last answer this device saw and
+/// with `known: false`; it becomes known once RevenueCat has answered (or
+/// failed to). Anything built directly — tests, previews — is known at once.
 class Entitlements extends ChangeNotifier {
   // `isUnlimited` is the stable public constructor param; the
   // initializing-formal lint would rename it to the private field name,
-  // breaking callers — suppressed on the line below for that reason.
-  // ignore: prefer_initializing_formals
-  Entitlements({bool isUnlimited = false}) : _isUnlimited = isUnlimited;
+  // breaking callers — suppressed on the initializer below for that reason.
+  Entitlements({bool isUnlimited = false, bool known = true})
+    // ignore: prefer_initializing_formals
+    : _isUnlimited = isUnlimited {
+    if (known) _known.complete();
+  }
 
   bool _isUnlimited;
   bool get isUnlimited => _isUnlimited;
+
+  final _known = Completer<void>();
+
+  /// Whether the store has answered since launch, or failed to. Until then
+  /// [isUnlimited] is only what this device knew the last time.
+  bool get isKnown => _known.isCompleted;
+
+  /// Completes once [markKnown] has run.
+  Future<void> get whenKnown => _known.future;
+
+  /// The store has answered at launch, or failed to: from now on
+  /// [isUnlimited] is as good as it gets until the next change.
+  void markKnown() {
+    if (!_known.isCompleted) _known.complete();
+  }
 
   void setUnlimited(bool value) {
     if (_isUnlimited == value) return;

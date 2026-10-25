@@ -1076,7 +1076,7 @@ abstract class AppLocalizations {
   /// No description provided for @positionHint.
   ///
   /// In en, this message translates to:
-  /// **'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.'**
+  /// **'Drag the bar on top of the prompter to move it anywhere, and the corner to resize.'**
   String get positionHint;
 
   /// No description provided for @app.
@@ -1256,7 +1256,7 @@ abstract class AppLocalizations {
   /// No description provided for @floatNotOnIos.
   ///
   /// In en, this message translates to:
-  /// **'iPhone doesn\'t let apps float over other apps. Use Record to film with the script under the camera.'**
+  /// **'Apps can\'t float over other apps on iPhone and iPad. Use Record to film with the script under the camera.'**
   String get floatNotOnIos;
 
   /// No description provided for @hashtagHint.
@@ -1688,13 +1688,13 @@ abstract class AppLocalizations {
   /// No description provided for @upgradeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Go unlimited'**
+  /// **'APrompter Unlimited'**
   String get upgradeTitle;
 
   /// No description provided for @upgradeBody.
   ///
   /// In en, this message translates to:
-  /// **'Unlock unlimited scripts and length with a subscription or a one-time purchase.'**
+  /// **'Unlimited scripts, with a subscription or a one-time purchase.'**
   String get upgradeBody;
 
   /// No description provided for @offeringsLoadFailed.
@@ -1724,7 +1724,7 @@ abstract class AppLocalizations {
   /// No description provided for @wordCapBannerText.
   ///
   /// In en, this message translates to:
-  /// **'Free scripts are capped at {count} words.'**
+  /// **'This script is over {count} words. Long scripts are part of APrompter Unlimited.'**
   String wordCapBannerText(int count);
 
   /// No description provided for @upgrade.
@@ -1760,7 +1760,7 @@ abstract class AppLocalizations {
   /// No description provided for @subscriptionTerms.
   ///
   /// In en, this message translates to:
-  /// **'Monthly and yearly plans renew automatically at the same price until you cancel. Cancel anytime in your {store} account settings. Lifetime is a one-time purchase.'**
+  /// **'Monthly and yearly plans renew automatically for the same period until you cancel. To avoid the next charge, cancel at least 24 hours before the period ends in your {store} account settings. Lifetime is a one-time purchase.'**
   String subscriptionTerms(String store);
 
   /// No description provided for @termsOfUse.
@@ -1804,6 +1804,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Its takes kept in the app are deleted too.'**
   String get deleteForeverTakes;
+
+  /// No description provided for @purchasePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending. APrompter Unlimited unlocks automatically once it\'s approved.'**
+  String get purchasePending;
+
+  /// No description provided for @positionHintFloat.
+  ///
+  /// In en, this message translates to:
+  /// **'The floating window can be dragged anywhere and remembers its spot.'**
+  String get positionHintFloat;
 }
 
 class _AppLocalizationsDelegate

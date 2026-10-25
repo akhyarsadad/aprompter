@@ -545,7 +545,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Trascina la barra in cima al prompter per spostarlo ovunque e l\'angolo per ridimensionarlo. Su Android la finestra fluttuante si sposta ovunque e ricorda la posizione.';
+      'Trascina la barra in cima al prompter per spostarlo ovunque e l\'angolo per ridimensionarlo.';
 
   @override
   String get app => 'App';
@@ -666,7 +666,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'Su iPhone le app non possono fluttuare sopra altre app. Usa Registra per filmare con il copione sotto la fotocamera.';
+      'Su iPhone e iPad le app non possono fluttuare sopra altre app. Usa Registra per filmare con il copione sotto la fotocamera.';
 
   @override
   String get hashtagHint =>
@@ -930,11 +930,11 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Passa a illimitato';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Sblocca copioni illimitati e senza limiti di lunghezza con un abbonamento o un acquisto una tantum.';
+      'Copioni illimitati, con un abbonamento o un acquisto una tantum.';
 
   @override
   String get offeringsLoadFailed =>
@@ -951,7 +951,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'I copioni gratuiti hanno un limite di $count parole.';
+    return 'Questo copione supera le $count parole. I copioni lunghi fanno parte di APrompter Unlimited.';
   }
 
   @override
@@ -979,7 +979,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'I piani mensile e annuale si rinnovano automaticamente allo stesso prezzo finché non li annulli. Annulla quando vuoi dalle impostazioni del tuo account $store. A vita è un acquisto una tantum.';
+    return 'I piani mensile e annuale si rinnovano automaticamente per lo stesso periodo finché non li annulli. Per evitare il prossimo addebito, annulla almeno 24 ore prima della fine del periodo dalle impostazioni del tuo account $store. A vita è un acquisto una tantum.';
   }
 
   @override
@@ -1009,4 +1009,12 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get deleteForeverTakes =>
       'Verranno eliminate anche le sue riprese salvate nell\'app.';
+
+  @override
+  String get purchasePending =>
+      'Pagamento in sospeso. APrompter Unlimited si sblocca automaticamente appena viene approvato.';
+
+  @override
+  String get positionHintFloat =>
+      'La finestra fluttuante si sposta ovunque e ricorda la posizione.';
 }
