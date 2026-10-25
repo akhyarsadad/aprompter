@@ -327,11 +327,28 @@ private enum ShareImporter {
     "org.oasis-open.opendocument.text",
   ]
 
+  /// Word and OpenDocument text templates: the app imports them like the
+  /// documents themselves, although they are not text-like for merging.
+  static let documentTemplateIdentifiers: Set<String> = [
+    "org.openxmlformats.wordprocessingml.template",
+    "org.oasis-open.opendocument.text-template",
+  ]
+
   /// Data the app turns away (see `isRefused`), besides PDFs, spreadsheets,
   /// presentations, iWork files and archives other than zip.
   static let refusedDocumentIdentifiers: Set<String> = [
     "org.openxmlformats.spreadsheetml.sheet",
     "org.openxmlformats.presentationml.presentation",
+    "org.oasis-open.opendocument.spreadsheet",
+    "org.oasis-open.opendocument.presentation",
+  ]
+
+  /// A plain zip archive. Only these exact types pass as archives: EPUB, JAR
+  /// and other zip-based containers conform to public.zip-archive too, but
+  /// the app cannot open them.
+  static let zipIdentifiers: Set<String> = [
+    "public.zip-archive",
+    "com.pkware.zip-archive",
   ]
 
   /// Name of shared text over the size limit, passed on as a too-large file.
@@ -461,13 +478,16 @@ private enum ShareImporter {
   }
 
   /// Data the app cannot turn into a script: PDFs, spreadsheets,
-  /// presentations, iWork files and archives other than zip (a zip of notes,
-  /// such as a Notion or Obsidian export, is imported). Word and OpenDocument
-  /// text files are zip-based but always pass. The activation rule in
+  /// presentations, iWork files and archives other than a plain zip (a zip of
+  /// notes, such as a Notion or Obsidian export, is imported; EPUB and other
+  /// zip-based containers are not). Word and OpenDocument text files and
+  /// their templates are zip-based but always pass. The activation rule in
   /// Info.plist turns the same types away, so the share sheet does not offer
   /// APrompter for them.
   private static func isRefused(_ type: UTType) -> Bool {
-    if conforms(type, toAnyOf: textLikeDocumentIdentifiers) {
+    if conforms(type, toAnyOf: textLikeDocumentIdentifiers)
+      || conforms(type, toAnyOf: documentTemplateIdentifiers)
+    {
       return false
     }
     if type.conforms(to: .pdf) || type.conforms(to: .spreadsheet)
@@ -482,7 +502,7 @@ private enum ShareImporter {
     {
       return true
     }
-    return type.conforms(to: .archive) && !type.conforms(to: .zip)
+    return type.conforms(to: .archive) && !zipIdentifiers.contains(type.identifier)
   }
 
   /// Whether `type` is, or conforms to, one of `identifiers` (which need not

@@ -71,7 +71,9 @@ AND SUBQUERY (
         (
             ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.text"
             OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.wordprocessingml.document"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.wordprocessingml.template"
             OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.text"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.text-template"
             OR (
                 ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.data"
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.adobe.pdf")
@@ -79,6 +81,8 @@ AND SUBQUERY (
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.presentation")
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.spreadsheetml.sheet")
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.presentationml.presentation")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.spreadsheet")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.presentation")
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.pages.sffpages")
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.pages.pages")
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.numbers.sffnumbers")
@@ -87,7 +91,10 @@ AND SUBQUERY (
                 AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.keynote.key")
                 AND NOT (
                     ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.archive"
-                    AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.zip-archive")
+                    AND NOT (
+                        ANY $attachment.registeredTypeIdentifiers == "public.zip-archive"
+                        OR ANY $attachment.registeredTypeIdentifiers == "com.pkware.zip-archive"
+                    )
                 )
             )
         )
