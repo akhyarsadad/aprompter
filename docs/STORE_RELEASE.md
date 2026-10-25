@@ -171,3 +171,19 @@ The app has no crash reporting. Options, in order of privacy:
       tested there.
 - [ ] Put a **support email** on both store listings: the privacy policy sends data-deletion
       requests there.
+
+## 9. Known and accepted for launch
+
+Found in the pre-release review and deliberately left for later — none blocks review:
+
+- **Notification permission (Android 13+):** the app never asks for `POST_NOTIFICATIONS`, so
+  the Float service's notification shows only in Android's task manager unless the user
+  allows notifications in Settings (backlog F11). Float itself works.
+- **Free limit and your own scripts:** restoring from *Recently deleted*, *Undo* after a
+  delete, and *Restore from a backup* never count against the one free script — bringing back
+  your own work is never paywalled.
+- **Shared notes:** when text is shared from a notes app without a title, a short first line
+  becomes the title and leaves the body (Apple Notes / Samsung Notes put the title there).
+  *Paste as new script* always keeps every line.
+- **Translations:** the new paywall and import strings are machine-assisted in all 28
+  languages; see the native-speaker review in §8.

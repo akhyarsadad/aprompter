@@ -265,6 +265,27 @@ void main() {
     });
   });
 
+  test('takes whose video is gone (e.g. left out of a cloud backup) are '
+      'forgotten at start, takes with a video stay', () async {
+    final dir = _takesDir();
+    _video(dir, 'kept-1.mp4');
+    SharedPreferences.setMockInitialValues({
+      'takes': jsonEncode([
+        _oldTake('a', 'kept-1.mp4').toJson(),
+        _oldTake('a', 'restored-without-video.mp4').toJson(),
+      ]),
+    });
+    final state = AppState(
+      await Storage.open(),
+      takesDirectory: () async => dir,
+    );
+    await state.expiredTrashCleared;
+    expect(state.takesOf('a').map((t) => t.fileName), ['kept-1.mp4']);
+    expect((await Storage.open()).loadTakes().map((t) => t.fileName), [
+      'kept-1.mp4',
+    ]);
+  });
+
   group('data-2 a backup is merged with Recently deleted too', () {
     test(
       'an older backup copy does not replace a newer deleted script',

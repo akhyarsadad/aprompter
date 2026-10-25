@@ -20,7 +20,9 @@ class AppState extends ChangeNotifier {
       _trash = storage.loadTrash(),
       _locale = parseLocaleTag(storage.loadLocale()),
       _takesDirectory = takesDirectory ?? _documentsTakes {
-    _expiredTrashCleared = _clearExpiredTrash();
+    _expiredTrashCleared = _clearExpiredTrash().then(
+      (_) => _forgetMissingTakes(),
+    );
   }
 
   final Storage storage;
@@ -299,7 +301,33 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  /// Completes once what expired scripts left behind is deleted.
+  /// Takes whose video is gone are forgotten: Android's cloud backup leaves
+  /// the videos out on purpose (they'd use up its quota and stop the scripts
+  /// from being backed up), so a restored phone would list takes it can't
+  /// play. Runs once, when the app starts.
+  Future<void> _forgetMissingTakes() async {
+    try {
+      final takes = storage.loadTakes();
+      if (takes.isEmpty) return;
+      final gone = <String>{};
+      for (final take in takes) {
+        if (!await (await takeFile(take)).exists()) gone.add(take.path);
+      }
+      if (gone.isEmpty) return;
+      await _persist(
+        () => storage.saveTakes([
+          for (final t in storage.loadTakes())
+            if (!gone.contains(t.path)) t,
+        ]),
+      );
+      notifyListeners();
+    } catch (_) {
+      // Tried again on the next start.
+    }
+  }
+
+  /// Completes once what expired scripts left behind is deleted and takes
+  /// without a video are forgotten.
   @visibleForTesting
   Future<void> get expiredTrashCleared => _expiredTrashCleared;
 
