@@ -997,4 +997,21 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó.';
+
+  @override
+  String get readingLine => 'Vị trí đường dẫn đọc';
+
+  @override
+  String get readingLineHint =>
+      'Camera điện thoại nằm phía trên màn hình: đặt đường đọc cao giúp mắt bạn ở gần ống kính.';
+
+  @override
+  String get readingLineNearCamera => 'Gần camera';
+
+  @override
+  String get readingLineMiddle => 'Giữa';
+
+  @override
+  String get readingLineDragHint =>
+      'Khi đang đọc, bạn cũng có thể kéo mũi tên bên trái của đường lên hoặc xuống.';
 }

@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "\"{title}\" definitief verwijderen? Dit kan niet ongedaan worden gemaakt.",
   "deleteForeverTakes": "De takes ervan die in de app staan, worden ook verwijderd.",
   "purchasePending": "Betaling in behandeling. APrompter Unlimited wordt automatisch ontgrendeld zodra die is goedgekeurd.",
-  "positionHintFloat": "Je kunt het zwevende venster overal heen slepen en het onthoudt zijn plek."
+  "positionHintFloat": "Je kunt het zwevende venster overal heen slepen en het onthoudt zijn plek.",
+  "readingLine": "Positie van de leeslijn",
+  "readingLineHint": "De camera van je telefoon zit boven het scherm: een hoge lijn houdt je blik dicht bij de lens.",
+  "readingLineNearCamera": "Bij de camera",
+  "readingLineMiddle": "Midden",
+  "readingLineDragHint": "Tijdens het lezen kun je ook de linkerpijl van de lijn omhoog of omlaag slepen."
 }

@@ -996,4 +996,21 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'تیرتی ونڈو کہیں بھی گھسیٹی جا سکتی ہے اور اپنی جگہ یاد رکھتی ہے۔';
+
+  @override
+  String get readingLine => 'پڑھنے کی لکیر کی جگہ';
+
+  @override
+  String get readingLineHint =>
+      'فون کا کیمرہ اسکرین کے اوپر ہوتا ہے: لکیر اوپر رکھنے سے آپ کی نظر لینس کے قریب رہتی ہے۔';
+
+  @override
+  String get readingLineNearCamera => 'کیمرے کے قریب';
+
+  @override
+  String get readingLineMiddle => 'درمیان';
+
+  @override
+  String get readingLineDragHint =>
+      'پڑھتے ہوئے آپ لکیر کے بائیں تیر کو اوپر یا نیچے گھسیٹ بھی سکتے ہیں۔';
 }

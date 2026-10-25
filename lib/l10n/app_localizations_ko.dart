@@ -972,4 +972,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get positionHintFloat => '떠 있는 창은 어디로든 옮길 수 있고 위치도 기억해요.';
+
+  @override
+  String get readingLine => '읽기 선 위치';
+
+  @override
+  String get readingLineHint => '휴대폰 카메라는 화면 위에 있어요. 선을 높이 두면 시선이 렌즈 가까이 머물러요.';
+
+  @override
+  String get readingLineNearCamera => '카메라 가까이';
+
+  @override
+  String get readingLineMiddle => '가운데';
+
+  @override
+  String get readingLineDragHint => '읽는 중에도 선 왼쪽의 화살표를 위아래로 끌어 옮길 수 있어요.';
 }

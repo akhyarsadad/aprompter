@@ -1816,6 +1816,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The floating window can be dragged anywhere and remembers its spot.'**
   String get positionHintFloat;
+
+  /// No description provided for @readingLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading line position'**
+  String get readingLine;
+
+  /// No description provided for @readingLineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone cameras sit above the screen: a high line keeps your eyes near the lens.'**
+  String get readingLineHint;
+
+  /// No description provided for @readingLineNearCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Near camera'**
+  String get readingLineNearCamera;
+
+  /// No description provided for @readingLineMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle'**
+  String get readingLineMiddle;
+
+  /// No description provided for @readingLineDragHint.
+  ///
+  /// In en, this message translates to:
+  /// **'While reading, you can also drag the line\'s left arrow up or down.'**
+  String get readingLineDragHint;
 }
 
 class _AppLocalizationsDelegate

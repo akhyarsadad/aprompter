@@ -26,6 +26,7 @@ class PrompterSettings {
     this.brightScreen = false,
     this.takesToGallery = true,
     this.reviewTakes = true,
+    this.guidePosition = defaultGuidePosition,
   });
 
   /// Font size in logical pixels.
@@ -90,6 +91,21 @@ class PrompterSettings {
 
   /// Show each take for keep / retake before saving it.
   final bool reviewTakes;
+
+  /// Height of the reading line, as a fraction of the prompter's height from
+  /// its top. Phones have the front camera at the top, so by default the line
+  /// being read sits high, keeping the eyes close to the lens.
+  final double guidePosition;
+
+  static const defaultGuidePosition = 0.15;
+  static const minGuidePosition = 0.05;
+
+  /// A little past the middle at most: beam-splitter glass is read around the
+  /// middle, and lower than that leaves little room for the lines coming up.
+  static const maxGuidePosition = 0.6;
+
+  static double clampGuidePosition(double position) =>
+      position.clamp(minGuidePosition, maxGuidePosition).toDouble();
 
   static const autoStopDelays = <int>[2, 5, 10];
   static const maxLetterSpacing = 4.0;
@@ -167,6 +183,7 @@ class PrompterSettings {
     bool? brightScreen,
     bool? takesToGallery,
     bool? reviewTakes,
+    double? guidePosition,
   }) => PrompterSettings(
     fontSize: fontSize ?? this.fontSize,
     wpm: wpm != null ? clampWpm(wpm) : this.wpm,
@@ -191,6 +208,9 @@ class PrompterSettings {
     brightScreen: brightScreen ?? this.brightScreen,
     takesToGallery: takesToGallery ?? this.takesToGallery,
     reviewTakes: reviewTakes ?? this.reviewTakes,
+    guidePosition: guidePosition != null
+        ? clampGuidePosition(guidePosition)
+        : this.guidePosition,
   );
 
   Map<String, dynamic> toJson() => {
@@ -217,6 +237,7 @@ class PrompterSettings {
     'brightScreen': brightScreen,
     'takesToGallery': takesToGallery,
     'reviewTakes': reviewTakes,
+    'guidePosition': guidePosition,
   };
 
   factory PrompterSettings.fromJson(Map<String, dynamic> json) {
@@ -272,6 +293,7 @@ class PrompterSettings {
       brightScreen: json['brightScreen'] as bool? ?? d.brightScreen,
       takesToGallery: json['takesToGallery'] as bool? ?? d.takesToGallery,
       reviewTakes: json['reviewTakes'] as bool? ?? d.reviewTakes,
+      guidePosition: clampGuidePosition(n('guidePosition', d.guidePosition)),
     );
   }
 }
@@ -313,6 +335,8 @@ enum SetupPreset {
       backgroundOpacity: 0.45,
       mirror: false,
       textAlign: TextAlign.center,
+      // In hand, the lens is right above the prompter: read just below it.
+      guidePosition: 0.12,
     ),
     SetupPreset.tripod => s.copyWith(
       fontSize: 56,
@@ -323,6 +347,8 @@ enum SetupPreset {
       prompterTop: 0,
       backgroundOpacity: 0.6,
       mirror: false,
+      // Further away the eye-line matters less; a bit lower is easier.
+      guidePosition: 0.25,
     ),
     SetupPreset.glass => s.copyWith(
       fontSize: 48,
@@ -333,6 +359,8 @@ enum SetupPreset {
       backgroundOpacity: 1,
       mirror: true,
       textColor: 0xFFFFFFFF,
+      // Beam-splitter glass sits in front of the lens: read in the middle.
+      guidePosition: 0.4,
     ),
   };
 }

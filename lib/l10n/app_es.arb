@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "¿Eliminar «{title}» para siempre? No se podrá recuperar.",
   "deleteForeverTakes": "También se eliminarán sus tomas guardadas en la app.",
   "purchasePending": "Pago pendiente. APrompter Unlimited se desbloquea automáticamente en cuanto se apruebe.",
-  "positionHintFloat": "La ventana flotante se puede arrastrar a cualquier lugar y recuerda su posición."
+  "positionHintFloat": "La ventana flotante se puede arrastrar a cualquier lugar y recuerda su posición.",
+  "readingLine": "Posición de la línea de lectura",
+  "readingLineHint": "La cámara del teléfono está encima de la pantalla: con la línea arriba, tu mirada queda cerca del objetivo.",
+  "readingLineNearCamera": "Cerca de la cámara",
+  "readingLineMiddle": "Centro",
+  "readingLineDragHint": "Mientras lees, también puedes arrastrar la flecha izquierda de la línea hacia arriba o hacia abajo."
 }

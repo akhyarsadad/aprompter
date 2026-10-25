@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Padam \"{title}\" selama-lamanya? Ia tidak dapat dikembalikan.",
   "deleteForeverTakes": "Rakamannya yang disimpan dalam apl juga akan dipadam.",
   "purchasePending": "Pembayaran belum selesai. APrompter Unlimited dibuka secara automatik sebaik sahaja ia diluluskan.",
-  "positionHintFloat": "Tetingkap terapung boleh diseret ke mana-mana dan mengingati kedudukannya."
+  "positionHintFloat": "Tetingkap terapung boleh diseret ke mana-mana dan mengingati kedudukannya.",
+  "readingLine": "Kedudukan garis bacaan",
+  "readingLineHint": "Kamera telefon terletak di atas skrin: garis yang tinggi mengekalkan mata anda dekat dengan kanta.",
+  "readingLineNearCamera": "Dekat kamera",
+  "readingLineMiddle": "Tengah",
+  "readingLineDragHint": "Semasa membaca, anda juga boleh menyeret anak panah kiri garis ke atas atau ke bawah."
 }

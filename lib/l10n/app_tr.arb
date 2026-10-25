@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "\"{title}\" kalıcı olarak silinsin mi? Geri getirilemez.",
   "deleteForeverTakes": "Uygulamada saklanan çekimleri de silinir.",
   "purchasePending": "Ödeme beklemede. Onaylandığında APrompter Unlimited otomatik olarak açılır.",
-  "positionHintFloat": "Yüzen pencere her yere sürüklenebilir ve yerini hatırlar."
+  "positionHintFloat": "Yüzen pencere her yere sürüklenebilir ve yerini hatırlar.",
+  "readingLine": "Okuma çizgisinin konumu",
+  "readingLineHint": "Telefon kamerası ekranın üstündedir: çizgi yukarıdayken bakışın lense yakın kalır.",
+  "readingLineNearCamera": "Kameraya yakın",
+  "readingLineMiddle": "Orta",
+  "readingLineDragHint": "Okurken çizginin soldaki okunu yukarı ya da aşağı da sürükleyebilirsin."
 }

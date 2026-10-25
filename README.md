@@ -68,6 +68,8 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
 
 - Jump to any section to retake just that part.
 - **Pinch** the prompter text to resize it on the fly; you stay on the same line.
+- **Reading line near the lens:** it sits high by default (front camera on top); move it in
+  *Settings → Layout* or drag its left arrow in Rehearse and Record.
 - **Put the prompter anywhere:** in Record, drag the bar on top of the prompter to move
   it and the corner handle to resize it. On Android, the floating window can be dragged
   anywhere over other apps, its width is adjustable, and it reopens where you left it.

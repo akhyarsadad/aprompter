@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "حذف \"{title}\" نهائيًا؟ لا يمكن التراجع عن ذلك.",
   "deleteForeverTakes": "ستُحذف أيضًا لقطاته المحفوظة في التطبيق.",
   "purchasePending": "الدفع قيد الانتظار. سيُفتح APrompter Unlimited تلقائيًا بمجرد الموافقة عليه.",
-  "positionHintFloat": "يمكن سحب النافذة العائمة إلى أي مكان وتتذكر موضعها."
+  "positionHintFloat": "يمكن سحب النافذة العائمة إلى أي مكان وتتذكر موضعها.",
+  "readingLine": "موضع خط القراءة",
+  "readingLineHint": "كاميرا الهاتف فوق الشاشة: الخط المرتفع يُبقي عينيك قرب العدسة.",
+  "readingLineNearCamera": "قرب الكاميرا",
+  "readingLineMiddle": "المنتصف",
+  "readingLineDragHint": "أثناء القراءة، يمكنك أيضًا سحب السهم الأيسر للخط لأعلى أو لأسفل."
 }

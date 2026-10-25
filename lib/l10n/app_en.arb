@@ -611,5 +611,10 @@
   },
   "deleteForeverTakes": "Its takes kept in the app are deleted too.",
   "purchasePending": "Payment pending. APrompter Unlimited unlocks automatically once it's approved.",
-  "positionHintFloat": "The floating window can be dragged anywhere and remembers its spot."
+  "positionHintFloat": "The floating window can be dragged anywhere and remembers its spot.",
+  "readingLine": "Reading line position",
+  "readingLineHint": "Phone cameras sit above the screen: a high line keeps your eyes near the lens.",
+  "readingLineNearCamera": "Near camera",
+  "readingLineMiddle": "Middle",
+  "readingLineDragHint": "While reading, you can also drag the line's left arrow up or down."
 }

@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Xóa vĩnh viễn \"{title}\"? Không thể khôi phục.",
   "deleteForeverTakes": "Các lần quay của kịch bản này lưu trong ứng dụng cũng sẽ bị xóa.",
   "purchasePending": "Thanh toán đang chờ xử lý. APrompter Unlimited sẽ tự động mở khóa sau khi được chấp thuận.",
-  "positionHintFloat": "Cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó."
+  "positionHintFloat": "Cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó.",
+  "readingLine": "Vị trí đường dẫn đọc",
+  "readingLineHint": "Camera điện thoại nằm phía trên màn hình: đặt đường đọc cao giúp mắt bạn ở gần ống kính.",
+  "readingLineNearCamera": "Gần camera",
+  "readingLineMiddle": "Giữa",
+  "readingLineDragHint": "Khi đang đọc, bạn cũng có thể kéo mũi tên bên trái của đường lên hoặc xuống."
 }

@@ -117,6 +117,17 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
     await storage.saveSettings(storage.loadSettings().copyWith(wpm: wpm));
   }
 
+  /// The reading line moved in the window (screen readers; drags move the
+  /// window itself) is kept for the app and the next float, like the pace.
+  Future<void> _saveGuidePosition(double position) async {
+    setState(() => _settings = _settings.copyWith(guidePosition: position));
+    final storage = await Storage.open();
+    await storage.reload();
+    await storage.saveSettings(
+      storage.loadSettings().copyWith(guidePosition: position),
+    );
+  }
+
   Future<void> _toggleMinimize() async {
     final display = PlatformDispatcher.instance.displays.first;
     final screen = display.size / display.devicePixelRatio;
@@ -242,6 +253,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
                             manualScroll: false,
                             autofocus: false,
                             onTap: _start,
+                            onGuidePositionChanged: _saveGuidePosition,
                           ),
                   ),
                   if (_counting)

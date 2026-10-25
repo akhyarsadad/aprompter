@@ -1036,4 +1036,21 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Pływające okno można przeciągnąć wszędzie i zapamiętuje swoje miejsce.';
+
+  @override
+  String get readingLine => 'Położenie linii czytania';
+
+  @override
+  String get readingLineHint =>
+      'Aparat telefonu jest nad ekranem: wysoko ustawiona linia trzyma wzrok blisko obiektywu.';
+
+  @override
+  String get readingLineNearCamera => 'Przy aparacie';
+
+  @override
+  String get readingLineMiddle => 'Środek';
+
+  @override
+  String get readingLineDragHint =>
+      'Podczas czytania możesz też przeciągnąć lewą strzałkę linii w górę lub w dół.';
 }

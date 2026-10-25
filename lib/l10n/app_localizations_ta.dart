@@ -1008,4 +1008,21 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'மிதக்கும் சாளரத்தை எங்கும் இழுக்கலாம், அது தன் இடத்தை நினைவில் வைக்கும்.';
+
+  @override
+  String get readingLine => 'வாசிப்பு வரியின் இடம்';
+
+  @override
+  String get readingLineHint =>
+      'ஃபோன் கேமரா திரைக்கு மேலே உள்ளது: வரியை மேலே வைத்தால் உங்கள் பார்வை லென்ஸ் அருகே இருக்கும்.';
+
+  @override
+  String get readingLineNearCamera => 'கேமரா அருகே';
+
+  @override
+  String get readingLineMiddle => 'நடுவில்';
+
+  @override
+  String get readingLineDragHint =>
+      'வாசிக்கும்போதும் வரியின் இடது அம்புக்குறியை மேலே அல்லது கீழே இழுக்கலாம்.';
 }

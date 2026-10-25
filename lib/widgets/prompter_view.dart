@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -93,9 +94,10 @@ class PrompterController extends ChangeNotifier {
 
 /// Auto-scrolling teleprompter text with markup support.
 ///
-/// Tap to pause/resume, drag to scroll manually. Bluetooth remotes and
-/// keyboards: Space/Enter/PageDown play-pause, PageUp previous section,
-/// arrow keys change pace.
+/// Tap to pause/resume, drag to scroll manually, drag the reading line's
+/// left arrow to move the line. Bluetooth remotes and keyboards:
+/// Space/Enter/PageDown play-pause, PageUp previous section, arrow keys change
+/// pace.
 class PrompterView extends StatefulWidget {
   const PrompterView({
     super.key,
@@ -108,6 +110,7 @@ class PrompterView extends StatefulWidget {
     this.autofocus = true,
     this.onFontSizeChanged,
     this.onWpmChanged,
+    this.onGuidePositionChanged,
   });
 
   final String text;
@@ -131,6 +134,13 @@ class PrompterView extends StatefulWidget {
   /// Called when a remote or keyboard changes the pace, so it is kept.
   final ValueChanged<double>? onWpmChanged;
 
+  /// Called with the new [PrompterSettings.guidePosition] when the reader
+  /// moves the reading line, so it is kept. The line's left arrow can be
+  /// dragged up and down; screen readers adjust it like a slider. Off when
+  /// null or when the guide is hidden. Dragging also needs [manualScroll]:
+  /// in the floating window every drag moves the window.
+  final ValueChanged<double>? onGuidePositionChanged;
+
   @override
   State<PrompterView> createState() => _PrompterViewState();
 }
@@ -149,6 +159,15 @@ class _PrompterViewState extends State<PrompterView>
   bool _dragging = false;
   double? _pinchStartFontSize;
   final _focus = FocusNode(debugLabel: 'prompter');
+
+  /// Reading line while it is being dragged, until the new setting arrives.
+  double? _liveGuide;
+  bool _movingGuide = false;
+  double _guideDragFrom = 0;
+  double _guideDragDy = 0;
+  double _height = 0;
+
+  double get _guide => _liveGuide ?? widget.settings.guidePosition;
 
   @override
   void initState() {
@@ -187,6 +206,14 @@ class _PrompterViewState extends State<PrompterView>
     final old = oldWidget.settings;
     final now = widget.settings;
     _timeline = null;
+    if (old.guidePosition != now.guidePosition) _liveGuide = null;
+    // The handle went away mid-drag (a take started, the guide was hidden):
+    // drop the unsaved line instead of showing it.
+    if (_movingGuide &&
+        (widget.onGuidePositionChanged == null || !now.showGuide)) {
+      _movingGuide = false;
+      _liveGuide = null;
+    }
     if (_scroll.hasClients &&
         (old.fontSize != now.fontSize ||
             old.lineHeight != now.lineHeight ||
@@ -487,11 +514,57 @@ class _PrompterViewState extends State<PrompterView>
     _pinchStartFontSize = null;
   }
 
+  /// The reading line follows the finger. Padding and scroll offset are
+  /// measured from the line, so the text being read moves with it and the
+  /// reader keeps their place.
+  void _onGuideDragStart(DragStartDetails d) {
+    HapticFeedback.selectionClick();
+    setState(() {
+      _movingGuide = true;
+      _guideDragFrom = _guide;
+      _guideDragDy = 0;
+      _liveGuide = _guide;
+    });
+  }
+
+  void _onGuideDragUpdate(DragUpdateDetails d) {
+    if (!_movingGuide || _height <= 0) return;
+    _guideDragDy += d.delta.dy;
+    setState(() {
+      _liveGuide = PrompterSettings.clampGuidePosition(
+        _guideDragFrom + _guideDragDy / _height,
+      );
+    });
+  }
+
+  /// Saved once, when the finger lifts, not on every frame.
+  void _onGuideDragEnd(DragEndDetails d) {
+    if (!_movingGuide) return;
+    final live = _liveGuide;
+    setState(() => _movingGuide = false);
+    if (live != null) _setGuide(live);
+  }
+
+  static const _guideStep = 0.05;
+
+  /// A6: screen readers move the line in steps, like a slider.
+  void _nudgeGuide(double delta) => _setGuide(_guide + delta);
+
+  void _setGuide(double position) {
+    // Whole percents keep the stored value tidy.
+    final rounded = PrompterSettings.clampGuidePosition(
+      (position * 100).round() / 100,
+    );
+    setState(() => _liveGuide = rounded);
+    if (rounded != widget.settings.guidePosition) {
+      widget.onGuidePositionChanged?.call(rounded);
+    }
+  }
+
   /// Fades text at the edges; with "focus line", also dims everything but
   /// the line being read (R8). No mask at all when effects are reduced.
-  Widget _mask(PrompterSettings s, double height, Widget child) {
+  Widget _mask(PrompterSettings s, double height, double guide, Widget child) {
     if (s.reduceEffects && !s.focusLine) return child;
-    const guide = 0.3;
     final line = height <= 0
         ? 0.1
         : (s.fontSize * s.lineHeight * 1.15 / height).clamp(0.02, 0.5);
@@ -510,16 +583,17 @@ class _PrompterViewState extends State<PrompterView>
               1,
             ],
           )
-        : const LinearGradient(
+        : LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
+            colors: const [
               Colors.transparent,
               Colors.white,
               Colors.white,
               Colors.transparent,
             ],
-            stops: [0, 0.08, 0.92, 1],
+            // The top fade stays clear of a reading line set near the top.
+            stops: [0, (guide / 2).clamp(0.0, 0.08), 0.92, 1],
           );
     return ShaderMask(
       shaderCallback: gradient.createShader,
@@ -527,6 +601,10 @@ class _PrompterViewState extends State<PrompterView>
       child: child,
     );
   }
+
+  static const _guideHandleSize = 48.0;
+
+  static String _percent(double fraction) => '${(fraction * 100).round()}%';
 
   @override
   void dispose() {
@@ -558,7 +636,20 @@ class _PrompterViewState extends State<PrompterView>
           builder: (context, constraints) {
             // Start the first line at the reading guide and let the last line
             // scroll all the way up to it.
-            final guideY = constraints.maxHeight * 0.3;
+            _height = constraints.maxHeight;
+            final guide = _guide;
+            final guideY = constraints.maxHeight * guide;
+            final canMoveGuide =
+                s.showGuide && widget.onGuidePositionChanged != null;
+            // A3: a 48 dp target around the left arrow (centred 10 dp below
+            // guideY), kept inside the prompter.
+            final handleTop = (guideY + 10 - _guideHandleSize / 2).clamp(
+              0.0,
+              (constraints.maxHeight - _guideHandleSize).clamp(
+                0.0,
+                double.infinity,
+              ),
+            );
             Widget content = ScriptText(
               key: _contentKey,
               blocks: _blocks,
@@ -589,6 +680,7 @@ class _PrompterViewState extends State<PrompterView>
                     child: _mask(
                       s,
                       constraints.maxHeight,
+                      guide,
                       SingleChildScrollView(
                         controller: _scroll,
                         physics: const NeverScrollableScrollPhysics(),
@@ -605,33 +697,55 @@ class _PrompterViewState extends State<PrompterView>
                 ),
                 if (s.showGuide)
                   Positioned(
+                    key: const ValueKey('reading-guide'),
                     top: guideY - 2,
                     left: 0,
                     right: 0,
                     child: IgnorePointer(
-                      child: Row(
-                        // Arrows point at the line in every UI direction.
-                        textDirection: TextDirection.ltr,
-                        children: [
-                          Icon(
-                            Icons.play_arrow,
-                            color: color.withValues(alpha: 0.7),
-                          ),
-                          Expanded(
-                            child: Container(
-                              height: 2,
-                              color: color.withValues(alpha: 0.25),
-                            ),
-                          ),
-                          Transform.flip(
-                            flipX: true,
-                            child: Icon(
-                              Icons.play_arrow,
-                              color: color.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ],
+                      child: ReadingGuideLine(
+                        color: color,
+                        active: _movingGuide,
                       ),
+                    ),
+                  ),
+                if (canMoveGuide)
+                  Positioned(
+                    key: const ValueKey('reading-guide-handle'),
+                    left: 0,
+                    top: handleTop,
+                    width: _guideHandleSize,
+                    height: _guideHandleSize,
+                    child: Semantics(
+                      container: true,
+                      slider: true,
+                      label: l.readingLine,
+                      value: _percent(guide),
+                      increasedValue: _percent(
+                        PrompterSettings.clampGuidePosition(guide + _guideStep),
+                      ),
+                      decreasedValue: _percent(
+                        PrompterSettings.clampGuidePosition(guide - _guideStep),
+                      ),
+                      onIncrease: () => _nudgeGuide(_guideStep),
+                      onDecrease: () => _nudgeGuide(-_guideStep),
+                      // Only the arrow's own corner: drags anywhere else
+                      // still scroll and pinch, and a tap here still plays /
+                      // pauses (outside the edge dead zone).
+                      child: widget.manualScroll
+                          ? GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              excludeFromSemantics: true,
+                              // The line stays under the finger from the
+                              // first touch.
+                              dragStartBehavior: DragStartBehavior.down,
+                              onTapUp: _onTapUp,
+                              onVerticalDragStart: _onGuideDragStart,
+                              onVerticalDragUpdate: _onGuideDragUpdate,
+                              onVerticalDragEnd: _onGuideDragEnd,
+                              onVerticalDragCancel: () =>
+                                  setState(() => _movingGuide = false),
+                            )
+                          : const SizedBox.expand(),
                     ),
                   ),
                 if (!widget.controller.playing)
@@ -651,6 +765,38 @@ class _PrompterViewState extends State<PrompterView>
           },
         ),
       ),
+    );
+  }
+}
+
+/// The reading line: an arrow at each end pointing at the line being read.
+/// [active] while it is being dragged. Also used for the live preview in
+/// settings.
+class ReadingGuideLine extends StatelessWidget {
+  const ReadingGuideLine({super.key, required this.color, this.active = false});
+
+  final Color color;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final arrow = color.withValues(alpha: active ? 1 : 0.7);
+    return Row(
+      // Arrows point at the line in every UI direction.
+      textDirection: TextDirection.ltr,
+      children: [
+        Icon(Icons.play_arrow, color: arrow),
+        Expanded(
+          child: Container(
+            height: 2,
+            color: color.withValues(alpha: active ? 0.6 : 0.25),
+          ),
+        ),
+        Transform.flip(
+          flipX: true,
+          child: Icon(Icons.play_arrow, color: arrow),
+        ),
+      ],
     );
   }
 }

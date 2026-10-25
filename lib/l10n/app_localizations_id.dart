@@ -996,4 +996,21 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
+
+  @override
+  String get readingLine => 'Posisi garis baca';
+
+  @override
+  String get readingLineHint =>
+      'Kamera HP ada di atas layar: garis yang tinggi menjaga matamu tetap dekat lensa.';
+
+  @override
+  String get readingLineNearCamera => 'Dekat kamera';
+
+  @override
+  String get readingLineMiddle => 'Tengah';
+
+  @override
+  String get readingLineDragHint =>
+      'Saat membaca, kamu juga bisa menyeret panah kiri garis ke atas atau ke bawah.';
 }

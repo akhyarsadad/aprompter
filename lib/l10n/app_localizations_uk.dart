@@ -1036,4 +1036,21 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Плаваюче вікно можна перетягнути будь-куди, і воно запам\'ятає місце.';
+
+  @override
+  String get readingLine => 'Положення лінії читання';
+
+  @override
+  String get readingLineHint =>
+      'Камера телефона розташована над екраном: висока лінія тримає ваш погляд біля об\'єктива.';
+
+  @override
+  String get readingLineNearCamera => 'Біля камери';
+
+  @override
+  String get readingLineMiddle => 'Середина';
+
+  @override
+  String get readingLineDragHint =>
+      'Під час читання можна також перетягнути ліву стрілку лінії вгору чи вниз.';
 }

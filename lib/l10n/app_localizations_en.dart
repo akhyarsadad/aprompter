@@ -1014,4 +1014,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'The floating window can be dragged anywhere and remembers its spot.';
+
+  @override
+  String get readingLine => 'Reading line position';
+
+  @override
+  String get readingLineHint =>
+      'Phone cameras sit above the screen: a high line keeps your eyes near the lens.';
+
+  @override
+  String get readingLineNearCamera => 'Near camera';
+
+  @override
+  String get readingLineMiddle => 'Middle';
+
+  @override
+  String get readingLineDragHint =>
+      'While reading, you can also drag the line\'s left arrow up or down.';
 }

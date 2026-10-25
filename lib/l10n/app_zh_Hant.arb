@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "要永久刪除「{title}」嗎？刪除後無法復原。",
   "deleteForeverTakes": "存放在 App 內的相關片段也會一併刪除。",
   "purchasePending": "付款處理中。核准後，APrompter Unlimited 會自動解鎖。",
-  "positionHintFloat": "懸浮視窗可拖到任何位置並會記住位置。"
+  "positionHintFloat": "懸浮視窗可拖到任何位置並會記住位置。",
+  "readingLine": "閱讀線位置",
+  "readingLineHint": "手機鏡頭在螢幕上方：閱讀線越高，視線越貼近鏡頭。",
+  "readingLineNearCamera": "靠近鏡頭",
+  "readingLineMiddle": "中間",
+  "readingLineDragHint": "閱讀時也可以上下拖曳閱讀線左側的箭頭。"
 }

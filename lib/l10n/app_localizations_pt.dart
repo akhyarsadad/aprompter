@@ -1019,4 +1019,21 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'A janela flutuante pode ser arrastada para qualquer lugar e lembra a posição.';
+
+  @override
+  String get readingLine => 'Posição da linha de leitura';
+
+  @override
+  String get readingLineHint =>
+      'A câmera do celular fica acima da tela: com a linha no alto, seu olhar fica perto da lente.';
+
+  @override
+  String get readingLineNearCamera => 'Perto da câmera';
+
+  @override
+  String get readingLineMiddle => 'Meio';
+
+  @override
+  String get readingLineDragHint =>
+      'Durante a leitura, você também pode arrastar a seta esquerda da linha para cima ou para baixo.';
 }

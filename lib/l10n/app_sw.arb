@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Ufute \"{title}\" kabisa? Haitaweza kurejeshwa.",
   "deleteForeverTakes": "Picha zake zilizohifadhiwa ndani ya programu zitafutwa pia.",
   "purchasePending": "Malipo yanasubiri. APrompter Unlimited itafunguka kiotomatiki mara tu yatakapoidhinishwa.",
-  "positionHintFloat": "Dirisha linaloelea linaweza kuburutwa popote na hukumbuka mahali pake."
+  "positionHintFloat": "Dirisha linaloelea linaweza kuburutwa popote na hukumbuka mahali pake.",
+  "readingLine": "Mahali pa mstari wa kusoma",
+  "readingLineHint": "Kamera ya simu iko juu ya skrini: mstari ulio juu huweka macho yako karibu na lenzi.",
+  "readingLineNearCamera": "Karibu na kamera",
+  "readingLineMiddle": "Katikati",
+  "readingLineDragHint": "Unaposoma, unaweza pia kuburuta mshale wa kushoto wa mstari juu au chini."
 }

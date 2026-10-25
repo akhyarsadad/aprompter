@@ -1023,4 +1023,21 @@ class AppLocalizationsFil extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto.';
+
+  @override
+  String get readingLine => 'Puwesto ng linya ng pagbasa';
+
+  @override
+  String get readingLineHint =>
+      'Nasa itaas ng screen ang camera ng phone: kapag mataas ang linya, malapit sa lens ang mga mata mo.';
+
+  @override
+  String get readingLineNearCamera => 'Malapit sa camera';
+
+  @override
+  String get readingLineMiddle => 'Gitna';
+
+  @override
+  String get readingLineDragHint =>
+      'Habang nagbabasa, puwede mo ring i-drag pataas o pababa ang kaliwang arrow ng linya.';
 }

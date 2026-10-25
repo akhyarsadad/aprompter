@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "「{title}」を完全に削除しますか？元に戻せません。",
   "deleteForeverTakes": "アプリ内に保存したこの台本のテイクも削除されます。",
   "purchasePending": "お支払いは保留中です。承認されると APrompter Unlimited が自動的に有効になります。",
-  "positionHintFloat": "フローティングウィンドウはどこへでも動かせ、位置も記憶します。"
+  "positionHintFloat": "フローティングウィンドウはどこへでも動かせ、位置も記憶します。",
+  "readingLine": "読み位置の高さ",
+  "readingLineHint": "端末のカメラは画面の上にあるので、ラインを高くすると視線がレンズの近くに保たれます。",
+  "readingLineNearCamera": "カメラ寄り",
+  "readingLineMiddle": "中央",
+  "readingLineDragHint": "読んでいる間も、ラインの左の矢印を上下にドラッグして動かせます。"
 }

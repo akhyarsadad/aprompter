@@ -1023,4 +1023,21 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Je kunt het zwevende venster overal heen slepen en het onthoudt zijn plek.';
+
+  @override
+  String get readingLine => 'Positie van de leeslijn';
+
+  @override
+  String get readingLineHint =>
+      'De camera van je telefoon zit boven het scherm: een hoge lijn houdt je blik dicht bij de lens.';
+
+  @override
+  String get readingLineNearCamera => 'Bij de camera';
+
+  @override
+  String get readingLineMiddle => 'Midden';
+
+  @override
+  String get readingLineDragHint =>
+      'Tijdens het lezen kun je ook de linkerpijl van de lijn omhoog of omlaag slepen.';
 }
