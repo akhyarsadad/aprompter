@@ -30,7 +30,12 @@ ImportFailure? _failure(ImportResult result) =>
 
 /// One file in a zip written by hand, so the sizes it claims can lie.
 class _Entry {
-  _Entry(this.name, this.deflated, this.crc, this.size, {this.link = false});
+  _Entry(this.name, this.packed, this.crc, this.size, {this.link = false})
+    : method = 8;
+
+  /// [packed] is bzip2 data that unpacks to [size] bytes with [crc].
+  _Entry.bzip2(this.name, this.packed, this.crc, this.size, {this.link = false})
+    : method = 12;
 
   /// [chunks] deflated one after another, as one file of their total size.
   factory _Entry.of(
@@ -60,12 +65,15 @@ class _Entry {
   }
 
   final String name;
-  final Uint8List deflated;
+  final Uint8List packed;
   final int crc;
   final int size;
 
   /// A Unix symbolic link.
   final bool link;
+
+  /// 8 deflate, 12 bzip2.
+  final int method;
 }
 
 Uint8List _zip(List<_Entry> entries) {
@@ -80,26 +88,26 @@ Uint8List _zip(List<_Entry> entries) {
     u32(out, 0x04034b50);
     u16(out, 20); // version needed
     u16(out, 0); // flags
-    u16(out, 8); // deflate
+    u16(out, e.method);
     u16(out, 0); // time
     u16(out, 0); // date
     u32(out, e.crc);
-    u32(out, e.deflated.length);
+    u32(out, e.packed.length);
     u32(out, e.size);
     u16(out, name.length);
     u16(out, 0);
     out.add(name);
-    out.add(e.deflated);
+    out.add(e.packed);
 
     u32(central, 0x02014b50);
     u16(central, e.link ? 0x0314 : 20); // made by (Unix for a link)
     u16(central, 20);
     u16(central, 0);
-    u16(central, 8);
+    u16(central, e.method);
     u16(central, 0);
     u16(central, 0);
     u32(central, e.crc);
-    u32(central, e.deflated.length);
+    u32(central, e.packed.length);
     u32(central, e.size);
     u16(central, name.length);
     u16(central, 0); // extra
@@ -132,6 +140,25 @@ Iterable<List<int>> _spaces(int megabytes) sync* {
   }
 }
 
+/// bzip2 of 100 MB of spaces: 113 bytes.
+final _bzip2Bomb = base64.decode(
+  'QlpoOTFBWSZTWbUiZb8BX44QAMAAAAggADCATUZCoCWpCoCXMUFZJlNZtSJlvwFfjhAAwAAACC'
+  'AAMIBNRkKgJakKgJcxQVkmU1kGgnYGAGQGFADAABAAAAggADDMBSmmKARbEoBF4u5IpwoSFwnl'
+  'cOA=',
+);
+const _bzip2BombSize = 100 * 1024 * 1024;
+const _bzip2BombCrc = 3819605932;
+
+_Entry _bzip2Note(String name, String text) {
+  final bytes = utf8.encode(text);
+  return _Entry.bzip2(
+    name,
+    BZip2Encoder().encodeBytes(bytes),
+    getCrc32(bytes),
+    bytes.length,
+  );
+}
+
 const _wordNs =
     'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
 
@@ -142,6 +169,8 @@ void main() {
       'Notes (2)',
       'Plain title',
       'Q&A: the (1) thing',
+      '(2024)',
+      '(1)',
     ]) {
       test(title, () {
         const body = 'Hook goes here.\n\nThen the point, and a call to action.';
@@ -171,6 +200,14 @@ void main() {
       );
       expect(script.title, 'Ideas');
       expect(script.body, 'Just one line of text.');
+    });
+
+    test('a file named after nothing but a counter gets no title from it', () {
+      final script = _single(
+        importFromFile('(1).txt', utf8.encode('Hook first.\n\nThen more.')),
+      );
+      expect(script.title, isNull);
+      expect(script.body, 'Hook first.\n\nThen more.');
     });
   });
 
@@ -290,7 +327,7 @@ void main() {
       final bomb = _Entry.of('bomb.md', _spaces(12), claimedSize: 10);
       final zip = _zip([
         for (var i = 0; i < 12; i++)
-          _Entry('bomb$i.md', bomb.deflated, bomb.crc, bomb.size),
+          _Entry('bomb$i.md', bomb.packed, bomb.crc, bomb.size),
       ]);
       expect(
         _failure(importFromFile('notes.zip', zip)),
@@ -303,6 +340,60 @@ void main() {
       final zip = _zip([
         _Entry.of('link', _spaces(100), claimedSize: 10, link: true),
         _Entry.of('Idea.txt', [utf8.encode('A real note to film.')]),
+      ]);
+      expect(
+        _failure(importFromFile('notes.zip', zip)),
+        ImportFailure.tooLarge,
+      );
+    });
+
+    test('a bzip2 symbolic link is refused before the zip is opened', () {
+      // bzip2 packs 100 MB into 113 bytes, well under the size a deflated
+      // link is allowed; opening the zip would unpack all of it.
+      final zip = _zip([
+        _Entry.bzip2(
+          'link',
+          _bzip2Bomb,
+          _bzip2BombCrc,
+          _bzip2BombSize,
+          link: true,
+        ),
+        _Entry.of('Idea.txt', [utf8.encode('A real note to film.')]),
+      ]);
+      expect(zip.length, lessThan(1024));
+      expect(
+        _failure(importFromFile('notes.zip', zip)),
+        ImportFailure.tooLarge,
+      );
+    });
+
+    test('a short ordinary symbolic link does not stop the zip', () {
+      final zip = _zip([
+        _Entry.of('link', [utf8.encode('Idea.txt')], link: true),
+        _Entry.of('Idea.txt', [utf8.encode('A real note to film.')]),
+      ]);
+      expect(
+        _single(importFromFile('notes.zip', zip)).body,
+        'A real note to film.',
+      );
+    });
+
+    test('bzip2 notes still import; a bzip2 bomb among them is skipped', () {
+      final zip = _zip([
+        _Entry.bzip2('bomb.txt', _bzip2Bomb, _bzip2BombCrc, 10),
+        _bzip2Note('b.txt', 'bzip note'),
+        _Entry.of('Idea.md', [utf8.encode('A real note to film.')]),
+      ]);
+      final result = importFromFile('notes.zip', zip);
+      expect(
+        (result as ImportedScripts).scripts.map((s) => '${s.title}|${s.body}'),
+        ['b|bzip note', 'Idea|A real note to film.'],
+      );
+    });
+
+    test('a zip of nothing but a bzip2 bomb says it is too large', () {
+      final zip = _zip([
+        _Entry.bzip2('bomb.md', _bzip2Bomb, _bzip2BombCrc, 10),
       ]);
       expect(
         _failure(importFromFile('notes.zip', zip)),

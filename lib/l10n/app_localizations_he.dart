@@ -987,7 +987,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get appLockTurnedOff =>
-      'בטלפון שלך אין נעילת מסך, ולכן נעילת האפליקציה כובתה.';
+      'בטלפון שלכם אין נעילת מסך, ולכן נעילת האפליקציה כובתה.';
 
   @override
   String get deleteTakeConfirm =>

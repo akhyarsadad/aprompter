@@ -931,16 +931,24 @@ class _TooLarge implements Exception {
   const _TooLarge();
 }
 
-/// Opening a zip already inflates its symbolic links, with no limit; a real
-/// link is a short path, so a zip with a big one is turned away first.
+/// Opening a zip already unpacks its symbolic links, with no limit; a real
+/// link is a short path, so a zip with a big one is turned away first. Only
+/// a stored or deflated link is small enough to judge by its packed size
+/// (deflate gives at most about 1000:1); bzip2 packs gigabytes into a few
+/// bytes, so a link packed any other way is turned away too. The decoder
+/// goes by the method in the entry's own (local) header, so that is the one
+/// looked at.
 bool _hasHugeLink(List<int> bytes) {
   final dir = ZipDirectory()..read(InputMemoryStream(bytes));
-  return dir.fileHeaders.any(
-    (h) =>
-        h.versionMadeBy >> 8 == 3 &&
-        (h.externalFileAttributes >> 16) & 0xF000 == 0xA000 &&
-        h.compressedSize > 4096,
-  );
+  return dir.fileHeaders.any((h) {
+    if (h.versionMadeBy >> 8 != 3 ||
+        (h.externalFileAttributes >> 16) & 0xF000 != 0xA000) {
+      return false;
+    }
+    final method = h.file?.compressionMethod;
+    return h.compressedSize > 4096 ||
+        (method != CompressionType.none && method != CompressionType.deflate);
+  });
 }
 
 /// The content of [file] in a zip, at most [limit] bytes. The size a zip
@@ -958,8 +966,12 @@ Uint8List _readEntry(ArchiveFile file, int limit) {
       if (data.length > limit) throw const _TooLarge();
       return data;
     case CompressionType.bzip2:
-      // No notes app, Word or LibreOffice writes these.
-      throw const FormatException('bzip2 in a zip');
+      // 7-Zip and Python can be set to write these.
+      final out = _CappedOutput(limit);
+      if (!BZip2Decoder().decodeStream(InputMemoryStream(data), out)) {
+        throw const FormatException('Broken bzip2 data');
+      }
+      return Uint8List.fromList(out.getBytes());
   }
 }
 
@@ -991,6 +1003,40 @@ class _CappedSink implements Sink<List<int>> {
 
   @override
   void close() {}
+}
+
+/// Unpacked bzip2 bytes; one past the limit throws [_TooLarge], which stops
+/// the unpacking.
+class _CappedOutput extends OutputMemoryStream {
+  _CappedOutput(this.limit);
+
+  final int limit;
+
+  @override
+  void writeByte(int value) {
+    if (length >= limit) throw const _TooLarge();
+    super.writeByte(value);
+  }
+
+  @override
+  void writeBytes(List<int> bytes, {int? length}) {
+    if (this.length + (length ?? bytes.length) > limit) {
+      throw const _TooLarge();
+    }
+    super.writeBytes(bytes, length: length);
+  }
+
+  @override
+  void writeStream(InputStream stream) {
+    if (length + stream.length > limit) throw const _TooLarge();
+    super.writeStream(stream);
+  }
+
+  @override
+  void writeBackReference(int distance, int count) {
+    if (length + count > limit) throw const _TooLarge();
+    super.writeBackReference(distance, count);
+  }
 }
 
 /// A zip of notes — a Notion, Bear or Obsidian export, a folder sent from
@@ -1270,19 +1316,21 @@ ImportResult _finish(
   }
   if (title == null && fileName != null) {
     final fromName = _fileTitle(fileName);
-    if (fromName != null) {
+    // A file APrompter saved is named after the title as it is, "(2024)"
+    // and all — even a title that is nothing else; a downloaded copy may add
+    // its own " (1)".
+    final stem = _fileTitle(fileName, keepCounter: true);
+    if (fromName != null || stem != null) {
       final split = _splitFirstLine(body);
-      // A file APrompter saved is named after the title as it is, "(2024)"
-      // and all; a downloaded copy may add its own " (1)".
-      final stem = _fileTitle(fileName, keepCounter: true);
       if (split != null &&
           split.$2.isNotEmpty &&
-          (_namesFile(split.$1, fromName) ||
+          ((fromName != null && _namesFile(split.$1, fromName)) ||
               (stem != null && _namesFile(split.$1, stem)))) {
         title = _cleanTitle(split.$1);
         body = split.$2;
         fromBody = true;
       } else {
+        // "(1).txt" names nothing in it: a bare counter is no title.
         title = fromName;
       }
     }
