@@ -805,15 +805,75 @@ class AppLocalizationsFil extends AppLocalizations {
   String get letterSpacing => 'Pagitan ng letra';
 
   @override
-  String get importTextFile => 'Mag-import ng text file';
+  String get pasteAsNewScript => 'I-paste bilang bagong script';
 
   @override
-  String get importTextFileHint =>
-      'Script na .txt o .md mula sa Files, Drive o email';
+  String get pasteAsNewScriptHint =>
+      'Text na kinopya mo mula sa Notes, Keep, Notion, Docs o anumang app';
 
   @override
-  String get importTextFailed =>
-      'Hindi mabasa ang file na iyon. Pumili ng plain text (.txt) file.';
+  String get importFiles => 'Mag-import ng mga file';
+
+  @override
+  String get importFilesHint =>
+      'Word, text, Markdown, RTF, HTML, Evernote, subtitle o backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Walang ipe-paste. Kopyahin muna ang script mo sa ibang app.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Na-import ang $count script',
+      one: 'Na-import ang 1 script',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Hanggang $count script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
+      one: 'Hanggang 1 script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Hindi ma-import ang PDF. Buksan ang PDF, kopyahin ang text, at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importOldFormat =>
+      'Hindi mabasa ang lumang Word (.doc) at Pages file. I-save ito bilang .docx o text, o kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importUnsupported =>
+      'Hindi kayang basahin ng APrompter ang ganitong file. Kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importEmpty => 'Walang text dito na mai-import.';
+
+  @override
+  String get importTooLarge =>
+      'Masyadong mahaba para sa isang script. Kopyahin ang bahaging kailangan mo at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importLinkOnly =>
+      'Link lang ang dumating, hindi ang text. Buksan ito, kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importUnreadable =>
+      'Hindi ito mabasa. Kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get saveAsTextFile => 'I-save bilang text file';
 
   @override
   String get mySetup => 'Setup ko';

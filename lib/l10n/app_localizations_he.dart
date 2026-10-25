@@ -793,15 +793,75 @@ class AppLocalizationsHe extends AppLocalizations {
   String get letterSpacing => 'ריווח אותיות';
 
   @override
-  String get importTextFile => 'ייבוא קובץ טקסט';
+  String get pasteAsNewScript => 'הדבקה כתסריט חדש';
 
   @override
-  String get importTextFileHint =>
-      'תסריט ‎.txt או ‎.md מהקבצים, מ-Drive או מהמייל';
+  String get pasteAsNewScriptHint =>
+      'טקסט שהעתקתם מהפתקים, Keep, Notion, Docs או מכל אפליקציה';
 
   @override
-  String get importTextFailed =>
-      'לא ניתן לקרוא את הקובץ. בחרו קובץ טקסט פשוט (.txt).';
+  String get importFiles => 'ייבוא קבצים';
+
+  @override
+  String get importFilesHint =>
+      'Word, טקסט, Markdown, RTF, HTML, Evernote, כתוביות או גיבוי';
+
+  @override
+  String get clipboardEmpty =>
+      'אין מה להדביק. העתיקו קודם את התסריט באפליקציה האחרת.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count תסריטים יובאו',
+      one: 'תסריט אחד יובא',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'בתוכנית החינמית יש מקום ל-$count תסריטים. שום דבר לא אבד: הפתק או הקובץ נשארו במקומם. שדרגו כדי לייבא עוד.',
+      one: 'בתוכנית החינמית יש מקום לתסריט אחד. שום דבר לא אבד: הפתק או הקובץ נשארו במקומם. שדרגו כדי לייבא עוד.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'אי אפשר לייבא קובצי PDF. פתחו את ה-PDF, העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importOldFormat =>
+      'אי אפשר לקרוא קובצי Word ישנים (.doc) וקובצי Pages. שמרו כ-.docx או כטקסט, או העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importUnsupported =>
+      'אי אפשר לקרוא סוג קובץ כזה ב-APrompter. העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importEmpty => 'אין בו טקסט לייבוא.';
+
+  @override
+  String get importTooLarge =>
+      'זה ארוך מדי לתסריט אחד. העתיקו את החלק שאתם צריכים והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importLinkOnly =>
+      'הגיע רק קישור, בלי הטקסט. פתחו אותו, העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importUnreadable =>
+      'לא ניתן לקרוא את זה. העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get saveAsTextFile => 'שמירה כקובץ טקסט';
 
   @override
   String get mySetup => 'ההגדרה שלי';

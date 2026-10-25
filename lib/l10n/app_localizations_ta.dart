@@ -788,15 +788,75 @@ class AppLocalizationsTa extends AppLocalizations {
   String get letterSpacing => 'எழுத்து இடைவெளி';
 
   @override
-  String get importTextFile => 'உரைக் கோப்பை இறக்கு';
+  String get pasteAsNewScript => 'புதிய ஸ்கிரிப்டாக ஒட்டு';
 
   @override
-  String get importTextFileHint =>
-      'Files, Drive அல்லது மின்னஞ்சலிலிருந்து .txt அல்லது .md ஸ்கிரிப்ட்';
+  String get pasteAsNewScriptHint =>
+      'Notes, Keep, Notion, Docs அல்லது எந்த ஆப்பிலிருந்தும் நகலெடுத்த உரை';
 
   @override
-  String get importTextFailed =>
-      'அந்தக் கோப்பைப் படிக்க முடியவில்லை. சாதாரண உரை (.txt) கோப்பைத் தேர்வுசெய்யவும்.';
+  String get importFiles => 'கோப்புகளை இறக்கு';
+
+  @override
+  String get importFilesHint =>
+      'Word, உரை, Markdown, RTF, HTML, Evernote, வசனங்கள் அல்லது காப்புப்பிரதி';
+
+  @override
+  String get clipboardEmpty =>
+      'ஒட்ட எதுவும் இல்லை. முதலில் மற்ற ஆப்பில் உங்கள் ஸ்கிரிப்டை நகலெடுக்கவும்.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ஸ்கிரிப்ட்கள் இறக்கப்பட்டன',
+      one: '1 ஸ்கிரிப்ட் இறக்கப்பட்டது',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'இலவசத் திட்டத்தில் $count ஸ்கிரிப்ட்கள் மட்டுமே வைக்கலாம். எதுவும் இழக்கப்படவில்லை: உங்கள் குறிப்பு அல்லது கோப்பு அதே இடத்தில் உள்ளது. மேலும் இறக்க மேம்படுத்தவும்.',
+      one: 'இலவசத் திட்டத்தில் 1 ஸ்கிரிப்ட் மட்டுமே வைக்கலாம். எதுவும் இழக்கப்படவில்லை: உங்கள் குறிப்பு அல்லது கோப்பு அதே இடத்தில் உள்ளது. மேலும் இறக்க மேம்படுத்தவும்.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF-களை இறக்க முடியாது. PDF-ஐத் திறந்து, உரையை நகலெடுத்து, \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importOldFormat =>
+      'பழைய Word (.doc), Pages கோப்புகளைப் படிக்க முடியாது. அதை .docx அல்லது உரையாகச் சேமிக்கவும், அல்லது உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importUnsupported =>
+      'இந்த வகைக் கோப்பை APrompter-ஆல் படிக்க முடியாது. உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importEmpty => 'இதில் இறக்க எந்த உரையும் இல்லை.';
+
+  @override
+  String get importTooLarge =>
+      'ஒரு ஸ்கிரிப்டுக்கு இது மிக நீளம். தேவையான பகுதியை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importLinkOnly =>
+      'உரை அல்ல, இணைப்பு மட்டுமே வந்தது. அதைத் திறந்து, உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importUnreadable =>
+      'படிக்க முடியவில்லை. உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get saveAsTextFile => 'உரைக் கோப்பாகச் சேமி';
 
   @override
   String get mySetup => 'என் அமைப்பு';

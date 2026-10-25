@@ -765,13 +765,72 @@ class AppLocalizationsKo extends AppLocalizations {
   String get letterSpacing => '자간';
 
   @override
-  String get importTextFile => '텍스트 파일 가져오기';
+  String get pasteAsNewScript => '새 대본으로 붙여넣기';
 
   @override
-  String get importTextFileHint => '파일, 드라이브, 이메일의 .txt 또는 .md 대본';
+  String get pasteAsNewScriptHint => '메모, Keep, Notion, 문서 등 어떤 앱에서 복사한 글이든';
 
   @override
-  String get importTextFailed => '파일을 읽지 못했어요. 일반 텍스트(.txt) 파일을 선택하세요.';
+  String get importFiles => '파일 가져오기';
+
+  @override
+  String get importFilesHint =>
+      'Word, 텍스트, Markdown, RTF, HTML, Evernote, 자막 또는 백업';
+
+  @override
+  String get clipboardEmpty => '붙여넣을 내용이 없어요. 먼저 다른 앱에서 대본을 복사하세요.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '대본 $count개 가져옴',
+      one: '대본 1개 가져옴',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '무료 플랜에는 대본을 $count개까지 둘 수 있어요. 잃어버린 건 없어요. 메모나 파일은 원래 자리에 그대로 있어요. 더 가져오려면 업그레이드하세요.',
+      one: '무료 플랜에는 대본을 1개까지 둘 수 있어요. 잃어버린 건 없어요. 메모나 파일은 원래 자리에 그대로 있어요. 더 가져오려면 업그레이드하세요.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF는 가져올 수 없어요. PDF를 열어 글을 복사한 뒤 \'새 대본으로 붙여넣기\'를 사용하세요.';
+
+  @override
+  String get importOldFormat =>
+      '예전 Word(.doc)와 Pages 파일은 읽을 수 없어요. .docx나 텍스트로 저장하거나, 글을 복사해 \'새 대본으로 붙여넣기\'를 사용하세요.';
+
+  @override
+  String get importUnsupported =>
+      'APrompter가 읽을 수 없는 파일 형식이에요. 글을 복사해 \'새 대본으로 붙여넣기\'를 사용하세요.';
+
+  @override
+  String get importEmpty => '가져올 글이 없어요.';
+
+  @override
+  String get importTooLarge =>
+      '대본 하나로는 너무 길어요. 필요한 부분을 복사해 \'새 대본으로 붙여넣기\'를 사용하세요.';
+
+  @override
+  String get importLinkOnly =>
+      '글이 아니라 링크만 왔어요. 링크를 열어 글을 복사한 뒤 \'새 대본으로 붙여넣기\'를 사용하세요.';
+
+  @override
+  String get importUnreadable => '읽지 못했어요. 글을 복사해 \'새 대본으로 붙여넣기\'를 사용하세요.';
+
+  @override
+  String get saveAsTextFile => '텍스트 파일로 저장';
 
   @override
   String get mySetup => '내 설정';

@@ -779,14 +779,75 @@ class AppLocalizationsFa extends AppLocalizations {
   String get letterSpacing => 'فاصلهٔ حروف';
 
   @override
-  String get importTextFile => 'وارد کردن فایل متنی';
+  String get pasteAsNewScript => 'چسباندن به‌عنوان متن جدید';
 
   @override
-  String get importTextFileHint => 'متن .txt یا .md از فایل‌ها، Drive یا ایمیل';
+  String get pasteAsNewScriptHint =>
+      'متنی که از یادداشت‌ها، Keep، Notion، Docs یا هر برنامه‌ای کپی کرده‌اید';
 
   @override
-  String get importTextFailed =>
-      'این فایل خوانده نشد. یک فایل متنی ساده (.txt) انتخاب کنید.';
+  String get importFiles => 'وارد کردن فایل‌ها';
+
+  @override
+  String get importFilesHint =>
+      'Word، متن، Markdown، RTF، HTML، Evernote، زیرنویس یا پشتیبان';
+
+  @override
+  String get clipboardEmpty =>
+      'چیزی برای چسباندن نیست. اول متن را در برنامهٔ دیگر کپی کنید.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count متن وارد شد',
+      one: '۱ متن وارد شد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'طرح رایگان فقط $count متن دارد. چیزی از دست نرفته: یادداشت یا فایل شما سر جایش است. برای وارد کردن بیشتر، ارتقا دهید.',
+      one: 'طرح رایگان فقط ۱ متن دارد. چیزی از دست نرفته: یادداشت یا فایل شما سر جایش است. برای وارد کردن بیشتر، ارتقا دهید.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'فایل‌های PDF وارد نمی‌شوند. PDF را باز کنید، متن را کپی کنید و از «چسباندن به‌عنوان متن جدید» استفاده کنید.';
+
+  @override
+  String get importOldFormat =>
+      'فایل‌های قدیمی Word (.doc) و Pages خوانده نمی‌شوند. آن را به‌صورت .docx یا متن ذخیره کنید، یا متن را کپی کنید و از «چسباندن به‌عنوان متن جدید» استفاده کنید.';
+
+  @override
+  String get importUnsupported =>
+      'APrompter این نوع فایل را نمی‌تواند بخواند. متن را کپی کنید و از «چسباندن به‌عنوان متن جدید» استفاده کنید.';
+
+  @override
+  String get importEmpty => 'متنی برای وارد کردن در آن نیست.';
+
+  @override
+  String get importTooLarge =>
+      'برای یک متن خیلی طولانی است. بخشی را که لازم دارید کپی کنید و از «چسباندن به‌عنوان متن جدید» استفاده کنید.';
+
+  @override
+  String get importLinkOnly =>
+      'فقط یک پیوند رسید، نه متن. آن را باز کنید، متن را کپی کنید و از «چسباندن به‌عنوان متن جدید» استفاده کنید.';
+
+  @override
+  String get importUnreadable =>
+      'خوانده نشد. متن را کپی کنید و از «چسباندن به‌عنوان متن جدید» استفاده کنید.';
+
+  @override
+  String get saveAsTextFile => 'ذخیره به‌صورت فایل متنی';
 
   @override
   String get mySetup => 'چیدمان من';

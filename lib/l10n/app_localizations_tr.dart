@@ -782,15 +782,75 @@ class AppLocalizationsTr extends AppLocalizations {
   String get letterSpacing => 'Harf aralığı';
 
   @override
-  String get importTextFile => 'Metin dosyası içe aktar';
+  String get pasteAsNewScript => 'Yeni senaryo olarak yapıştır';
 
   @override
-  String get importTextFileHint =>
-      'Dosyalar, Drive veya e-postadan .txt ya da .md senaryo';
+  String get pasteAsNewScriptHint =>
+      'Notlar, Keep, Notion, Dokümanlar veya herhangi bir uygulamadan kopyalanan metin';
 
   @override
-  String get importTextFailed =>
-      'Dosya okunamadı. Düz metin (.txt) dosyası seç.';
+  String get importFiles => 'Dosyaları içe aktar';
+
+  @override
+  String get importFilesHint =>
+      'Word, metin, Markdown, RTF, HTML, Evernote, altyazı veya yedek';
+
+  @override
+  String get clipboardEmpty =>
+      'Yapıştırılacak bir şey yok. Önce senaryonu diğer uygulamada kopyala.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count senaryo içe aktarıldı',
+      one: '1 senaryo içe aktarıldı',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Ücretsiz plan $count senaryo içerir. Hiçbir şey kaybolmadı: notun veya dosyan olduğu yerde duruyor. Daha fazlasını içe aktarmak için yükselt.',
+      one: 'Ücretsiz plan 1 senaryo içerir. Hiçbir şey kaybolmadı: notun veya dosyan olduğu yerde duruyor. Daha fazlasını içe aktarmak için yükselt.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF\'ler içe aktarılamaz. PDF\'i aç, metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importOldFormat =>
+      'Eski Word (.doc) ve Pages dosyaları okunamaz. Dosyayı .docx veya metin olarak kaydet ya da metni kopyalayıp \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importUnsupported =>
+      'APrompter bu tür dosyaları okuyamaz. Metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importEmpty => 'İçinde içe aktarılacak metin yok.';
+
+  @override
+  String get importTooLarge =>
+      'Bu, tek bir senaryo için çok uzun. İhtiyacın olan kısmı kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importLinkOnly =>
+      'Metin değil, yalnızca bir bağlantı geldi. Bağlantıyı aç, metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importUnreadable =>
+      'Okunamadı. Metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get saveAsTextFile => 'Metin dosyası olarak kaydet';
 
   @override
   String get mySetup => 'Kurulumum';

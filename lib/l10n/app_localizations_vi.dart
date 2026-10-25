@@ -780,15 +780,75 @@ class AppLocalizationsVi extends AppLocalizations {
   String get letterSpacing => 'Khoảng cách chữ';
 
   @override
-  String get importTextFile => 'Nhập tệp văn bản';
+  String get pasteAsNewScript => 'Dán thành kịch bản mới';
 
   @override
-  String get importTextFileHint =>
-      'Kịch bản .txt hoặc .md từ Tệp, Drive hoặc email';
+  String get pasteAsNewScriptHint =>
+      'Văn bản đã sao chép từ Ghi chú, Keep, Notion, Docs hoặc bất kỳ ứng dụng nào';
 
   @override
-  String get importTextFailed =>
-      'Không đọc được tệp này. Hãy chọn tệp văn bản thuần (.txt).';
+  String get importFiles => 'Nhập tệp';
+
+  @override
+  String get importFilesHint =>
+      'Word, văn bản, Markdown, RTF, HTML, Evernote, phụ đề hoặc bản sao lưu';
+
+  @override
+  String get clipboardEmpty =>
+      'Không có gì để dán. Hãy sao chép kịch bản trong ứng dụng kia trước.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã nhập $count kịch bản',
+      one: 'Đã nhập 1 kịch bản',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Gói miễn phí chứa được $count kịch bản. Không mất gì cả: ghi chú hoặc tệp của bạn vẫn ở chỗ cũ. Hãy nâng cấp để nhập thêm.',
+      one: 'Gói miễn phí chứa được 1 kịch bản. Không mất gì cả: ghi chú hoặc tệp của bạn vẫn ở chỗ cũ. Hãy nâng cấp để nhập thêm.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Không thể nhập PDF. Hãy mở PDF, sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importOldFormat =>
+      'Không đọc được tệp Word cũ (.doc) và tệp Pages. Hãy lưu thành .docx hoặc văn bản, hoặc sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter không đọc được loại tệp này. Hãy sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importEmpty => 'Không có văn bản nào để nhập.';
+
+  @override
+  String get importTooLarge =>
+      'Quá dài cho một kịch bản. Hãy sao chép phần bạn cần rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importLinkOnly =>
+      'Chỉ nhận được một liên kết, không có văn bản. Hãy mở nó, sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importUnreadable =>
+      'Không đọc được. Hãy sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get saveAsTextFile => 'Lưu thành tệp văn bản';
 
   @override
   String get mySetup => 'Thiết lập của tôi';

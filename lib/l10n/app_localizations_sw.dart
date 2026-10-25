@@ -800,15 +800,75 @@ class AppLocalizationsSw extends AppLocalizations {
   String get letterSpacing => 'Nafasi kati ya herufi';
 
   @override
-  String get importTextFile => 'Leta faili la maandishi';
+  String get pasteAsNewScript => 'Bandika kama hati mpya';
 
   @override
-  String get importTextFileHint =>
-      'Hati ya .txt au .md kutoka Faili, Drive au barua pepe';
+  String get pasteAsNewScriptHint =>
+      'Maandishi uliyonakili kutoka Notes, Keep, Notion, Docs au programu yoyote';
 
   @override
-  String get importTextFailed =>
-      'Imeshindwa kusoma faili hilo. Chagua faili la maandishi tu (.txt).';
+  String get importFiles => 'Leta faili';
+
+  @override
+  String get importFilesHint =>
+      'Word, maandishi, Markdown, RTF, HTML, Evernote, manukuu au nakala rudufu';
+
+  @override
+  String get clipboardEmpty =>
+      'Hakuna cha kubandika. Nakili hati yako kwenye programu nyingine kwanza.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hati $count zimeletwa',
+      one: 'Hati 1 imeletwa',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Mpango wa bure unabeba hati $count. Hakuna kilichopotea: dokezo au faili lako bado liko pale pale. Pandisha daraja ili kuleta zaidi.',
+      one: 'Mpango wa bure unabeba hati 1. Hakuna kilichopotea: dokezo au faili lako bado liko pale pale. Pandisha daraja ili kuleta zaidi.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF haziwezi kuletwa. Fungua PDF, nakili maandishi, kisha tumia \"Bandika kama hati mpya\".';
+
+  @override
+  String get importOldFormat =>
+      'Faili za zamani za Word (.doc) na Pages haziwezi kusomwa. Lihifadhi kama .docx au maandishi, au nakili maandishi na utumie \"Bandika kama hati mpya\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter haiwezi kusoma aina hiyo ya faili. Nakili maandishi na utumie \"Bandika kama hati mpya\".';
+
+  @override
+  String get importEmpty => 'Hakuna maandishi ndani yake ya kuleta.';
+
+  @override
+  String get importTooLarge =>
+      'Ni ndefu mno kwa hati moja. Nakili sehemu unayohitaji na utumie \"Bandika kama hati mpya\".';
+
+  @override
+  String get importLinkOnly =>
+      'Kiungo pekee ndicho kimefika, si maandishi. Kifungue, nakili maandishi na utumie \"Bandika kama hati mpya\".';
+
+  @override
+  String get importUnreadable =>
+      'Imeshindwa kusoma. Nakili maandishi na utumie \"Bandika kama hati mpya\".';
+
+  @override
+  String get saveAsTextFile => 'Hifadhi kama faili la maandishi';
 
   @override
   String get mySetup => 'Mpangilio wangu';

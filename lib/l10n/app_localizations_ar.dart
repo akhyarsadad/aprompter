@@ -808,15 +808,83 @@ class AppLocalizationsAr extends AppLocalizations {
   String get letterSpacing => 'تباعد الأحرف';
 
   @override
-  String get importTextFile => 'استيراد ملف نصي';
+  String get pasteAsNewScript => 'لصق كنص جديد';
 
   @override
-  String get importTextFileHint =>
-      'نص بصيغة .txt أو .md من الملفات أو Drive أو البريد';
+  String get pasteAsNewScriptHint =>
+      'نص نسخته من الملاحظات أو Keep أو Notion أو المستندات أو أي تطبيق';
 
   @override
-  String get importTextFailed =>
-      'تعذّرت قراءة الملف. اختر ملفًا نصيًا عاديًا (.txt).';
+  String get importFiles => 'استيراد ملفات';
+
+  @override
+  String get importFilesHint =>
+      'Word أو نص أو Markdown أو RTF أو HTML أو Evernote أو ترجمات أو نسخة احتياطية';
+
+  @override
+  String get clipboardEmpty =>
+      'لا يوجد ما يُلصق. انسخ نصك في التطبيق الآخر أولًا.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تم استيراد $count نص',
+      many: 'تم استيراد $count نصًا',
+      few: 'تم استيراد $count نصوص',
+      two: 'تم استيراد نصين',
+      one: 'تم استيراد نص واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'الخطة المجانية تتسع لـ $count نص. لم يضِع شيء: ملاحظتك أو ملفك ما زال في مكانه. قم بالترقية لاستيراد المزيد.',
+      many:
+          'الخطة المجانية تتسع لـ $count نصًا. لم يضِع شيء: ملاحظتك أو ملفك ما زال في مكانه. قم بالترقية لاستيراد المزيد.',
+      few:
+          'الخطة المجانية تتسع لـ $count نصوص. لم يضِع شيء: ملاحظتك أو ملفك ما زال في مكانه. قم بالترقية لاستيراد المزيد.',
+      two: 'الخطة المجانية تتسع لنصين. لم يضِع شيء: ملاحظتك أو ملفك ما زال في مكانه. قم بالترقية لاستيراد المزيد.',
+      one: 'الخطة المجانية تتسع لنص واحد. لم يضِع شيء: ملاحظتك أو ملفك ما زال في مكانه. قم بالترقية لاستيراد المزيد.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'لا يمكن استيراد ملفات PDF. افتح الملف وانسخ النص، ثم استخدم «لصق كنص جديد».';
+
+  @override
+  String get importOldFormat =>
+      'لا يمكن قراءة ملفات Word القديمة (.doc) وملفات Pages. احفظه بصيغة .docx أو كنص، أو انسخ النص واستخدم «لصق كنص جديد».';
+
+  @override
+  String get importUnsupported =>
+      'لا يستطيع APrompter قراءة هذا النوع من الملفات. انسخ النص واستخدم «لصق كنص جديد».';
+
+  @override
+  String get importEmpty => 'لا يوجد فيه نص لاستيراده.';
+
+  @override
+  String get importTooLarge =>
+      'هذا أطول من أن يكون نصًا واحدًا. انسخ الجزء الذي تحتاجه واستخدم «لصق كنص جديد».';
+
+  @override
+  String get importLinkOnly =>
+      'وصل رابط فقط وليس النص. افتحه وانسخ النص واستخدم «لصق كنص جديد».';
+
+  @override
+  String get importUnreadable =>
+      'تعذّرت القراءة. انسخ النص واستخدم «لصق كنص جديد».';
+
+  @override
+  String get saveAsTextFile => 'حفظ كملف نصي';
 
   @override
   String get mySetup => 'إعدادي';

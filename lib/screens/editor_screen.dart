@@ -11,6 +11,7 @@ import '../models/templates.dart';
 import '../services/app_state.dart';
 import '../services/entitlements.dart';
 import '../services/floating_prompter.dart';
+import '../services/script_import.dart';
 import '../services/storage.dart';
 import '../widgets/guards.dart';
 import 'camera_prompter_screen.dart';
@@ -740,13 +741,3 @@ class _MarkupToolbar extends StatelessWidget {
     ),
   );
 }
-
-/// Removes what pasting from Google Docs, Word, Notes or WhatsApp brings
-/// along: zero-width characters, non-breaking spaces, tabs, Windows line
-/// ends and list bullets.
-String cleanPastedText(String text) => text
-    .replaceAll('\r\n', '\n')
-    .replaceAll('\r', '\n')
-    .replaceAll(RegExp('[\u200B-\u200D\u2060\uFEFF\u00AD]'), '')
-    .replaceAll(RegExp('[\u00A0\u202F\t]'), ' ')
-    .replaceAll(RegExp(r'^[ ]*[•◦▪▫●○■□‣⁃–—-][ ]+', multiLine: true), '');

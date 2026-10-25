@@ -6,9 +6,9 @@ import 'package:aprompter/main.dart';
 import 'package:aprompter/models/prompter_settings.dart';
 import 'package:aprompter/models/script.dart';
 import 'package:aprompter/models/script_markup.dart';
-import 'package:aprompter/screens/editor_screen.dart';
 import 'package:aprompter/services/app_state.dart';
 import 'package:aprompter/services/purchase_service.dart';
+import 'package:aprompter/services/script_import.dart';
 import 'package:aprompter/services/backup.dart';
 import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/storage.dart';
@@ -220,7 +220,7 @@ void main() {
 
   test('W7 pasted text is cleaned', () {
     expect(
-      cleanPastedText('• First​ point\r\n\t- Second point\n3 - 1'),
+      cleanPastedText('• First\u200B point\r\n\t- Second\u00A0point\n3 - 1'),
       'First point\nSecond point\n3 - 1',
     );
   });

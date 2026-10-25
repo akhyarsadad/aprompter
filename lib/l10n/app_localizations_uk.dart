@@ -811,15 +811,82 @@ class AppLocalizationsUk extends AppLocalizations {
   String get letterSpacing => 'Міжлітерний інтервал';
 
   @override
-  String get importTextFile => 'Імпорт текстового файлу';
+  String get pasteAsNewScript => 'Вставити як новий сценарій';
 
   @override
-  String get importTextFileHint =>
-      'Сценарій .txt або .md з Файлів, Диска чи пошти';
+  String get pasteAsNewScriptHint =>
+      'Текст, скопійований із Нотаток, Keep, Notion, Документів чи будь-якого застосунку';
 
   @override
-  String get importTextFailed =>
-      'Не вдалося прочитати файл. Виберіть звичайний текстовий файл (.txt).';
+  String get importFiles => 'Імпорт файлів';
+
+  @override
+  String get importFilesHint =>
+      'Word, текст, Markdown, RTF, HTML, Evernote, субтитри або резервна копія';
+
+  @override
+  String get clipboardEmpty =>
+      'Немає що вставити. Спочатку скопіюйте сценарій в іншому застосунку.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Імпортовано $count сценарію',
+      many: 'Імпортовано $count сценаріїв',
+      few: 'Імпортовано $count сценарії',
+      one: 'Імпортовано $count сценарій',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Безкоштовний план вміщує $count сценарію. Нічого не втрачено: нотатка чи файл залишилися на місці. Щоб імпортувати більше, покращте план.',
+      many:
+          'Безкоштовний план вміщує $count сценаріїв. Нічого не втрачено: нотатка чи файл залишилися на місці. Щоб імпортувати більше, покращте план.',
+      few:
+          'Безкоштовний план вміщує $count сценарії. Нічого не втрачено: нотатка чи файл залишилися на місці. Щоб імпортувати більше, покращте план.',
+      one:
+          'Безкоштовний план вміщує $count сценарій. Нічого не втрачено: нотатка чи файл залишилися на місці. Щоб імпортувати більше, покращте план.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF не можна імпортувати. Відкрийте PDF, скопіюйте текст і виберіть «Вставити як новий сценарій».';
+
+  @override
+  String get importOldFormat =>
+      'Старі файли Word (.doc) і Pages не читаються. Збережіть файл як .docx або текст чи скопіюйте текст і виберіть «Вставити як новий сценарій».';
+
+  @override
+  String get importUnsupported =>
+      'APrompter не може прочитати такий файл. Скопіюйте текст і виберіть «Вставити як новий сценарій».';
+
+  @override
+  String get importEmpty => 'Тут немає тексту для імпорту.';
+
+  @override
+  String get importTooLarge =>
+      'Це задовго для одного сценарію. Скопіюйте потрібну частину й виберіть «Вставити як новий сценарій».';
+
+  @override
+  String get importLinkOnly =>
+      'Надійшло лише посилання, без тексту. Відкрийте його, скопіюйте текст і виберіть «Вставити як новий сценарій».';
+
+  @override
+  String get importUnreadable =>
+      'Не вдалося прочитати. Скопіюйте текст і виберіть «Вставити як новий сценарій».';
+
+  @override
+  String get saveAsTextFile => 'Зберегти як текстовий файл';
 
   @override
   String get mySetup => 'Мої налаштування';

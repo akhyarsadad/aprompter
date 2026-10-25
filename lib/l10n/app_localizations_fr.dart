@@ -804,15 +804,75 @@ class AppLocalizationsFr extends AppLocalizations {
   String get letterSpacing => 'Espacement des lettres';
 
   @override
-  String get importTextFile => 'Importer un fichier texte';
+  String get pasteAsNewScript => 'Coller comme nouveau script';
 
   @override
-  String get importTextFileHint =>
-      'Un script .txt ou .md depuis Fichiers, Drive ou un e-mail';
+  String get pasteAsNewScriptHint =>
+      'Texte copié depuis Notes, Keep, Notion, Docs ou toute autre appli';
 
   @override
-  String get importTextFailed =>
-      'Impossible de lire ce fichier. Choisissez un fichier texte brut (.txt).';
+  String get importFiles => 'Importer des fichiers';
+
+  @override
+  String get importFilesHint =>
+      'Word, texte, Markdown, RTF, HTML, Evernote, sous-titres ou une sauvegarde';
+
+  @override
+  String get clipboardEmpty =>
+      'Rien à coller. Copiez d\'abord votre script dans l\'autre appli.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts importés',
+      one: '1 script importé',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'L\'offre gratuite contient $count scripts. Rien n\'est perdu : votre note ou fichier est toujours à sa place. Débloquez l\'illimité pour en importer plus.',
+      one: 'L\'offre gratuite contient 1 script. Rien n\'est perdu : votre note ou fichier est toujours à sa place. Débloquez l\'illimité pour en importer plus.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Les PDF ne peuvent pas être importés. Ouvrez le PDF, copiez le texte, puis utilisez « Coller comme nouveau script ».';
+
+  @override
+  String get importOldFormat =>
+      'Les anciens fichiers Word (.doc) et Pages ne peuvent pas être lus. Enregistrez-le en .docx ou en texte, ou copiez le texte et utilisez « Coller comme nouveau script ».';
+
+  @override
+  String get importUnsupported =>
+      'APrompter ne sait pas lire ce type de fichier. Copiez le texte et utilisez « Coller comme nouveau script ».';
+
+  @override
+  String get importEmpty => 'Il n\'y a aucun texte à importer.';
+
+  @override
+  String get importTooLarge =>
+      'C\'est trop long pour un seul script. Copiez la partie utile et utilisez « Coller comme nouveau script ».';
+
+  @override
+  String get importLinkOnly =>
+      'Seul un lien est arrivé, pas le texte. Ouvrez-le, copiez le texte et utilisez « Coller comme nouveau script ».';
+
+  @override
+  String get importUnreadable =>
+      'Lecture impossible. Copiez le texte et utilisez « Coller comme nouveau script ».';
+
+  @override
+  String get saveAsTextFile => 'Enregistrer en fichier texte';
 
   @override
   String get mySetup => 'Ma config';

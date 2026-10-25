@@ -798,15 +798,75 @@ class AppLocalizationsEn extends AppLocalizations {
   String get letterSpacing => 'Letter spacing';
 
   @override
-  String get importTextFile => 'Import a text file';
+  String get pasteAsNewScript => 'Paste as new script';
 
   @override
-  String get importTextFileHint =>
-      'A .txt or .md script from Files, Drive or email';
+  String get pasteAsNewScriptHint =>
+      'Text copied from Notes, Keep, Notion, Docs or any app';
 
   @override
-  String get importTextFailed =>
-      'Couldn\'t read that file. Pick a plain text (.txt) file.';
+  String get importFiles => 'Import files';
+
+  @override
+  String get importFilesHint =>
+      'Word, text, Markdown, RTF, HTML, Evernote, subtitles or a backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Nothing to paste. Copy your script in the other app first.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts imported',
+      one: '1 script imported',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'The free plan holds $count scripts. Nothing is lost: your note or file is still where it was. Upgrade to import more.',
+      one: 'The free plan holds 1 script. Nothing is lost: your note or file is still where it was. Upgrade to import more.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDFs can\'t be imported. Open the PDF, copy the text, then use Paste as new script.';
+
+  @override
+  String get importOldFormat =>
+      'Old Word (.doc) and Pages files can\'t be read. Save as .docx or text, or copy the text and use Paste as new script.';
+
+  @override
+  String get importUnsupported =>
+      'APrompter can\'t read that kind of file. Copy the text and use Paste as new script.';
+
+  @override
+  String get importEmpty => 'There\'s no text in it to import.';
+
+  @override
+  String get importTooLarge =>
+      'That\'s too big for one script. Copy the part you need and use Paste as new script.';
+
+  @override
+  String get importLinkOnly =>
+      'Only a link came through, not the text. Open it, copy the text and use Paste as new script.';
+
+  @override
+  String get importUnreadable =>
+      'Couldn\'t read that. Copy the text and use Paste as new script.';
+
+  @override
+  String get saveAsTextFile => 'Save as text file';
 
   @override
   String get mySetup => 'My setup';

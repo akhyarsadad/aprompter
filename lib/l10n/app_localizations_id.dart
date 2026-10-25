@@ -779,15 +779,75 @@ class AppLocalizationsId extends AppLocalizations {
   String get letterSpacing => 'Jarak huruf';
 
   @override
-  String get importTextFile => 'Impor file teks';
+  String get pasteAsNewScript => 'Tempel sebagai naskah baru';
 
   @override
-  String get importTextFileHint =>
-      'Naskah .txt atau .md dari Files, Drive, atau email';
+  String get pasteAsNewScriptHint =>
+      'Teks yang disalin dari Catatan, Keep, Notion, Docs, atau aplikasi apa pun';
 
   @override
-  String get importTextFailed =>
-      'File itu tidak bisa dibaca. Pilih file teks biasa (.txt).';
+  String get importFiles => 'Impor file';
+
+  @override
+  String get importFilesHint =>
+      'Word, teks, Markdown, RTF, HTML, Evernote, subtitle, atau cadangan';
+
+  @override
+  String get clipboardEmpty =>
+      'Tidak ada yang bisa ditempel. Salin dulu naskahmu di aplikasi lain.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count naskah diimpor',
+      one: '1 naskah diimpor',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Paket gratis memuat $count naskah. Tidak ada yang hilang: catatan atau file-mu masih di tempatnya. Tingkatkan untuk mengimpor lebih banyak.',
+      one: 'Paket gratis memuat 1 naskah. Tidak ada yang hilang: catatan atau file-mu masih di tempatnya. Tingkatkan untuk mengimpor lebih banyak.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF tidak bisa diimpor. Buka PDF-nya, salin teksnya, lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importOldFormat =>
+      'File Word lama (.doc) dan Pages tidak bisa dibaca. Simpan sebagai .docx atau teks, atau salin teksnya lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter tidak bisa membaca jenis file itu. Salin teksnya lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importEmpty => 'Tidak ada teks untuk diimpor.';
+
+  @override
+  String get importTooLarge =>
+      'Terlalu panjang untuk satu naskah. Salin bagian yang kamu perlukan lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importLinkOnly =>
+      'Yang masuk hanya tautan, bukan teksnya. Buka tautannya, salin teksnya, lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importUnreadable =>
+      'Tidak bisa dibaca. Salin teksnya lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get saveAsTextFile => 'Simpan sebagai file teks';
 
   @override
   String get mySetup => 'Setelanku';

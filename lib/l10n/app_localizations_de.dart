@@ -801,15 +801,75 @@ class AppLocalizationsDe extends AppLocalizations {
   String get letterSpacing => 'Zeichenabstand';
 
   @override
-  String get importTextFile => 'Textdatei importieren';
+  String get pasteAsNewScript => 'Als neues Skript einfügen';
 
   @override
-  String get importTextFileHint =>
-      'Ein .txt- oder .md-Skript aus Dateien, Drive oder E-Mail';
+  String get pasteAsNewScriptHint =>
+      'Kopierter Text aus Notizen, Keep, Notion, Docs oder jeder anderen App';
 
   @override
-  String get importTextFailed =>
-      'Die Datei konnte nicht gelesen werden. Wähle eine reine Textdatei (.txt).';
+  String get importFiles => 'Dateien importieren';
+
+  @override
+  String get importFilesHint =>
+      'Word, Text, Markdown, RTF, HTML, Evernote, Untertitel oder ein Backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Nichts zum Einfügen. Kopiere dein Skript zuerst in der anderen App.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Skripte importiert',
+      one: '1 Skript importiert',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Der kostenlose Plan umfasst $count Skripte. Nichts ist verloren: Deine Notiz oder Datei ist noch da, wo sie war. Schalte frei, um mehr zu importieren.',
+      one: 'Der kostenlose Plan umfasst 1 Skript. Nichts ist verloren: Deine Notiz oder Datei ist noch da, wo sie war. Schalte frei, um mehr zu importieren.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDFs können nicht importiert werden. Öffne das PDF, kopiere den Text und nutze „Als neues Skript einfügen“.';
+
+  @override
+  String get importOldFormat =>
+      'Alte Word-Dateien (.doc) und Pages-Dateien können nicht gelesen werden. Speichere sie als .docx oder Text oder kopiere den Text und nutze „Als neues Skript einfügen“.';
+
+  @override
+  String get importUnsupported =>
+      'Diese Art von Datei kann APrompter nicht lesen. Kopiere den Text und nutze „Als neues Skript einfügen“.';
+
+  @override
+  String get importEmpty => 'Darin ist kein Text zum Importieren.';
+
+  @override
+  String get importTooLarge =>
+      'Das ist zu lang für ein Skript. Kopiere den Teil, den du brauchst, und nutze „Als neues Skript einfügen“.';
+
+  @override
+  String get importLinkOnly =>
+      'Es kam nur ein Link an, nicht der Text. Öffne ihn, kopiere den Text und nutze „Als neues Skript einfügen“.';
+
+  @override
+  String get importUnreadable =>
+      'Das konnte nicht gelesen werden. Kopiere den Text und nutze „Als neues Skript einfügen“.';
+
+  @override
+  String get saveAsTextFile => 'Als Textdatei speichern';
 
   @override
   String get mySetup => 'Mein Setup';

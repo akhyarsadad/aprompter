@@ -799,15 +799,75 @@ class AppLocalizationsPt extends AppLocalizations {
   String get letterSpacing => 'Espaçamento entre letras';
 
   @override
-  String get importTextFile => 'Importar arquivo de texto';
+  String get pasteAsNewScript => 'Colar como novo roteiro';
 
   @override
-  String get importTextFileHint =>
-      'Um roteiro .txt ou .md de Arquivos, Drive ou e-mail';
+  String get pasteAsNewScriptHint =>
+      'Texto copiado do Notas, Keep, Notion, Docs ou qualquer app';
 
   @override
-  String get importTextFailed =>
-      'Não foi possível ler o arquivo. Escolha um arquivo de texto simples (.txt).';
+  String get importFiles => 'Importar arquivos';
+
+  @override
+  String get importFilesHint =>
+      'Word, texto, Markdown, RTF, HTML, Evernote, legendas ou um backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Nada para colar. Copie seu roteiro no outro app primeiro.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count roteiros importados',
+      one: '1 roteiro importado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'O plano gratuito comporta $count roteiros. Nada se perdeu: sua nota ou arquivo continua onde estava. Faça upgrade para importar mais.',
+      one: 'O plano gratuito comporta 1 roteiro. Nada se perdeu: sua nota ou arquivo continua onde estava. Faça upgrade para importar mais.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDFs não podem ser importados. Abra o PDF, copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importOldFormat =>
+      'Arquivos antigos do Word (.doc) e do Pages não podem ser lidos. Salve como .docx ou texto, ou copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importUnsupported =>
+      'O APrompter não consegue ler esse tipo de arquivo. Copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importEmpty => 'Não há texto para importar.';
+
+  @override
+  String get importTooLarge =>
+      'É grande demais para um roteiro. Copie a parte de que precisa e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importLinkOnly =>
+      'Só chegou um link, não o texto. Abra-o, copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importUnreadable =>
+      'Não foi possível ler. Copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get saveAsTextFile => 'Salvar como arquivo de texto';
 
   @override
   String get mySetup => 'Minha configuração';

@@ -799,15 +799,75 @@ class AppLocalizationsEs extends AppLocalizations {
   String get letterSpacing => 'Espaciado de letras';
 
   @override
-  String get importTextFile => 'Importar archivo de texto';
+  String get pasteAsNewScript => 'Pegar como guion nuevo';
 
   @override
-  String get importTextFileHint =>
-      'Un guion .txt o .md desde Archivos, Drive o el correo';
+  String get pasteAsNewScriptHint =>
+      'Texto copiado de Notas, Keep, Notion, Docs o cualquier app';
 
   @override
-  String get importTextFailed =>
-      'No se pudo leer el archivo. Elige un archivo de texto plano (.txt).';
+  String get importFiles => 'Importar archivos';
+
+  @override
+  String get importFilesHint =>
+      'Word, texto, Markdown, RTF, HTML, Evernote, subtítulos o una copia de seguridad';
+
+  @override
+  String get clipboardEmpty =>
+      'No hay nada que pegar. Primero copia tu guion en la otra app.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count guiones importados',
+      one: '1 guion importado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'El plan gratis incluye $count guiones. No se ha perdido nada: tu nota o archivo sigue donde estaba. Mejora tu plan para importar más.',
+      one: 'El plan gratis incluye 1 guion. No se ha perdido nada: tu nota o archivo sigue donde estaba. Mejora tu plan para importar más.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Los PDF no se pueden importar. Abre el PDF, copia el texto y usa «Pegar como guion nuevo».';
+
+  @override
+  String get importOldFormat =>
+      'Los archivos antiguos de Word (.doc) y de Pages no se pueden leer. Guárdalo como .docx o texto, o copia el texto y usa «Pegar como guion nuevo».';
+
+  @override
+  String get importUnsupported =>
+      'APrompter no puede leer ese tipo de archivo. Copia el texto y usa «Pegar como guion nuevo».';
+
+  @override
+  String get importEmpty => 'No hay texto que importar.';
+
+  @override
+  String get importTooLarge =>
+      'Es demasiado largo para un solo guion. Copia la parte que necesites y usa «Pegar como guion nuevo».';
+
+  @override
+  String get importLinkOnly =>
+      'Solo llegó un enlace, no el texto. Ábrelo, copia el texto y usa «Pegar como guion nuevo».';
+
+  @override
+  String get importUnreadable =>
+      'No se pudo leer. Copia el texto y usa «Pegar como guion nuevo».';
+
+  @override
+  String get saveAsTextFile => 'Guardar como archivo de texto';
 
   @override
   String get mySetup => 'Mi configuración';

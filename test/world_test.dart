@@ -158,6 +158,9 @@ void main() {
       // Template picker, then the editor.
       await tester.tap(find.text(l.newScript));
       await tester.pumpAndSettle();
+      // Below "Paste as new script" and "Import files" the list may scroll.
+      await tester.ensureVisible(find.text(l.templateReview));
+      await tester.pumpAndSettle();
       await tester.tap(find.text(l.templateReview));
       await tester.pumpAndSettle();
       expect(find.text(l.toolSection), findsOneWidget);
