@@ -25,8 +25,17 @@ Future<void> main() async {
   final state = AppState(storage);
   await state.runWordCapMigrationIfNeeded();
 
-  final entitlements = Entitlements();
-  final purchaseService = PurchaseService(entitlements: entitlements);
+  // Starts from what the store said last time, so a subscriber who shares
+  // a note right at launch doesn't meet the paywall; RevenueCat corrects it
+  // either way once it answers (see _initPurchases).
+  final entitlements = Entitlements(
+    isUnlimited: storage.lastKnownUnlimited,
+    known: false,
+  );
+  final purchaseService = PurchaseService(
+    entitlements: entitlements,
+    storage: storage,
+  );
 
   runApp(
     AprompterApp(
@@ -59,7 +68,10 @@ Future<void> _initPurchases(PurchaseService purchaseService) async {
     // A subscription bought earlier on this store account unlocks at launch.
     purchaseService.applyCustomerInfo(await Purchases.getCustomerInfo());
   } catch (_) {
-    // Stays on the free tier until the next successful launch.
+    // Keeps the last known answer until the next successful launch.
+  } finally {
+    // Whatever happened, the paywall stops waiting for an answer.
+    purchaseService.entitlements.markKnown();
   }
 }
 

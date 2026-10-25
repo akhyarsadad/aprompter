@@ -62,6 +62,14 @@ void main() {
   ) async {
     await _pump(tester, script: _script(words: 501), isUnlimited: false);
     expect(find.text('Upgrade'), findsOneWidget);
+    // A reminder, not a cap: nothing claims the script is cut off.
+    expect(
+      find.text(
+        'This script is over 500 words. Long scripts are part of '
+        'APrompter Unlimited.',
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('free account under the cap sees no banner', (tester) async {

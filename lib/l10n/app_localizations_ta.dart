@@ -532,7 +532,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'ப்ராம்ப்டரை எங்கும் நகர்த்த மேலுள்ள பட்டையையும், அளவை மாற்ற மூலையையும் இழுக்கவும். Android-இல் மிதக்கும் சாளரத்தை எங்கும் இழுக்கலாம், அது தன் இடத்தை நினைவில் வைக்கும்.';
+      'ப்ராம்ப்டரை எங்கும் நகர்த்த மேலுள்ள பட்டையையும், அளவை மாற்ற மூலையையும் இழுக்கவும்.';
 
   @override
   String get app => 'ஆப்';
@@ -653,7 +653,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone-இல் ஆப்கள் மற்ற ஆப்களின் மேல் மிதக்க முடியாது. கேமராவுக்குக் கீழே ஸ்கிரிப்டுடன் படம்பிடிக்க பதிவு பயன்படுத்தவும்.';
+      'iPhone மற்றும் iPad-இல் ஆப்கள் மற்ற ஆப்களின் மேல் மிதக்க முடியாது. கேமராவுக்குக் கீழே ஸ்கிரிப்டுடன் படம்பிடிக்க பதிவு பயன்படுத்தவும்.';
 
   @override
   String get hashtagHint =>
@@ -920,11 +920,11 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'வரம்பற்றதாக்குங்கள்';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'சந்தா அல்லது ஒருமுறை வாங்குதல் மூலம் வரம்பற்ற ஸ்கிரிப்டுகளையும் நீளத்தையும் திறக்கவும்.';
+      'சந்தா அல்லது ஒருமுறை வாங்குதல் மூலம் வரம்பற்ற ஸ்கிரிப்டுகள்.';
 
   @override
   String get offeringsLoadFailed =>
@@ -942,7 +942,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'இலவச ஸ்கிரிப்டுகளுக்கு $count சொற்கள் வரம்பு.';
+    return 'இந்த ஸ்கிரிப்ட் $count சொற்களுக்கு மேல் உள்ளது. நீளமான ஸ்கிரிப்டுகள் APrompter Unlimited-இன் ஒரு பகுதி.';
   }
 
   @override
@@ -970,7 +970,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'மாதாந்திர மற்றும் ஆண்டு திட்டங்கள் நீங்கள் ரத்து செய்யும் வரை அதே விலையில் தானாகப் புதுப்பிக்கப்படும். உங்கள் $store கணக்கு அமைப்புகளில் எப்போது வேண்டுமானாலும் ரத்து செய்யலாம். வாழ்நாள் திட்டம் ஒருமுறை வாங்குவதாகும்.';
+    return 'மாதாந்திர மற்றும் ஆண்டு திட்டங்கள் நீங்கள் ரத்து செய்யும் வரை அதே காலத்துக்குத் தானாகப் புதுப்பிக்கப்படும். அடுத்த கட்டணத்தைத் தவிர்க்க, காலம் முடிவதற்குக் குறைந்தது 24 மணிநேரத்துக்கு முன் உங்கள் $store கணக்கு அமைப்புகளில் ரத்து செய்யவும். வாழ்நாள் திட்டம் ஒருமுறை வாங்குவதாகும்.';
   }
 
   @override
@@ -983,4 +983,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'இந்த $store கணக்கில் முந்தைய வாங்குதல் எதுவும் இல்லை.';
   }
+
+  @override
+  String get purchasePending =>
+      'கட்டணம் நிலுவையில் உள்ளது. அங்கீகரிக்கப்பட்டதும் APrompter Unlimited தானாகத் திறக்கும்.';
+
+  @override
+  String get positionHintFloat =>
+      'மிதக்கும் சாளரத்தை எங்கும் இழுக்கலாம், அது தன் இடத்தை நினைவில் வைக்கும்.';
 }

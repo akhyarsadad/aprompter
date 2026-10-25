@@ -526,7 +526,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'نوار بالای پرامپتر را بکشید تا هر جا خواستید ببریدش و گوشه را بکشید تا اندازه‌اش عوض شود. در اندروید پنجرهٔ شناور هر جایی کشیده می‌شود و جایش را به خاطر می‌سپارد.';
+      'نوار بالای پرامپتر را بکشید تا هر جا خواستید ببریدش و گوشه را بکشید تا اندازه‌اش عوض شود.';
 
   @override
   String get app => 'برنامه';
@@ -647,7 +647,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'آیفون اجازه نمی‌دهد برنامه‌ها روی برنامه‌های دیگر شناور شوند. از «ضبط» استفاده کنید تا با متن زیر دوربین فیلم بگیرید.';
+      'آیفون و آیپد اجازه نمی‌دهند برنامه‌ها روی برنامه‌های دیگر شناور شوند. از «ضبط» استفاده کنید تا با متن زیر دوربین فیلم بگیرید.';
 
   @override
   String get hashtagHint =>
@@ -909,11 +909,10 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'نامحدود شوید';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody =>
-      'با اشتراک یا خرید یک‌باره، تعداد و طول متن‌ها را نامحدود کنید.';
+  String get upgradeBody => 'متن‌های نامحدود، با اشتراک یا خرید یک‌باره.';
 
   @override
   String get offeringsLoadFailed =>
@@ -930,7 +929,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'متن‌های رایگان حداکثر $count کلمه دارند.';
+    return 'این متن بیش از $count کلمه دارد. متن‌های طولانی بخشی از APrompter Unlimited هستند.';
   }
 
   @override
@@ -958,7 +957,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'طرح‌های ماهانه و سالانه تا زمانی که لغوشان نکنید با همان قیمت خودکار تمدید می‌شوند. هر زمان خواستید از تنظیمات حساب $store لغو کنید. طرح مادام‌العمر یک خرید یک‌باره است.';
+    return 'طرح‌های ماهانه و سالانه تا زمانی که لغوشان نکنید برای همان مدت خودکار تمدید می‌شوند. برای جلوگیری از پرداخت بعدی، دست‌کم ۲۴ ساعت پیش از پایان دوره از تنظیمات حساب $store لغو کنید. طرح مادام‌العمر یک خرید یک‌باره است.';
   }
 
   @override
@@ -971,4 +970,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'هیچ خرید قبلی در این حساب $store پیدا نشد.';
   }
+
+  @override
+  String get purchasePending =>
+      'پرداخت در انتظار تأیید است. APrompter Unlimited پس از تأیید خودکار باز می‌شود.';
+
+  @override
+  String get positionHintFloat =>
+      'پنجرهٔ شناور هر جایی کشیده می‌شود و جایش را به خاطر می‌سپارد.';
 }

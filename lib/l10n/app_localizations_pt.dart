@@ -545,7 +545,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Arraste a barra no topo do prompter para movê-lo para qualquer lugar e o canto para redimensionar. No Android, a janela flutuante pode ser arrastada para qualquer lugar e lembra a posição.';
+      'Arraste a barra no topo do prompter para movê-lo para qualquer lugar e o canto para redimensionar.';
 
   @override
   String get app => 'App';
@@ -666,7 +666,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'O iPhone não deixa apps flutuarem sobre outros apps. Use Gravar para filmar com o roteiro sob a câmera.';
+      'O iPhone e o iPad não deixam apps flutuarem sobre outros apps. Use Gravar para filmar com o roteiro sob a câmera.';
 
   @override
   String get hashtagHint =>
@@ -930,11 +930,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Desbloqueie o ilimitado';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Desbloqueie roteiros ilimitados e sem limite de tamanho com uma assinatura ou uma compra única.';
+      'Roteiros ilimitados, com uma assinatura ou uma compra única.';
 
   @override
   String get offeringsLoadFailed =>
@@ -952,7 +952,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Roteiros gratuitos têm limite de $count palavras.';
+    return 'Este roteiro passa de $count palavras. Roteiros longos fazem parte do APrompter Unlimited.';
   }
 
   @override
@@ -980,7 +980,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Os planos mensal e anual são renovados automaticamente pelo mesmo preço até você cancelar. Cancele quando quiser nas configurações da sua conta $store. O vitalício é uma compra única.';
+    return 'Os planos mensal e anual são renovados automaticamente pelo mesmo período até você cancelar. Para evitar a próxima cobrança, cancele pelo menos 24 horas antes do fim do período nas configurações da sua conta $store. O vitalício é uma compra única.';
   }
 
   @override
@@ -993,4 +993,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Nenhuma compra anterior encontrada nesta conta $store.';
   }
+
+  @override
+  String get purchasePending =>
+      'Pagamento pendente. O APrompter Unlimited é desbloqueado automaticamente assim que for aprovado.';
+
+  @override
+  String get positionHintFloat =>
+      'A janela flutuante pode ser arrastada para qualquer lugar e lembra a posição.';
 }

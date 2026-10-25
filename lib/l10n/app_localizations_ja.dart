@@ -519,7 +519,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'プロンプター上部のバーをドラッグすると好きな場所に移動でき、角をドラッグするとサイズを変えられます。Android ではフローティングウィンドウをどこへでも動かせ、位置も記憶します。';
+      'プロンプター上部のバーをドラッグすると好きな場所に移動でき、角をドラッグするとサイズを変えられます。';
 
   @override
   String get app => 'アプリ';
@@ -638,7 +638,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone ではアプリを他のアプリの上に表示できません。「撮影」なら台本をカメラの下に表示して撮影できます。';
+      'iPhone と iPad ではアプリを他のアプリの上に表示できません。「撮影」なら台本をカメラの下に表示して撮影できます。';
 
   @override
   String get hashtagHint =>
@@ -892,10 +892,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => '無制限にする';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody => 'サブスクリプションまたは買い切りで、台本の数と長さの制限を解除できます。';
+  String get upgradeBody => 'サブスクリプションまたは買い切りで、台本を無制限に作れます。';
 
   @override
   String get offeringsLoadFailed => 'プランを読み込めませんでした。接続を確認して、もう一度お試しください。';
@@ -911,7 +911,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return '無料の台本は$count語までです。';
+    return 'この台本は$count語を超えています。長い台本は APrompter Unlimited に含まれます。';
   }
 
   @override
@@ -939,7 +939,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return '月額・年額プランは解約するまで同じ価格で自動更新されます。$storeのアカウント設定からいつでも解約できます。買い切りは1回限りの購入です。';
+    return '月額・年額プランは、解約するまで同じ期間で自動更新されます。次回の請求を避けるには、期間終了の24時間前までに$storeのアカウント設定から解約してください。買い切りは1回限りの購入です。';
   }
 
   @override
@@ -952,4 +952,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'この$storeアカウントには以前の購入が見つかりませんでした。';
   }
+
+  @override
+  String get purchasePending =>
+      'お支払いは保留中です。承認されると APrompter Unlimited が自動的に有効になります。';
+
+  @override
+  String get positionHintFloat => 'フローティングウィンドウはどこへでも動かせ、位置も記憶します。';
 }

@@ -550,7 +550,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Faites glisser la barre en haut du prompteur pour le placer n\'importe où, et le coin pour le redimensionner. Sur Android, la fenêtre flottante se déplace partout et retient sa place.';
+      'Faites glisser la barre en haut du prompteur pour le placer n\'importe où, et le coin pour le redimensionner.';
 
   @override
   String get app => 'Appli';
@@ -671,7 +671,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'L\'iPhone ne permet pas aux apps de flotter sur d\'autres apps. Utilisez Filmer pour tourner avec le script sous la caméra.';
+      'L\'iPhone et l\'iPad ne permettent pas aux apps de flotter sur d\'autres apps. Utilisez Filmer pour tourner avec le script sous la caméra.';
 
   @override
   String get hashtagHint =>
@@ -935,11 +935,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Passez en illimité';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Débloquez des scripts illimités, sans limite de longueur, avec un abonnement ou un achat unique.';
+      'Des scripts illimités, avec un abonnement ou un achat unique.';
 
   @override
   String get offeringsLoadFailed =>
@@ -956,7 +956,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Les scripts gratuits sont limités à $count mots.';
+    return 'Ce script dépasse $count mots. Les scripts longs font partie d\'APrompter Unlimited.';
   }
 
   @override
@@ -984,7 +984,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Les formules mensuelle et annuelle se renouvellent automatiquement au même prix jusqu\'à leur résiliation. Résiliez à tout moment dans les réglages de votre compte $store. L\'offre à vie est un achat unique.';
+    return 'Les formules mensuelle et annuelle se renouvellent automatiquement pour la même durée jusqu\'à leur résiliation. Pour éviter le prochain prélèvement, résiliez au moins 24 heures avant la fin de la période dans les réglages de votre compte $store. L\'offre à vie est un achat unique.';
   }
 
   @override
@@ -997,4 +997,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Aucun achat précédent trouvé sur ce compte $store.';
   }
+
+  @override
+  String get purchasePending =>
+      'Paiement en attente. APrompter Unlimited se débloque automatiquement dès qu\'il est approuvé.';
+
+  @override
+  String get positionHintFloat =>
+      'La fenêtre flottante se déplace partout et retient sa place.';
 }

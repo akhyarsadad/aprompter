@@ -544,7 +544,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Arrastra la barra superior del prompter para moverlo a cualquier sitio y la esquina para cambiar su tamaño. En Android, la ventana flotante se puede arrastrar a cualquier lugar y recuerda su posición.';
+      'Arrastra la barra superior del prompter para moverlo a cualquier sitio y la esquina para cambiar su tamaño.';
 
   @override
   String get app => 'App';
@@ -666,7 +666,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'El iPhone no permite que las apps floten sobre otras. Usa Grabar para filmar con el guion bajo la cámara.';
+      'El iPhone y el iPad no permiten que las apps floten sobre otras. Usa Grabar para filmar con el guion bajo la cámara.';
 
   @override
   String get hashtagHint =>
@@ -930,11 +930,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Pásate a ilimitado';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Desbloquea guiones ilimitados y sin límite de longitud con una suscripción o un pago único.';
+      'Guiones ilimitados, con una suscripción o un pago único.';
 
   @override
   String get offeringsLoadFailed =>
@@ -952,7 +952,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Los guiones gratis tienen un límite de $count palabras.';
+    return 'Este guion supera las $count palabras. Los guiones largos son parte de APrompter Unlimited.';
   }
 
   @override
@@ -980,7 +980,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Los planes mensual y anual se renuevan automáticamente al mismo precio hasta que los canceles. Cancela cuando quieras en los ajustes de tu cuenta de $store. De por vida es un pago único.';
+    return 'Los planes mensual y anual se renuevan automáticamente por el mismo periodo hasta que los canceles. Para evitar el próximo cargo, cancela al menos 24 horas antes de que termine el periodo en los ajustes de tu cuenta de $store. De por vida es un pago único.';
   }
 
   @override
@@ -993,4 +993,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'No se encontraron compras anteriores en esta cuenta de $store.';
   }
+
+  @override
+  String get purchasePending =>
+      'Pago pendiente. APrompter Unlimited se desbloquea automáticamente en cuanto se apruebe.';
+
+  @override
+  String get positionHintFloat =>
+      'La ventana flotante se puede arrastrar a cualquier lugar y recuerda su posición.';
 }

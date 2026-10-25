@@ -527,7 +527,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'پرامپٹر کو کہیں بھی لے جانے کے لیے اوپر والی پٹی، اور سائز بدلنے کے لیے کونا گھسیٹیں۔ اینڈرائیڈ پر تیرتی ونڈو کہیں بھی گھسیٹی جا سکتی ہے اور اپنی جگہ یاد رکھتی ہے۔';
+      'پرامپٹر کو کہیں بھی لے جانے کے لیے اوپر والی پٹی، اور سائز بدلنے کے لیے کونا گھسیٹیں۔';
 
   @override
   String get app => 'ایپ';
@@ -648,7 +648,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone ایپس کو دوسری ایپس کے اوپر تیرنے نہیں دیتا۔ کیمرے کے نیچے اسکرپٹ کے ساتھ فلم بنانے کے لیے ریکارڈ استعمال کریں۔';
+      'iPhone اور iPad ایپس کو دوسری ایپس کے اوپر تیرنے نہیں دیتے۔ کیمرے کے نیچے اسکرپٹ کے ساتھ فلم بنانے کے لیے ریکارڈ استعمال کریں۔';
 
   @override
   String get hashtagHint =>
@@ -910,11 +910,10 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'لامحدود استعمال کریں';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody =>
-      'سبسکرپشن یا ایک بار کی خریداری سے لامحدود اسکرپٹ اور لمبائی ان لاک کریں۔';
+  String get upgradeBody => 'سبسکرپشن یا ایک بار کی خریداری سے لامحدود اسکرپٹ۔';
 
   @override
   String get offeringsLoadFailed =>
@@ -931,7 +930,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'مفت اسکرپٹ زیادہ سے زیادہ $count الفاظ کے ہو سکتے ہیں۔';
+    return 'یہ اسکرپٹ $count الفاظ سے زیادہ ہے۔ لمبے اسکرپٹ APrompter Unlimited کا حصہ ہیں۔';
   }
 
   @override
@@ -959,7 +958,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'ماہانہ اور سالانہ پلان منسوخ کرنے تک اسی قیمت پر خودکار طور پر تجدید ہوتے رہتے ہیں۔ اپنے $store اکاؤنٹ کی ترتیبات میں کسی بھی وقت منسوخ کریں۔ تاحیات پلان ایک بار کی خریداری ہے۔';
+    return 'ماہانہ اور سالانہ پلان منسوخ کرنے تک اسی مدت کے لیے خودکار طور پر تجدید ہوتے رہتے ہیں۔ اگلی ادائیگی سے بچنے کے لیے، مدت ختم ہونے سے کم از کم 24 گھنٹے پہلے اپنے $store اکاؤنٹ کی ترتیبات میں منسوخ کریں۔ تاحیات پلان ایک بار کی خریداری ہے۔';
   }
 
   @override
@@ -972,4 +971,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'اس $store اکاؤنٹ میں کوئی سابقہ خریداری نہیں ملی۔';
   }
+
+  @override
+  String get purchasePending =>
+      'ادائیگی زیرِ التوا ہے۔ منظوری ملتے ہی APrompter Unlimited خودبخود کھل جائے گا۔';
+
+  @override
+  String get positionHintFloat =>
+      'تیرتی ونڈو کہیں بھی گھسیٹی جا سکتی ہے اور اپنی جگہ یاد رکھتی ہے۔';
 }

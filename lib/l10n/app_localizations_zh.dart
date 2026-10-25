@@ -516,8 +516,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetPosition => '重置位置（顶部、全宽）';
 
   @override
-  String get positionHint =>
-      '拖动提词器顶部的横条可移到任意位置，拖动角落可调整大小。在 Android 上，悬浮窗可拖到任意位置并会记住位置。';
+  String get positionHint => '拖动提词器顶部的横条可移到任意位置，拖动角落可调整大小。';
 
   @override
   String get app => '应用';
@@ -634,7 +633,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get saved => '已保存';
 
   @override
-  String get floatNotOnIos => 'iPhone 不允许应用悬浮在其他应用上方。请使用“拍摄”，在镜头下方显示脚本进行录制。';
+  String get floatNotOnIos =>
+      'iPhone 和 iPad 不允许应用悬浮在其他应用上方。请使用“拍摄”，在镜头下方显示脚本进行录制。';
 
   @override
   String get hashtagHint => '话题标签行（#fyp #ad）会变暗显示且不计时。段落请使用带空格的“# ”。';
@@ -878,10 +878,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => '解锁无限制';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody => '通过订阅或一次性购买，解锁不限数量、不限长度的脚本。';
+  String get upgradeBody => '不限数量的脚本，可通过订阅或一次性购买获得。';
 
   @override
   String get offeringsLoadFailed => '无法加载方案。请检查网络连接后重试。';
@@ -897,7 +897,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return '免费脚本最多 $count 个词。';
+    return '此脚本超过 $count 个词。长脚本属于 APrompter Unlimited 的功能。';
   }
 
   @override
@@ -925,7 +925,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return '月度和年度方案会以相同价格自动续订，直到你取消。你可以随时在 $store 账户设置中取消。终身方案为一次性购买。';
+    return '月度和年度方案会按相同周期自动续订，直到你取消。如需避免下次扣费，请在当期结束前至少 24 小时在 $store 账户设置中取消。终身方案为一次性购买。';
   }
 
   @override
@@ -938,6 +938,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String nothingToRestore(String store) {
     return '在此 $store 账户中未找到以往的购买记录。';
   }
+
+  @override
+  String get purchasePending => '付款待处理。获批后，APrompter Unlimited 会自动解锁。';
+
+  @override
+  String get positionHintFloat => '悬浮窗可拖到任意位置并会记住位置。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1451,8 +1457,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get resetPosition => '重設位置（頂端、全寬）';
 
   @override
-  String get positionHint =>
-      '拖曳提詞機頂端的橫條可移到任何位置，拖曳角落可調整大小。在 Android 上，懸浮視窗可拖到任何位置並會記住位置。';
+  String get positionHint => '拖曳提詞機頂端的橫條可移到任何位置，拖曳角落可調整大小。';
 
   @override
   String get app => 'App';
@@ -1570,7 +1575,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get floatNotOnIos =>
-      'iPhone 不允許 App 懸浮在其他 App 上方。請使用「拍攝」，在鏡頭下方顯示腳本進行錄影。';
+      'iPhone 和 iPad 不允許 App 懸浮在其他 App 上方。請使用「拍攝」，在鏡頭下方顯示腳本進行錄影。';
 
   @override
   String get hashtagHint => '主題標籤行（#fyp #ad）會變暗顯示且不計時。段落請使用帶空格的「# 」。';
@@ -1814,10 +1819,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get upgradeTitle => '解鎖無限制';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody => '透過訂閱或一次性購買，解鎖不限數量、不限長度的腳本。';
+  String get upgradeBody => '不限數量的腳本，可透過訂閱或一次性購買取得。';
 
   @override
   String get offeringsLoadFailed => '無法載入方案。請檢查網路連線後再試一次。';
@@ -1833,7 +1838,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String wordCapBannerText(int count) {
-    return '免費腳本最多 $count 個字詞。';
+    return '此腳本超過 $count 個字詞。長腳本屬於 APrompter Unlimited 的功能。';
   }
 
   @override
@@ -1861,7 +1866,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String subscriptionTerms(String store) {
-    return '月方案和年方案會以相同價格自動續訂，直到你取消為止。你可以隨時在 $store 帳號設定中取消。終身方案為一次性購買。';
+    return '月方案和年方案會以相同週期自動續訂，直到你取消為止。如要避免下次扣款，請在本期結束前至少 24 小時於 $store 帳號設定中取消。終身方案為一次性購買。';
   }
 
   @override
@@ -1874,4 +1879,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String nothingToRestore(String store) {
     return '在這個 $store 帳號中找不到先前的購買項目。';
   }
+
+  @override
+  String get purchasePending => '付款處理中。核准後，APrompter Unlimited 會自動解鎖。';
+
+  @override
+  String get positionHintFloat => '懸浮視窗可拖到任何位置並會記住位置。';
 }

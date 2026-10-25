@@ -544,7 +544,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'प्रॉम्प्टर को कहीं भी ले जाने के लिए ऊपर की पट्टी और आकार बदलने के लिए कोना खींचें। Android पर फ़्लोटिंग विंडो कहीं भी खींची जा सकती है और अपनी जगह याद रखती है।';
+      'प्रॉम्प्टर को कहीं भी ले जाने के लिए ऊपर की पट्टी और आकार बदलने के लिए कोना खींचें।';
 
   @override
   String get app => 'ऐप';
@@ -665,7 +665,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone ऐप्स को दूसरे ऐप्स के ऊपर फ़्लोट नहीं करने देता। कैमरे के नीचे स्क्रिप्ट के साथ शूट करने के लिए रिकॉर्ड इस्तेमाल करें।';
+      'iPhone और iPad ऐप्स को दूसरे ऐप्स के ऊपर फ़्लोट नहीं करने देते। कैमरे के नीचे स्क्रिप्ट के साथ शूट करने के लिए रिकॉर्ड इस्तेमाल करें।';
 
   @override
   String get hashtagHint =>
@@ -928,11 +928,11 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'अनलिमिटेड पाएँ';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'सब्सक्रिप्शन या एक बार की खरीद से असीमित स्क्रिप्ट और लंबाई अनलॉक करें।';
+      'सब्सक्रिप्शन या एक बार की खरीद से असीमित स्क्रिप्ट।';
 
   @override
   String get offeringsLoadFailed =>
@@ -949,7 +949,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'मुफ़्त स्क्रिप्ट में ज़्यादा से ज़्यादा $count शब्द हो सकते हैं।';
+    return 'यह स्क्रिप्ट $count शब्दों से लंबी है। लंबी स्क्रिप्ट APrompter Unlimited का हिस्सा हैं।';
   }
 
   @override
@@ -977,7 +977,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'मासिक और वार्षिक प्लान रद्द करने तक उसी कीमत पर अपने-आप रिन्यू होते हैं। अपनी $store खाता सेटिंग में कभी भी रद्द करें। लाइफ़टाइम एक बार की खरीद है।';
+    return 'मासिक और वार्षिक प्लान रद्द करने तक उसी अवधि के लिए अपने-आप रिन्यू होते हैं। अगले शुल्क से बचने के लिए, अवधि खत्म होने से कम से कम 24 घंटे पहले अपनी $store खाता सेटिंग में रद्द करें। लाइफ़टाइम एक बार की खरीद है।';
   }
 
   @override
@@ -990,4 +990,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'इस $store खाते पर कोई पिछली खरीद नहीं मिली।';
   }
+
+  @override
+  String get purchasePending =>
+      'भुगतान लंबित है। मंज़ूरी मिलते ही APrompter Unlimited अपने-आप अनलॉक हो जाएगा।';
+
+  @override
+  String get positionHintFloat =>
+      'फ़्लोटिंग विंडो कहीं भी खींची जा सकती है और अपनी जगह याद रखती है।';
 }

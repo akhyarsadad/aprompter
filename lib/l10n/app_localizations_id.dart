@@ -526,7 +526,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
+      'Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran.';
 
   @override
   String get app => 'Aplikasi';
@@ -647,7 +647,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone tidak mengizinkan aplikasi melayang di atas aplikasi lain. Gunakan Rekam untuk merekam dengan naskah di bawah kamera.';
+      'iPhone dan iPad tidak mengizinkan aplikasi melayang di atas aplikasi lain. Gunakan Rekam untuk merekam dengan naskah di bawah kamera.';
 
   @override
   String get hashtagHint =>
@@ -909,11 +909,11 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Jadi tanpa batas';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Buka naskah tanpa batas jumlah dan panjang dengan langganan atau pembelian sekali bayar.';
+      'Naskah tanpa batas, dengan langganan atau pembelian sekali bayar.';
 
   @override
   String get offeringsLoadFailed =>
@@ -930,7 +930,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Naskah gratis dibatasi $count kata.';
+    return 'Naskah ini lebih dari $count kata. Naskah panjang termasuk dalam APrompter Unlimited.';
   }
 
   @override
@@ -958,7 +958,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Paket bulanan dan tahunan diperpanjang otomatis dengan harga yang sama sampai kamu membatalkannya. Batalkan kapan saja di pengaturan akun $store kamu. Seumur hidup adalah pembelian sekali bayar.';
+    return 'Paket bulanan dan tahunan diperpanjang otomatis untuk periode yang sama sampai kamu membatalkannya. Agar tidak ditagih lagi, batalkan paling lambat 24 jam sebelum periode berakhir di pengaturan akun $store kamu. Seumur hidup adalah pembelian sekali bayar.';
   }
 
   @override
@@ -971,4 +971,12 @@ class AppLocalizationsId extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Tidak ada pembelian sebelumnya di akun $store ini.';
   }
+
+  @override
+  String get purchasePending =>
+      'Pembayaran tertunda. APrompter Unlimited terbuka otomatis setelah pembayaran disetujui.';
+
+  @override
+  String get positionHintFloat =>
+      'Jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
 }

@@ -550,7 +550,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'اسحب الشريط أعلى الملقّن لنقله إلى أي مكان، واسحب الزاوية لتغيير حجمه. على أندرويد يمكن سحب النافذة العائمة إلى أي مكان وتتذكر موضعها.';
+      'اسحب الشريط أعلى الملقّن لنقله إلى أي مكان، واسحب الزاوية لتغيير حجمه.';
 
   @override
   String get app => 'التطبيق';
@@ -677,7 +677,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'لا يسمح iPhone للتطبيقات بالظهور فوق تطبيقات أخرى. استخدم \"تسجيل\" للتصوير والنص أسفل الكاميرا.';
+      'لا يسمح iPhone و iPad للتطبيقات بالظهور فوق تطبيقات أخرى. استخدم \"تسجيل\" للتصوير والنص أسفل الكاميرا.';
 
   @override
   String get hashtagHint =>
@@ -946,11 +946,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'احصل على النسخة غير المحدودة';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
-  String get upgradeBody =>
-      'افتح عددًا غير محدود من النصوص وبلا حد للطول باشتراك أو بعملية شراء لمرة واحدة.';
+  String get upgradeBody => 'نصوص بلا حدود، باشتراك أو بعملية شراء لمرة واحدة.';
 
   @override
   String get offeringsLoadFailed =>
@@ -967,7 +966,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'النصوص المجانية محدودة بـ $count كلمة.';
+    return 'هذا النص يتجاوز $count كلمة. النصوص الطويلة جزء من APrompter Unlimited.';
   }
 
   @override
@@ -995,7 +994,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'تتجدد الخطتان الشهرية والسنوية تلقائيًا بالسعر نفسه حتى تلغيها. يمكنك الإلغاء في أي وقت من إعدادات حسابك في $store. خطة مدى الحياة عملية شراء لمرة واحدة.';
+    return 'تتجدد الخطتان الشهرية والسنوية تلقائيًا للمدة نفسها حتى تلغيها. لتجنّب الدفعة التالية، ألغِ الاشتراك قبل انتهاء المدة بـ 24 ساعة على الأقل من إعدادات حسابك في $store. خطة مدى الحياة عملية شراء لمرة واحدة.';
   }
 
   @override
@@ -1008,4 +1007,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'لم يُعثر على مشتريات سابقة في حساب $store هذا.';
   }
+
+  @override
+  String get purchasePending =>
+      'الدفع قيد الانتظار. سيُفتح APrompter Unlimited تلقائيًا بمجرد الموافقة عليه.';
+
+  @override
+  String get positionHintFloat =>
+      'يمكن سحب النافذة العائمة إلى أي مكان وتتذكر موضعها.';
 }

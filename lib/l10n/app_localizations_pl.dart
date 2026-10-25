@@ -552,7 +552,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Przeciągnij pasek na górze promptera, aby przenieść go w dowolne miejsce, a róg, aby zmienić rozmiar. Na Androidzie pływające okno można przeciągnąć wszędzie i zapamiętuje swoje miejsce.';
+      'Przeciągnij pasek na górze promptera, aby przenieść go w dowolne miejsce, a róg, aby zmienić rozmiar.';
 
   @override
   String get app => 'Aplikacja';
@@ -677,7 +677,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone nie pozwala aplikacjom wyświetlać się nad innymi. Użyj „Nagraj”, by filmować ze scenariuszem pod kamerą.';
+      'iPhone i iPad nie pozwalają aplikacjom wyświetlać się nad innymi. Użyj „Nagraj”, by filmować ze scenariuszem pod kamerą.';
 
   @override
   String get hashtagHint =>
@@ -948,11 +948,11 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Bez ograniczeń';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Odblokuj nieograniczoną liczbę i długość scenariuszy w subskrypcji lub jednorazowym zakupie.';
+      'Nieograniczona liczba scenariuszy w subskrypcji lub jednorazowym zakupie.';
 
   @override
   String get offeringsLoadFailed =>
@@ -970,7 +970,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Darmowe scenariusze mają limit $count słów.';
+    return 'Ten scenariusz ma ponad $count słów. Długie scenariusze są częścią APrompter Unlimited.';
   }
 
   @override
@@ -998,7 +998,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Plany miesięczny i roczny odnawiają się automatycznie w tej samej cenie, dopóki ich nie anulujesz. Anuluj w dowolnej chwili w ustawieniach konta $store. Plan dożywotni to jednorazowy zakup.';
+    return 'Plany miesięczny i roczny odnawiają się automatycznie na ten sam okres, dopóki ich nie anulujesz. Aby uniknąć kolejnej opłaty, anuluj co najmniej 24 godziny przed końcem okresu w ustawieniach konta $store. Plan dożywotni to jednorazowy zakup.';
   }
 
   @override
@@ -1011,4 +1011,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Nie znaleziono wcześniejszych zakupów na tym koncie $store.';
   }
+
+  @override
+  String get purchasePending =>
+      'Płatność czeka na zatwierdzenie. APrompter Unlimited odblokuje się automatycznie, gdy zostanie zatwierdzona.';
+
+  @override
+  String get positionHintFloat =>
+      'Pływające okno można przeciągnąć wszędzie i zapamiętuje swoje miejsce.';
 }

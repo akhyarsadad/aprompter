@@ -373,6 +373,15 @@ class Storage {
   Future<void> saveGrandfatheredWordCapIds(Set<String> ids) =>
       _prefs.setStringList(_grandfatheredWordCapKey, ids.toList());
 
+  static const _lastKnownUnlimitedKey = 'last_known_unlimited';
+
+  /// What the store last said about APrompter Unlimited on this device, so
+  /// a subscriber isn't treated as free while it answers again at launch.
+  bool get lastKnownUnlimited =>
+      _prefs.getBool(_lastKnownUnlimitedKey) ?? false;
+  Future<void> setLastKnownUnlimited(bool value) =>
+      _prefs.setBool(_lastKnownUnlimitedKey, value);
+
   static const _seedScriptIdKey = 'seed_script_id';
 
   /// The auto-seeded welcome script's id, so a free account's one script

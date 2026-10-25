@@ -555,7 +555,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Перетащите полоску сверху суфлёра, чтобы поставить его куда угодно, и угол — чтобы изменить размер. На Android плавающее окно можно перетащить в любое место, и оно запомнит его.';
+      'Перетащите полоску сверху суфлёра, чтобы поставить его куда угодно, и угол — чтобы изменить размер.';
 
   @override
   String get app => 'Приложение';
@@ -680,7 +680,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'На iPhone приложения не могут отображаться поверх других. Используйте «Запись», чтобы снимать со сценарием под камерой.';
+      'На iPhone и iPad приложения не могут отображаться поверх других. Используйте «Запись», чтобы снимать со сценарием под камерой.';
 
   @override
   String get hashtagHint =>
@@ -951,11 +951,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Без ограничений';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Откройте неограниченное число сценариев любой длины по подписке или разовой покупкой.';
+      'Неограниченное число сценариев — по подписке или разовой покупкой.';
 
   @override
   String get offeringsLoadFailed =>
@@ -973,7 +973,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'В бесплатных сценариях не больше $count слов.';
+    return 'В этом сценарии больше $count слов. Длинные сценарии входят в APrompter Unlimited.';
   }
 
   @override
@@ -1001,7 +1001,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Месячный и годовой тарифы продлеваются автоматически по той же цене, пока вы их не отмените. Отменить можно в любой момент в настройках аккаунта $store. «Навсегда» — разовая покупка.';
+    return 'Месячный и годовой тарифы продлеваются автоматически на тот же срок, пока вы их не отмените. Чтобы избежать следующего списания, отмените подписку не позднее чем за 24 часа до конца периода в настройках аккаунта $store. «Навсегда» — разовая покупка.';
   }
 
   @override
@@ -1014,4 +1014,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'В этом аккаунте $store не найдено прошлых покупок.';
   }
+
+  @override
+  String get purchasePending =>
+      'Платёж ожидает подтверждения. APrompter Unlimited откроется автоматически, как только его одобрят.';
+
+  @override
+  String get positionHintFloat =>
+      'Плавающее окно можно перетащить в любое место, и оно запомнит его.';
 }

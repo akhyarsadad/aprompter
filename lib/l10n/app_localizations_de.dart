@@ -547,7 +547,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Zieh die Leiste oben am Prompter, um ihn beliebig zu platzieren, und die Ecke, um die Größe zu ändern. Unter Android lässt sich das schwebende Fenster überallhin ziehen und merkt sich seinen Platz.';
+      'Zieh die Leiste oben am Prompter, um ihn beliebig zu platzieren, und die Ecke, um die Größe zu ändern.';
 
   @override
   String get app => 'App';
@@ -668,7 +668,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'Auf dem iPhone können Apps nicht über anderen Apps schweben. Nutze „Aufnehmen“, um mit dem Skript unter der Kamera zu filmen.';
+      'Auf iPhone und iPad können Apps nicht über anderen Apps schweben. Nutze „Aufnehmen“, um mit dem Skript unter der Kamera zu filmen.';
 
   @override
   String get hashtagHint =>
@@ -932,11 +932,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Unbegrenzt nutzen';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Schalte unbegrenzt viele und beliebig lange Skripte frei – per Abo oder einmaligem Kauf.';
+      'Unbegrenzt viele Skripte – per Abo oder einmaligem Kauf.';
 
   @override
   String get offeringsLoadFailed =>
@@ -954,7 +954,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Kostenlose Skripte sind auf $count Wörter begrenzt.';
+    return 'Dieses Skript hat mehr als $count Wörter. Lange Skripte gehören zu APrompter Unlimited.';
   }
 
   @override
@@ -982,7 +982,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Monats- und Jahresabos verlängern sich automatisch zum gleichen Preis, bis du kündigst. Kündige jederzeit in deinen $store-Kontoeinstellungen. Lebenslang ist ein einmaliger Kauf.';
+    return 'Monats- und Jahresabos verlängern sich automatisch um denselben Zeitraum, bis du kündigst. Um die nächste Abbuchung zu vermeiden, kündige mindestens 24 Stunden vor Ablauf des Zeitraums in deinen $store-Kontoeinstellungen. Lebenslang ist ein einmaliger Kauf.';
   }
 
   @override
@@ -995,4 +995,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Für dieses $store-Konto wurde kein früherer Kauf gefunden.';
   }
+
+  @override
+  String get purchasePending =>
+      'Zahlung ausstehend. APrompter Unlimited wird automatisch freigeschaltet, sobald sie bestätigt ist.';
+
+  @override
+  String get positionHintFloat =>
+      'Das schwebende Fenster lässt sich überallhin ziehen und merkt sich seinen Platz.';
 }

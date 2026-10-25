@@ -525,7 +525,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'প্রম্পটারকে যেকোনো জায়গায় নিতে উপরের বারটি এবং আকার বদলাতে কোণটি টানুন। Android-এ ভাসমান উইন্ডো যেকোনো জায়গায় টানা যায় এবং নিজের জায়গা মনে রাখে।';
+      'প্রম্পটারকে যেকোনো জায়গায় নিতে উপরের বারটি এবং আকার বদলাতে কোণটি টানুন।';
 
   @override
   String get app => 'অ্যাপ';
@@ -646,7 +646,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone অ্যাপকে অন্য অ্যাপের উপরে ভাসতে দেয় না। ক্যামেরার নিচে স্ক্রিপ্ট রেখে শুট করতে রেকর্ড ব্যবহার করুন।';
+      'iPhone ও iPad অ্যাপকে অন্য অ্যাপের উপরে ভাসতে দেয় না। ক্যামেরার নিচে স্ক্রিপ্ট রেখে শুট করতে রেকর্ড ব্যবহার করুন।';
 
   @override
   String get hashtagHint =>
@@ -909,11 +909,11 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'আনলিমিটেড নিন';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'সাবস্ক্রিপশন বা একবারের কেনাকাটায় সীমাহীন স্ক্রিপ্ট ও দৈর্ঘ্য আনলক করুন।';
+      'সাবস্ক্রিপশন বা একবারের কেনাকাটায় সীমাহীন স্ক্রিপ্ট।';
 
   @override
   String get offeringsLoadFailed =>
@@ -930,7 +930,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'ফ্রি স্ক্রিপ্ট সর্বোচ্চ $count শব্দের হতে পারে।';
+    return 'এই স্ক্রিপ্টটি $count শব্দের বেশি। লম্বা স্ক্রিপ্ট APrompter Unlimited-এর অংশ।';
   }
 
   @override
@@ -958,7 +958,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'মাসিক ও বার্ষিক প্ল্যান বাতিল না করা পর্যন্ত একই দামে নিজে থেকেই নবায়ন হয়। যেকোনো সময় আপনার $store অ্যাকাউন্টের সেটিংসে বাতিল করুন। আজীবন প্ল্যান একবারের কেনাকাটা।';
+    return 'মাসিক ও বার্ষিক প্ল্যান বাতিল না করা পর্যন্ত একই মেয়াদের জন্য নিজে থেকেই নবায়ন হয়। পরের চার্জ এড়াতে মেয়াদ শেষ হওয়ার অন্তত ২৪ ঘণ্টা আগে আপনার $store অ্যাকাউন্টের সেটিংসে বাতিল করুন। আজীবন প্ল্যান একবারের কেনাকাটা।';
   }
 
   @override
@@ -971,4 +971,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'এই $store অ্যাকাউন্টে আগের কোনো কেনাকাটা পাওয়া যায়নি।';
   }
+
+  @override
+  String get purchasePending =>
+      'পেমেন্ট অপেক্ষমাণ। অনুমোদন হলেই APrompter Unlimited নিজে থেকেই চালু হবে।';
+
+  @override
+  String get positionHintFloat =>
+      'ভাসমান উইন্ডো যেকোনো জায়গায় টানা যায় এবং নিজের জায়গা মনে রাখে।';
 }

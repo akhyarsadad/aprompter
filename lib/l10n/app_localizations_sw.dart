@@ -546,7 +546,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Buruta upau ulio juu ya prompter kuisogeza popote, na kona kubadilisha ukubwa. Kwenye Android, dirisha linaloelea linaweza kuburutwa popote na hukumbuka mahali pake.';
+      'Buruta upau ulio juu ya prompter kuisogeza popote, na kona kubadilisha ukubwa.';
 
   @override
   String get app => 'Programu';
@@ -667,7 +667,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get floatNotOnIos =>
-      'iPhone hairuhusu programu kuelea juu ya programu nyingine. Tumia Rekodi kurekodi huku hati ikiwa chini ya kamera.';
+      'iPhone na iPad haziruhusu programu kuelea juu ya programu nyingine. Tumia Rekodi kurekodi huku hati ikiwa chini ya kamera.';
 
   @override
   String get hashtagHint =>
@@ -931,11 +931,11 @@ class AppLocalizationsSw extends AppLocalizations {
   }
 
   @override
-  String get upgradeTitle => 'Tumia bila kikomo';
+  String get upgradeTitle => 'APrompter Unlimited';
 
   @override
   String get upgradeBody =>
-      'Fungua hati zisizo na kikomo cha idadi wala urefu kwa usajili au ununuzi wa mara moja.';
+      'Hati bila kikomo, kwa usajili au ununuzi wa mara moja.';
 
   @override
   String get offeringsLoadFailed =>
@@ -952,7 +952,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String wordCapBannerText(int count) {
-    return 'Hati za bure zina kikomo cha maneno $count.';
+    return 'Hati hii ina zaidi ya maneno $count. Hati ndefu ni sehemu ya APrompter Unlimited.';
   }
 
   @override
@@ -980,7 +980,7 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String subscriptionTerms(String store) {
-    return 'Mipango ya kila mwezi na kila mwaka hujisasisha kiotomatiki kwa bei ileile hadi utakapoighairi. Ghairi wakati wowote kwenye mipangilio ya akaunti yako ya $store. Maisha yote ni ununuzi wa mara moja.';
+    return 'Mipango ya kila mwezi na kila mwaka hujisasisha kiotomatiki kwa muda uleule hadi utakapoighairi. Ili kuepuka malipo yanayofuata, ghairi angalau saa 24 kabla ya kipindi kuisha kwenye mipangilio ya akaunti yako ya $store. Maisha yote ni ununuzi wa mara moja.';
   }
 
   @override
@@ -993,4 +993,12 @@ class AppLocalizationsSw extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Hakuna ununuzi wa awali uliopatikana kwenye akaunti hii ya $store.';
   }
+
+  @override
+  String get purchasePending =>
+      'Malipo yanasubiri. APrompter Unlimited itafunguka kiotomatiki mara tu yatakapoidhinishwa.';
+
+  @override
+  String get positionHintFloat =>
+      'Dirisha linaloelea linaweza kuburutwa popote na hukumbuka mahali pake.';
 }

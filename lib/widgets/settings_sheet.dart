@@ -5,6 +5,7 @@ import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../services/app_state.dart';
+import '../services/floating_prompter.dart';
 import 'app_lock.dart';
 import 'prompter_view.dart';
 
@@ -368,6 +369,10 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                   ),
                   _header(context, l.layout),
                   Text(l.positionHint, style: theme.textTheme.bodySmall),
+                  // Only where there is a floating window: no other
+                  // platform is named on one that doesn't have it.
+                  if (FloatingPrompter.isSupported)
+                    Text(l.positionHintFloat, style: theme.textTheme.bodySmall),
                   _slider(
                     label: l.prompterWidth,
                     value: _s.prompterWidthFraction,
@@ -488,9 +493,15 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     },
                   ),
                   _header(context, l.recording),
-                  Row(
+                  // Side by side when they fit; with large system text the
+                  // choices move under the label and narrow to the sheet.
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 12,
+                    runSpacing: 8,
                     children: [
-                      Expanded(child: Text(l.videoQuality)),
+                      Text(l.videoQuality),
                       SegmentedButton<VideoQuality>(
                         showSelectedIcon: false,
                         segments: [
