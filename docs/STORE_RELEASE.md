@@ -32,7 +32,8 @@ and never shown again, not even to you.
       The export asks for a password twice (letters and numbers only). The last line copies
       the key, as text, to the clipboard.
 - [ ] Secrets: **`ANDROID_KEYSTORE_BASE64`** = paste the clipboard; **`ANDROID_KEYSTORE_PASSWORD`**
-      = that password.
+      = that password. (Reusing an older keystore whose alias isn't `upload` or whose key
+      password differs? Also add `ANDROID_KEY_ALIAS` / `ANDROID_KEY_PASSWORD`.)
 - [ ] **Back up** `aprompter-upload.p12` and its password (password manager, iCloud Drive, USB).
       Never commit or share them.
 - [ ] When you create the app in the Play Console, keep **Play App Signing** on (the default).
@@ -64,19 +65,23 @@ certificate, provisioning profile or Mac work. All in a browser:
 
 ### Running a release build
 
-- [ ] GitHub → **Actions → Release builds → Run workflow** (tick Android, iPhone or both), or
-      push a tag like `v1.0.0-1`. The button only appears once `release.yml` is on the
-      repository's **default branch** (Settings → General → Default branch → `main`, after
-      merging the release PR).
+- [ ] GitHub → **Actions → Release builds → Run workflow** and tick Android, iPhone or both.
+      The button only appears once `release.yml` is on the repository's **default branch**:
+      merge the release PR into `main`, then Settings → General → Default branch → `main`.
+      Pushing a tag like `v1.0.0-1` also works (from any branch) but builds **both**
+      platforms, so until both sets of secrets exist use the button and untick the other one.
 - [ ] **Android:** the run's artifact `aprompter-play-bundle-N` contains `app-release.aab`.
-      Upload it in the Play Console (*Testing → Internal testing* first). Play doesn't accept
-      APKs for new apps; the APK from normal CI is only for installing on your own phone.
+      Download it and upload it in the Play Console (*Testing → Internal testing* or
+      *Closed testing*) right away: the repo is public, so artifacts are visible to anyone on
+      GitHub and are deleted after 3 days. Play doesn't accept APKs for new apps; the APK from
+      normal CI is only for installing on your own phone.
 - [ ] **iPhone:** the job checks your Apple setup first (about a minute) and names anything
       missing, then builds and uploads. Apple emails you when the build is processed; then
       App Store Connect → the app → **TestFlight** → *Internal Testing* → add yourself, and
       install it with the TestFlight app.
-- [ ] Every run uses a new build number automatically. Raise `version:` in `pubspec.yaml`
-      (e.g. `1.0.1+1`) for each new store version.
+- [ ] Every run (and every re-run) gets a new build number automatically: run 7 → 701, its
+      re-run → 702. Raise `version:` in `pubspec.yaml` (e.g. `1.0.1+1`) for each new store
+      version.
 
 ## 2. Products and prices
 

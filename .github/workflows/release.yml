@@ -2,7 +2,7 @@ name: Release builds
 
 # Store builds, run by hand (Actions → Release builds → Run workflow) or by
 # pushing a tag like v1.0.0-3. Needs the repository secrets described in
-# docs/STORE_RELEASE.md → "Release builds"; a job whose secrets are missing
+# docs/STORE_RELEASE.md §1 "Signing and release builds"; a job whose secrets are missing
 # stops at its first step and says which ones to add.
 
 on:
@@ -22,15 +22,11 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
-
 env:
   FLUTTER_VERSION: '3.47.5'
   # Play and App Store Connect both reject a build number they have seen
-  # before; this workflow's run number grows with every run.
-  BUILD_NUMBER: ${{ github.run_number }}
+  # before. Each job uses run number × 100 + attempt (run 7 → 701, its
+  # re-run → 702), a plain integer as Play's versionCode requires.
 
 jobs:
   android:
@@ -44,15 +40,18 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: |
           if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ]; then
-            echo "::error::Add the repository secrets ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD first (docs/STORE_RELEASE.md, 'Release builds')."
+            echo "::error::Add the repository secrets ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD first (docs/STORE_RELEASE.md §1, 'Signing and release builds')."
             exit 1
           fi
+          echo "BUILD_CODE=$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))" >> "$GITHUB_ENV"
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -66,17 +65,25 @@ jobs:
         run: |
           keystore="$RUNNER_TEMP/upload-keystore"
           printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 --decode > "$keystore"
+          alias="${KEY_ALIAS:-upload}"
+          # Fail now, not after a 10-minute build, if the key doesn't open.
+          if ! keytool -list -keystore "$keystore" -storepass:env KEYSTORE_PASSWORD -alias "$alias" > /dev/null 2>&1; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD (or ANDROID_KEY_ALIAS) don't open the upload key. Copy the key again with base64 -i aprompter-upload.p12 | pbcopy and re-check the password."
+            exit 1
+          fi
+          # Java properties treat a backslash as an escape and drop leading spaces.
+          esc() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/^[[:space:]]/\\&/'; }
           # Read by android/app/build.gradle.kts. Alias and key password
           # default to "upload" and the keystore password (a .p12 made as
           # in the docs has one password for both).
           {
             echo "storeFile=$keystore"
-            echo "storePassword=$KEYSTORE_PASSWORD"
-            echo "keyAlias=${KEY_ALIAS:-upload}"
-            echo "keyPassword=${KEY_PASSWORD:-$KEYSTORE_PASSWORD}"
+            echo "storePassword=$(esc "$KEYSTORE_PASSWORD")"
+            echo "keyAlias=$alias"
+            echo "keyPassword=$(esc "${KEY_PASSWORD:-$KEYSTORE_PASSWORD}")"
           } > android/key.properties
       - run: flutter pub get
-      - run: flutter build appbundle --release --build-number="$BUILD_NUMBER"
+      - run: flutter build appbundle --release --build-number="$BUILD_CODE"
       - name: Check it is signed with the upload key
         run: |
           aab=build/app/outputs/bundle/release/app-release.aab
@@ -91,9 +98,11 @@ jobs:
         run: rm -f android/key.properties "$RUNNER_TEMP/upload-keystore"
       - uses: actions/upload-artifact@v4
         with:
-          name: aprompter-play-bundle-${{ env.BUILD_NUMBER }}
+          name: aprompter-play-bundle-${{ env.BUILD_CODE }}
           path: build/app/outputs/bundle/release/app-release.aab
-          retention-days: 30
+          # Public repo: anyone signed in can download artifacts, so keep
+          # the bundle only as long as it takes to upload it to Play.
+          retention-days: 3
 
   ios:
     name: iPhone build to TestFlight
@@ -129,7 +138,7 @@ jobs:
             [ -n "${!name}" ] || missing+=("$name")
           done
           if [ "${#missing[@]}" -gt 0 ]; then
-            echo "::error title=Missing secrets::Add the repository secrets ${missing[*]} (Settings > Secrets and variables > Actions; docs/STORE_RELEASE.md, 'Release builds')."
+            echo "::error title=Missing secrets::Add the repository secrets ${missing[*]} (Settings > Secrets and variables > Actions; docs/STORE_RELEASE.md §1, 'Signing and release builds')."
             exit 1
           fi
           team="${APPLE_TEAM_ID//[[:space:]]/}"
@@ -157,7 +166,7 @@ jobs:
           xcodebuild -version
           echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
 
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
@@ -278,10 +287,8 @@ jobs:
 
       - name: Build the archive (unsigned)
         run: |
-          # First attempt uses this run's number, the same as the Android
-          # versionCode; "Re-run" adds .2, .3 so App Store Connect never sees
-          # a number twice. Flutter keeps the dots for iOS.
-          if [ "$GITHUB_RUN_ATTEMPT" = 1 ]; then n="$BUILD_NUMBER"; else n="$BUILD_NUMBER.$GITHUB_RUN_ATTEMPT"; fi
+          # Same number as the Android versionCode of this run and attempt.
+          n=$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))
           echo "IOS_BUILD_NUMBER=$n" >> "$GITHUB_ENV"
           flutter build ipa --release --no-codesign --build-number="$n"
 
