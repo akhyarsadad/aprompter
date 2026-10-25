@@ -282,5 +282,5 @@
   "readingLineHint": "La cámara del teléfono está encima de la pantalla: con la línea arriba, tu mirada queda cerca del objetivo.",
   "readingLineNearCamera": "Cerca de la cámara",
   "readingLineMiddle": "Centro",
-  "readingLineDragHint": "Mientras lees, también puedes arrastrar la flecha izquierda de la línea hacia arriba o hacia abajo."
+  "readingLineDragHint": "En Ensayar, y en Grabar antes de empezar, también puedes arrastrar la flecha izquierda de la línea hacia arriba o hacia abajo."
 }

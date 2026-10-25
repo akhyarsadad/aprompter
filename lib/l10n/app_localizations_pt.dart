@@ -1035,5 +1035,5 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Durante a leitura, você também pode arrastar a seta esquerda da linha para cima ou para baixo.';
+      'Em Ensaiar, e em Gravar antes de começar, você também pode arrastar a seta esquerda da linha para cima ou para baixo.';
 }

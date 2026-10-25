@@ -12,6 +12,7 @@ import 'package:aprompter/services/app_state.dart';
 import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/purchase_service.dart';
 import 'package:aprompter/services/storage.dart';
+import 'package:aprompter/widgets/movable_box.dart';
 import 'package:aprompter/widgets/prompter_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -99,24 +100,38 @@ void main() {
       PrompterController controller, {
       PrompterSettings settings = const PrompterSettings(),
       ValueChanged<double>? onGuidePositionChanged,
+      ValueChanged<double>? onFontSizeChanged,
       String? text,
+      double boxHeight = height,
+      double textScale = 1,
     }) => tester.pumpWidget(
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
+        builder: (context, child) => MediaQuery(
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
         home: Center(
           child: SizedBox(
             width: 360,
-            height: height,
+            height: boxHeight,
             child: PrompterView(
               text: text ?? body,
               settings: settings,
               controller: controller,
               onGuidePositionChanged: onGuidePositionChanged,
+              onFontSizeChanged: onFontSizeChanged,
             ),
           ),
         ),
       ),
     );
+
+    // The handle is not a hit target of its own (the prompter's gesture
+    // detector below handles it), so drag from its centre.
+    Future<void> dragHandle(WidgetTester tester, Offset by) =>
+        tester.dragFrom(tester.getCenter(find.byKey(_handleKey)), by);
 
     double top(WidgetTester tester, Finder f) =>
         tester.getTopLeft(f).dy -
@@ -213,7 +228,7 @@ void main() {
       addTearDown(controller.dispose);
       final saved = <double>[];
       await pump(tester, controller, onGuidePositionChanged: saved.add);
-      await tester.drag(find.byKey(_handleKey), const Offset(0, -300));
+      await dragHandle(tester, const Offset(0, -300));
       await tester.pump();
       expect(saved.last, PrompterSettings.minGuidePosition);
       await pump(
@@ -224,7 +239,7 @@ void main() {
       );
       // Even at the very top the handle keeps its full 48 dp inside.
       expect(top(tester, find.byKey(_handleKey)), greaterThanOrEqualTo(0));
-      await tester.drag(find.byKey(_handleKey), const Offset(0, 600));
+      await dragHandle(tester, const Offset(0, 600));
       await tester.pump();
       expect(saved.last, PrompterSettings.maxGuidePosition);
     });
@@ -317,6 +332,229 @@ void main() {
       expect(find.byKey(_handleKey), findsNothing);
     });
 
+    testWidgets('in a short box the line being read stays inside it', (
+      tester,
+    ) async {
+      final controller = PrompterController();
+      addTearDown(controller.dispose);
+      final saved = <double>[];
+      // About the smallest Record box: one 48 px line is 67.2 px tall.
+      const settings = PrompterSettings(fontSize: 48, guidePosition: 0.6);
+      await pump(
+        tester,
+        controller,
+        settings: settings,
+        boxHeight: 117,
+        onGuidePositionChanged: saved.add,
+      );
+      const lineTop = 117 - 48 * 1.4;
+      expect(padding(tester).top, closeTo(lineTop, 0.01));
+      expect(top(tester, find.byKey(_guideKey)), closeTo(lineTop - 2, 0.01));
+      expect(
+        tester.getBottomLeft(find.text('Intro')).dy -
+            tester.getTopLeft(find.byType(PrompterView)).dy,
+        lessThanOrEqualTo(117),
+      );
+      // The handle is still a full target inside the box.
+      final handle = tester.getRect(find.byKey(_handleKey));
+      expect(handle.size, const Size(48, 48));
+      expect(
+        handle.bottom,
+        lessThanOrEqualTo(tester.getRect(find.byType(PrompterView)).bottom),
+      );
+      // The setting is kept: a taller box puts the line back where it was.
+      await pump(
+        tester,
+        controller,
+        settings: settings,
+        onGuidePositionChanged: saved.add,
+      );
+      expect(padding(tester).top, closeTo(height * 0.6, 0.01));
+      expect(saved, isEmpty);
+    });
+
+    testWidgets('large system text keeps the line inside too', (tester) async {
+      final controller = PrompterController();
+      addTearDown(controller.dispose);
+      await pump(
+        tester,
+        controller,
+        settings: const PrompterSettings(guidePosition: 0.6),
+        boxHeight: 200,
+        textScale: 2,
+      );
+      // 32 px at 200% is 64 px, so a line is 89.6 px tall.
+      expect(padding(tester).top, closeTo(200 - 64 * 1.4, 0.01));
+    });
+
+    testWidgets('a line moved in a short box starts from where it is shown', (
+      tester,
+    ) async {
+      final controller = PrompterController();
+      addTearDown(controller.dispose);
+      final saved = <double>[];
+      await pump(
+        tester,
+        controller,
+        settings: const PrompterSettings(fontSize: 48, guidePosition: 0.6),
+        boxHeight: 150,
+        onGuidePositionChanged: saved.add,
+      );
+      // Shown at (150 - 67.2) / 150 = 55%, not 60%: no dead zone first.
+      await dragHandle(tester, const Offset(0, -45));
+      await tester.pump();
+      expect(saved, [0.25]);
+      // Dragged far down, it stops (and is saved) where a line still fits.
+      await dragHandle(tester, const Offset(0, 300));
+      await tester.pump();
+      expect(saved.last, 0.55);
+    });
+
+    testWidgets('a pinch that starts on the handle resizes the text', (
+      tester,
+    ) async {
+      final controller = PrompterController();
+      addTearDown(controller.dispose);
+      final fonts = <double>[];
+      final guides = <double>[];
+      await pump(
+        tester,
+        controller,
+        onGuidePositionChanged: guides.add,
+        onFontSizeChanged: fonts.add,
+      );
+      final origin = tester.getTopLeft(find.byType(PrompterView));
+      final first = await tester.startGesture(
+        tester.getCenter(find.byKey(_handleKey)),
+      );
+      final second = await tester.startGesture(
+        origin + const Offset(250, 300),
+        pointer: 7,
+      );
+      for (var i = 0; i < 10; i++) {
+        await first.moveBy(const Offset(-2, -8));
+        await second.moveBy(const Offset(8, 8));
+        await tester.pump();
+      }
+      await first.up();
+      await second.up();
+      await tester.pump();
+      expect(fonts, isNotEmpty);
+      expect(fonts.last, greaterThan(32));
+      expect(guides, isEmpty);
+      expect(
+        top(tester, find.byKey(_guideKey)),
+        closeTo(height * 0.15 - 2, 0.01),
+      );
+    });
+
+    testWidgets('a second finger turns a line drag into a pinch', (
+      tester,
+    ) async {
+      final controller = PrompterController();
+      addTearDown(controller.dispose);
+      final fonts = <double>[];
+      final guides = <double>[];
+      await pump(
+        tester,
+        controller,
+        onGuidePositionChanged: guides.add,
+        onFontSizeChanged: fonts.add,
+      );
+      final origin = tester.getTopLeft(find.byType(PrompterView));
+      final first = await tester.startGesture(
+        tester.getCenter(find.byKey(_handleKey)),
+      );
+      await first.moveBy(const Offset(0, 40));
+      await first.moveBy(const Offset(0, 40));
+      await tester.pump();
+      expect(
+        top(tester, find.byKey(_guideKey)),
+        closeTo(height * 0.35 - 2, 0.5),
+      );
+      final second = await tester.startGesture(
+        origin + const Offset(250, 350),
+        pointer: 7,
+      );
+      await tester.pump();
+      // The line goes back; the two fingers resize the text.
+      expect(
+        top(tester, find.byKey(_guideKey)),
+        closeTo(height * 0.15 - 2, 0.01),
+      );
+      for (var i = 0; i < 10; i++) {
+        await first.moveBy(const Offset(0, -8));
+        await second.moveBy(const Offset(0, 8));
+        await tester.pump();
+      }
+      await first.up();
+      await second.up();
+      await tester.pump();
+      expect(fonts, isNotEmpty);
+      expect(guides, isEmpty);
+    });
+
+    testWidgets('in a narrow Record box the move grip leaves the handle free', (
+      tester,
+    ) async {
+      final controller = PrompterController();
+      addTearDown(controller.dispose);
+      final guides = <double>[];
+      final boxes = <PrompterSettings>[];
+      var settings = const PrompterSettings(
+        prompterWidthFraction: 0.45,
+        overlayHeightFraction: 0.25,
+      );
+      Future<void> pumpBox() => tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: Stack(
+            children: [
+              MovablePrompterBox(
+                area: const Rect.fromLTWH(0, 0, 360, 700),
+                settings: settings,
+                onChanged: (s) {
+                  boxes.add(s);
+                  settings = s;
+                },
+                child: PrompterView(
+                  text: body,
+                  settings: settings,
+                  controller: controller,
+                  onGuidePositionChanged: guides.add,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      tester.view.physicalSize = const Size(360, 700);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await pumpBox();
+
+      final handle = tester.getRect(find.byKey(_handleKey));
+      final grip = tester.getRect(find.byKey(const ValueKey('prompter-move')));
+      expect(handle.overlaps(grip), isFalse);
+      expect(grip.width, greaterThanOrEqualTo(48));
+      expect(grip.height, greaterThanOrEqualTo(48));
+
+      // Where the grip used to cover the handle, a drag moves the line.
+      await tester.dragFrom(Offset(42, handle.center.dy), const Offset(0, 60));
+      await tester.pumpAndSettle();
+      expect(guides, hasLength(1));
+      expect(boxes, isEmpty);
+
+      // The grip still moves the box.
+      await tester.drag(
+        find.byKey(const ValueKey('prompter-move')),
+        const Offset(0, 100),
+      );
+      await pumpBox();
+      expect(boxes, hasLength(1));
+      expect(boxes.single.prompterTop, greaterThan(0));
+    });
+
     testWidgets('screen readers move the line like a slider', (tester) async {
       final handle = tester.ensureSemantics();
       final controller = PrompterController();
@@ -390,6 +628,15 @@ void main() {
       expect(find.text(en.readingLineMiddle), findsOneWidget);
       expect(find.text('15%'), findsOneWidget);
       final previewBefore = tester.getTopLeft(find.byKey(_previewGuideKey)).dy;
+      final previewText = find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byType(ScriptText),
+      );
+      // The preview script starts on the line, as in the prompter.
+      expect(
+        tester.getTopLeft(previewText).dy - previewBefore,
+        closeTo(2, 0.5),
+      );
 
       await tester.drag(find.byKey(_sliderKey), const Offset(600, 0));
       await tester.pumpAndSettle();
@@ -404,10 +651,22 @@ void main() {
         tester.getTopLeft(find.byKey(_previewGuideKey)).dy - previewBefore,
         closeTo(150 * 0.45, 0.5),
       );
+      expect(
+        tester.getTopLeft(previewText).dy -
+            tester.getTopLeft(find.byKey(_previewGuideKey)).dy,
+        closeTo(2, 0.5),
+      );
 
       await tester.drag(find.byKey(_sliderKey), const Offset(-600, 0));
       await tester.pumpAndSettle();
       expect(state.settings.guidePosition, PrompterSettings.minGuidePosition);
+      // Right at the top, the marker stays clear of the "Preview" label.
+      expect(
+        tester
+            .getRect(find.byKey(_previewGuideKey))
+            .overlaps(tester.getRect(find.text(en.preview))),
+        isFalse,
+      );
     });
 
     testWidgets('right to left, "near camera" is at the slider\'s start', (
@@ -433,7 +692,10 @@ void main() {
       final h = tester.getSize(view).height;
       final guideBefore = tester.getTopLeft(find.byKey(_guideKey)).dy;
 
-      await tester.drag(find.byKey(_handleKey), const Offset(0, 120));
+      await tester.dragFrom(
+        tester.getCenter(find.byKey(_handleKey)),
+        const Offset(0, 120),
+      );
       await tester.pumpAndSettle();
 
       final expected = ((0.15 + 120 / h) * 100).round() / 100;
@@ -475,10 +737,15 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(PrompterView), findsOneWidget);
     // Drags move the window there, so the arrow is not a drag handle...
-    final handle = find.byKey(_handleKey);
+    final view = tester.getTopLeft(find.byType(PrompterView));
+    await tester.dragFrom(
+      tester.getCenter(find.byKey(_handleKey)),
+      const Offset(0, 80),
+    );
+    await tester.pumpAndSettle();
     expect(
-      find.descendant(of: handle, matching: find.byType(GestureDetector)),
-      findsNothing,
+      tester.getTopLeft(find.byKey(_guideKey)).dy - view.dy,
+      closeTo(tester.getSize(find.byType(PrompterView)).height * 0.15 - 2, 0.5),
     );
     // ...but screen readers can still move the line, and the app keeps it.
     tester.semantics.increase(find.semantics.byLabel(en.readingLine));

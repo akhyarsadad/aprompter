@@ -1039,5 +1039,5 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Habang nagbabasa, puwede mo ring i-drag pataas o pababa ang kaliwang arrow ng linya.';
+      'Sa Mag-ensayo, at sa I-record bago ka magsimula, puwede mo ring i-drag pataas o pababa ang kaliwang arrow ng linya.';
 }

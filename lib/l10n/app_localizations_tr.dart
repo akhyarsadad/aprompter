@@ -1014,5 +1014,5 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Okurken çizginin soldaki okunu yukarı ya da aşağı da sürükleyebilirsin.';
+      'Prova\'da ve başlamadan önce Kaydet\'te çizginin soldaki okunu yukarı ya da aşağı da sürükleyebilirsin.';
 }

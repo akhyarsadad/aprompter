@@ -1052,5 +1052,5 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Podczas czytania możesz też przeciągnąć lewą strzałkę linii w górę lub w dół.';
+      'W trybie „Próba”, a w trybie „Nagraj” przed rozpoczęciem, możesz też przeciągnąć lewą strzałkę linii w górę lub w dół.';
 }

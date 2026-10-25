@@ -149,7 +149,13 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                   Positioned.fill(
                     child: SingleChildScrollView(
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(12),
+                      // Like the prompter, the script starts on the line.
+                      padding: EdgeInsets.fromLTRB(
+                        12,
+                        _previewHeight * _s.guidePosition,
+                        12,
+                        12,
+                      ),
                       child: Transform.flip(
                         flipX: _s.mirror,
                         child: ScriptText(blocks: previewBlocks, settings: _s),
@@ -170,9 +176,10 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                       ),
                     ),
                   ),
+                  // At the bottom: the line can sit right at the top.
                   Positioned(
                     right: 8,
-                    top: 6,
+                    bottom: 6,
                     child: Text(
                       l.preview,
                       style: theme.textTheme.labelSmall?.copyWith(

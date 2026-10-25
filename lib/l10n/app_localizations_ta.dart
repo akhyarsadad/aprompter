@@ -1024,5 +1024,5 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'வாசிக்கும்போதும் வரியின் இடது அம்புக்குறியை மேலே அல்லது கீழே இழுக்கலாம்.';
+      'ஒத்திகையிலும், பதிவில் தொடங்கும் முன்பும் வரியின் இடது அம்புக்குறியை மேலே அல்லது கீழே இழுக்கலாம்.';
 }

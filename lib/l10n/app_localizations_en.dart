@@ -1030,5 +1030,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'While reading, you can also drag the line\'s left arrow up or down.';
+      'In Rehearse, and in Record before you start, you can also drag the line\'s left arrow up or down.';
 }

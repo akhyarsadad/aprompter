@@ -1023,5 +1023,5 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'בזמן הקריאה אפשר גם לגרור את החץ השמאלי של הקו למעלה או למטה.';
+      'ב\"חזרה\", וב\"צילום\" לפני שמתחילים, אפשר גם לגרור את החץ השמאלי של הקו למעלה או למטה.';
 }

@@ -1010,5 +1010,5 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'هنگام خواندن می‌توانید پیکان چپ خط را هم به بالا یا پایین بکشید.';
+      'در «تمرین»، و در «ضبط» پیش از شروع، می‌توانید پیکان چپ خط را هم به بالا یا پایین بکشید.';
 }

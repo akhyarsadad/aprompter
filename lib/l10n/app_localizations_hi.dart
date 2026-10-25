@@ -1031,5 +1031,5 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'पढ़ते समय आप लाइन के बाएँ तीर को ऊपर या नीचे खींचकर भी इसे खिसका सकते हैं।';
+      'अभ्यास में, और रिकॉर्ड में शुरू करने से पहले, आप लाइन के बाएँ तीर को ऊपर या नीचे खींचकर भी इसे खिसका सकते हैं।';
 }

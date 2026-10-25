@@ -1036,5 +1036,5 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Beim Lesen kannst du auch den linken Pfeil der Linie nach oben oder unten ziehen.';
+      'In „Proben“ und vor dem Start in „Aufnehmen“ kannst du auch den linken Pfeil der Linie nach oben oder unten ziehen.';
 }

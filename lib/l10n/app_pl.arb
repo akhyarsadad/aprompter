@@ -282,5 +282,5 @@
   "readingLineHint": "Aparat telefonu jest nad ekranem: wysoko ustawiona linia trzyma wzrok blisko obiektywu.",
   "readingLineNearCamera": "Przy aparacie",
   "readingLineMiddle": "Środek",
-  "readingLineDragHint": "Podczas czytania możesz też przeciągnąć lewą strzałkę linii w górę lub w dół."
+  "readingLineDragHint": "W trybie „Próba”, a w trybie „Nagraj” przed rozpoczęciem, możesz też przeciągnąć lewą strzałkę linii w górę lub w dół."
 }

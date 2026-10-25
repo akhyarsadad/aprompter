@@ -1046,5 +1046,5 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'أثناء القراءة، يمكنك أيضًا سحب السهم الأيسر للخط لأعلى أو لأسفل.';
+      'في \"تمرين\"، وفي \"تسجيل\" قبل أن تبدأ، يمكنك أيضًا سحب السهم الأيسر للخط لأعلى أو لأسفل.';
 }

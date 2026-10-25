@@ -1012,5 +1012,5 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Saat membaca, kamu juga bisa menyeret panah kiri garis ke atas atau ke bawah.';
+      'Di Latihan, dan di Rekam sebelum mulai, kamu juga bisa menyeret panah kiri garis ke atas atau ke bawah.';
 }

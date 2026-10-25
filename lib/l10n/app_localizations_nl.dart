@@ -1039,5 +1039,5 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Tijdens het lezen kun je ook de linkerpijl van de lijn omhoog of omlaag slepen.';
+      'In Oefenen, en in Opnemen voordat je begint, kun je ook de linkerpijl van de lijn omhoog of omlaag slepen.';
 }

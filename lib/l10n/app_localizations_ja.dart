@@ -987,5 +987,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get readingLineMiddle => '中央';
 
   @override
-  String get readingLineDragHint => '読んでいる間も、ラインの左の矢印を上下にドラッグして動かせます。';
+  String get readingLineDragHint =>
+      '「リハーサル」と、開始前の「撮影」では、ラインの左の矢印を上下にドラッグして動かすこともできます。';
 }

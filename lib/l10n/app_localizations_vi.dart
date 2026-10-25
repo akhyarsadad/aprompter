@@ -1013,5 +1013,5 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Khi đang đọc, bạn cũng có thể kéo mũi tên bên trái của đường lên hoặc xuống.';
+      'Trong Tập dượt, và trong Quay trước khi bắt đầu, bạn cũng có thể kéo mũi tên bên trái của đường lên hoặc xuống.';
 }

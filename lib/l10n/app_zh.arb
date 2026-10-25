@@ -282,5 +282,5 @@
   "readingLineHint": "手机摄像头在屏幕上方：阅读线越靠上，视线越贴近镜头。",
   "readingLineNearCamera": "靠近摄像头",
   "readingLineMiddle": "中间",
-  "readingLineDragHint": "阅读时也可以上下拖动阅读线左侧的箭头。"
+  "readingLineDragHint": "在“排练”中，以及“拍摄”开始前，也可以上下拖动阅读线左侧的箭头。"
 }

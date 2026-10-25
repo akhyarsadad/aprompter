@@ -986,5 +986,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get readingLineMiddle => '가운데';
 
   @override
-  String get readingLineDragHint => '읽는 중에도 선 왼쪽의 화살표를 위아래로 끌어 옮길 수 있어요.';
+  String get readingLineDragHint =>
+      '\'리허설\'에서, 그리고 시작하기 전의 \'촬영\'에서도 선 왼쪽의 화살표를 위아래로 끌어 옮길 수 있어요.';
 }

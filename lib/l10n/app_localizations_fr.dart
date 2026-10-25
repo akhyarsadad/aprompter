@@ -1039,5 +1039,5 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Pendant la lecture, vous pouvez aussi faire glisser la flèche gauche de la ligne vers le haut ou le bas.';
+      'Dans Répéter, et dans Filmer avant de commencer, vous pouvez aussi faire glisser la flèche gauche de la ligne vers le haut ou le bas.';
 }

@@ -1034,5 +1034,5 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Unaposoma, unaweza pia kuburuta mshale wa kushoto wa mstari juu au chini.';
+      'Katika Mazoezi, na katika Rekodi kabla ya kuanza, unaweza pia kuburuta mshale wa kushoto wa mstari juu au chini.';
 }

@@ -1012,5 +1012,5 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'پڑھتے ہوئے آپ لکیر کے بائیں تیر کو اوپر یا نیچے گھسیٹ بھی سکتے ہیں۔';
+      'مشق میں، اور ریکارڈ میں شروع کرنے سے پہلے، آپ لکیر کے بائیں تیر کو اوپر یا نیچے گھسیٹ بھی سکتے ہیں۔';
 }

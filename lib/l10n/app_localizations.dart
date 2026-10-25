@@ -1844,7 +1844,7 @@ abstract class AppLocalizations {
   /// No description provided for @readingLineDragHint.
   ///
   /// In en, this message translates to:
-  /// **'While reading, you can also drag the line\'s left arrow up or down.'**
+  /// **'In Rehearse, and in Record before you start, you can also drag the line\'s left arrow up or down.'**
   String get readingLineDragHint;
 }
 

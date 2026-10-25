@@ -1002,5 +1002,5 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'ระหว่างอ่าน คุณลากลูกศรด้านซ้ายของเส้นขึ้นหรือลงได้ด้วย';
+      'ในโหมดซ้อม และในโหมดถ่ายก่อนเริ่ม คุณลากลูกศรด้านซ้ายของเส้นขึ้นหรือลงได้ด้วย';
 }

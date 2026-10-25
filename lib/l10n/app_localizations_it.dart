@@ -1033,5 +1033,5 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Mentre leggi, puoi anche trascinare in su o in giù la freccia sinistra della linea.';
+      'In Prova, e in Registra prima di iniziare, puoi anche trascinare in su o in giù la freccia sinistra della linea.';
 }

@@ -1034,5 +1034,5 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'Mientras lees, también puedes arrastrar la flecha izquierda de la línea hacia arriba o hacia abajo.';
+      'En Ensayar, y en Grabar antes de empezar, también puedes arrastrar la flecha izquierda de la línea hacia arriba o hacia abajo.';
 }

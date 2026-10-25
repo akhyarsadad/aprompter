@@ -1011,5 +1011,5 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get readingLineDragHint =>
-      'পড়ার সময় লাইনের বাঁ দিকের তীরটি উপরে বা নিচে টেনেও সরাতে পারেন।';
+      'অনুশীলনে, আর রেকর্ডে শুরু করার আগে, লাইনের বাঁ দিকের তীরটি উপরে বা নিচে টেনেও সরাতে পারেন।';
 }

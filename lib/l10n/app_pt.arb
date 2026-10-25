@@ -282,5 +282,5 @@
   "readingLineHint": "A câmera do celular fica acima da tela: com a linha no alto, seu olhar fica perto da lente.",
   "readingLineNearCamera": "Perto da câmera",
   "readingLineMiddle": "Meio",
-  "readingLineDragHint": "Durante a leitura, você também pode arrastar a seta esquerda da linha para cima ou para baixo."
+  "readingLineDragHint": "Em Ensaiar, e em Gravar antes de começar, você também pode arrastar a seta esquerda da linha para cima ou para baixo."
 }

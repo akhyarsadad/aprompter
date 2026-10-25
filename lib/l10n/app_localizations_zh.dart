@@ -972,7 +972,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get readingLineMiddle => '中间';
 
   @override
-  String get readingLineDragHint => '阅读时也可以上下拖动阅读线左侧的箭头。';
+  String get readingLineDragHint => '在“排练”中，以及“拍摄”开始前，也可以上下拖动阅读线左侧的箭头。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1942,5 +1942,5 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get readingLineMiddle => '中間';
 
   @override
-  String get readingLineDragHint => '閱讀時也可以上下拖曳閱讀線左側的箭頭。';
+  String get readingLineDragHint => '在「排練」中，以及「拍攝」開始前，也可以上下拖曳閱讀線左側的箭頭。';
 }
