@@ -20,6 +20,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.webkit.MimeTypeMap
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -209,6 +210,9 @@ internal class ImportRequest(
  * and removes them. Items that arrive before Dart is listening simply wait:
  * Dart calls `takePending` when its home screen is up, and `incoming` tells a
  * running app that more arrived.
+ *
+ * An item is a text, a file, or (Android only) both: one share of a text plus
+ * one text-like file comes as ONE item with `text` and `bytes` set; see read().
  */
 internal object ImportInbox {
     const val TAG = "APrompterImport"
@@ -222,6 +226,24 @@ internal object ImportInbox {
      * files past it are reported as tooLarge, like a file over 10 MB.
      */
     private const val MAX_PENDING_BYTES = 24 * 1024 * 1024
+
+    private const val OCTET_STREAM = "application/octet-stream"
+
+    /** Non-text types the share filters accept (AndroidManifest.xml). */
+    private val DOCUMENT_TYPES = setOf(
+        "application/rtf",
+        "application/x-rtf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.oasis.opendocument.text",
+        "application/x-subrip",
+        "application/xhtml+xml",
+    )
+
+    /** Script files by name, for providers that give no useful type. */
+    private val TEXT_EXTENSIONS = setOf(
+        "txt", "text", "md", "markdown", "fountain", "rtf", "docx", "odt",
+        "srt", "vtt", "html", "htm", "xhtml",
+    )
 
     private val lock = Any()
     private val pending = ArrayList<HashMap<String, Any>>() // guarded by lock
@@ -281,21 +303,20 @@ internal object ImportInbox {
                 Intent.ACTION_VIEW -> intent.data?.let { uris.add(it) }
                 else -> return null
             }
-            // Some apps only fill ClipData (Android also mirrors EXTRA_TEXT and
-            // EXTRA_STREAM there), so use it for whatever the extras lacked.
+            // Some apps only fill ClipData, so fall back to it, but only when
+            // the extras carried nothing at all. When they did, ClipData holds
+            // either a copy of them (Android mirrors EXTRA_TEXT and EXTRA_STREAM
+            // there) or the preview image the share sheet shows for a text
+            // share (it takes ClipData item 0), which is not shared content.
             val clip = intent.clipData
             if (intent.action != Intent.ACTION_VIEW && clip != null &&
-                (texts.isEmpty() || uris.isEmpty())
+                texts.isEmpty() && uris.isEmpty()
             ) {
-                val clipTexts = ArrayList<String>()
-                val clipUris = ArrayList<Uri>()
                 for (i in 0 until clip.itemCount) {
                     val item = clip.getItemAt(i) ?: continue
-                    item.uri?.let { clipUris.add(it) }
-                    item.text?.let { clipTexts.add(it.toString()) }
+                    item.uri?.let { uris.add(it) }
+                    item.text?.let { texts.add(it.toString()) }
                 }
-                if (texts.isEmpty()) texts.addAll(clipTexts)
-                if (uris.isEmpty()) uris.addAll(clipUris)
             }
             val subject = listOf(Intent.EXTRA_SUBJECT, Intent.EXTRA_TITLE).firstNotNullOfOrNull { key ->
                 intent.getCharSequenceExtra(key)?.toString()?.trim()?.takeIf { it.isNotEmpty() }
@@ -384,28 +405,54 @@ internal object ImportInbox {
         }
     }
 
+    /** One shared Uri, looked at but not read yet. */
+    private class SharedFile(
+        val uri: Uri,
+        val name: String?,
+        /** Type reported to Dart: the provider's, else the share's. */
+        val mimeType: String?,
+        /** Image, video or audio by the provider's type or the file name. */
+        val media: Boolean,
+        /** Text, or a document type the share filters accept. */
+        val textLike: Boolean,
+    )
+
     private fun read(context: Context, request: ImportRequest): List<HashMap<String, Any>> {
+        val shared = request.uris.mapNotNull { describe(context, it, request.type) }
+        // Images, video and audio cannot become a script, and they come along
+        // with what can: a note with a photo attached (sent as */*, which
+        // matches any filter), or a text share's preview image from an app
+        // that only fills ClipData. Skip them then. A share of nothing but
+        // media still goes to Dart, so the user is told it cannot be imported
+        // instead of the app opening with nothing.
+        val documents = shared.filter { !it.media }
+        val files = if (documents.isEmpty() && request.texts.isEmpty()) shared else documents
         var budget = MAX_PENDING_BYTES - synchronized(lock) { pendingBytes }
-        val files = ArrayList<HashMap<String, Any>>()
-        for (uri in request.uris) {
+        val read = ArrayList<HashMap<String, Any>>()
+        for (file in files) {
             val cap = minOf(MAX_FILE_BYTES, maxOf(budget, 0))
-            val file = readFile(context, uri, request.type, cap) ?: continue
-            (file["bytes"] as? ByteArray)?.let { budget -= it.size }
-            files.add(file)
+            val item = readFile(context, file, cap) ?: continue
+            (item["bytes"] as? ByteArray)?.let { budget -= it.size }
+            read.add(item)
         }
         val items = ArrayList<HashMap<String, Any>>()
-        if (request.texts.size == 1 && request.uris.size == 1) {
-            // One text plus one file in a single share is one thing: a notes
-            // app attaching its export next to the body, or a caption on a
-            // file. Deliver ONE item with both fields so the user gets one
-            // script, not two; Dart picks the richer part. If the file could
-            // not be read, the item carries just the text.
-            val item = files.firstOrNull() ?: HashMap<String, Any>()
-            item["text"] = request.texts[0]
-            items.add(item)
+        val single = read.singleOrNull()
+        if (request.texts.size == 1 && files.size == 1 && files[0].textLike &&
+            single != null && single["bytes"] != null
+        ) {
+            // One text plus one text-like file in a single share is one thing:
+            // a notes app attaching its export (.md, .txt, .docx) next to the
+            // body. Deliver ONE item carrying both `text` and `bytes` (plus
+            // name and mimeType) so the user gets one script, not two; Dart
+            // picks the richer part. Otherwise (the file could not be read, was
+            // too large, or is another kind of file) text and file go as
+            // separate items, so the text is never lost behind a file Dart
+            // cannot use.
+            single["text"] = request.texts[0]
+            items.add(single)
         } else {
             for (text in request.texts) items.add(hashMapOf<String, Any>("text" to text))
-            items.addAll(files)
+            items.addAll(read)
         }
         // A title hint only makes sense for a single item; several files
         // sharing one subject would all get the same title.
@@ -415,17 +462,48 @@ internal object ImportInbox {
     }
 
     /**
-     * One file as a channel item, or null when it cannot be read at all
-     * (no permission, gone, refused). Over [cap] bytes: name only, tooLarge.
+     * Name and type of one Uri, without reading it. Null when it must not or
+     * cannot be read (a private file:// path, a provider that throws).
      */
-    private fun readFile(context: Context, uri: Uri, intentType: String?, cap: Int): HashMap<String, Any>? {
+    private fun describe(context: Context, uri: Uri, intentType: String?): SharedFile? {
         try {
             if (uri.scheme == ContentResolver.SCHEME_FILE && isPrivatePath(context, uri)) return null
             val resolver = context.contentResolver
+            val name = displayName(resolver, uri)
+            val fromProvider: String? = try {
+                resolver.getType(uri)
+            } catch (e: Exception) {
+                null
+            }
+            // The file's own type: the provider's unless it has none or only
+            // the generic one, else what its extension stands for. Not the
+            // share's type, which covers the whole share.
+            val extension = name?.substringAfterLast('.', "")?.lowercase().orEmpty()
+            val ownType: String? = fromProvider?.takeIf { it.isNotEmpty() && it != OCTET_STREAM }
+                ?: extension.takeIf { it.isNotEmpty() }?.let {
+                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)
+                }
+            val base = baseType(ownType)
+            val media = base != null &&
+                (base.startsWith("image/") || base.startsWith("video/") || base.startsWith("audio/"))
+            val textLike = extension in TEXT_EXTENSIONS || isTextType(ownType ?: intentType)
+            return SharedFile(uri, name, mimeType(fromProvider, intentType), media, textLike)
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not look at a shared file", e)
+            return null
+        }
+    }
+
+    /**
+     * One file as a channel item, or null when it cannot be read at all
+     * (no permission, gone, refused). Over [cap] bytes: name only, tooLarge.
+     */
+    private fun readFile(context: Context, file: SharedFile, cap: Int): HashMap<String, Any>? {
+        try {
             val item = HashMap<String, Any>()
-            displayName(resolver, uri)?.let { item["name"] = it }
-            mimeType(resolver, uri, intentType)?.let { item["mimeType"] = it }
-            val input = resolver.openInputStream(uri) ?: return null
+            file.name?.let { item["name"] = it }
+            file.mimeType?.let { item["mimeType"] = it }
+            val input = context.contentResolver.openInputStream(file.uri) ?: return null
             val bytes = input.use { readCapped(it, cap) }
             if (bytes != null) item["bytes"] = bytes else item["tooLarge"] = true
             return item
@@ -474,18 +552,23 @@ internal object ImportInbox {
         return last.substringAfterLast('/').substringAfterLast(':').takeIf { it.isNotBlank() }
     }
 
-    private fun mimeType(resolver: ContentResolver, uri: Uri, intentType: String?): String? {
-        val fromProvider = try {
-            resolver.getType(uri)
-        } catch (e: Exception) {
-            null
-        }
+    /** The type reported to Dart: the provider's, else the share's. */
+    private fun mimeType(fromProvider: String?, intentType: String?): String? {
         val fromIntent = intentType?.takeIf { it != "*/*" }
         return when {
             fromProvider.isNullOrEmpty() -> fromIntent
-            fromProvider == "application/octet-stream" && fromIntent != null -> fromIntent
+            fromProvider == OCTET_STREAM && fromIntent != null -> fromIntent
             else -> fromProvider
         }
+    }
+
+    /** "Text/Plain; charset=utf-8" -> "text/plain". */
+    private fun baseType(type: String?): String? =
+        type?.substringBefore(';')?.trim()?.lowercase()?.takeIf { it.isNotEmpty() }
+
+    private fun isTextType(type: String?): Boolean {
+        val base = baseType(type) ?: return false
+        return base.startsWith("text/") || base in DOCUMENT_TYPES
     }
 
     @Suppress("DEPRECATION")
