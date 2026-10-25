@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Auto Backup on Android 6 to 11 (android:fullBackupContent). Everything is
+     backed up as before (scripts and settings live in shared_prefs), except
+     the in-app video takes in app_flutter/takes (the documents directory):
+     Google Drive keeps at most 25 MB per app, and past that the WHOLE backup
+     stops, scripts included. Android 12 and later use
+     data_extraction_rules.xml instead. -->
+<full-backup-content>
+    <exclude domain="root" path="app_flutter/takes/" />
+</full-backup-content>

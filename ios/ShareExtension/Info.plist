@@ -12,6 +12,37 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ar</string>
+		<string>bn</string>
+		<string>de</string>
+		<string>en</string>
+		<string>es</string>
+		<string>fa</string>
+		<string>fil</string>
+		<string>fr</string>
+		<string>he</string>
+		<string>hi</string>
+		<string>id</string>
+		<string>it</string>
+		<string>ja</string>
+		<string>ko</string>
+		<string>ms</string>
+		<string>nl</string>
+		<string>pl</string>
+		<string>pt</string>
+		<string>ru</string>
+		<string>sw</string>
+		<string>ta</string>
+		<string>th</string>
+		<string>tr</string>
+		<string>uk</string>
+		<string>ur</string>
+		<string>vi</string>
+		<string>zh-Hans</string>
+		<string>zh-Hant</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
@@ -40,8 +71,32 @@ AND SUBQUERY (
         (
             ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.text"
             OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.wordprocessingml.document"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.wordprocessingml.template"
             OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.text"
-            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.data"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.text-template"
+            OR (
+                ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.data"
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.adobe.pdf")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.spreadsheet")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.presentation")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.spreadsheetml.sheet")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.presentationml.presentation")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.spreadsheet")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.presentation")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.pages.sffpages")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.pages.pages")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.numbers.sffnumbers")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.numbers.numbers")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.keynote.sffkey")
+                AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.apple.iwork.keynote.key")
+                AND NOT (
+                    ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.archive"
+                    AND NOT (
+                        ANY $attachment.registeredTypeIdentifiers == "public.zip-archive"
+                        OR ANY $attachment.registeredTypeIdentifiers == "com.pkware.zip-archive"
+                    )
+                )
+            )
         )
         AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image")
         AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.audiovisual-content")

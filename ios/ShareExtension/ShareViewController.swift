@@ -20,7 +20,11 @@ import UniformTypeIdentifiers
 /// Items match Android's (see `ShareCollector`): one text plus one text-like
 /// file in a share is ONE item with both `text` and `bytes`, and `subject` is
 /// only set when the share yields a single item. Cancel removes whatever this
-/// share already put in the inbox.
+/// share already put in the inbox. A share of nothing but files or text over
+/// 10 MB fails here (with the reason) instead of saying "Added".
+///
+/// The card's texts are in `<locale>.lproj/Localizable.strings`, one per
+/// language the app supports.
 final class ShareViewController: UIViewController {
   private let card = UIView()
   private let spinner = UIActivityIndicatorView(style: .large)
@@ -65,12 +69,12 @@ final class ShareViewController: UIViewController {
     let inbox = Inbox()
     self.inbox = inbox
     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-      let saved =
+      let outcome =
         inbox.map {
           ShareImporter.importItems(extensionItems, into: $0, isCancelled: { cancelFlag.isSet })
-        } ?? 0
+        } ?? .failed
       DispatchQueue.main.async {
-        self?.showResult(success: saved > 0)
+        self?.showResult(outcome)
       }
     }
   }
@@ -146,9 +150,10 @@ final class ShareViewController: UIViewController {
     ])
   }
 
-  private func showResult(success: Bool) {
+  private func showResult(_ outcome: ShareOutcome) {
     guard !finished else { return }
     importDone = true
+    let success = outcome == .added
 
     spinner.stopAnimating()
     spinner.isHidden = true
@@ -170,16 +175,28 @@ final class ShareViewController: UIViewController {
         comment: "Share extension: nothing in the share could be saved")
     titleLabel.isHidden = false
 
-    messageLabel.text = NSLocalizedString(
-      "Open APrompter to start reading.",
-      comment: "Share extension: hint shown after the item was saved")
-    messageLabel.isHidden = !success
+    let message: String?
+    switch outcome {
+    case .added:
+      message = NSLocalizedString(
+        "Open APrompter to start reading.",
+        comment: "Share extension: hint shown after the item was saved")
+    case .tooLarge:
+      message = NSLocalizedString(
+        "That's too big for one script.",
+        comment: "Share extension: nothing was added because the shared text or file is over 10 MB")
+    case .failed:
+      message = nil
+    }
+    messageLabel.text = message
+    messageLabel.isHidden = message == nil
 
     button.setTitle(
       NSLocalizedString("Done", comment: "Share extension: close the confirmation"),
       for: .normal)
 
-    UIAccessibility.post(notification: .announcement, argument: titleLabel.text)
+    let announcement = [titleLabel.text, message].compactMap { $0 }.joined(separator: " ")
+    UIAccessibility.post(notification: .announcement, argument: announcement)
 
     if success {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
@@ -210,6 +227,16 @@ final class ShareViewController: UIViewController {
 }
 
 // MARK: - Import
+
+/// How a share ended, for the card.
+private enum ShareOutcome {
+  /// At least one item the app can open was saved.
+  case added
+  /// Everything importable was over the size limit; nothing was saved.
+  case tooLarge
+  /// Nothing could be saved.
+  case failed
+}
 
 /// One thing to hand to the app (see the `aprompter/import` contract).
 private struct SharedItem {
@@ -300,6 +327,33 @@ private enum ShareImporter {
     "org.oasis-open.opendocument.text",
   ]
 
+  /// Word and OpenDocument text templates: the app imports them like the
+  /// documents themselves, although they are not text-like for merging.
+  static let documentTemplateIdentifiers: Set<String> = [
+    "org.openxmlformats.wordprocessingml.template",
+    "org.oasis-open.opendocument.text-template",
+  ]
+
+  /// Data the app turns away (see `isRefused`), besides PDFs, spreadsheets,
+  /// presentations, iWork files and archives other than zip.
+  static let refusedDocumentIdentifiers: Set<String> = [
+    "org.openxmlformats.spreadsheetml.sheet",
+    "org.openxmlformats.presentationml.presentation",
+    "org.oasis-open.opendocument.spreadsheet",
+    "org.oasis-open.opendocument.presentation",
+  ]
+
+  /// A plain zip archive. Only these exact types pass as archives: EPUB, JAR
+  /// and other zip-based containers conform to public.zip-archive too, but
+  /// the app cannot open them.
+  static let zipIdentifiers: Set<String> = [
+    "public.zip-archive",
+    "com.pkware.zip-archive",
+  ]
+
+  /// Name of shared text over the size limit, passed on as a too-large file.
+  static let tooLargeTextName = "Shared text.txt"
+
   private enum Attempt {
     case fileURL
     case text(UTType)
@@ -308,12 +362,12 @@ private enum ShareImporter {
 
   /// Saves everything importable into `inbox`, one attachment at a time so at
   /// most two files are in memory at once (share extensions have a tight
-  /// memory limit). Must not run on the main thread. Returns how many items
-  /// were saved; when cancelled, removes what it already saved and returns 0.
+  /// memory limit). Must not run on the main thread. When cancelled, or when
+  /// everything saved is too large to open, removes what it already saved.
   static func importItems(
     _ extensionItems: [NSExtensionItem], into inbox: Inbox,
     isCancelled: @escaping () -> Bool
-  ) -> Int {
+  ) -> ShareOutcome {
     var shareSubject: String?
     for extensionItem in extensionItems {
       if let title = trimmed(extensionItem.attributedTitle?.string) {
@@ -346,16 +400,11 @@ private enum ShareImporter {
       }
 
       // Text that only came as the item's content text (no usable attachment).
-      if !foundAny, !isCancelled(),
-        let text = extensionItem.attributedContentText?.string,
-        trimmed(text) != nil,
-        seenTexts.insert(text).inserted
-      {
-        var item = SharedItem()
-        item.text = text
-        item.subject = subject
-        item.mimeType = "text/plain"
+      if !foundAny, !isCancelled(), let content = extensionItem.attributedContentText {
         autoreleasepool {
+          guard var item = textItem(content) else { return }
+          if let text = item.text, !seenTexts.insert(text).inserted { return }
+          item.subject = subject
           collector.add(item)
         }
       }
@@ -370,19 +419,25 @@ private enum ShareImporter {
     // writing must not leave part of the share behind.
     if isCancelled() {
       inbox.discardWritten()
-      return 0
+      return .failed
+    }
+    if collector.saved == 0 {
+      return .failed
+    }
+    if collector.usable == 0 {
+      // Only items over the size limit: the app could open none of them, so
+      // the card says why and nothing is left behind for the app.
+      inbox.discardWritten()
+      return .tooLarge
     }
 
-    let saved = collector.saved
-    if saved > 0 {
-      CFNotificationCenterPostNotification(
-        CFNotificationCenterGetDarwinNotifyCenter(),
-        CFNotificationName(rawValue: inboxChangedNotification as CFString),
-        nil,
-        nil,
-        true)
-    }
-    return saved
+    CFNotificationCenterPostNotification(
+      CFNotificationCenterGetDarwinNotifyCenter(),
+      CFNotificationName(rawValue: inboxChangedNotification as CFString),
+      nil,
+      nil,
+      true)
+    return .added
   }
 
   /// Tries the provider's representations, best first: a real file, then plain
@@ -412,12 +467,51 @@ private enum ShareImporter {
     return type.conforms(to: .plainText) || type == .text
   }
 
-  /// Anything that is data but not a link, an image, a video or audio.
+  /// Anything that is data but not a link, an image, a video, audio or a type
+  /// the app turns away (see `isRefused`).
   private static func isDocument(_ type: UTType) -> Bool {
     return type.conforms(to: .data)
       && !type.conforms(to: .url)
       && !type.conforms(to: .image)
       && !type.conforms(to: .audiovisualContent)
+      && !isRefused(type)
+  }
+
+  /// Data the app cannot turn into a script: PDFs, spreadsheets,
+  /// presentations, iWork files and archives other than a plain zip (a zip of
+  /// notes, such as a Notion or Obsidian export, is imported; EPUB and other
+  /// zip-based containers are not). Word and OpenDocument text files and
+  /// their templates are zip-based but always pass. The activation rule in
+  /// Info.plist turns the same types away, so the share sheet does not offer
+  /// APrompter for them.
+  private static func isRefused(_ type: UTType) -> Bool {
+    if conforms(type, toAnyOf: textLikeDocumentIdentifiers)
+      || conforms(type, toAnyOf: documentTemplateIdentifiers)
+    {
+      return false
+    }
+    if type.conforms(to: .pdf) || type.conforms(to: .spreadsheet)
+      || type.conforms(to: .presentation)
+      || conforms(type, toAnyOf: refusedDocumentIdentifiers)
+    {
+      return true
+    }
+    // Pages, Numbers and Keynote documents, single-file or package.
+    if type.identifier.hasPrefix("com.apple.iwork.")
+      || type.supertypes.contains(where: { $0.identifier.hasPrefix("com.apple.iwork.") })
+    {
+      return true
+    }
+    return type.conforms(to: .archive) && !zipIdentifiers.contains(type.identifier)
+  }
+
+  /// Whether `type` is, or conforms to, one of `identifiers` (which need not
+  /// be declared on this device).
+  private static func conforms(_ type: UTType, toAnyOf identifiers: Set<String>) -> Bool {
+    if identifiers.contains(type.identifier) {
+      return true
+    }
+    return type.supertypes.contains { identifiers.contains($0.identifier) }
   }
 
   /// Text, a Word or ODT document, or a script file by its extension (the
@@ -526,10 +620,14 @@ private enum ShareImporter {
       if isText(type) {
         return textItem(string)
       }
+      if string.utf8.count > maxFileBytes {
+        // Not copied into Data just to find out it is too large.
+        return tooLargeFileItem(type: type, suggestedName: suggestedName)
+      }
       return dataItem(Data(string.utf8), type: type, suggestedName: suggestedName)
     }
     if let attributed = loaded as? NSAttributedString {
-      return textItem(attributed.string)
+      return textItem(attributed)
     }
     if let data = loaded as? Data {
       return dataItem(data, type: type, suggestedName: suggestedName)
@@ -537,11 +635,46 @@ private enum ShareImporter {
     return nil
   }
 
+  /// Shared text. Over the size limit it becomes a too-large text file,
+  /// checked before anything copies the text (trimming, the inbox JSON).
   private static func textItem(_ text: String) -> SharedItem? {
+    if text.utf8.count > maxFileBytes {
+      return tooLargeTextItem()
+    }
     guard trimmed(text) != nil else { return nil }
     var item = SharedItem()
     item.text = text
     item.mimeType = "text/plain"
+    return item
+  }
+
+  private static func textItem(_ attributed: NSAttributedString) -> SharedItem? {
+    // More UTF-16 units than the limit means more UTF-8 bytes too, so this
+    // needs no copy of the text.
+    if attributed.length > maxFileBytes {
+      return tooLargeTextItem()
+    }
+    return textItem(attributed.string)
+  }
+
+  /// Shared text over the size limit: a text file without its content.
+  private static func tooLargeTextItem() -> SharedItem {
+    var item = SharedItem()
+    item.name = tooLargeTextName
+    item.mimeType = "text/plain"
+    item.textLike = true
+    item.tooLarge = true
+    return item
+  }
+
+  /// A shared document over the size limit: its name, without its content.
+  private static func tooLargeFileItem(type: UTType, suggestedName: String?) -> SharedItem {
+    var item = SharedItem()
+    let name = fileName(url: nil, type: type, suggestedName: suggestedName, keepFileName: false)
+    item.name = name
+    item.mimeType = mimeType(fileName: name, type: type)
+    item.textLike = isTextLike(fileName: name, types: [type])
+    item.tooLarge = true
     return item
   }
 
@@ -551,21 +684,24 @@ private enum ShareImporter {
       return nil
     }
     if plainTextIdentifiers.contains(type.identifier) {
+      // Too large text is not decoded at all.
+      if data.count > maxFileBytes {
+        return tooLargeTextItem()
+      }
       let utf16 = type.identifier.hasPrefix("public.utf16")
       if let string = String(data: data, encoding: utf16 ? .utf16 : .utf8) {
         return textItem(string)
       }
+    }
+    if data.count > maxFileBytes {
+      return tooLargeFileItem(type: type, suggestedName: suggestedName)
     }
     var item = SharedItem()
     let name = fileName(url: nil, type: type, suggestedName: suggestedName, keepFileName: false)
     item.name = name
     item.mimeType = mimeType(fileName: name, type: type)
     item.textLike = isTextLike(fileName: name, types: [type])
-    if data.count > maxFileBytes {
-      item.tooLarge = true
-    } else {
-      item.bytes = data
-    }
+    item.bytes = data
     return item
   }
 
@@ -622,7 +758,9 @@ private enum ShareImporter {
   }
 
   /// The original file name with its extension (the app picks the parser by
-  /// extension). `suggestedName` often lacks the extension.
+  /// extension). `suggestedName` often lacks the extension. Empty when there
+  /// is no name at all: then the app titles the script from its content
+  /// instead of a made-up English name, and `mimeType` still says what it is.
   private static func fileName(
     url: URL?, type: UTType?, suggestedName: String?, keepFileName: Bool
   ) -> String {
@@ -643,7 +781,7 @@ private enum ShareImporter {
     if hasURLName {
       return urlName
     }
-    return ext.isEmpty ? "Shared document" : "Shared document." + ext
+    return ""
   }
 
   private static func mimeType(fileName: String, type: UTType?) -> String? {
@@ -683,6 +821,8 @@ private final class ShareCollector {
   /// The share yields several items: nothing is held, no subject is set.
   private var passingThrough = false
   private(set) var saved = 0
+  /// Saved items the app can open: all but the too-large ones.
+  private(set) var usable = 0
 
   init(inbox: Inbox, shareSubject: String?, isCancelled: @escaping () -> Bool) {
     self.inbox = inbox
@@ -763,6 +903,9 @@ private final class ShareCollector {
     item.subject = subject
     if inbox.write(item, isCancelled: isCancelled) {
       saved += 1
+      if !item.tooLarge {
+        usable += 1
+      }
     }
   }
 }

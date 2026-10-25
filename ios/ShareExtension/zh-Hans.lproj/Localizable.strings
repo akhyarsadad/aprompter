@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "取消";
+
+/* Share extension: close the confirmation */
+"Done" = "完成";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "已添加到 APrompter";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "无法添加到 APrompter";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "打开 APrompter 即可开始阅读。";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "内容太长，无法作为一个脚本。";

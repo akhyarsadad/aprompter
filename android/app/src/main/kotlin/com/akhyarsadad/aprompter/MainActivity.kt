@@ -260,6 +260,12 @@ class ImportActivity : Activity() {
 internal class ImportRequest(
     val texts: List<String>,
     val uris: List<Uri>,
+    /**
+     * Shared files that are never opened (APrompter's own, another scheme, or
+     * extras that could not be read). Only counted when nothing else in the
+     * share can be imported; each becomes an `unreadable` item.
+     */
+    val refused: Int,
     val subject: String?,
     val type: String?,
 )
@@ -274,8 +280,11 @@ internal class ImportRequest(
  * running app that more arrived. When too many bytes wait already, the next
  * file is read once Dart has taken them (see MAX_PENDING_BYTES).
  *
- * An item is a text, a file, or (Android only) both: one share of a text plus
- * one text-like file comes as ONE item with `text` and `bytes` set; see read().
+ * An item is a text, a file, or both: one share of a text plus one non-empty
+ * text-like file comes as ONE item with `text` and `bytes` set; see read().
+ * A file that cannot or must not be read comes as `name` (empty when unknown),
+ * `mimeType` when known and `unreadable`, so Dart can tell the user instead of
+ * the app opening with nothing.
  */
 internal object ImportInbox {
     const val TAG = "APrompterImport"
@@ -384,11 +393,19 @@ internal object ImportInbox {
     private fun textItems(texts: List<String>): List<HashMap<String, Any>> =
         texts.map { hashMapOf<String, Any>("text" to it) }
 
+    /** A shared file Dart gets no content of: it could not, or must not, be read. */
+    private fun unreadableItem(name: String?, mimeType: String?): HashMap<String, Any> {
+        val item = hashMapOf<String, Any>("name" to (name ?: ""), "unreadable" to true)
+        mimeType?.let { item["mimeType"] = it }
+        return item
+    }
+
     /**
      * Pulls text and Uris out of a SEND, SEND_MULTIPLE or VIEW intent. No I/O.
      * Returns null when the intent carries nothing to import.
      */
     fun parse(context: Context, intent: Intent): ImportRequest? {
+        val action = intent.action
         try {
             val texts = ArrayList<String>()
             val uris = ArrayList<Uri>()
@@ -430,17 +447,29 @@ internal object ImportInbox {
             val subject = listOf(Intent.EXTRA_SUBJECT, Intent.EXTRA_TITLE).firstNotNullOfOrNull { key ->
                 intent.getCharSequenceExtra(key)?.toString()?.trim()?.takeIf { it.isNotEmpty() }
             }
-            val request = ImportRequest(
-                texts = texts.filter { it.isNotBlank() },
-                uris = uris.distinct().filter { isAcceptedUri(context, it) },
+            val usableTexts = texts.filter { it.isNotBlank() }
+            val all = uris.distinct()
+            val accepted = all.filter { isAcceptedUri(context, it) }
+            // Uris that are never opened (APrompter's own files, other schemes)
+            // are reported as unreadable when nothing else in the share can be
+            // imported, so the app does not open with nothing happening. Next
+            // to importable content they are left out, like media.
+            val refused = if (usableTexts.isEmpty() && accepted.isEmpty()) all.size else 0
+            if (usableTexts.isEmpty() && accepted.isEmpty() && refused == 0) return null
+            return ImportRequest(
+                texts = usableTexts,
+                uris = accepted,
+                refused = refused,
                 subject = subject,
                 type = intent.type,
             )
-            return if (request.texts.isEmpty() && request.uris.isEmpty()) null else request
         } catch (e: Exception) {
             // Malformed extras from the sending app (e.g. BadParcelableException).
             Log.w(TAG, "Could not read the shared intent", e)
-            return null
+            // Something was shared, but none of it can be read: say so.
+            val shared = action == Intent.ACTION_SEND || action == Intent.ACTION_SEND_MULTIPLE ||
+                action == Intent.ACTION_VIEW
+            return if (shared) ImportRequest(emptyList(), emptyList(), 1, null, intent.type) else null
         }
     }
 
@@ -515,11 +544,16 @@ internal object ImportInbox {
         val media: Boolean,
         /** Text, or a document type the share filters accept. */
         val textLike: Boolean,
+        /**
+         * False for a path inside APrompter's own data, or a Uri that could
+         * not even be looked at: reported to Dart as unreadable, never opened.
+         */
+        val readable: Boolean,
     )
 
     /** Reads the request's files and queues them, with its texts, for Dart. Reader thread only. */
     private fun read(context: Context, request: ImportRequest) {
-        val shared = request.uris.mapNotNull { describe(context, it, request.type) }
+        val shared = request.uris.map { describe(context, it, request.type) }
         // Images, video and audio cannot become a script, and they come along
         // with what can: a note with a photo attached (sent as */*, which
         // matches any filter), or a text share's preview image from an app
@@ -531,6 +565,7 @@ internal object ImportInbox {
         // This share's texts and files that are not queued yet.
         val texts = ArrayList(request.texts)
         val read = ArrayList<HashMap<String, Any>>()
+        repeat(request.refused) { read.add(unreadableItem(null, mimeType(null, request.type))) }
         var split = false
         for (file in files) {
             val held = byteCount(read)
@@ -548,19 +583,24 @@ internal object ImportInbox {
                 }
                 awaitRoom()
             }
-            readFile(context, file)?.let { read.add(it) }
+            read.add(readFile(context, file))
         }
+        // iOS skips empty files. An empty file that came with text is left out
+        // the same way, so the text alone becomes the script; an empty file
+        // shared on its own still goes to Dart, which says it is empty.
+        if (texts.isNotEmpty()) read.removeAll { (it["bytes"] as? ByteArray)?.isEmpty() == true }
         val items = ArrayList<HashMap<String, Any>>()
         val single = read.singleOrNull()
+        val singleBytes = single?.get("bytes") as? ByteArray
         if (texts.size == 1 && files.size == 1 && files[0].textLike &&
-            single != null && single["bytes"] != null
+            single != null && singleBytes != null && singleBytes.isNotEmpty()
         ) {
             // One text plus one text-like file in a single share is one thing:
             // a notes app attaching its export (.md, .txt, .docx) next to the
             // body. Deliver ONE item carrying both `text` and `bytes` (plus
             // name and mimeType) so the user gets one script, not two; Dart
             // picks the richer part. Otherwise (the file could not be read, was
-            // too large, or is another kind of file) text and file go as
+            // too large, empty, or is another kind of file) text and file go as
             // separate items, so the text is never lost behind a file Dart
             // cannot use.
             single["text"] = texts[0]
@@ -578,18 +618,23 @@ internal object ImportInbox {
     }
 
     /**
-     * Name and type of one Uri, without reading it. Null when it must not or
-     * cannot be read (a private file:// path, a provider that throws).
+     * Name and type of one Uri, without reading it. A file:// path inside the
+     * app's own data is described from the path alone and marked unreadable,
+     * so it is reported to Dart but never opened.
      */
-    private fun describe(context: Context, uri: Uri, intentType: String?): SharedFile? {
+    private fun describe(context: Context, uri: Uri, intentType: String?): SharedFile {
         try {
-            if (uri.scheme == ContentResolver.SCHEME_FILE && isPrivatePath(context, uri)) return null
+            val readable = uri.scheme != ContentResolver.SCHEME_FILE || !isPrivatePath(context, uri)
             val resolver = context.contentResolver
-            val name = displayName(resolver, uri)
-            val fromProvider: String? = try {
-                resolver.getType(uri)
-            } catch (e: Exception) {
+            val name = (if (readable) displayName(resolver, uri) else null) ?: nameFromPath(uri)
+            val fromProvider: String? = if (!readable) {
                 null
+            } else {
+                try {
+                    resolver.getType(uri)
+                } catch (e: Exception) {
+                    null
+                }
             }
             // The file's own type: the provider's unless it has none or only
             // the generic one, else what its extension stands for. Not the
@@ -603,33 +648,41 @@ internal object ImportInbox {
             val media = base != null &&
                 (base.startsWith("image/") || base.startsWith("video/") || base.startsWith("audio/"))
             val textLike = extension in TEXT_EXTENSIONS || isTextType(ownType ?: intentType)
-            return SharedFile(uri, name, mimeType(fromProvider, intentType), media, textLike)
+            return SharedFile(uri, name, mimeType(fromProvider, intentType), media, textLike, readable)
         } catch (e: Exception) {
             Log.w(TAG, "Could not look at a shared file", e)
-            return null
+            // Reported as unreadable, never opened.
+            return SharedFile(
+                uri, null, mimeType(null, intentType), media = false, textLike = false, readable = false,
+            )
         }
     }
 
     /**
-     * One file as a channel item, or null when it cannot be read at all
-     * (no permission, gone, refused). Over MAX_FILE_BYTES: name only, tooLarge.
+     * One file as a channel item. Over MAX_FILE_BYTES: name only, tooLarge.
+     * When it cannot be read at all (no permission, gone, refused, a private
+     * path): name only, unreadable.
      */
-    private fun readFile(context: Context, file: SharedFile): HashMap<String, Any>? {
-        try {
-            val item = HashMap<String, Any>()
-            file.name?.let { item["name"] = it }
-            file.mimeType?.let { item["mimeType"] = it }
-            val input = context.contentResolver.openInputStream(file.uri) ?: return null
-            val bytes = input.use { readCapped(it, MAX_FILE_BYTES) }
-            if (bytes != null) item["bytes"] = bytes else item["tooLarge"] = true
-            return item
-        } catch (e: SecurityException) {
-            Log.w(TAG, "No permission to read a shared file", e)
-        } catch (e: Exception) {
-            // IOException (FileNotFoundException, ...) or a misbehaving provider.
-            Log.w(TAG, "Could not read a shared file", e)
+    private fun readFile(context: Context, file: SharedFile): HashMap<String, Any> {
+        if (file.readable) {
+            try {
+                val input = context.contentResolver.openInputStream(file.uri)
+                if (input != null) {
+                    val bytes = input.use { readCapped(it, MAX_FILE_BYTES) }
+                    val item = HashMap<String, Any>()
+                    file.name?.let { item["name"] = it }
+                    file.mimeType?.let { item["mimeType"] = it }
+                    if (bytes != null) item["bytes"] = bytes else item["tooLarge"] = true
+                    return item
+                }
+            } catch (e: SecurityException) {
+                Log.w(TAG, "No permission to read a shared file", e)
+            } catch (e: Exception) {
+                // IOException (FileNotFoundException, ...) or a misbehaving provider.
+                Log.w(TAG, "Could not read a shared file", e)
+            }
         }
-        return null
+        return unreadableItem(file.name, file.mimeType)
     }
 
     /** The stream's bytes, or null as soon as it is longer than [cap]. */
@@ -663,7 +716,11 @@ internal object ImportInbox {
                 // Some providers do not answer queries; fall back to the path.
             }
         }
-        // e.g. ".../document/primary:Scripts/Hook ideas.md" -> "Hook ideas.md"
+        return nameFromPath(uri)
+    }
+
+    /** e.g. ".../document/primary:Scripts/Hook ideas.md" -> "Hook ideas.md". No I/O. */
+    private fun nameFromPath(uri: Uri): String? {
         val last = uri.lastPathSegment ?: return null
         return last.substringAfterLast('/').substringAfterLast(':').takeIf { it.isNotBlank() }
     }
@@ -722,15 +779,23 @@ internal object ImportInbox {
         else -> false
     }
 
-    /** True for file:// paths inside the app's own data directories or /proc. */
+    /**
+     * True for file:// paths inside the app's own data directories or /proc,
+     * and for paths that cannot be resolved (never opened either).
+     */
     private fun isPrivatePath(context: Context, uri: Uri): Boolean {
         val path = uri.path ?: return true
-        val real = File(path).canonicalPath
-        if (real == "/proc" || real.startsWith("/proc/")) return true
-        val info = context.applicationInfo
-        return listOfNotNull(info.dataDir, info.deviceProtectedDataDir).any { dir ->
-            val root = File(dir).canonicalPath
-            real == root || real.startsWith(root + File.separator)
+        return try {
+            val real = File(path).canonicalPath
+            if (real == "/proc" || real.startsWith("/proc/")) return true
+            val info = context.applicationInfo
+            listOfNotNull(info.dataDir, info.deviceProtectedDataDir).any { dir ->
+                val root = File(dir).canonicalPath
+                real == root || real.startsWith(root + File.separator)
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not resolve a shared file path", e)
+            true
         }
     }
 }
