@@ -1020,4 +1020,21 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Das schwebende Fenster lässt sich überallhin ziehen und merkt sich seinen Platz.';
+
+  @override
+  String get readingLine => 'Position der Leselinie';
+
+  @override
+  String get readingLineHint =>
+      'Die Handykamera sitzt über dem Display: Eine hohe Linie hält deinen Blick nah an der Linse.';
+
+  @override
+  String get readingLineNearCamera => 'Nah an der Kamera';
+
+  @override
+  String get readingLineMiddle => 'Mitte';
+
+  @override
+  String get readingLineDragHint =>
+      'In „Proben“ und vor dem Start in „Aufnehmen“ kannst du auch den linken Pfeil der Linie nach oben oder unten ziehen.';
 }

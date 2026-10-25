@@ -986,4 +986,21 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get positionHintFloat => 'หน้าต่างลอยลากไปได้ทุกที่และจำตำแหน่งไว้';
+
+  @override
+  String get readingLine => 'ตำแหน่งเส้นนำสายตา';
+
+  @override
+  String get readingLineHint =>
+      'กล้องของโทรศัพท์อยู่เหนือจอ วางเส้นไว้สูงเพื่อให้สายตาอยู่ใกล้เลนส์';
+
+  @override
+  String get readingLineNearCamera => 'ใกล้กล้อง';
+
+  @override
+  String get readingLineMiddle => 'กลางจอ';
+
+  @override
+  String get readingLineDragHint =>
+      'ในโหมดซ้อม และในโหมดถ่ายก่อนเริ่ม คุณลากลูกศรด้านซ้ายของเส้นขึ้นหรือลงได้ด้วย';
 }

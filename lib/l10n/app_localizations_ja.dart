@@ -973,4 +973,20 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get positionHintFloat => 'フローティングウィンドウはどこへでも動かせ、位置も記憶します。';
+
+  @override
+  String get readingLine => '読み位置の高さ';
+
+  @override
+  String get readingLineHint => '端末のカメラは画面の上にあるので、ラインを高くすると視線がレンズの近くに保たれます。';
+
+  @override
+  String get readingLineNearCamera => 'カメラ寄り';
+
+  @override
+  String get readingLineMiddle => '中央';
+
+  @override
+  String get readingLineDragHint =>
+      '「リハーサル」と、開始前の「撮影」では、ラインの左の矢印を上下にドラッグして動かすこともできます。';
 }

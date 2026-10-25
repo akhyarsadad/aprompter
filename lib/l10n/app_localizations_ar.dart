@@ -1030,4 +1030,21 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'يمكن سحب النافذة العائمة إلى أي مكان وتتذكر موضعها.';
+
+  @override
+  String get readingLine => 'موضع خط القراءة';
+
+  @override
+  String get readingLineHint =>
+      'كاميرا الهاتف فوق الشاشة: الخط المرتفع يُبقي عينيك قرب العدسة.';
+
+  @override
+  String get readingLineNearCamera => 'قرب الكاميرا';
+
+  @override
+  String get readingLineMiddle => 'المنتصف';
+
+  @override
+  String get readingLineDragHint =>
+      'في \"تمرين\"، وفي \"تسجيل\" قبل أن تبدأ، يمكنك أيضًا سحب السهم الأيسر للخط لأعلى أو لأسفل.';
 }

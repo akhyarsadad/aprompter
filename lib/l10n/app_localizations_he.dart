@@ -1007,4 +1007,21 @@ class AppLocalizationsHe extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו.';
+
+  @override
+  String get readingLine => 'מיקום קו הקריאה';
+
+  @override
+  String get readingLineHint =>
+      'מצלמת הטלפון נמצאת מעל המסך: קו גבוה שומר את העיניים קרוב לעדשה.';
+
+  @override
+  String get readingLineNearCamera => 'ליד המצלמה';
+
+  @override
+  String get readingLineMiddle => 'אמצע';
+
+  @override
+  String get readingLineDragHint =>
+      'ב\"חזרה\", וב\"צילום\" לפני שמתחילים, אפשר גם לגרור את החץ השמאלי של הקו למעלה או למטה.';
 }

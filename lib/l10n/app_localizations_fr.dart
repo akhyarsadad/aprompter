@@ -1023,4 +1023,21 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'La fenêtre flottante se déplace partout et retient sa place.';
+
+  @override
+  String get readingLine => 'Position de la ligne de lecture';
+
+  @override
+  String get readingLineHint =>
+      'La caméra du téléphone est au-dessus de l\'écran : une ligne haute garde votre regard près de l\'objectif.';
+
+  @override
+  String get readingLineNearCamera => 'Près de la caméra';
+
+  @override
+  String get readingLineMiddle => 'Milieu';
+
+  @override
+  String get readingLineDragHint =>
+      'Dans Répéter, et dans Filmer avant de commencer, vous pouvez aussi faire glisser la flèche gauche de la ligne vers le haut ou le bas.';
 }

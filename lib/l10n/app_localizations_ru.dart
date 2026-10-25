@@ -1039,4 +1039,21 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Плавающее окно можно перетащить в любое место, и оно запомнит его.';
+
+  @override
+  String get readingLine => 'Положение линии чтения';
+
+  @override
+  String get readingLineHint =>
+      'Камера телефона находится над экраном: высокая линия держит ваш взгляд у объектива.';
+
+  @override
+  String get readingLineNearCamera => 'У камеры';
+
+  @override
+  String get readingLineMiddle => 'Середина';
+
+  @override
+  String get readingLineDragHint =>
+      'В режиме «Репетиция», а в режиме «Запись» до начала съёмки, можно также перетащить левую стрелку линии вверх или вниз.';
 }

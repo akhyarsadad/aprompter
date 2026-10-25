@@ -190,6 +190,9 @@ class _ReadScreenState extends State<ReadScreen> {
                     state.updateSettings(settings.copyWith(fontSize: v)),
                 onWpmChanged: (v) =>
                     state.updateSettings(settings.copyWith(wpm: v)),
+                onGuidePositionChanged: (v) => state.updateSettings(
+                  state.settings.copyWith(guidePosition: v),
+                ),
               ),
             ),
             Positioned(

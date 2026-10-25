@@ -1017,4 +1017,21 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'La finestra fluttuante si sposta ovunque e ricorda la posizione.';
+
+  @override
+  String get readingLine => 'Posizione della linea di lettura';
+
+  @override
+  String get readingLineHint =>
+      'La fotocamera del telefono è sopra lo schermo: una linea alta tiene lo sguardo vicino all\'obiettivo.';
+
+  @override
+  String get readingLineNearCamera => 'Vicino alla fotocamera';
+
+  @override
+  String get readingLineMiddle => 'Centro';
+
+  @override
+  String get readingLineDragHint =>
+      'In Prova, e in Registra prima di iniziare, puoi anche trascinare in su o in giù la freccia sinistra della linea.';
 }

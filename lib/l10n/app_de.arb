@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "„{title}“ endgültig löschen? Das lässt sich nicht rückgängig machen.",
   "deleteForeverTakes": "Die Takes dazu, die in der App liegen, werden ebenfalls gelöscht.",
   "purchasePending": "Zahlung ausstehend. APrompter Unlimited wird automatisch freigeschaltet, sobald sie bestätigt ist.",
-  "positionHintFloat": "Das schwebende Fenster lässt sich überallhin ziehen und merkt sich seinen Platz."
+  "positionHintFloat": "Das schwebende Fenster lässt sich überallhin ziehen und merkt sich seinen Platz.",
+  "readingLine": "Position der Leselinie",
+  "readingLineHint": "Die Handykamera sitzt über dem Display: Eine hohe Linie hält deinen Blick nah an der Linse.",
+  "readingLineNearCamera": "Nah an der Kamera",
+  "readingLineMiddle": "Mitte",
+  "readingLineDragHint": "In „Proben“ und vor dem Start in „Aufnehmen“ kannst du auch den linken Pfeil der Linie nach oben oder unten ziehen."
 }

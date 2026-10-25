@@ -121,8 +121,12 @@ class AppState extends ChangeNotifier {
   Future<void> reloadSettings() async {
     await storage.reload();
     final fresh = storage.loadSettings();
-    if (fresh.wpm != _settings.wpm) {
-      _settings = _settings.copyWith(wpm: fresh.wpm);
+    if (fresh.wpm != _settings.wpm ||
+        fresh.guidePosition != _settings.guidePosition) {
+      _settings = _settings.copyWith(
+        wpm: fresh.wpm,
+        guidePosition: fresh.guidePosition,
+      );
       notifyListeners();
     }
   }

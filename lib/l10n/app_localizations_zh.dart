@@ -958,6 +958,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get positionHintFloat => '悬浮窗可拖到任意位置并会记住位置。';
+
+  @override
+  String get readingLine => '阅读线位置';
+
+  @override
+  String get readingLineHint => '手机摄像头在屏幕上方：阅读线越靠上，视线越贴近镜头。';
+
+  @override
+  String get readingLineNearCamera => '靠近摄像头';
+
+  @override
+  String get readingLineMiddle => '中间';
+
+  @override
+  String get readingLineDragHint => '在“排练”中，以及“拍摄”开始前，也可以上下拖动阅读线左侧的箭头。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1913,4 +1928,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get positionHintFloat => '懸浮視窗可拖到任何位置並會記住位置。';
+
+  @override
+  String get readingLine => '閱讀線位置';
+
+  @override
+  String get readingLineHint => '手機鏡頭在螢幕上方：閱讀線越高，視線越貼近鏡頭。';
+
+  @override
+  String get readingLineNearCamera => '靠近鏡頭';
+
+  @override
+  String get readingLineMiddle => '中間';
+
+  @override
+  String get readingLineDragHint => '在「排練」中，以及「拍攝」開始前，也可以上下拖曳閱讀線左側的箭頭。';
 }

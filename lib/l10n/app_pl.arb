@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Usunąć „{title}” na zawsze? Nie da się tego cofnąć.",
   "deleteForeverTakes": "Jego ujęcia zapisane w aplikacji też zostaną usunięte.",
   "purchasePending": "Płatność czeka na zatwierdzenie. APrompter Unlimited odblokuje się automatycznie, gdy zostanie zatwierdzona.",
-  "positionHintFloat": "Pływające okno można przeciągnąć wszędzie i zapamiętuje swoje miejsce."
+  "positionHintFloat": "Pływające okno można przeciągnąć wszędzie i zapamiętuje swoje miejsce.",
+  "readingLine": "Położenie linii czytania",
+  "readingLineHint": "Aparat telefonu jest nad ekranem: wysoko ustawiona linia trzyma wzrok blisko obiektywu.",
+  "readingLineNearCamera": "Przy aparacie",
+  "readingLineMiddle": "Środek",
+  "readingLineDragHint": "W trybie „Próba”, a w trybie „Nagraj” przed rozpoczęciem, możesz też przeciągnąć lewą strzałkę linii w górę lub w dół."
 }

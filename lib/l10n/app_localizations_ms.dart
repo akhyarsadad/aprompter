@@ -999,4 +999,21 @@ class AppLocalizationsMs extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Tetingkap terapung boleh diseret ke mana-mana dan mengingati kedudukannya.';
+
+  @override
+  String get readingLine => 'Kedudukan garis bacaan';
+
+  @override
+  String get readingLineHint =>
+      'Kamera telefon terletak di atas skrin: garis yang tinggi mengekalkan mata anda dekat dengan kanta.';
+
+  @override
+  String get readingLineNearCamera => 'Dekat kamera';
+
+  @override
+  String get readingLineMiddle => 'Tengah';
+
+  @override
+  String get readingLineDragHint =>
+      'Dalam Latihan, dan dalam Rakam sebelum anda mula, anda juga boleh menyeret anak panah kiri garis ke atas atau ke bawah.';
 }

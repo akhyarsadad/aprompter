@@ -1015,4 +1015,21 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'फ़्लोटिंग विंडो कहीं भी खींची जा सकती है और अपनी जगह याद रखती है।';
+
+  @override
+  String get readingLine => 'पढ़ने की लाइन की जगह';
+
+  @override
+  String get readingLineHint =>
+      'फ़ोन का कैमरा स्क्रीन के ऊपर होता है: लाइन ऊपर रखने से आपकी नज़र लेंस के पास रहती है।';
+
+  @override
+  String get readingLineNearCamera => 'कैमरे के पास';
+
+  @override
+  String get readingLineMiddle => 'बीच में';
+
+  @override
+  String get readingLineDragHint =>
+      'अभ्यास में, और रिकॉर्ड में शुरू करने से पहले, आप लाइन के बाएँ तीर को ऊपर या नीचे खींचकर भी इसे खिसका सकते हैं।';
 }

@@ -1018,4 +1018,21 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Dirisha linaloelea linaweza kuburutwa popote na hukumbuka mahali pake.';
+
+  @override
+  String get readingLine => 'Mahali pa mstari wa kusoma';
+
+  @override
+  String get readingLineHint =>
+      'Kamera ya simu iko juu ya skrini: mstari ulio juu huweka macho yako karibu na lenzi.';
+
+  @override
+  String get readingLineNearCamera => 'Karibu na kamera';
+
+  @override
+  String get readingLineMiddle => 'Katikati';
+
+  @override
+  String get readingLineDragHint =>
+      'Katika Mazoezi, na katika Rekodi kabla ya kuanza, unaweza pia kuburuta mshale wa kushoto wa mstari juu au chini.';
 }

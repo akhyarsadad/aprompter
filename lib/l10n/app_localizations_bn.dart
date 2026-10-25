@@ -995,4 +995,21 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'ভাসমান উইন্ডো যেকোনো জায়গায় টানা যায় এবং নিজের জায়গা মনে রাখে।';
+
+  @override
+  String get readingLine => 'পড়ার লাইনের অবস্থান';
+
+  @override
+  String get readingLineHint =>
+      'ফোনের ক্যামেরা স্ক্রিনের উপরে থাকে: লাইন উপরে রাখলে চোখ লেন্সের কাছে থাকে।';
+
+  @override
+  String get readingLineNearCamera => 'ক্যামেরার কাছে';
+
+  @override
+  String get readingLineMiddle => 'মাঝখানে';
+
+  @override
+  String get readingLineDragHint =>
+      'অনুশীলনে, আর রেকর্ডে শুরু করার আগে, লাইনের বাঁ দিকের তীরটি উপরে বা নিচে টেনেও সরাতে পারেন।';
 }

@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Hapus permanen \"{title}\"? Ini tidak bisa dibatalkan.",
   "deleteForeverTakes": "Take-nya yang disimpan di aplikasi juga ikut terhapus.",
   "purchasePending": "Pembayaran tertunda. APrompter Unlimited terbuka otomatis setelah pembayaran disetujui.",
-  "positionHintFloat": "Jendela melayang bisa diseret ke mana saja dan mengingat posisinya."
+  "positionHintFloat": "Jendela melayang bisa diseret ke mana saja dan mengingat posisinya.",
+  "readingLine": "Posisi garis baca",
+  "readingLineHint": "Kamera HP ada di atas layar: garis yang tinggi menjaga matamu tetap dekat lensa.",
+  "readingLineNearCamera": "Dekat kamera",
+  "readingLineMiddle": "Tengah",
+  "readingLineDragHint": "Di Latihan, dan di Rekam sebelum mulai, kamu juga bisa menyeret panah kiri garis ke atas atau ke bawah."
 }

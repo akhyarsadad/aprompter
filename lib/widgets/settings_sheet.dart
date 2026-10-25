@@ -75,6 +75,8 @@ class _SettingsSheet extends StatefulWidget {
 class _SettingsSheetState extends State<_SettingsSheet> {
   late PrompterSettings _s = widget.initial;
 
+  static const _previewHeight = 150.0;
+
   void _update(PrompterSettings s) {
     setState(() => _s = s);
     widget.onChanged(s);
@@ -124,7 +126,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
           children: [
             // Live preview.
             Container(
-              height: 150,
+              height: _previewHeight,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
@@ -147,16 +149,37 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                   Positioned.fill(
                     child: SingleChildScrollView(
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(12),
+                      // Like the prompter, the script starts on the line.
+                      padding: EdgeInsets.fromLTRB(
+                        12,
+                        _previewHeight * _s.guidePosition,
+                        12,
+                        12,
+                      ),
                       child: Transform.flip(
                         flipX: _s.mirror,
                         child: ScriptText(blocks: previewBlocks, settings: _s),
                       ),
                     ),
                   ),
+                  // Where the reading line sits in the prompter; faint when
+                  // its marker is hidden.
+                  Positioned(
+                    key: const ValueKey('preview-reading-guide'),
+                    top: _previewHeight * _s.guidePosition - 2,
+                    left: 0,
+                    right: 0,
+                    child: IgnorePointer(
+                      child: Opacity(
+                        opacity: _s.showGuide ? 1 : 0.4,
+                        child: ReadingGuideLine(color: Color(_s.textColor)),
+                      ),
+                    ),
+                  ),
+                  // At the bottom: the line can sit right at the top.
                   Positioned(
                     right: 8,
-                    top: 6,
+                    bottom: 6,
                     child: Text(
                       l.preview,
                       style: theme.textTheme.labelSmall?.copyWith(
@@ -423,6 +446,7 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                     value: _s.showGuide,
                     onChanged: (v) => _update(_s.copyWith(showGuide: v)),
                   ),
+                  _readingLine(context),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l.mirrorText),
@@ -616,6 +640,67 @@ class _SettingsSheetState extends State<_SettingsSheet> {
       ),
     ),
   );
+
+  /// Where the line being read sits: high keeps the eyes near a phone's
+  /// front camera, the middle suits teleprompter glass. Labels wrap with
+  /// large text and follow the slider's direction in right-to-left languages.
+  Widget _readingLine(BuildContext context) {
+    final l = context.l10n;
+    final small = Theme.of(context).textTheme.bodySmall;
+    String percent(double v) => '${(v * 100).round()}%';
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          MergeSemantics(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(l.readingLine)),
+                    const SizedBox(width: 8),
+                    ExcludeSemantics(child: Text(percent(_s.guidePosition))),
+                  ],
+                ),
+                Slider(
+                  key: const ValueKey('reading-line-slider'),
+                  value: _s.guidePosition.clamp(
+                    PrompterSettings.minGuidePosition,
+                    PrompterSettings.maxGuidePosition,
+                  ),
+                  min: PrompterSettings.minGuidePosition,
+                  max: PrompterSettings.maxGuidePosition,
+                  semanticFormatterCallback: percent,
+                  onChanged: (v) => _update(
+                    _s.copyWith(guidePosition: (v * 100).round() / 100),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Text(l.readingLineNearCamera, style: small)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  l.readingLineMiddle,
+                  textAlign: TextAlign.end,
+                  style: small,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(l.readingLineHint, style: small),
+          if (_s.showGuide) Text(l.readingLineDragHint, style: small),
+        ],
+      ),
+    );
+  }
 
   Widget _slider({
     required String label,

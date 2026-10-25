@@ -66,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _importGate = null;
   }
 
-  // F9: pace changed in the floating window is picked up on return.
+  // F9: pace (and reading line) changed in the floating window is picked up
+  // on return.
   late final _lifecycle = AppLifecycleListener(
     onResume: () {
       AppScope.read(context).reloadSettings();

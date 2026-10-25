@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "למחוק את \"{title}\" לצמיתות? אי אפשר לבטל את הפעולה.",
   "deleteForeverTakes": "גם הטייקים שלו שנשמרו באפליקציה יימחקו.",
   "purchasePending": "התשלום ממתין לאישור. APrompter Unlimited ייפתח אוטומטית ברגע שיאושר.",
-  "positionHintFloat": "אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו."
+  "positionHintFloat": "אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו.",
+  "readingLine": "מיקום קו הקריאה",
+  "readingLineHint": "מצלמת הטלפון נמצאת מעל המסך: קו גבוה שומר את העיניים קרוב לעדשה.",
+  "readingLineNearCamera": "ליד המצלמה",
+  "readingLineMiddle": "אמצע",
+  "readingLineDragHint": "ב\"חזרה\", וב\"צילום\" לפני שמתחילים, אפשר גם לגרור את החץ השמאלי של הקו למעלה או למטה."
 }

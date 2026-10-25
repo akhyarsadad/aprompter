@@ -998,4 +998,21 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'Yüzen pencere her yere sürüklenebilir ve yerini hatırlar.';
+
+  @override
+  String get readingLine => 'Okuma çizgisinin konumu';
+
+  @override
+  String get readingLineHint =>
+      'Telefon kamerası ekranın üstündedir: çizgi yukarıdayken bakışın lense yakın kalır.';
+
+  @override
+  String get readingLineNearCamera => 'Kameraya yakın';
+
+  @override
+  String get readingLineMiddle => 'Orta';
+
+  @override
+  String get readingLineDragHint =>
+      'Prova\'da ve başlamadan önce Kaydet\'te çizginin soldaki okunu yukarı ya da aşağı da sürükleyebilirsin.';
 }

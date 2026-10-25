@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "永久删除“{title}”？删除后无法恢复。",
   "deleteForeverTakes": "保存在应用内的相关片段也会一并删除。",
   "purchasePending": "付款待处理。获批后，APrompter Unlimited 会自动解锁。",
-  "positionHintFloat": "悬浮窗可拖到任意位置并会记住位置。"
+  "positionHintFloat": "悬浮窗可拖到任意位置并会记住位置。",
+  "readingLine": "阅读线位置",
+  "readingLineHint": "手机摄像头在屏幕上方：阅读线越靠上，视线越贴近镜头。",
+  "readingLineNearCamera": "靠近摄像头",
+  "readingLineMiddle": "中间",
+  "readingLineDragHint": "在“排练”中，以及“拍摄”开始前，也可以上下拖动阅读线左侧的箭头。"
 }

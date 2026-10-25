@@ -994,4 +994,21 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get positionHintFloat =>
       'پنجرهٔ شناور هر جایی کشیده می‌شود و جایش را به خاطر می‌سپارد.';
+
+  @override
+  String get readingLine => 'موقعیت خط خواندن';
+
+  @override
+  String get readingLineHint =>
+      'دوربین گوشی بالای صفحه است: خط بالا چشم‌هایتان را نزدیک لنز نگه می‌دارد.';
+
+  @override
+  String get readingLineNearCamera => 'نزدیک دوربین';
+
+  @override
+  String get readingLineMiddle => 'وسط';
+
+  @override
+  String get readingLineDragHint =>
+      'در «تمرین»، و در «ضبط» پیش از شروع، می‌توانید پیکان چپ خط را هم به بالا یا پایین بکشید.';
 }

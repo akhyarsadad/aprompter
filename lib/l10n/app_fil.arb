@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Burahin nang tuluyan ang \"{title}\"? Hindi na ito maibabalik.",
   "deleteForeverTakes": "Mabubura rin ang mga take nito na nasa loob ng app.",
   "purchasePending": "Nakabinbin ang bayad. Awtomatikong mabubuksan ang APrompter Unlimited kapag naaprubahan na ito.",
-  "positionHintFloat": "Puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto."
+  "positionHintFloat": "Puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto.",
+  "readingLine": "Puwesto ng linya ng pagbasa",
+  "readingLineHint": "Nasa itaas ng screen ang camera ng phone: kapag mataas ang linya, malapit sa lens ang mga mata mo.",
+  "readingLineNearCamera": "Malapit sa camera",
+  "readingLineMiddle": "Gitna",
+  "readingLineDragHint": "Sa Mag-ensayo, at sa I-record bago ka magsimula, puwede mo ring i-drag pataas o pababa ang kaliwang arrow ng linya."
 }

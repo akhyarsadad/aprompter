@@ -651,6 +651,13 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                             ),
                       onWpmChanged: (v) =>
                           state.updateSettings(settings.copyWith(wpm: v)),
+                      // Set before a take; during one, a hand holding the
+                      // phone must not move the line by accident (like R12).
+                      onGuidePositionChanged: _recording
+                          ? null
+                          : (v) => state.updateSettings(
+                              state.settings.copyWith(guidePosition: v),
+                            ),
                     ),
                   ),
                   Positioned(

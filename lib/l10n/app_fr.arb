@@ -277,5 +277,10 @@
   "deleteForeverConfirm": "Supprimer définitivement « {title} » ? Cette action est irréversible.",
   "deleteForeverTakes": "Ses prises conservées dans l'appli seront aussi supprimées.",
   "purchasePending": "Paiement en attente. APrompter Unlimited se débloque automatiquement dès qu'il est approuvé.",
-  "positionHintFloat": "La fenêtre flottante se déplace partout et retient sa place."
+  "positionHintFloat": "La fenêtre flottante se déplace partout et retient sa place.",
+  "readingLine": "Position de la ligne de lecture",
+  "readingLineHint": "La caméra du téléphone est au-dessus de l'écran : une ligne haute garde votre regard près de l'objectif.",
+  "readingLineNearCamera": "Près de la caméra",
+  "readingLineMiddle": "Milieu",
+  "readingLineDragHint": "Dans Répéter, et dans Filmer avant de commencer, vous pouvez aussi faire glisser la flèche gauche de la ligne vers le haut ou le bas."
 }
