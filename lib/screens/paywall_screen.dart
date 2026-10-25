@@ -16,11 +16,33 @@ import '../services/purchase_service.dart';
 /// launch before showing the plans anyway.
 const storeAnswerTimeout = Duration(seconds: 3);
 
+/// The upgrade flow under way for an [Entitlements], waiting for the store
+/// or showing the plans. Keyed by the instance, so each app (and each
+/// widget test) has its own.
+final _flowsUnderWay = Expando<Future<bool>>();
+
 /// Shows the plan picker. Returns true once the person ends up unlimited
-/// (bought, restored, or already was). There is no sign-in: a purchase
-/// belongs to the store account and comes back with "Restore purchases".
-Future<bool> showUpgradeFlow(BuildContext context) async {
+/// (bought, restored, or already was), for the caller to carry on with what
+/// it was doing. There is no sign-in: a purchase belongs to the store
+/// account and comes back with "Restore purchases".
+///
+/// A call while the flow is already under way (a second tap during the
+/// wait for the store, a share arriving meanwhile) joins it instead of
+/// stacking a second sheet: it waits for that flow to end and returns
+/// false, as the first caller is the one that carries on.
+Future<bool> showUpgradeFlow(BuildContext context) {
   final entitlements = EntitlementsScope.read(context);
+  final underWay = _flowsUnderWay[entitlements];
+  if (underWay != null) return underWay.then((_) => false);
+  final flow = _upgradeFlow(context, entitlements);
+  _flowsUnderWay[entitlements] = flow;
+  return flow.whenComplete(() => _flowsUnderWay[entitlements] = null);
+}
+
+Future<bool> _upgradeFlow(
+  BuildContext context,
+  Entitlements entitlements,
+) async {
   if (!entitlements.isKnown) {
     // Right after launch RevenueCat may not have answered yet: a subscriber
     // who shares a note or taps quickly mustn't be offered what they own.

@@ -189,6 +189,17 @@ Future<void> _openPlans(WidgetTester tester) async {
   expect(find.text(_en.upgradeTitle), findsOneWidget);
 }
 
+/// Unlimited after tapping New script: the plans are gone and the person
+/// is on to the templates, once, over the library. (A second pop of the
+/// plans would have closed the templates instead.)
+void _expectOnToTemplates() {
+  expect(find.text(_en.upgradeTitle), findsNothing);
+  expect(find.text(_en.startFromTemplate), findsOneWidget);
+  expect(find.byType(BottomSheet), findsOneWidget);
+  expect(find.byType(HomeScreen), findsOneWidget);
+  expect(find.text(_en.newScript), findsOneWidget);
+}
+
 void main() {
   group('Entitlements', () {
     test('built directly, it is known at once', () {
@@ -278,9 +289,59 @@ void main() {
     entitlements.setUnlimited(true);
     await tester.pumpAndSettle();
 
+    _expectOnToTemplates();
+  });
+
+  testWidgets('a subscriber who taps New script before the store answers '
+      'goes on to the templates once it does', (tester) async {
+    _store(tester);
+    final (state, entitlements) = await _pump(tester, known: false);
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump(const Duration(milliseconds: 1500));
+    expect(find.byType(BottomSheet), findsNothing);
+
+    entitlements.setUnlimited(true);
+    entitlements.markKnown();
+    await tester.pumpAndSettle();
+
+    _expectOnToTemplates();
+    expect(state.scripts, hasLength(2));
+  });
+
+  testWidgets('tapping New script again while the store has not answered '
+      'shows one paywall, and goes on to the templates once', (tester) async {
+    _store(tester);
+    final (_, entitlements) = await _pump(tester, known: false);
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.tap(find.byIcon(Icons.add)); // nothing seemed to happen
+    await tester.pump(const Duration(milliseconds: 300));
+
+    entitlements.markKnown(); // free after all
+    await tester.pumpAndSettle();
+    expect(find.byType(BottomSheet), findsOneWidget);
+    expect(find.text(_en.upgradeTitle), findsOneWidget);
+
+    entitlements.setUnlimited(true); // bought
+    await tester.pumpAndSettle();
+    _expectOnToTemplates();
+  });
+
+  testWidgets('declining the one paywall of a double tap leaves the library', (
+    tester,
+  ) async {
+    _store(tester);
+    final (_, entitlements) = await _pump(tester, known: false);
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.tap(find.byIcon(Icons.add));
+    entitlements.markKnown();
+    await tester.pumpAndSettle();
+
+    await tester.binding.handlePopRoute(); // back: not now
+    await tester.pumpAndSettle();
     expect(find.byType(BottomSheet), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.text(_en.newScript), findsOneWidget);
   });
 
   // RevenueCat's listener can report a purchase before the purchase call
@@ -309,9 +370,7 @@ void main() {
       await tester.pump(const Duration(seconds: 2));
       await tester.pumpAndSettle();
 
-      expect(find.byType(BottomSheet), findsNothing);
-      expect(find.byType(HomeScreen), findsOneWidget);
-      expect(find.text(_en.newScript), findsOneWidget);
+      _expectOnToTemplates();
     });
   }
 
@@ -334,7 +393,7 @@ void main() {
     // Approved later: RevenueCat's listener reports it.
     entitlements.setUnlimited(true);
     await tester.pumpAndSettle();
-    expect(find.byType(BottomSheet), findsNothing);
+    _expectOnToTemplates();
   });
 
   testWidgets('buying a plan the store account already owns restores it '
@@ -358,8 +417,7 @@ void main() {
     expect(restored, 1);
     expect(entitlements.isUnlimited, isTrue);
     expect(find.text(_en.purchaseFailed), findsNothing);
-    expect(find.byType(BottomSheet), findsNothing);
-    expect(find.byType(HomeScreen), findsOneWidget);
+    _expectOnToTemplates();
   });
 
   testWidgets('a purchase that really fails still says so', (tester) async {
@@ -396,5 +454,83 @@ void main() {
     expect(find.text(_en.upgradeTitle), findsNothing);
     expect(find.text(_en.importFreeLimit(maxFreeScripts)), findsOneWidget);
     expect(state.scripts, hasLength(2)); // welcome + their own, nothing new
+  });
+
+  /// Batch one of a share at pump time, declined: the run that asked ends.
+  Future<(AppState, Entitlements, _FakeShares)> declineFirstBatch(
+    WidgetTester tester,
+  ) async {
+    _store(tester);
+    final shares = _FakeShares(tester);
+    shares.pending.add({'subject': 'Part one', 'text': 'First note.'});
+    final (state, entitlements) = await _pump(tester);
+    expect(find.text(_en.upgradeTitle), findsOneWidget);
+    await tester.binding.handlePopRoute(); // back: not now
+    await tester.pumpAndSettle();
+    expect(find.byType(BottomSheet), findsNothing);
+    expect(find.text(_en.importFreeLimit(maxFreeScripts)), findsOneWidget);
+    return (state, entitlements, shares);
+  }
+
+  testWidgets('the rest of a share that native code reads after the paywall '
+      'was declined gets the same answer, without asking again', (
+    tester,
+  ) async {
+    final (state, _, shares) = await declineFirstBatch(tester);
+
+    // A slow cloud download: native reads the next file only now.
+    await tester.pump(const Duration(seconds: 5));
+    shares.pending.add({'subject': 'Part two', 'text': 'Second note.'});
+    await shares.announce();
+    expect(shares.takes, 2);
+    expect(find.byType(BottomSheet), findsNothing);
+    expect(find.text(_en.upgradeTitle), findsNothing);
+
+    // The free-limit note was not queued a second time either.
+    await tester.pump(const Duration(seconds: 9));
+    await tester.pumpAndSettle();
+    expect(find.text(_en.importFreeLimit(maxFreeScripts)), findsNothing);
+    expect(state.scripts, hasLength(2));
+  });
+
+  testWidgets('the rest of a declined share still comes in once Unlimited '
+      'was bought meanwhile', (tester) async {
+    final (state, entitlements, shares) = await declineFirstBatch(tester);
+    entitlements.setUnlimited(true); // from the library menu, say
+    await tester.pumpAndSettle();
+
+    shares.pending.add({'subject': 'Part two', 'text': 'Second note.'});
+    await shares.announce();
+    expect(find.text(_en.upgradeTitle), findsNothing);
+    expect(state.scripts.map((s) => s.title), contains('Part two'));
+  });
+
+  testWidgets('a new share after leaving the app asks again', (tester) async {
+    final (_, _, shares) = await declineFirstBatch(tester);
+
+    // Off to another app to share something else, and back.
+    for (final s in const [
+      AppLifecycleState.inactive,
+      AppLifecycleState.hidden,
+      AppLifecycleState.paused,
+      AppLifecycleState.hidden,
+      AppLifecycleState.inactive,
+      AppLifecycleState.resumed,
+    ]) {
+      tester.binding.handleAppLifecycleStateChanged(s);
+    }
+    shares.pending.add({'subject': 'Another', 'text': 'Another note.'});
+    await shares.announce();
+    expect(find.text(_en.upgradeTitle), findsOneWidget);
+  });
+
+  testWidgets('a new share after a quiet while asks again', (tester) async {
+    final (_, _, shares) = await declineFirstBatch(tester);
+    await tester.pump(const Duration(seconds: 31));
+    await tester.pumpAndSettle();
+
+    shares.pending.add({'subject': 'Another', 'text': 'Another note.'});
+    await shares.announce();
+    expect(find.text(_en.upgradeTitle), findsOneWidget);
   });
 }
