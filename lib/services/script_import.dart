@@ -92,8 +92,14 @@ final class ImportFailed extends ImportResult {
 // Entry points
 
 /// Imports text that was pasted or shared from another app. [title] is the
-/// share's subject (Google Keep sends the note title there).
-ImportResult importFromText(String text, {String? title}) {
+/// share's subject (Google Keep sends the note title there). With
+/// [fromClipboard] a short first line may still name the script, but it is
+/// never taken out of it: what someone copies is what they mean to read.
+ImportResult importFromText(
+  String text, {
+  String? title,
+  bool fromClipboard = false,
+}) {
   // The 2 MB limit applies to the converted script (see _finish); this
   // only keeps a runaway paste from using up memory.
   if (text.length > maxImportBytes) {
@@ -110,6 +116,7 @@ ImportResult importFromText(String text, {String? title}) {
       format: format ?? _Format.plain,
       explicitTitle: title,
       pasted: true,
+      keepFirstLine: fromClipboard,
     );
   } catch (_) {
     return const ImportFailed(ImportFailure.unreadable);
@@ -149,14 +156,18 @@ Future<ImportResult> importFromFileAsync(
 }
 
 /// [importFromText], on a background isolate for very long text.
-Future<ImportResult> importFromTextAsync(String text, {String? title}) async {
-  if (text.length < _backgroundBytes) {
-    return importFromText(text, title: title);
-  }
+Future<ImportResult> importFromTextAsync(
+  String text, {
+  String? title,
+  bool fromClipboard = false,
+}) async {
+  ImportResult run() =>
+      importFromText(text, title: title, fromClipboard: fromClipboard);
+  if (text.length < _backgroundBytes) return run();
   try {
-    return await Isolate.run(() => importFromText(text, title: title));
+    return await Isolate.run(run);
   } catch (_) {
-    return importFromText(text, title: title);
+    return run();
   }
 }
 
@@ -988,6 +999,7 @@ ImportResult _importText(
   String? explicitTitle,
   String? fileName,
   required bool pasted,
+  bool keepFirstLine = false,
 }) {
   // Backups restore the person's own scripts, so like "Restore from a
   // backup" in the library menu they are never held back by the free plan;
@@ -1012,6 +1024,7 @@ ImportResult _importText(
     // Every line of subtitles was said: none of them is a title.
     pasted: pasted && format != _Format.srt && format != _Format.vtt,
     converted: format != _Format.plain,
+    keepFirstLine: keepFirstLine,
   );
 }
 
@@ -1154,6 +1167,7 @@ ImportResult _finish(
   String? fileName,
   required bool pasted,
   required bool converted,
+  bool keepFirstLine = false,
 }) {
   var body = normalizeScriptText(doc.body);
   if (body.length > maxImportChars) {
@@ -1197,7 +1211,7 @@ ImportResult _finish(
   if (title == null && fileName == null && pasted) {
     if (_firstLineTitle(body) case (final t, final rest, final keep)) {
       title = _cleanTitle(t);
-      if (!keep) body = rest;
+      if (!keep && !keepFirstLine) body = rest;
       fromBody = true;
     }
   }

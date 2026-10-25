@@ -215,9 +215,10 @@ void main() {
 
     expect(find.byType(EditorScreen), findsOneWidget);
     expect(_editorTitle(tester), 'Grocery haul');
+    // A paste keeps every line it copied; the first one also names it.
     expect(
       _editorBody(tester),
-      'Hey everyone! Today I show what I bought.\n\n'
+      'Grocery haul\nHey everyone! Today I show what I bought.\n\n'
       '# Fruit\nApples [pause] and *mangoes*.\n#fyp #haul',
     );
     final saved = state.scripts.firstWhere((s) => s.title == 'Grocery haul');

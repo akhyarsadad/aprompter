@@ -480,7 +480,7 @@ Future<void> _pasteAsNewScript(BuildContext context) async {
     messenger.showSnackBar(SnackBar(content: Text(l.clipboardEmpty)));
     return;
   }
-  final result = await importFromTextAsync(text);
+  final result = await importFromTextAsync(text, fromClipboard: true);
   if (!context.mounted) return;
   await _addImports(context, [result]);
 }

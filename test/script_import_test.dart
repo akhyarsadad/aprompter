@@ -1155,6 +1155,16 @@ Hello there
       );
     });
 
+    test('a clipboard paste never loses its first line to the title', () {
+      const text = 'Hey guys\nToday we talk about lenses.';
+      final pasted = _one(importFromText(text, fromClipboard: true));
+      expect(pasted.title, 'Hey guys');
+      expect(pasted.body, text);
+      // Shared from a notes app, the same first line is the note's title.
+      final shared = _one(importFromText(text));
+      expect(shared.body, 'Today we talk about lenses.');
+    });
+
     test('pasted caption-style lines keep their first line', () {
       final s = _one(
         importFromText(
