@@ -102,6 +102,7 @@ class AppLocalizationsFr extends AppLocalizations {
       locale: localeName,
       other: '$count mots',
       one: '1 mot',
+      zero: '0 mot',
     );
     return '$_temp0';
   }
@@ -997,4 +998,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Aucun achat précédent trouvé sur ce compte $store.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Votre téléphone n\'a pas de verrouillage d\'écran, le verrouillage de l\'appli a donc été désactivé.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Supprimer cette prise ? La vidéo ne pourra pas être récupérée.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Supprimer définitivement « $title » ? Cette action est irréversible.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Ses prises conservées dans l\'appli seront aussi supprimées.';
 }

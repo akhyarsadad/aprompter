@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import '../l10n/l10n.dart';
 import '../services/app_state.dart';
 import '../services/storage.dart';
+import '../widgets/confirm_dialog.dart';
 
 /// Deleted scripts, kept for [Storage.trashDays] days so a deletion is
 /// never final by accident.
@@ -58,7 +59,14 @@ class TrashScreen extends StatelessWidget {
                   IconButton(
                     tooltip: l.deleteForever,
                     icon: const Icon(Icons.delete_forever_outlined),
-                    onPressed: () => state.discardDamaged(key),
+                    onPressed: () async {
+                      final sure = await confirmDeletion(
+                        context,
+                        message: l.deleteForeverConfirm(l.damagedData),
+                        action: l.deleteForever,
+                      );
+                      if (sure) await state.discardDamaged(key);
+                    },
                   ),
                 ],
               ),
@@ -98,7 +106,22 @@ class TrashScreen extends StatelessWidget {
                   IconButton(
                     tooltip: l.deleteForever,
                     icon: const Icon(Icons.delete_forever_outlined),
-                    onPressed: () => state.deleteForever(t.script.id),
+                    onPressed: () async {
+                      final name = t.script.title.isEmpty
+                          ? l.untitled
+                          : t.script.title;
+                      final hasTakes = state.takesOf(t.script.id).isNotEmpty;
+                      final sure = await confirmDeletion(
+                        context,
+                        message: [
+                          l.deleteForeverConfirm(name),
+                          // Takes kept in the app go with the script.
+                          if (hasTakes) l.deleteForeverTakes,
+                        ].join('\n\n'),
+                        action: l.deleteForever,
+                      );
+                      if (sure) await state.deleteForever(t.script.id);
+                    },
                   ),
                 ],
               ),

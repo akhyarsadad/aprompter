@@ -990,4 +990,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'No earlier purchase found on this $store account.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Your phone has no screen lock, so app lock was turned off.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Delete this take? The video can\'t be brought back.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Delete \"$title\" for good? It can\'t be brought back.';
+  }
+
+  @override
+  String get deleteForeverTakes => 'Its takes kept in the app are deleted too.';
 }

@@ -21,6 +21,10 @@ class AppLockGate extends StatefulWidget {
   static bool isLocked(BuildContext context) =>
       context.getInheritedWidgetOfExactType<_LockState>()?.locked ?? false;
 
+  /// The phone's fingerprint / face / PIN check; tests put a fake here.
+  @visibleForTesting
+  static LocalAuthentication auth = LocalAuthentication();
+
   @override
   State<AppLockGate> createState() => _AppLockGateState();
 }
@@ -71,18 +75,56 @@ class _AppLockGateState extends State<AppLockGate> {
   Future<void> _unlock() async {
     if (_asking || !mounted) return;
     _asking = true;
+    final reason = context.l10n.unlockReason;
     try {
-      final ok = await LocalAuthentication().authenticate(
-        localizedReason: context.l10n.unlockReason,
+      // Without a screen lock nothing could ever unlock the app: the lock
+      // was removed from the phone since, or app lock came back with the
+      // app's data on a phone that has none. The lock goes off instead of
+      // locking the creator out of their scripts.
+      if (!await _phoneHasLock()) {
+        await _turnOff();
+        return;
+      }
+      final ok = await AppLockGate.auth.authenticate(
+        localizedReason: reason,
         persistAcrossBackgrounding: true,
       );
       if (ok && mounted) setState(() => _locked = false);
+    } on LocalAuthException catch (e) {
+      if (e.code == LocalAuthExceptionCode.noCredentialsSet ||
+          e.code == LocalAuthExceptionCode.noBiometricHardware) {
+        await _turnOff();
+      }
+      // Otherwise (cancelled, too many tries…) stay locked; the button
+      // tries again.
     } catch (_) {
-      // No screen lock any more, or the prompt failed: stay locked; the
-      // button tries again.
+      // The prompt failed: stay locked; the button tries again.
     } finally {
       _asking = false;
     }
+  }
+
+  /// False only when the phone says it has no screen lock: an error is no
+  /// reason to open the app.
+  Future<bool> _phoneHasLock() async {
+    try {
+      return await AppLockGate.auth.isDeviceSupported();
+    } catch (_) {
+      return true;
+    }
+  }
+
+  /// Turns app lock off, opens the app and says why.
+  Future<void> _turnOff() async {
+    if (!mounted) return;
+    final state = AppScope.read(context);
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final message = context.l10n.appLockTurnedOff;
+    await state.setAppLock(false);
+    if (mounted) setState(() => _locked = false);
+    messenger?.showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 8)),
+    );
   }
 
   @override
@@ -129,11 +171,10 @@ class _AppLockGateState extends State<AppLockGate> {
   }
 }
 
-/// Turns app lock on after checking the phone can do it.
+/// Whether app lock can be turned on: the phone has a screen lock.
 Future<bool> canUseAppLock() async {
   try {
-    final auth = LocalAuthentication();
-    return await auth.isDeviceSupported();
+    return await AppLockGate.auth.isDeviceSupported();
   } catch (_) {
     return false;
   }

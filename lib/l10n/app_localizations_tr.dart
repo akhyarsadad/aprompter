@@ -974,4 +974,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Bu $store hesabında önceki bir satın alma bulunamadı.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Telefonunda ekran kilidi yok, bu yüzden uygulama kilidi kapatıldı.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Bu çekim silinsin mi? Video geri getirilemez.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" kalıcı olarak silinsin mi? Geri getirilemez.';
+  }
+
+  @override
+  String get deleteForeverTakes => 'Uygulamada saklanan çekimleri de silinir.';
 }

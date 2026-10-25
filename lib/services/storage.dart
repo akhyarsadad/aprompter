@@ -52,7 +52,17 @@ class Take {
     required this.seconds,
   });
 
+  /// The video's file name in the takes folder. Takes kept by earlier
+  /// versions hold the full path; only its file name is used either way
+  /// (see [fileName]).
   final String path;
+
+  /// The video's file name. iOS moves the app's folder on every App Store
+  /// update, so a full path saved before an update no longer leads to the
+  /// file: it is found again by its name in the takes folder
+  /// (`AppState.takeFile`).
+  String get fileName => path.split(RegExp(r'[/\\]')).last;
+
   final String scriptId;
   final DateTime recordedAt;
   final int seconds;
@@ -296,6 +306,24 @@ class Storage {
             TrashedScript.fromJson(t as Map<String, dynamic>),
         ].where((t) => t.deletedAt.isAfter(cutoff)).toList()
         ..sort((a, b) => b.deletedAt.compareTo(a.deletedAt));
+    } catch (_) {
+      return [];
+    }
+  }
+
+  /// Scripts in "Recently deleted" for longer than [trashDays], which
+  /// [loadTrash] leaves out: their versions and takes are still stored.
+  List<String> loadExpiredTrashIds() {
+    final raw = _prefs.getString(_trashKey);
+    if (raw == null) return [];
+    final cutoff = DateTime.now().subtract(const Duration(days: trashDays));
+    try {
+      return [
+        for (final entry in jsonDecode(raw) as List)
+          if (TrashedScript.fromJson(entry as Map<String, dynamic>) case final t
+              when !t.deletedAt.isAfter(cutoff))
+            t.script.id,
+      ];
     } catch (_) {
       return [];
     }

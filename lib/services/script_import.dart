@@ -10,6 +10,7 @@
 library;
 
 import 'dart:convert';
+import 'dart:io' as io show ZLibCodec;
 import 'dart:isolate';
 import 'dart:math' as math;
 import 'dart:typed_data';
@@ -866,6 +867,7 @@ ImportResult _fromZip(
 ) {
   final Archive zip;
   try {
+    if (_hasHugeLink(bytes)) return const ImportFailed(ImportFailure.tooLarge);
     zip = ZipDecoder().decodeBytes(bytes);
   } catch (_) {
     return const ImportFailed(ImportFailure.unreadable);
@@ -874,8 +876,7 @@ ImportResult _fromZip(
   String? entryText(String path) {
     final file = zip.findFile(path);
     if (file == null || !file.isFile) return null;
-    if (file.size > _maxXmlBytes) throw const _TooLarge();
-    return decodeText(file.content);
+    return decodeText(_readEntry(file, _maxXmlBytes));
   }
 
   try {
@@ -930,6 +931,68 @@ class _TooLarge implements Exception {
   const _TooLarge();
 }
 
+/// Opening a zip already inflates its symbolic links, with no limit; a real
+/// link is a short path, so a zip with a big one is turned away first.
+bool _hasHugeLink(List<int> bytes) {
+  final dir = ZipDirectory()..read(InputMemoryStream(bytes));
+  return dir.fileHeaders.any(
+    (h) =>
+        h.versionMadeBy >> 8 == 3 &&
+        (h.externalFileAttributes >> 16) & 0xF000 == 0xA000 &&
+        h.compressedSize > 4096,
+  );
+}
+
+/// The content of [file] in a zip, at most [limit] bytes. The size a zip
+/// gives for a file can't be trusted — a crafted one says 1 KB and inflates
+/// to gigabytes — so inflating itself stops at the limit ([_TooLarge]).
+Uint8List _readEntry(ArchiveFile file, int limit) {
+  if (file.size > limit) throw const _TooLarge();
+  final raw = file.rawContent;
+  if (raw == null) return Uint8List(0);
+  final data = raw.getStream(decompress: false).toUint8List();
+  switch (file.compression) {
+    case CompressionType.deflate:
+      return _inflate(data, limit);
+    case CompressionType.none || null:
+      if (data.length > limit) throw const _TooLarge();
+      return data;
+    case CompressionType.bzip2:
+      // No notes app, Word or LibreOffice writes these.
+      throw const FormatException('bzip2 in a zip');
+  }
+}
+
+/// Raw deflate [data], inflated a piece at a time up to [limit] bytes.
+Uint8List _inflate(Uint8List data, int limit) {
+  final out = _CappedSink(limit);
+  final input = io.ZLibCodec(raw: true).decoder.startChunkedConversion(out);
+  const piece = 64 * 1024;
+  for (var i = 0; i < data.length; i += piece) {
+    input.addSlice(data, i, math.min(i + piece, data.length), false);
+  }
+  input.close();
+  return out.bytes.takeBytes();
+}
+
+/// Collects inflated bytes; one past the limit throws [_TooLarge], which
+/// stops the inflating.
+class _CappedSink implements Sink<List<int>> {
+  _CappedSink(this.limit);
+
+  final int limit;
+  final bytes = BytesBuilder(copy: false);
+
+  @override
+  void add(List<int> chunk) {
+    if (bytes.length + chunk.length > limit) throw const _TooLarge();
+    bytes.add(chunk);
+  }
+
+  @override
+  void close() {}
+}
+
 /// A zip of notes — a Notion, Bear or Obsidian export, a folder sent from
 /// Files: every note in it becomes a script.
 ImportResult _fromNotesZip(Archive zip, String zipName, int depth) {
@@ -945,14 +1008,25 @@ ImportResult _fromNotesZip(Archive zip, String zipName, int depth) {
     }
     final ext = _extensionOf(path);
     if (!_notesZipExt.contains(ext)) continue;
-    budget -= file.size;
-    if (file.size > maxImportBytes || budget < 0) {
+    final limit = math.min(maxImportBytes, budget);
+    final List<int> content;
+    try {
+      content = _readEntry(file, limit);
+    } on _TooLarge {
       failure ??= ImportFailure.tooLarge;
+      // One that said it was small and wasn't (a zip bomb) used up the work
+      // of reading that much.
+      if (file.size <= limit) budget -= limit;
+      if (budget <= 0) break;
+      continue;
+    } catch (_) {
+      failure ??= ImportFailure.unreadable;
       continue;
     }
+    budget -= content.length;
     final result = _importFile(
       _entryName(parts, ext, zipName),
-      file.content,
+      content,
       depth: depth + 1,
     );
     switch (result) {
@@ -1100,14 +1174,15 @@ String _squash(String s) =>
 }
 
 /// The title of a file named [fileName]: no folder, no extension, no
-/// " (1)" download counter, no Notion page id.
-String? _fileTitle(String fileName) {
-  final base = fileName
+/// " (1)" download counter, no Notion page id. With [keepCounter] a
+/// trailing "(n)" stays: it may be part of the title ("Top 10 tips (2024)").
+String? _fileTitle(String fileName, {bool keepCounter = false}) {
+  var base = fileName
       .split(RegExp(r'[/\\]'))
       .last
       .replaceFirst(RegExp(r'(?<=.)\.[A-Za-z0-9]{1,8}$'), '')
-      .replaceFirst(RegExp(r'\s+[0-9a-f]{32}$'), '')
-      .replaceFirst(RegExp(r'\s*\(\d+\)$'), '');
+      .replaceFirst(RegExp(r'\s+[0-9a-f]{32}$'), '');
+  if (!keepCounter) base = base.replaceFirst(RegExp(r'\s*\(\d+\)$'), '');
   return _cleanTitle(base);
 }
 
@@ -1197,9 +1272,13 @@ ImportResult _finish(
     final fromName = _fileTitle(fileName);
     if (fromName != null) {
       final split = _splitFirstLine(body);
+      // A file APrompter saved is named after the title as it is, "(2024)"
+      // and all; a downloaded copy may add its own " (1)".
+      final stem = _fileTitle(fileName, keepCounter: true);
       if (split != null &&
           split.$2.isNotEmpty &&
-          _namesFile(split.$1, fromName)) {
+          (_namesFile(split.$1, fromName) ||
+              (stem != null && _namesFile(split.$1, stem)))) {
         title = _cleanTitle(split.$1);
         body = split.$2;
         fromBody = true;

@@ -271,5 +271,9 @@
   "subscriptionTerms": "월간 및 연간 플랜은 해지할 때까지 같은 가격으로 자동 갱신돼요. {store} 계정 설정에서 언제든지 해지할 수 있어요. 평생 이용권은 1회 구매예요.",
   "termsOfUse": "이용약관",
   "privacyPolicy": "개인정보 처리방침",
-  "nothingToRestore": "이 {store} 계정에서 이전 구매 내역을 찾지 못했어요."
+  "nothingToRestore": "이 {store} 계정에서 이전 구매 내역을 찾지 못했어요.",
+  "appLockTurnedOff": "휴대폰에 화면 잠금이 없어서 앱 잠금을 껐어요.",
+  "deleteTakeConfirm": "이 테이크를 삭제할까요? 영상은 되돌릴 수 없어요.",
+  "deleteForeverConfirm": "'{title}'을(를) 영구 삭제할까요? 되돌릴 수 없어요.",
+  "deleteForeverTakes": "앱에 보관된 이 대본의 테이크도 함께 삭제돼요."
 }

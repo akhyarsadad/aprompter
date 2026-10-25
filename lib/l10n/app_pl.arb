@@ -271,5 +271,9 @@
   "subscriptionTerms": "Plany miesięczny i roczny odnawiają się automatycznie w tej samej cenie, dopóki ich nie anulujesz. Anuluj w dowolnej chwili w ustawieniach konta {store}. Plan dożywotni to jednorazowy zakup.",
   "termsOfUse": "Warunki korzystania",
   "privacyPolicy": "Polityka prywatności",
-  "nothingToRestore": "Nie znaleziono wcześniejszych zakupów na tym koncie {store}."
+  "nothingToRestore": "Nie znaleziono wcześniejszych zakupów na tym koncie {store}.",
+  "appLockTurnedOff": "Twój telefon nie ma blokady ekranu, więc blokada aplikacji została wyłączona.",
+  "deleteTakeConfirm": "Usunąć to ujęcie? Nagrania nie da się przywrócić.",
+  "deleteForeverConfirm": "Usunąć „{title}” na zawsze? Nie da się tego cofnąć.",
+  "deleteForeverTakes": "Jego ujęcia zapisane w aplikacji też zostaną usunięte."
 }

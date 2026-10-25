@@ -598,5 +598,16 @@
         "type": "String"
       }
     }
-  }
+  },
+  "appLockTurnedOff": "Your phone has no screen lock, so app lock was turned off.",
+  "deleteTakeConfirm": "Delete this take? The video can't be brought back.",
+  "deleteForeverConfirm": "Delete \"{title}\" for good? It can't be brought back.",
+  "@deleteForeverConfirm": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteForeverTakes": "Its takes kept in the app are deleted too."
 }

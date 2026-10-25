@@ -974,4 +974,21 @@ class AppLocalizationsMs extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Tiada pembelian terdahulu ditemui untuk akaun $store ini.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Telefon anda tiada kunci skrin, jadi kunci apl telah dimatikan.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Padam rakaman ini? Video tidak dapat dikembalikan.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Padam \"$title\" selama-lamanya? Ia tidak dapat dikembalikan.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Rakamannya yang disimpan dalam apl juga akan dipadam.';
 }

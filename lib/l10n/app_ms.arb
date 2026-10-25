@@ -271,5 +271,9 @@
   "subscriptionTerms": "Pelan bulanan dan tahunan diperbaharui secara automatik pada harga yang sama sehingga anda membatalkannya. Batalkan bila-bila masa dalam tetapan akaun {store} anda. Seumur hidup ialah pembelian sekali bayar.",
   "termsOfUse": "Terma Penggunaan",
   "privacyPolicy": "Dasar Privasi",
-  "nothingToRestore": "Tiada pembelian terdahulu ditemui untuk akaun {store} ini."
+  "nothingToRestore": "Tiada pembelian terdahulu ditemui untuk akaun {store} ini.",
+  "appLockTurnedOff": "Telefon anda tiada kunci skrin, jadi kunci apl telah dimatikan.",
+  "deleteTakeConfirm": "Padam rakaman ini? Video tidak dapat dikembalikan.",
+  "deleteForeverConfirm": "Padam \"{title}\" selama-lamanya? Ia tidak dapat dikembalikan.",
+  "deleteForeverTakes": "Rakamannya yang disimpan dalam apl juga akan dipadam."
 }

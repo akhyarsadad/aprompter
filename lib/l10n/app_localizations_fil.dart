@@ -102,7 +102,7 @@ class AppLocalizationsFil extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count salita',
-      one: '1 salita',
+      one: '$count salita',
     );
     return '$_temp0';
   }
@@ -113,7 +113,7 @@ class AppLocalizationsFil extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count take',
-      one: '1 take',
+      one: '$count take',
     );
     return '$_temp0';
   }
@@ -189,7 +189,7 @@ class AppLocalizationsFil extends AppLocalizations {
       locale: localeName,
       other:
           '$count mahahabang pangungusap (25+ salita) — hatiin para makahinga',
-      one: '1 mahabang pangungusap (25+ salita) — hatiin para makahinga',
+      one: '$count mahabang pangungusap (25+ salita) — hatiin para makahinga',
     );
     return '$_temp0';
   }
@@ -597,7 +597,7 @@ class AppLocalizationsFil extends AppLocalizations {
       days,
       locale: localeName,
       other: 'Nananatili rito ang mga binurang script nang $days araw.',
-      one: 'Nananatili rito ang mga binurang script nang 1 araw.',
+      one: 'Nananatili rito ang mga binurang script nang $days araw.',
     );
     return '$_temp0';
   }
@@ -630,7 +630,7 @@ class AppLocalizationsFil extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Na-restore ang $count script',
-      one: 'Na-restore ang 1 script',
+      one: 'Na-restore ang $count script',
       zero: 'Nandito na ang lahat ng nasa backup na ito',
     );
     return '$_temp0';
@@ -828,7 +828,7 @@ class AppLocalizationsFil extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Na-import ang $count script',
-      one: 'Na-import ang 1 script',
+      one: 'Na-import ang $count script',
     );
     return '$_temp0';
   }
@@ -840,7 +840,8 @@ class AppLocalizationsFil extends AppLocalizations {
       locale: localeName,
       other:
           'Hanggang $count script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
-      one: 'Hanggang 1 script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
+      one:
+          'Hanggang $count script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
     );
     return '$_temp0';
   }
@@ -997,4 +998,21 @@ class AppLocalizationsFil extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Walang nakitang naunang binili sa $store account na ito.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Walang screen lock ang phone mo, kaya in-off ang lock ng app.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Burahin ang take na ito? Hindi na maibabalik ang video.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Burahin nang tuluyan ang \"$title\"? Hindi na ito maibabalik.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Mabubura rin ang mga take nito na nasa loob ng app.';
 }

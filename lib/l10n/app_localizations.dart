@@ -1780,6 +1780,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No earlier purchase found on this {store} account.'**
   String nothingToRestore(String store);
+
+  /// No description provided for @appLockTurnedOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone has no screen lock, so app lock was turned off.'**
+  String get appLockTurnedOff;
+
+  /// No description provided for @deleteTakeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this take? The video can\'t be brought back.'**
+  String get deleteTakeConfirm;
+
+  /// No description provided for @deleteForeverConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{title}\" for good? It can\'t be brought back.'**
+  String deleteForeverConfirm(String title);
+
+  /// No description provided for @deleteForeverTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Its takes kept in the app are deleted too.'**
+  String get deleteForeverTakes;
 }
 
 class _AppLocalizationsDelegate

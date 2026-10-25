@@ -984,4 +984,20 @@ class AppLocalizationsHe extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'לא נמצאו רכישות קודמות בחשבון $store הזה.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'בטלפון שלך אין נעילת מסך, ולכן נעילת האפליקציה כובתה.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'למחוק את הטייק הזה? לא יהיה אפשר לשחזר את הסרטון.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'למחוק את \"$title\" לצמיתות? אי אפשר לבטל את הפעולה.';
+  }
+
+  @override
+  String get deleteForeverTakes => 'גם הטייקים שלו שנשמרו באפליקציה יימחקו.';
 }

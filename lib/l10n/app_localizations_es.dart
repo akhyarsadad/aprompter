@@ -993,4 +993,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'No se encontraron compras anteriores en esta cuenta de $store.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Tu teléfono no tiene bloqueo de pantalla, así que se desactivó el bloqueo de la app.';
+
+  @override
+  String get deleteTakeConfirm =>
+      '¿Eliminar esta toma? El video no se podrá recuperar.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '¿Eliminar «$title» para siempre? No se podrá recuperar.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'También se eliminarán sus tomas guardadas en la app.';
 }

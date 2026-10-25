@@ -964,4 +964,19 @@ class AppLocalizationsTh extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'ไม่พบการซื้อก่อนหน้าในบัญชี $store นี้';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'โทรศัพท์ของคุณไม่มีล็อกหน้าจอ จึงปิดล็อกแอปแล้ว';
+
+  @override
+  String get deleteTakeConfirm => 'ลบเทคนี้ไหม วิดีโอจะกู้คืนไม่ได้';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'ลบ \"$title\" ถาวรไหม จะกู้คืนไม่ได้';
+  }
+
+  @override
+  String get deleteForeverTakes => 'เทคของสคริปต์นี้ที่เก็บไว้ในแอปจะถูกลบด้วย';
 }

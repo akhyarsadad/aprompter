@@ -971,4 +971,20 @@ class AppLocalizationsFa extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'هیچ خرید قبلی در این حساب $store پیدا نشد.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'گوشی شما قفل صفحه ندارد، برای همین قفل برنامه خاموش شد.';
+
+  @override
+  String get deleteTakeConfirm => 'این برداشت حذف شود؟ ویدیو دیگر برنمی‌گردد.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '«$title» برای همیشه حذف شود؟ دیگر برنمی‌گردد.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'برداشت‌های آن که داخل برنامه مانده‌اند هم حذف می‌شوند.';
 }

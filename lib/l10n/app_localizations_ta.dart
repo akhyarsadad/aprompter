@@ -983,4 +983,21 @@ class AppLocalizationsTa extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'இந்த $store கணக்கில் முந்தைய வாங்குதல் எதுவும் இல்லை.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'உங்கள் ஃபோனில் திரைப் பூட்டு இல்லை, அதனால் ஆப் பூட்டு அணைக்கப்பட்டது.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'இந்த டேக்கை நீக்கவா? வீடியோவைத் திரும்பப் பெற முடியாது.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" ஐ நிரந்தரமாக நீக்கவா? திரும்பப் பெற முடியாது.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'ஆப்பில் வைத்திருக்கும் இதன் டேக்குகளும் நீக்கப்படும்.';
 }

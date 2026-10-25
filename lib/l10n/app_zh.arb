@@ -271,5 +271,9 @@
   "subscriptionTerms": "月度和年度方案会以相同价格自动续订，直到你取消。你可以随时在 {store} 账户设置中取消。终身方案为一次性购买。",
   "termsOfUse": "使用条款",
   "privacyPolicy": "隐私政策",
-  "nothingToRestore": "在此 {store} 账户中未找到以往的购买记录。"
+  "nothingToRestore": "在此 {store} 账户中未找到以往的购买记录。",
+  "appLockTurnedOff": "你的手机没有设置锁屏，所以已关闭应用锁。",
+  "deleteTakeConfirm": "删除这一条片段？视频将无法恢复。",
+  "deleteForeverConfirm": "永久删除“{title}”？删除后无法恢复。",
+  "deleteForeverTakes": "保存在应用内的相关片段也会一并删除。"
 }

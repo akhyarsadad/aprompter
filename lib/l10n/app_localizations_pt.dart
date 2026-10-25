@@ -103,6 +103,7 @@ class AppLocalizationsPt extends AppLocalizations {
       locale: localeName,
       other: '$count palavras',
       one: '1 palavra',
+      zero: '0 palavras',
     );
     return '$_temp0';
   }
@@ -993,4 +994,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Nenhuma compra anterior encontrada nesta conta $store.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Seu celular não tem bloqueio de tela, então o bloqueio do app foi desativado.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Excluir este take? Não será possível recuperar o vídeo.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Excluir \"$title\" para sempre? Não dá para desfazer.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Os takes dele guardados no app também serão excluídos.';
 }

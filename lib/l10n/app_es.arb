@@ -271,5 +271,9 @@
   "subscriptionTerms": "Los planes mensual y anual se renuevan automáticamente al mismo precio hasta que los canceles. Cancela cuando quieras en los ajustes de tu cuenta de {store}. De por vida es un pago único.",
   "termsOfUse": "Términos de uso",
   "privacyPolicy": "Política de privacidad",
-  "nothingToRestore": "No se encontraron compras anteriores en esta cuenta de {store}."
+  "nothingToRestore": "No se encontraron compras anteriores en esta cuenta de {store}.",
+  "appLockTurnedOff": "Tu teléfono no tiene bloqueo de pantalla, así que se desactivó el bloqueo de la app.",
+  "deleteTakeConfirm": "¿Eliminar esta toma? El video no se podrá recuperar.",
+  "deleteForeverConfirm": "¿Eliminar «{title}» para siempre? No se podrá recuperar.",
+  "deleteForeverTakes": "También se eliminarán sus tomas guardadas en la app."
 }

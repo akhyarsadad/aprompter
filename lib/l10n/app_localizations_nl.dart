@@ -998,4 +998,21 @@ class AppLocalizationsNl extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Geen eerdere aankoop gevonden voor dit $store-account.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Je telefoon heeft geen schermvergrendeling, dus de app-vergrendeling is uitgezet.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Deze take verwijderen? De video kan niet worden teruggehaald.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" definitief verwijderen? Dit kan niet ongedaan worden gemaakt.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'De takes ervan die in de app staan, worden ook verwijderd.';
 }

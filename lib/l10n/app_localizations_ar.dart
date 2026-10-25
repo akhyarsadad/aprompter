@@ -1008,4 +1008,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'لم يُعثر على مشتريات سابقة في حساب $store هذا.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'لا يوجد قفل شاشة على هاتفك، لذا تم إيقاف قفل التطبيق.';
+
+  @override
+  String get deleteTakeConfirm => 'حذف هذه اللقطة؟ لا يمكن استعادة الفيديو.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'حذف \"$title\" نهائيًا؟ لا يمكن التراجع عن ذلك.';
+  }
+
+  @override
+  String get deleteForeverTakes => 'ستُحذف أيضًا لقطاته المحفوظة في التطبيق.';
 }

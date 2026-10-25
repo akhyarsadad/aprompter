@@ -103,6 +103,7 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count शब्द',
       one: '1 शब्द',
+      zero: '0 शब्द',
     );
     return '$_temp0';
   }
@@ -990,4 +991,20 @@ class AppLocalizationsHi extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'इस $store खाते पर कोई पिछली खरीद नहीं मिली।';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'आपके फ़ोन में कोई स्क्रीन लॉक नहीं है, इसलिए ऐप लॉक बंद कर दिया गया।';
+
+  @override
+  String get deleteTakeConfirm =>
+      'यह टेक हटाएँ? वीडियो वापस नहीं लाया जा सकेगा।';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" को हमेशा के लिए हटाएँ? इसे वापस नहीं लाया जा सकेगा।';
+  }
+
+  @override
+  String get deleteForeverTakes => 'ऐप में रखे इसके टेक भी हट जाएँगे।';
 }

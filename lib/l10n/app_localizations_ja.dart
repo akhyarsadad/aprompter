@@ -952,4 +952,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'この$storeアカウントには以前の購入が見つかりませんでした。';
   }
+
+  @override
+  String get appLockTurnedOff => 'この端末に画面ロックが設定されていないため、アプリのロックをオフにしました。';
+
+  @override
+  String get deleteTakeConfirm => 'このテイクを削除しますか？動画は元に戻せません。';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '「$title」を完全に削除しますか？元に戻せません。';
+  }
+
+  @override
+  String get deleteForeverTakes => 'アプリ内に保存したこの台本のテイクも削除されます。';
 }

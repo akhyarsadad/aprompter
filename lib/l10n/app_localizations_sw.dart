@@ -993,4 +993,21 @@ class AppLocalizationsSw extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Hakuna ununuzi wa awali uliopatikana kwenye akaunti hii ya $store.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Simu yako haina kifunga skrini, kwa hiyo kufunga programu kumezimwa.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Ufute picha hii? Video haitaweza kurejeshwa.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Ufute \"$title\" kabisa? Haitaweza kurejeshwa.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Picha zake zilizohifadhiwa ndani ya programu zitafutwa pia.';
 }
