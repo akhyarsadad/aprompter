@@ -12,20 +12,71 @@ do it. Work top to bottom; each step says where.
       Payments profile) so you can sell in-app products.
 - [ ] **RevenueCat** account (free tier is enough to start).
 
-## 1. Signing
+## 1. Signing and release builds
 
-- [ ] **Android:** create the upload keystore once and write `android/key.properties`
-      (format in `android/app/build.gradle.kts`). Never commit either; back the keystore up.
-      Without it, release builds are signed with the debug key and Play rejects them.
-- [ ] Enrol in **Play App Signing** when you create the app in the Play Console.
-- [ ] **iOS:** open `ios/Runner.xcworkspace` in Xcode. For **both** targets, *Runner* and
-      *ShareExtension*: *Signing & Capabilities* → pick your Team (automatic signing).
-      Both already declare the App Group `group.com.akhyarsadad.aprompter`; Xcode registers it
-      for both app ids on first build. Archive with `flutter build ipa` using **Xcode 26 or
-      later** (App Store Connect only accepts builds made with the current iOS SDK).
-- [ ] **Android upload:** build with `flutter build appbundle --release` and upload
-      `build/app/outputs/bundle/release/app-release.aab`. Play doesn't accept APKs for new apps;
-      the APK from CI is only for installing on your own phone.
+Store builds are made by GitHub Actions (`.github/workflows/release.yml`), so you never sign
+on your own computer. You add a few **repository secrets** once: GitHub → the repo →
+**Settings → Secrets and variables → Actions → New repository secret**. Secrets are encrypted
+and never shown again, not even to you.
+
+### Android (Google Play)
+
+- [ ] **Create the upload key** on any Mac, in Terminal (nothing to install):
+      ```bash
+      mkdir -p ~/aprompter-keys && cd ~/aprompter-keys
+      openssl req -x509 -newkey rsa:2048 -nodes -days 10000 -subj "/CN=APrompter upload key" -keyout upload.key -out upload.crt
+      openssl pkcs12 -export -name upload -inkey upload.key -in upload.crt -out aprompter-upload.p12
+      rm upload.key upload.crt
+      base64 -i aprompter-upload.p12 | pbcopy
+      ```
+      The export asks for a password twice (letters and numbers only). The last line copies
+      the key, as text, to the clipboard.
+- [ ] Secrets: **`ANDROID_KEYSTORE_BASE64`** = paste the clipboard; **`ANDROID_KEYSTORE_PASSWORD`**
+      = that password.
+- [ ] **Back up** `aprompter-upload.p12` and its password (password manager, iCloud Drive, USB).
+      Never commit or share them.
+- [ ] When you create the app in the Play Console, keep **Play App Signing** on (the default).
+      Google then holds the real app-signing key; yours only proves uploads come from you,
+      and Google can reset it if it is ever lost.
+
+### iPhone (TestFlight and the App Store)
+
+Apple signs the app in the cloud with an App Store Connect API key, so there is no
+certificate, provisioning profile or Mac work. All in a browser:
+
+- [ ] **Agreements:** accept any pending agreement on developer.apple.com and in App Store
+      Connect → *Business*.
+- [ ] **Team ID:** developer.apple.com/account → *Membership details* → the 10-character Team ID.
+- [ ] **App Group:** developer.apple.com → *Certificates, Identifiers & Profiles* →
+      *Identifiers* → **+** → *App Groups* → identifier `group.com.akhyarsadad.aprompter`.
+- [ ] **App IDs:** *Identifiers* → **+** → *App IDs* → *App*, Explicit bundle ID
+      `com.akhyarsadad.aprompter`, tick **App Groups** → Register. Open it → App Groups →
+      *Configure* → tick `group.com.akhyarsadad.aprompter` → Save. Repeat for
+      `com.akhyarsadad.aprompter.ShareExtension`.
+- [ ] **App record:** App Store Connect → *Apps* → **+** → *New App* → iOS, name APrompter,
+      bundle ID `com.akhyarsadad.aprompter`, SKU `aprompter`.
+- [ ] **API key:** App Store Connect → *Users and Access* → *Integrations* → *App Store Connect
+      API* (click *Request Access* first if shown) → **Team Keys** → *Generate API Key*, access
+      **Admin** (lower roles can't cloud-sign). Note the **Issuer ID** and **Key ID**, and
+      download the `.p8` file (possible only once).
+- [ ] Secrets: **`APPLE_TEAM_ID`**, **`ASC_ISSUER_ID`**, **`ASC_KEY_ID`**, and **`ASC_KEY_P8`**
+      = the whole text of the `.p8` file, including the BEGIN/END lines.
+
+### Running a release build
+
+- [ ] GitHub → **Actions → Release builds → Run workflow** (tick Android, iPhone or both), or
+      push a tag like `v1.0.0-1`. The button only appears once `release.yml` is on the
+      repository's **default branch** (Settings → General → Default branch → `main`, after
+      merging the release PR).
+- [ ] **Android:** the run's artifact `aprompter-play-bundle-N` contains `app-release.aab`.
+      Upload it in the Play Console (*Testing → Internal testing* first). Play doesn't accept
+      APKs for new apps; the APK from normal CI is only for installing on your own phone.
+- [ ] **iPhone:** the job checks your Apple setup first (about a minute) and names anything
+      missing, then builds and uploads. Apple emails you when the build is processed; then
+      App Store Connect → the app → **TestFlight** → *Internal Testing* → add yourself, and
+      install it with the TestFlight app.
+- [ ] Every run uses a new build number automatically. Raise `version:` in `pubspec.yaml`
+      (e.g. `1.0.1+1`) for each new store version.
 
 ## 2. Products and prices
 

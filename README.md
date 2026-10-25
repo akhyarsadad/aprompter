@@ -137,28 +137,15 @@ flutter run            # pick an Android device or iPhone
 flutter test           # unit + widget tests
 ```
 
-Release builds:
+Store builds are made by GitHub Actions: **Actions → Release builds → Run workflow** gives a
+signed Play App Bundle (`.aab`) and uploads the iPhone build to TestFlight. Signing keys live
+in repository secrets, never in the repo; the one-time setup is in
+[`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md) §1.
 
-```bash
-flutter build appbundle --release   # Play Store upload (flutter build apk for side-loading)
-flutter build ipa --release      # needs an Apple developer account / signing team
-```
-
-Android release signing reads `android/key.properties` (git-ignored):
-
-```properties
-storeFile=/absolute/path/to/upload-keystore.jks
-storePassword=…
-keyAlias=upload
-keyPassword=…
-```
-
-Create the keystore once with
-`keytool -genkey -v -keystore upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload`
-and keep it safe — Play updates must be signed with it. Without `key.properties`,
-release builds fall back to the debug key (fine for testing, not for the store).
-For iOS, set your team in Xcode (`ios/Runner.xcworkspace`) for both the *Runner* and
-*ShareExtension* targets.
+Building a store version locally still works the usual way: Android release signing reads
+`android/key.properties` (git-ignored; format in `android/app/build.gradle.kts`) and falls
+back to the debug key without it (fine for testing, not for the store); for iOS, set your
+team in Xcode (`ios/Runner.xcworkspace`) for both the *Runner* and *ShareExtension* targets.
 
 ### Permissions
 
