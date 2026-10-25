@@ -238,6 +238,7 @@
   "importLinkOnly": "Solo llegó un enlace, no el texto. Ábrelo, copia el texto y usa «Pegar como guion nuevo».",
   "importUnreadable": "No se pudo leer. Copia el texto y usa «Pegar como guion nuevo».",
   "saveAsTextFile": "Guardar como archivo de texto",
+  "saveTextFileFailed": "No se pudo crear el archivo de texto. Reinténtalo.",
   "mySetup": "Mi configuración",
   "mySetupHint": "La configuración que guardaste",
   "saveMySetup": "Guardar como mi configuración",

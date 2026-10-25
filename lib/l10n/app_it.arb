@@ -238,6 +238,7 @@
   "importLinkOnly": "È arrivato solo un link, non il testo. Aprilo, copia il testo e usa \"Incolla come nuovo copione\".",
   "importUnreadable": "Impossibile leggerlo. Copia il testo e usa \"Incolla come nuovo copione\".",
   "saveAsTextFile": "Salva come file di testo",
+  "saveTextFileFailed": "Impossibile creare il file di testo. Riprova.",
   "mySetup": "La mia configurazione",
   "mySetupHint": "La configurazione che hai salvato",
   "saveMySetup": "Salva come mia configurazione",

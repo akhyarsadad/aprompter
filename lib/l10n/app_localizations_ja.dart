@@ -834,6 +834,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get saveAsTextFile => 'テキストファイルとして保存';
 
   @override
+  String get saveTextFileFailed => 'テキストファイルを作成できませんでした。もう一度お試しください。';
+
+  @override
   String get mySetup => 'マイ設定';
 
   @override

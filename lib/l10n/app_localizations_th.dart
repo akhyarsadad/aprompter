@@ -844,6 +844,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get saveAsTextFile => 'บันทึกเป็นไฟล์ข้อความ';
 
   @override
+  String get saveTextFileFailed => 'สร้างไฟล์ข้อความไม่ได้ ลองอีกครั้ง';
+
+  @override
   String get mySetup => 'ค่าของฉัน';
 
   @override

@@ -864,6 +864,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get saveAsTextFile => 'שמירה כקובץ טקסט';
 
   @override
+  String get saveTextFileFailed => 'לא ניתן ליצור את קובץ הטקסט. נסו שוב.';
+
+  @override
   String get mySetup => 'ההגדרה שלי';
 
   @override

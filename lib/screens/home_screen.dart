@@ -521,6 +521,10 @@ Future<void> _importFiles(BuildContext context) async {
 /// Adds imported scripts to the library. Each new script respects the free
 /// plan like New script does; one script opens in the editor, several are
 /// counted, and anything that failed says why and what to do.
+///
+/// Backups merge without the free-plan check, like "Restore from a backup"
+/// in the library menu, which takes the very same file: they bring back the
+/// person's own scripts.
 Future<void> _addImports(
   BuildContext context,
   List<ImportResult> results,
@@ -529,7 +533,8 @@ Future<void> _addImports(
   final state = AppScope.read(context);
   final entitlements = EntitlementsScope.read(context);
   final messenger = ScaffoldMessenger.of(context);
-  final added = <Script>[];
+  final shown = <Script>[]; // what this import brought, new or already here
+  var created = 0;
   int? restored;
   ImportFailure? failure;
   var askedToUpgrade = false;
@@ -541,7 +546,6 @@ Future<void> _addImports(
   );
 
   for (final result in results) {
-    if (blocked) break;
     switch (result) {
       case ImportFailed(:final reason):
         failure ??= reason;
@@ -550,28 +554,38 @@ Future<void> _addImports(
       case ImportedScripts(:final scripts):
         for (final imported in scripts) {
           final title = imported.title ?? '';
-          // The same note shared twice opens the copy already here.
+          // The same note shared twice opens the copy already here. An
+          // import without a title was saved as "Untitled" by the editor.
           final existing = state.scripts
-              .where((s) => s.title == title && s.body == imported.body)
+              .where(
+                (s) =>
+                    s.body == imported.body &&
+                    (s.title == title ||
+                        (title.isEmpty && s.title == l.untitled)),
+              )
               .firstOrNull;
           if (existing != null) {
-            added.add(existing);
+            if (!shown.any((s) => s.id == existing.id)) shown.add(existing);
             continue;
           }
+          // Past the free plan nothing new is added, but backups and
+          // failures later in the batch still come through.
+          if (blocked) continue;
           if (!canAdd() && !askedToUpgrade && context.mounted) {
             askedToUpgrade = true;
             await showUpgradeFlow(context);
           }
           if (!canAdd()) {
             blocked = true;
-            break;
+            continue;
           }
           final script = Storage.newScript().copyWith(
             title: title,
             body: imported.body,
           );
           await state.upsert(script);
-          added.add(script);
+          shown.add(script);
+          created++;
         }
     }
   }
@@ -590,16 +604,19 @@ Future<void> _addImports(
         duration: long,
       ),
     );
-  } else if (failure != null) {
+  }
+  if (failure != null) {
     messenger.showSnackBar(
       SnackBar(content: Text(_failureText(l, failure)), duration: long),
     );
   }
-  if (added.length == 1) {
-    _edit(context, added.single);
-  } else if (added.length > 1) {
+  if (shown.length == 1) {
+    // Already open (shared again while editing it): that editor stays the
+    // only one, so it can't be overwritten by an older copy.
+    if (!EditorScreen.isOpen(shown.single.id)) _edit(context, shown.single);
+  } else if (created > 0) {
     messenger.showSnackBar(
-      SnackBar(content: Text(l.importedNewScripts(added.length))),
+      SnackBar(content: Text(l.importedNewScripts(created))),
     );
   }
 }
@@ -705,22 +722,27 @@ class _ScriptCard extends StatelessWidget {
         // gives the same script back.
         final box = context.findRenderObject() as RenderBox?;
         final name = textFileName(script.title, fallback: l.untitled);
-        await SharePlus.instance.share(
-          ShareParams(
-            title: script.title.isEmpty ? l.untitled : script.title,
-            files: [
-              XFile.fromData(
-                utf8.encode(scriptAsText(script.title, script.body)),
-                mimeType: 'text/plain',
-                name: name,
-              ),
-            ],
-            fileNameOverrides: [name],
-            sharePositionOrigin: box == null
-                ? null
-                : box.localToGlobal(Offset.zero) & box.size,
-          ),
-        );
+        try {
+          await SharePlus.instance.share(
+            ShareParams(
+              title: script.title.isEmpty ? l.untitled : script.title,
+              files: [
+                XFile.fromData(
+                  utf8.encode(scriptAsText(script.title, script.body)),
+                  mimeType: 'text/plain',
+                  name: name,
+                ),
+              ],
+              fileNameOverrides: [name],
+              sharePositionOrigin: box == null
+                  ? null
+                  : box.localToGlobal(Offset.zero) & box.size,
+            ),
+          );
+        } catch (_) {
+          // The temporary file couldn't be written (storage full…).
+          messenger.showSnackBar(SnackBar(content: Text(l.saveTextFileFailed)));
+        }
       case _Action.caption:
         if (!ensureSpeakable(context, script)) return;
         await Clipboard.setData(ClipboardData(text: captionText(script.body)));

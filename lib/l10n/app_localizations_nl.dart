@@ -875,6 +875,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get saveAsTextFile => 'Opslaan als tekstbestand';
 
   @override
+  String get saveTextFileFailed =>
+      'Kan het tekstbestand niet maken. Probeer het opnieuw.';
+
+  @override
   String get mySetup => 'Mijn opstelling';
 
   @override

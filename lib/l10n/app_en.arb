@@ -509,6 +509,7 @@
   "importLinkOnly": "Only a link came through, not the text. Open it, copy the text and use Paste as new script.",
   "importUnreadable": "Couldn't read that. Copy the text and use Paste as new script.",
   "saveAsTextFile": "Save as text file",
+  "saveTextFileFailed": "Couldn't create the text file. Try again.",
   "mySetup": "My setup",
   "mySetupHint": "The setup you saved",
   "saveMySetup": "Save as my setup",

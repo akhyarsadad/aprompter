@@ -889,6 +889,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get saveAsTextFile => 'Зберегти як текстовий файл';
 
   @override
+  String get saveTextFileFailed =>
+      'Не вдалося створити текстовий файл. Спробуйте ще раз.';
+
+  @override
   String get mySetup => 'Мої налаштування';
 
   @override

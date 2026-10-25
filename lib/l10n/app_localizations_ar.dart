@@ -887,6 +887,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get saveAsTextFile => 'حفظ كملف نصي';
 
   @override
+  String get saveTextFileFailed => 'تعذّر إنشاء الملف النصي. حاول مرة أخرى.';
+
+  @override
   String get mySetup => 'إعدادي';
 
   @override

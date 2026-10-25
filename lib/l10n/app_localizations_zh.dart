@@ -822,6 +822,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get saveAsTextFile => '另存为文本文件';
 
   @override
+  String get saveTextFileFailed => '无法创建文本文件。请重试。';
+
+  @override
   String get mySetup => '我的设置';
 
   @override
@@ -1753,6 +1756,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get saveAsTextFile => '另存為文字檔';
+
+  @override
+  String get saveTextFileFailed => '無法建立文字檔。請再試一次。';
 
   @override
   String get mySetup => '我的設定';

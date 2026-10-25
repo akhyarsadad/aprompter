@@ -238,6 +238,7 @@
   "importLinkOnly": "Link lang ang dumating, hindi ang text. Buksan ito, kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".",
   "importUnreadable": "Hindi ito mabasa. Kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".",
   "saveAsTextFile": "I-save bilang text file",
+  "saveTextFileFailed": "Hindi magawa ang text file. Subukan ulit.",
   "mySetup": "Setup ko",
   "mySetupHint": "Ang setup na na-save mo",
   "saveMySetup": "I-save bilang setup ko",

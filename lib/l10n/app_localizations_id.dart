@@ -850,6 +850,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get saveAsTextFile => 'Simpan sebagai file teks';
 
   @override
+  String get saveTextFileFailed => 'File teks tidak bisa dibuat. Coba lagi.';
+
+  @override
   String get mySetup => 'Setelanku';
 
   @override

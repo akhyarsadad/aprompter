@@ -859,6 +859,10 @@ class AppLocalizationsTa extends AppLocalizations {
   String get saveAsTextFile => 'உரைக் கோப்பாகச் சேமி';
 
   @override
+  String get saveTextFileFailed =>
+      'உரைக் கோப்பை உருவாக்க முடியவில்லை. மீண்டும் முயலவும்.';
+
+  @override
   String get mySetup => 'என் அமைப்பு';
 
   @override

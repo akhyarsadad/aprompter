@@ -238,6 +238,7 @@
   "importLinkOnly": "Chỉ nhận được một liên kết, không có văn bản. Hãy mở nó, sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".",
   "importUnreadable": "Không đọc được. Hãy sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".",
   "saveAsTextFile": "Lưu thành tệp văn bản",
+  "saveTextFileFailed": "Không tạo được tệp văn bản. Hãy thử lại.",
   "mySetup": "Thiết lập của tôi",
   "mySetupHint": "Thiết lập bạn đã lưu",
   "saveMySetup": "Lưu làm thiết lập của tôi",

@@ -876,6 +876,9 @@ class AppLocalizationsFil extends AppLocalizations {
   String get saveAsTextFile => 'I-save bilang text file';
 
   @override
+  String get saveTextFileFailed => 'Hindi magawa ang text file. Subukan ulit.';
+
+  @override
   String get mySetup => 'Setup ko';
 
   @override

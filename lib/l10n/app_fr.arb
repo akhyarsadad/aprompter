@@ -238,6 +238,7 @@
   "importLinkOnly": "Seul un lien est arrivé, pas le texte. Ouvrez-le, copiez le texte et utilisez « Coller comme nouveau script ».",
   "importUnreadable": "Lecture impossible. Copiez le texte et utilisez « Coller comme nouveau script ».",
   "saveAsTextFile": "Enregistrer en fichier texte",
+  "saveTextFileFailed": "Impossible de créer le fichier texte. Réessayez.",
   "mySetup": "Ma config",
   "mySetupHint": "La config que vous avez enregistrée",
   "saveMySetup": "Enregistrer comme ma config",

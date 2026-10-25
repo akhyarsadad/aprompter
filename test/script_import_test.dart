@@ -755,6 +755,24 @@ Hello there
       expect(textFileName('...dots...', fallback: 'x'), 'dots.txt');
       expect(textFileName('a' * 200, fallback: 'x'), '${'a' * 80}.txt');
       expect(textFileName('Видео 🎬', fallback: 'x'), 'Видео 🎬.txt');
+      // Phones allow 255 bytes per name: emoji and CJK take 3–4 each.
+      for (final title in [
+        '😀' * 80,
+        '直播' * 30 + '🎬' * 20,
+        'a${'🇺🇸' * 40}',
+      ]) {
+        final name = textFileName(title, fallback: 'x');
+        expect(utf8.encode(name).length, lessThanOrEqualTo(204), reason: name);
+        expect(name, endsWith('.txt'));
+        expect(
+          name.runes.where((r) => r >= 0x1F1E6 && r <= 0x1F1FF).length.isEven,
+          isTrue,
+        );
+      }
+      expect(
+        textFileName('👨\u200D👩\u200D👧' * 20, fallback: 'x'),
+        isNot(contains('\u200D.txt')),
+      );
     });
 
     test('export then import gives the same title and body', () {
@@ -772,6 +790,14 @@ Hello there
           'Body text.',
         ),
         ('Review', 'Review\nThe body starts with the title word on purpose.'),
+        // Dialogue dashes and typed lists stay; stars in a title stay.
+        ('Диалог', '— Привет, друзья!\n— Сегодня обзор.'),
+        ('Diálogo', '– ¿Listos?\n– ¡Vamos!'),
+        ('Shopping', '- milk\n- eggs\n- bread'),
+        ('*Big* news', 'Body with *emphasis*.'),
+        // Not subtitles, not HTML: just a title that starts that way.
+        ('WEBVTT tips', 'Use captions.'),
+        ('<b> tags', 'Bold in HTML.'),
       ];
       for (final (title, body) in cases) {
         final name = textFileName(title, fallback: 'Untitled');
@@ -784,6 +810,393 @@ Hello there
           importFromText(scriptAsText(title, body), title: title),
         );
         expect((shared.title, shared.body), (title, body));
+      }
+    });
+  });
+
+  group('notes as people really write them', () {
+    test('Word .docx: emoji typed from the emoji panel and text boxes', () {
+      const ns =
+          'xmlns:w="$_w" '
+          'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" '
+          'xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex" '
+          'xmlns:v="urn:schemas-microsoft-com:vml" '
+          'xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"';
+      const document =
+          '<w:document $ns><w:body>'
+          '<w:p><w:r><w:t xml:space="preserve">I love this </w:t></w:r><w:r>'
+          '<mc:AlternateContent><mc:Choice Requires="w16se">'
+          '<w16se:symEx w16se:font="Segoe UI Emoji" w16se:char="1F525"/>'
+          '</mc:Choice><mc:Fallback><w:t>🔥</w:t></mc:Fallback>'
+          '</mc:AlternateContent></w:r><w:r><w:t xml:space="preserve"> so much'
+          '</w:t></w:r></w:p>'
+          '<w:p><w:r><w:t>Before box</w:t></w:r><w:r><mc:AlternateContent>'
+          '<mc:Choice Requires="wps"><w:drawing><wps:wsp><wps:txbx>'
+          '<w:txbxContent><w:p><w:r><w:t>Box text</w:t></w:r></w:p>'
+          '</w:txbxContent></wps:txbx></wps:wsp></w:drawing></mc:Choice>'
+          '<mc:Fallback><w:pict><v:shape><v:textbox><w:txbxContent><w:p><w:r>'
+          '<w:t>Box text</w:t></w:r></w:p></w:txbxContent></v:textbox>'
+          '</v:shape></w:pict></mc:Fallback></mc:AlternateContent></w:r></w:p>'
+          '<w:p><w:r><w:t>After.</w:t></w:r></w:p>'
+          '<w:p><w:r><mc:AlternateContent><mc:Choice Requires="w16se">'
+          '<w16se:symEx w16se:font="Segoe UI Emoji" w16se:char="1F44B"/>'
+          '</mc:Choice></mc:AlternateContent></w:r></w:p>'
+          '</w:body></w:document>';
+      final s = _one(
+        importFromFile('Emoji.docx', _zip({'word/document.xml': document})),
+      );
+      expect(
+        s.body,
+        'I love this 🔥 so much\nBefore box\nBox text\nAfter.\n👋',
+      );
+    });
+
+    test('the 2 MB limit is for the text, not for photos alongside it', () {
+      final photo = 'A' * (3 * 1024 * 1024); // base64 of a phone photo
+      final enex =
+          '<?xml version="1.0" encoding="UTF-8"?><en-export><note>'
+          '<title>Shoot plan</title><content><![CDATA[<en-note><div>Short '
+          'script text.</div><en-media type="image/jpeg" hash="1"/></en-note>]]>'
+          '</content><resource><data encoding="base64">$photo</data>'
+          '<mime>image/jpeg</mime></resource></note></en-export>';
+      final note = _one(importFromFile('Notebook.enex', utf8.encode(enex)));
+      expect((note.title, note.body), ('Shoot plan', 'Short script text.'));
+
+      final html =
+          '<html><body><p>Short text</p>'
+          '<img src="data:image/png;base64,$photo"></body></html>';
+      expect(
+        _one(importFromFile('page.html', utf8.encode(html))).body,
+        'Short text',
+      );
+      expect(
+        _one(
+          importFromFile(
+            'a.rtf',
+            utf8.encode(
+              '{\\rtf1 Hello{\\pict\\pngblip ${'0' * (3 * 1024 * 1024)}}\\par}',
+            ),
+          ),
+        ).body,
+        'Hello',
+      );
+      // Text itself over 2 MB is still too much for one script.
+      expect(
+        _failure(importFromFile('long.md', utf8.encode('word ' * 500000))),
+        ImportFailure.tooLarge,
+      );
+    });
+
+    test('numbered list items wrapping a paragraph keep number and text '
+        'together (Evernote, pasted HTML)', () {
+      const enex =
+          '<?xml version="1.0" encoding="UTF-8"?><en-export><note>'
+          '<title>Steps</title><content><![CDATA[<en-note><div>Intro line.'
+          '</div><ol><li><div>Open the app</div></li><li><div><b>Tap</b> '
+          'record</div></li><li><div></div></li></ol></en-note>]]></content>'
+          '</note></en-export>';
+      expect(
+        _one(importFromFile('n.enex', utf8.encode(enex))).body,
+        'Intro line.\n1. Open the app\n2. *Tap* record\n3.',
+      );
+      expect(
+        _one(
+          importFromText(
+            '<ol><li><p>First step</p></li><li><p>Second step</p></li></ol>',
+          ),
+        ).body,
+        '1. First step\n2. Second step',
+      );
+    });
+
+    test('bold inside a word is not turned into stray stars', () {
+      expect(
+        _one(importFromText('<p><b>Super</b>man and <b>bold</b>.</p>')).body,
+        'Superman and *bold*.',
+      );
+      final md = _one(
+        importFromFile('m.md', utf8.encode('**Super**man and **bold**.')),
+      );
+      expect(md.body, 'Superman and *bold*.');
+      expect(parseScript(md.body).single.spans.map((s) => s.type), [
+        SpanType.text,
+        SpanType.emphasis,
+        SpanType.text,
+      ]);
+    });
+
+    test('Markdown code and escapes are not read as sections or titles', () {
+      final s = _one(
+        importFromFile(
+          'setup.md',
+          utf8.encode(
+            '```bash\n# install deps\nnpm install\n```\n\nThen record.\n'
+            '\\# not a heading\n',
+          ),
+        ),
+      );
+      expect(s.title, 'setup');
+      expect(
+        s.body,
+        '\\# install deps\nnpm install\n\nThen record.\n\\# not a heading',
+      );
+      expect(sectionTitles(s.body), isEmpty);
+    });
+
+    test('"---" dividers around a label are not front matter', () {
+      final pasted = _one(
+        importFromText(
+          '---\nNote: film outside\n---\nHey guys, welcome back!\n'
+          'Today we talk cameras.',
+        ),
+      );
+      expect(pasted.body, contains('Note: film outside'));
+      expect(pasted.body, contains('Hey guys, welcome back!'));
+      // Real front matter still goes, pasted or in a file.
+      final obsidian = _one(
+        importFromText('---\ntags: [vlog]\ncreated: 2026-10-01\n---\nHello.'),
+      );
+      expect(obsidian.body, 'Hello.');
+      final file = _one(
+        importFromFile('n.md', utf8.encode('---\nmood: calm\n---\nHello.')),
+      );
+      expect(file.body, 'Hello.');
+    });
+
+    test('SRT with Windows line ends is recognised without its name', () {
+      const srt =
+          '1\r\n00:00:01,000 --> 00:00:03,500\r\nHey everyone\r\n\r\n'
+          '2\r\n00:00:03,600 --> 00:00:05,000\r\nwelcome back\r\n';
+      expect(_one(importFromText(srt)).body, 'Hey everyone\nwelcome back');
+      final file = _one(importFromFile('subs.txt', utf8.encode(srt)));
+      expect((file.title, file.body), ('subs', 'Hey everyone\nwelcome back'));
+      expect(
+        _one(importFromFile('subs', utf8.encode(srt))).body,
+        'Hey everyone\nwelcome back',
+      );
+    });
+
+    test('subtitles: cues without blank lines, lines said twice', () {
+      expect(
+        _one(
+          importFromFile(
+            'm.srt',
+            utf8.encode(
+              '1\n00:00:01,000 --> 00:00:02,000\nHello\n'
+              '2\n00:00:02,000 --> 00:00:03,000\nWorld\n',
+            ),
+          ),
+        ).body,
+        'Hello\nWorld',
+      );
+      expect(
+        _one(
+          importFromFile(
+            'm.srt',
+            utf8.encode(
+              '1\n00:00:01,000 --> 00:00:02,000\nNo.\n\n'
+              '2\n00:00:02,000 --> 00:00:03,000\nNo.\n\n'
+              '3\n00:00:03,000 --> 00:00:04,000\nStop.\n',
+            ),
+          ),
+        ).body,
+        'No.\nNo.\nStop.',
+      );
+    });
+
+    test('RTF lists from Word, WordPad and TextEdit', () {
+      const word =
+          r"{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Calibri;}"
+          r"{\f3\fnil\fcharset2 Symbol;}}\pard{\pntext\f3\'b7\tab}First item\par"
+          r"{\listtext\f3 \'b7\tab}Second item\par}";
+      expect(
+        _one(importFromFile('list.rtf', utf8.encode(word))).body,
+        'First item\nSecond item',
+      );
+      const textEdit =
+          '{\\rtf1\\ansi\\ansicpg1252\\cocoartf2761\n'
+          '{\\fonttbl\\f0\\fswiss\\fcharset0 Helvetica;}\n'
+          '\\pard\\f0\\fs24 \\cf0 Steps:\\\n{\\listtext\t1.\t}First\\\n'
+          '{\\listtext\t2.\t}Second step\\\n{\\listtext\t\\uc0\\u8226 \t}Dot\\\n}';
+      expect(
+        _one(importFromFile('list.rtf', utf8.encode(textEdit))).body,
+        'Steps:\n1. First\n2. Second step\nDot',
+      );
+    });
+
+    test('RTF in other Windows code pages and font character sets', () {
+      String body(String rtf) =>
+          _one(importFromFile('n.rtf', latin1.encode(rtf))).body;
+      expect(
+        body(r"{\rtf1\ansi\ansicpg1250 Cze\'9c\'e6, \'b3\'f3d\'9f\par}"),
+        'Cześć, łódź',
+      );
+      expect(
+        body(r"{\rtf1\ansi\ansicpg1254 te\'feekk\'fcrler, \'f0\'fd\par}"),
+        'teşekkürler, ğı',
+      );
+      // WordPad on an English Windows: Polish in a Central European font.
+      expect(
+        body(
+          r"{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Arial;}"
+          r"{\f1\fnil\fcharset238 Arial;}}\f0 Caf\'e9 \f1 \'b3\'f3d\'9f\f0 !\par}",
+        ),
+        'Café łódź!',
+      );
+      expect(body(r"{\rtf1\ansi\ansicpg1253 \'e3\'e5\'e9\'e1\par}"), 'γεια');
+      // Japanese bytes can't be read one at a time: say so, no garbage.
+      expect(
+        _failure(
+          importFromText(r"{\rtf1\ansi\ansicpg932 \'82\'b1\'82\'f1\par}"),
+        ),
+        ImportFailure.unreadable,
+      );
+    });
+
+    test('a damaged RTF escape loses that character, not the document', () {
+      expect(
+        _one(importFromText(r"{\rtf1 Hello \'-1 world\par}")).body,
+        'Hello -1 world',
+      );
+      expect(
+        _one(importFromText(r'{\rtf1 Hello \u-70000? world \u9999999? x\par}'))
+            .body,
+        'Hello  world  x',
+      );
+    });
+
+    test('encodings: stray Windows bytes, UTF-16 without a mark, zeros', () {
+      final mixed = [
+        ...utf8.encode('Café ‘quoted’ — naïve résumé'),
+        0x96,
+        ...utf8.encode(' end'),
+      ];
+      expect(decodeText(mixed), 'Café ‘quoted’ — naïve résumé– end');
+      const ru = 'Привет, друзья! Сегодня обзор камеры.\nВторая строка.';
+      const zh = '大家好，今天我们来聊聊相机。\n第二行文字在这里。';
+      expect(_one(importFromFile('ru.txt', _utf16le(ru, bom: false))).body, ru);
+      expect(_one(importFromFile('zh.txt', _utf16le(zh, bom: false))).body, zh);
+      expect(
+        _one(importFromFile('n.txt', utf8.encode('Hello\u0000 world, a note.')))
+            .body,
+        'Hello world, a note.',
+      );
+      expect(
+        _one(importFromFile('pad.txt', [...utf8.encode('Padded.'), 0, 0, 0, 0]))
+            .body,
+        'Padded.',
+      );
+      // Plain text is still plain text, not "UTF-16 Chinese".
+      expect(decodeText(utf8.encode('Hello world')), 'Hello world');
+    });
+
+    test('a note that starts with a tag is not HTML', () {
+      final txt = _one(
+        importFromFile(
+          'notes.txt',
+          utf8.encode('<p> tags wrap paragraphs.\nUse them well.'),
+        ),
+      );
+      expect(txt.body, '<p> tags wrap paragraphs.\nUse them well.');
+      expect(
+        _one(importFromText('<b> is the bold tag in HTML, remember it')).body,
+        '<b> is the bold tag in HTML, remember it',
+      );
+      // A whole web page saved as .txt is still read as HTML.
+      expect(
+        _one(
+          importFromFile(
+            'page.txt',
+            utf8.encode('<!DOCTYPE html><html><body><p>Hi</p></body></html>'),
+          ),
+        ).body,
+        'Hi',
+      );
+    });
+
+    test(
+      'a page without </head>, or with odd style sheets, keeps its text',
+      () {
+        final s = _one(
+          importFromFile(
+            'p.html',
+            utf8.encode(
+              '<html><head><title>Talk</title><meta charset="utf-8">'
+              '<style>{font-weight:bold} .c1{font-weight:700}</style>'
+              '<p>Hello <span class="c1">all</span>.</p></html>',
+            ),
+          ),
+        );
+        expect((s.title, s.body), ('Talk', 'Hello *all*.'));
+      },
+    );
+
+    test('single-file web pages (.mht) from OneNote and Word', () {
+      const mht =
+          'MIME-Version: 1.0\r\nContent-Type: multipart/related;\r\n'
+          '\tboundary="----=_NextPart_01"\r\n\r\n'
+          'This is a multi-part message in MIME format.\r\n\r\n'
+          '------=_NextPart_01\r\nContent-Location: file:///C:/x.htm\r\n'
+          'Content-Transfer-Encoding: quoted-printable\r\n'
+          'Content-Type: text/html; charset="windows-1252"\r\n\r\n'
+          '<html><head><title>OneNote page</title></head><body>'
+          '<p class=3DMsoNormal>Hello from OneNote, this is my scr=\r\nipt. '
+          'Caf=E9 =96 <b>now</b>.</p></body></html>\r\n\r\n'
+          '------=_NextPart_01\r\nContent-Location: file:///C:/image001.png\r\n'
+          'Content-Transfer-Encoding: base64\r\nContent-Type: image/png\r\n\r\n'
+          'iVBORw0KGgo=\r\n\r\n------=_NextPart_01--\r\n';
+      final s = _one(importFromFile('Page.mht', utf8.encode(mht)));
+      expect(s.title, 'OneNote page');
+      expect(s.body, 'Hello from OneNote, this is my script. Café – *now*.');
+      expect(
+        _one(importFromFile('page', utf8.encode(mht))).body,
+        s.body,
+        reason: 'recognised without its extension',
+      );
+    });
+
+    test('pasted caption-style lines keep their first line', () {
+      final s = _one(
+        importFromText(
+          'Stop scrolling right now\nThis trick changes everything\n'
+          'Here is how',
+        ),
+      );
+      expect(s.title, 'Stop scrolling right now');
+      expect(
+        s.body,
+        'Stop scrolling right now\nThis trick changes everything\nHere is how',
+      );
+      // A title line followed by prose is still the note's title.
+      final notes = _one(importFromText('Grocery haul\nHey! I bought fruit.'));
+      expect(
+        (notes.title, notes.body),
+        ('Grocery haul', 'Hey! I bought fruit.'),
+      );
+      // Dividers are not titles.
+      expect(_one(importFromText('---\nHello there\nfriend')).title, isNull);
+    });
+
+    test('broken or hostile files are read in reasonable time', () {
+      final cases = {
+        'page.html': '<html>${"<a'" * 20000}',
+        'quotes.html': '<html>${"<a '>' " * 20000}x',
+        'deep.html': '${'<div>' * 50000}${'</span>' * 50000}',
+        'scripts.html': '<html>${'<script>x ' * 20000}</p>',
+        'bold.md': '**a ' * 15000,
+        'brackets.md': '[' * 60000,
+        'under.md': '__a ' * 15000,
+        'tags.md': '<span ' * 15000,
+      };
+      for (final MapEntry(key: name, value: text) in cases.entries) {
+        final watch = Stopwatch()..start();
+        importFromFile(name, utf8.encode(text));
+        // Each used to take 20–45 s on the UI thread.
+        expect(
+          watch.elapsed,
+          lessThan(const Duration(seconds: 3)),
+          reason: name,
+        );
       }
     });
   });

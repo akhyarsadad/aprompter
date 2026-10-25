@@ -849,6 +849,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get saveAsTextFile => 'টেক্সট ফাইল হিসেবে সেভ করুন';
 
   @override
+  String get saveTextFileFailed =>
+      'টেক্সট ফাইল তৈরি করা যায়নি। আবার চেষ্টা করুন।';
+
+  @override
   String get mySetup => 'আমার সেটআপ';
 
   @override

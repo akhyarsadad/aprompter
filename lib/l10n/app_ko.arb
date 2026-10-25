@@ -238,6 +238,7 @@
   "importLinkOnly": "글이 아니라 링크만 왔어요. 링크를 열어 글을 복사한 뒤 '새 대본으로 붙여넣기'를 사용하세요.",
   "importUnreadable": "읽지 못했어요. 글을 복사해 '새 대본으로 붙여넣기'를 사용하세요.",
   "saveAsTextFile": "텍스트 파일로 저장",
+  "saveTextFileFailed": "텍스트 파일을 만들지 못했어요. 다시 시도하세요.",
   "mySetup": "내 설정",
   "mySetupHint": "저장한 설정",
   "saveMySetup": "내 설정으로 저장",

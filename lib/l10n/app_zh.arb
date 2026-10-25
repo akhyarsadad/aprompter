@@ -238,6 +238,7 @@
   "importLinkOnly": "只收到一个链接，没有文字。请打开它，复制文字后使用“粘贴为新脚本”。",
   "importUnreadable": "无法读取。请复制文字后使用“粘贴为新脚本”。",
   "saveAsTextFile": "另存为文本文件",
+  "saveTextFileFailed": "无法创建文本文件。请重试。",
   "mySetup": "我的设置",
   "mySetupHint": "你保存的设置",
   "saveMySetup": "保存为我的设置",

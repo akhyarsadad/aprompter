@@ -238,6 +238,7 @@
   "importLinkOnly": "只收到一個連結，沒有文字。請開啟它，複製文字後使用「貼上為新腳本」。",
   "importUnreadable": "無法讀取。請複製文字後使用「貼上為新腳本」。",
   "saveAsTextFile": "另存為文字檔",
+  "saveTextFileFailed": "無法建立文字檔。請再試一次。",
   "mySetup": "我的設定",
   "mySetupHint": "你儲存的設定",
   "saveMySetup": "儲存為我的設定",

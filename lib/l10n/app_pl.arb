@@ -238,6 +238,7 @@
   "importLinkOnly": "Dotarł tylko link, bez tekstu. Otwórz go, skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.",
   "importUnreadable": "Nie udało się tego odczytać. Skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.",
   "saveAsTextFile": "Zapisz jako plik tekstowy",
+  "saveTextFileFailed": "Nie udało się utworzyć pliku tekstowego. Spróbuj ponownie.",
   "mySetup": "Moja konfiguracja",
   "mySetupHint": "Zapisana przez ciebie konfiguracja",
   "saveMySetup": "Zapisz jako moją konfigurację",

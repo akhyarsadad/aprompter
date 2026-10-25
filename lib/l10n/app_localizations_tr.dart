@@ -853,6 +853,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get saveAsTextFile => 'Metin dosyası olarak kaydet';
 
   @override
+  String get saveTextFileFailed => 'Metin dosyası oluşturulamadı. Tekrar dene.';
+
+  @override
   String get mySetup => 'Kurulumum';
 
   @override

@@ -853,6 +853,9 @@ class AppLocalizationsMs extends AppLocalizations {
   String get saveAsTextFile => 'Simpan sebagai fail teks';
 
   @override
+  String get saveTextFileFailed => 'Fail teks tidak dapat dibuat. Cuba lagi.';
+
+  @override
   String get mySetup => 'Persediaan saya';
 
   @override

@@ -868,6 +868,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get saveAsTextFile => 'टेक्स्ट फ़ाइल के रूप में सेव करें';
 
   @override
+  String get saveTextFileFailed =>
+      'टेक्स्ट फ़ाइल नहीं बन सकी। फिर से कोशिश करें।';
+
+  @override
   String get mySetup => 'मेरा सेटअप';
 
   @override

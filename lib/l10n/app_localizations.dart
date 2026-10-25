@@ -1577,6 +1577,12 @@ abstract class AppLocalizations {
   /// **'Save as text file'**
   String get saveAsTextFile;
 
+  /// No description provided for @saveTextFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the text file. Try again.'**
+  String get saveTextFileFailed;
+
   /// No description provided for @mySetup.
   ///
   /// In en, this message translates to:

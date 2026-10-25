@@ -238,6 +238,7 @@
   "importLinkOnly": "Yang masuk hanya tautan, bukan teksnya. Buka tautannya, salin teksnya, lalu pakai \"Tempel sebagai naskah baru\".",
   "importUnreadable": "Tidak bisa dibaca. Salin teksnya lalu pakai \"Tempel sebagai naskah baru\".",
   "saveAsTextFile": "Simpan sebagai file teks",
+  "saveTextFileFailed": "File teks tidak bisa dibuat. Coba lagi.",
   "mySetup": "Setelanku",
   "mySetupHint": "Setelan yang kamu simpan",
   "saveMySetup": "Simpan sebagai setelanku",

@@ -870,6 +870,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get saveAsTextFile => 'Salva come file di testo';
 
   @override
+  String get saveTextFileFailed =>
+      'Impossibile creare il file di testo. Riprova.';
+
+  @override
   String get mySetup => 'La mia configurazione';
 
   @override

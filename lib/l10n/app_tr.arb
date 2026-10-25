@@ -238,6 +238,7 @@
   "importLinkOnly": "Metin değil, yalnızca bir bağlantı geldi. Bağlantıyı aç, metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.",
   "importUnreadable": "Okunamadı. Metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.",
   "saveAsTextFile": "Metin dosyası olarak kaydet",
+  "saveTextFileFailed": "Metin dosyası oluşturulamadı. Tekrar dene.",
   "mySetup": "Kurulumum",
   "mySetupHint": "Kaydettiğin kurulum",
   "saveMySetup": "Kurulumum olarak kaydet",

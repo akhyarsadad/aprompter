@@ -851,6 +851,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get saveAsTextFile => 'Lưu thành tệp văn bản';
 
   @override
+  String get saveTextFileFailed => 'Không tạo được tệp văn bản. Hãy thử lại.';
+
+  @override
   String get mySetup => 'Thiết lập của tôi';
 
   @override

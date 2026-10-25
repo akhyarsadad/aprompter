@@ -891,6 +891,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get saveAsTextFile => 'Сохранить как текстовый файл';
 
   @override
+  String get saveTextFileFailed =>
+      'Не удалось создать текстовый файл. Попробуйте ещё раз.';
+
+  @override
   String get mySetup => 'Мои настройки';
 
   @override

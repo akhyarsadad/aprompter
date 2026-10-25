@@ -238,6 +238,7 @@
   "importLinkOnly": "Er kwam alleen een link door, niet de tekst. Open hem, kopieer de tekst en gebruik \"Plakken als nieuw script\".",
   "importUnreadable": "Kan dat niet lezen. Kopieer de tekst en gebruik \"Plakken als nieuw script\".",
   "saveAsTextFile": "Opslaan als tekstbestand",
+  "saveTextFileFailed": "Kan het tekstbestand niet maken. Probeer het opnieuw.",
   "mySetup": "Mijn opstelling",
   "mySetupHint": "De opstelling die je hebt opgeslagen",
   "saveMySetup": "Opslaan als mijn opstelling",

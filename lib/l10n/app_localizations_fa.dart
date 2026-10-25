@@ -850,6 +850,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get saveAsTextFile => 'ذخیره به‌صورت فایل متنی';
 
   @override
+  String get saveTextFileFailed => 'فایل متنی ساخته نشد. دوباره امتحان کنید.';
+
+  @override
   String get mySetup => 'چیدمان من';
 
   @override

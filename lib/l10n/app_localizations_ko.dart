@@ -833,6 +833,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get saveAsTextFile => '텍스트 파일로 저장';
 
   @override
+  String get saveTextFileFailed => '텍스트 파일을 만들지 못했어요. 다시 시도하세요.';
+
+  @override
   String get mySetup => '내 설정';
 
   @override

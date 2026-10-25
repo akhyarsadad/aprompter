@@ -238,6 +238,7 @@
   "importLinkOnly": "Es kam nur ein Link an, nicht der Text. Öffne ihn, kopiere den Text und nutze „Als neues Skript einfügen“.",
   "importUnreadable": "Das konnte nicht gelesen werden. Kopiere den Text und nutze „Als neues Skript einfügen“.",
   "saveAsTextFile": "Als Textdatei speichern",
+  "saveTextFileFailed": "Die Textdatei konnte nicht erstellt werden. Versuch es erneut.",
   "mySetup": "Mein Setup",
   "mySetupHint": "Dein gespeichertes Setup",
   "saveMySetup": "Als mein Setup speichern",

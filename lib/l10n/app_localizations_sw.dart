@@ -871,6 +871,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String get saveAsTextFile => 'Hifadhi kama faili la maandishi';
 
   @override
+  String get saveTextFileFailed =>
+      'Imeshindwa kuunda faili la maandishi. Jaribu tena.';
+
+  @override
   String get mySetup => 'Mpangilio wangu';
 
   @override

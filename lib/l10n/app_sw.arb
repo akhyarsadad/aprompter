@@ -238,6 +238,7 @@
   "importLinkOnly": "Kiungo pekee ndicho kimefika, si maandishi. Kifungue, nakili maandishi na utumie \"Bandika kama hati mpya\".",
   "importUnreadable": "Imeshindwa kusoma. Nakili maandishi na utumie \"Bandika kama hati mpya\".",
   "saveAsTextFile": "Hifadhi kama faili la maandishi",
+  "saveTextFileFailed": "Imeshindwa kuunda faili la maandishi. Jaribu tena.",
   "mySetup": "Mpangilio wangu",
   "mySetupHint": "Mpangilio uliouhifadhi",
   "saveMySetup": "Hifadhi kama mpangilio wangu",

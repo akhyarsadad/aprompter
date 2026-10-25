@@ -851,6 +851,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get saveAsTextFile => 'ٹیکسٹ فائل کے طور پر محفوظ کریں';
 
   @override
+  String get saveTextFileFailed => 'ٹیکسٹ فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
   String get mySetup => 'میرا سیٹ اپ';
 
   @override

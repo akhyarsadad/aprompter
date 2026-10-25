@@ -888,6 +888,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get saveAsTextFile => 'Zapisz jako plik tekstowy';
 
   @override
+  String get saveTextFileFailed =>
+      'Nie udało się utworzyć pliku tekstowego. Spróbuj ponownie.';
+
+  @override
   String get mySetup => 'Moja konfiguracja';
 
   @override

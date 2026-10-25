@@ -238,6 +238,7 @@
   "importLinkOnly": "Só chegou um link, não o texto. Abra-o, copie o texto e use \"Colar como novo roteiro\".",
   "importUnreadable": "Não foi possível ler. Copie o texto e use \"Colar como novo roteiro\".",
   "saveAsTextFile": "Salvar como arquivo de texto",
+  "saveTextFileFailed": "Não foi possível criar o arquivo de texto. Tente de novo.",
   "mySetup": "Minha configuração",
   "mySetupHint": "A configuração que você salvou",
   "saveMySetup": "Salvar como minha configuração",
