@@ -971,4 +971,20 @@ class AppLocalizationsBn extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'এই $store অ্যাকাউন্টে আগের কোনো কেনাকাটা পাওয়া যায়নি।';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'আপনার ফোনে কোনো স্ক্রিন লক নেই, তাই অ্যাপ লক বন্ধ করা হয়েছে।';
+
+  @override
+  String get deleteTakeConfirm =>
+      'এই টেকটি মুছবেন? ভিডিওটি আর ফেরত আনা যাবে না।';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" চিরতরে মুছবেন? এটি আর ফেরত আনা যাবে না।';
+  }
+
+  @override
+  String get deleteForeverTakes => 'অ্যাপে রাখা এর টেকগুলোও মুছে যাবে।';
 }

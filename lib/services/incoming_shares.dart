@@ -13,6 +13,7 @@ class IncomingShare {
     this.mimeType,
     this.bytes,
     this.tooLarge = false,
+    this.unreadable = false,
   });
 
   /// Reads one item of `takePending`; anything malformed is left out.
@@ -34,6 +35,7 @@ class IncomingShare {
           ? Uint8List.fromList(bytes)
           : null,
       tooLarge: map['tooLarge'] == true,
+      unreadable: map['unreadable'] == true,
     );
   }
 
@@ -52,24 +54,40 @@ class IncomingShare {
 
   /// The file was over 10 MB, so its bytes were left behind.
   final bool tooLarge;
+
+  /// Native code couldn't read the file (a cloud file that didn't download,
+  /// a revoked permission…), so there are no bytes.
+  final bool unreadable;
 }
 
 /// Turns what another app sent into scripts. A file wins over text sent
-/// along with it (often just "Shared from …").
+/// along with it (often just "Shared from …"); the text is used when the
+/// file can't be.
 Future<ImportResult> importShare(IncomingShare share) async {
   if (share.tooLarge) return const ImportFailed(ImportFailure.tooLarge);
+  final text = share.text;
   final bytes = share.bytes;
-  if (bytes != null) {
-    return importFromFileAsync(
+  final ImportResult fromFile;
+  if (share.unreadable) {
+    fromFile = const ImportFailed(ImportFailure.unreadable);
+  } else if (bytes != null) {
+    fromFile = await importFromFileAsync(
       share.name ?? '',
       bytes,
       mimeType: share.mimeType,
       title: share.subject,
     );
+  } else if (text != null) {
+    return importFromTextAsync(text, title: share.subject);
+  } else {
+    return const ImportFailed(ImportFailure.empty);
   }
-  final text = share.text;
-  if (text != null) return importFromTextAsync(text, title: share.subject);
-  return const ImportFailed(ImportFailure.empty);
+  if (fromFile is ImportFailed && text != null) {
+    final fromText = await importFromTextAsync(text, title: share.subject);
+    // When the text fails too, the file's reason is the one worth telling.
+    if (fromText is! ImportFailed) return fromText;
+  }
+  return fromFile;
 }
 
 /// Client of the native `aprompter/import` channel. Native code keeps what

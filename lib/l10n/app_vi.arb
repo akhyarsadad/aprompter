@@ -245,7 +245,7 @@
   "resetAllSettings": "Đặt lại mọi cài đặt",
   "runHadJumps": "Bạn đã nhảy qua lại trong lần chạy này nên không thể gợi ý tốc độ.",
   "keepTake": "Giữ",
-  "retake": "Quay lại",
+  "retake": "Quay lần nữa",
   "reviewTakes": "Xem lại từng lần quay",
   "reviewTakesHint": "Xem rồi giữ lại hoặc quay lần nữa",
   "takesToGallery": "Lưu lần quay vào thư viện",
@@ -271,5 +271,9 @@
   "subscriptionTerms": "Gói tháng và gói năm tự động gia hạn với cùng mức giá cho đến khi bạn hủy. Hủy bất cứ lúc nào trong phần cài đặt tài khoản {store} của bạn. Gói trọn đời là giao dịch mua một lần.",
   "termsOfUse": "Điều khoản sử dụng",
   "privacyPolicy": "Chính sách quyền riêng tư",
-  "nothingToRestore": "Không tìm thấy giao dịch mua trước đây trong tài khoản {store} này."
+  "nothingToRestore": "Không tìm thấy giao dịch mua trước đây trong tài khoản {store} này.",
+  "appLockTurnedOff": "Điện thoại của bạn không có khóa màn hình nên khóa ứng dụng đã được tắt.",
+  "deleteTakeConfirm": "Xóa lần quay này? Video sẽ không thể khôi phục.",
+  "deleteForeverConfirm": "Xóa vĩnh viễn \"{title}\"? Không thể khôi phục.",
+  "deleteForeverTakes": "Các lần quay của kịch bản này lưu trong ứng dụng cũng sẽ bị xóa."
 }

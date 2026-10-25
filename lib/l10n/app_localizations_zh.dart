@@ -938,6 +938,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String nothingToRestore(String store) {
     return '在此 $store 账户中未找到以往的购买记录。';
   }
+
+  @override
+  String get appLockTurnedOff => '你的手机没有设置锁屏，所以已关闭应用锁。';
+
+  @override
+  String get deleteTakeConfirm => '删除这一条片段？视频将无法恢复。';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '永久删除“$title”？删除后无法恢复。';
+  }
+
+  @override
+  String get deleteForeverTakes => '保存在应用内的相关片段也会一并删除。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1874,4 +1888,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String nothingToRestore(String store) {
     return '在這個 $store 帳號中找不到先前的購買項目。';
   }
+
+  @override
+  String get appLockTurnedOff => '你的手機沒有設定螢幕鎖定，所以已關閉 App 鎖定。';
+
+  @override
+  String get deleteTakeConfirm => '要刪除這一條片段嗎？影片將無法復原。';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '要永久刪除「$title」嗎？刪除後無法復原。';
+  }
+
+  @override
+  String get deleteForeverTakes => '存放在 App 內的相關片段也會一併刪除。';
 }

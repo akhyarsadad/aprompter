@@ -1011,4 +1011,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'У цьому обліковому записі $store не знайдено попередніх покупок.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'На вашому телефоні немає блокування екрана, тому блокування застосунку вимкнено.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Видалити цей дубль? Відео не можна буде відновити.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Видалити «$title» назавжди? Цю дію не можна скасувати.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Його дублі, збережені в застосунку, теж буде видалено.';
 }

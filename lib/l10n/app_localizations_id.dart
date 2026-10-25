@@ -971,4 +971,21 @@ class AppLocalizationsId extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Tidak ada pembelian sebelumnya di akun $store ini.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'HP kamu tidak punya kunci layar, jadi kunci aplikasi dimatikan.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Hapus take ini? Videonya tidak bisa dikembalikan.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Hapus permanen \"$title\"? Ini tidak bisa dibatalkan.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Take-nya yang disimpan di aplikasi juga ikut terhapus.';
 }

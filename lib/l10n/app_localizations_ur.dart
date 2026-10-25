@@ -972,4 +972,21 @@ class AppLocalizationsUr extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'اس $store اکاؤنٹ میں کوئی سابقہ خریداری نہیں ملی۔';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'آپ کے فون پر کوئی اسکرین لاک نہیں ہے، اس لیے ایپ لاک بند کر دیا گیا۔';
+
+  @override
+  String get deleteTakeConfirm =>
+      'یہ ٹیک حذف کریں؟ ویڈیو واپس نہیں لائی جا سکے گی۔';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" کو ہمیشہ کے لیے حذف کریں؟ اسے واپس نہیں لایا جا سکے گا۔';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'ایپ میں رکھے گئے اس کے ٹیکس بھی حذف ہو جائیں گے۔';
 }

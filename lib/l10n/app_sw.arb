@@ -271,5 +271,9 @@
   "subscriptionTerms": "Mipango ya kila mwezi na kila mwaka hujisasisha kiotomatiki kwa bei ileile hadi utakapoighairi. Ghairi wakati wowote kwenye mipangilio ya akaunti yako ya {store}. Maisha yote ni ununuzi wa mara moja.",
   "termsOfUse": "Masharti ya Matumizi",
   "privacyPolicy": "Sera ya Faragha",
-  "nothingToRestore": "Hakuna ununuzi wa awali uliopatikana kwenye akaunti hii ya {store}."
+  "nothingToRestore": "Hakuna ununuzi wa awali uliopatikana kwenye akaunti hii ya {store}.",
+  "appLockTurnedOff": "Simu yako haina kifunga skrini, kwa hiyo kufunga programu kumezimwa.",
+  "deleteTakeConfirm": "Ufute picha hii? Video haitaweza kurejeshwa.",
+  "deleteForeverConfirm": "Ufute \"{title}\" kabisa? Haitaweza kurejeshwa.",
+  "deleteForeverTakes": "Picha zake zilizohifadhiwa ndani ya programu zitafutwa pia."
 }

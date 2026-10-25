@@ -271,5 +271,9 @@
   "subscriptionTerms": "月額・年額プランは解約するまで同じ価格で自動更新されます。{store}のアカウント設定からいつでも解約できます。買い切りは1回限りの購入です。",
   "termsOfUse": "利用規約",
   "privacyPolicy": "プライバシーポリシー",
-  "nothingToRestore": "この{store}アカウントには以前の購入が見つかりませんでした。"
+  "nothingToRestore": "この{store}アカウントには以前の購入が見つかりませんでした。",
+  "appLockTurnedOff": "この端末に画面ロックが設定されていないため、アプリのロックをオフにしました。",
+  "deleteTakeConfirm": "このテイクを削除しますか？動画は元に戻せません。",
+  "deleteForeverConfirm": "「{title}」を完全に削除しますか？元に戻せません。",
+  "deleteForeverTakes": "アプリ内に保存したこの台本のテイクも削除されます。"
 }

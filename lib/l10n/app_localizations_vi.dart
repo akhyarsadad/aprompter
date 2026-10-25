@@ -873,7 +873,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get keepTake => 'Giữ';
 
   @override
-  String get retake => 'Quay lại';
+  String get retake => 'Quay lần nữa';
 
   @override
   String get reviewTakes => 'Xem lại từng lần quay';
@@ -972,4 +972,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Không tìm thấy giao dịch mua trước đây trong tài khoản $store này.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Điện thoại của bạn không có khóa màn hình nên khóa ứng dụng đã được tắt.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Xóa lần quay này? Video sẽ không thể khôi phục.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Xóa vĩnh viễn \"$title\"? Không thể khôi phục.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Các lần quay của kịch bản này lưu trong ứng dụng cũng sẽ bị xóa.';
 }

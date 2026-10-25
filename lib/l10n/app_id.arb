@@ -271,5 +271,9 @@
   "subscriptionTerms": "Paket bulanan dan tahunan diperpanjang otomatis dengan harga yang sama sampai kamu membatalkannya. Batalkan kapan saja di pengaturan akun {store} kamu. Seumur hidup adalah pembelian sekali bayar.",
   "termsOfUse": "Ketentuan Penggunaan",
   "privacyPolicy": "Kebijakan Privasi",
-  "nothingToRestore": "Tidak ada pembelian sebelumnya di akun {store} ini."
+  "nothingToRestore": "Tidak ada pembelian sebelumnya di akun {store} ini.",
+  "appLockTurnedOff": "HP kamu tidak punya kunci layar, jadi kunci aplikasi dimatikan.",
+  "deleteTakeConfirm": "Hapus take ini? Videonya tidak bisa dikembalikan.",
+  "deleteForeverConfirm": "Hapus permanen \"{title}\"? Ini tidak bisa dibatalkan.",
+  "deleteForeverTakes": "Take-nya yang disimpan di aplikasi juga ikut terhapus."
 }

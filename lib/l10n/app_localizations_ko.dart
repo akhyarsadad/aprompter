@@ -951,4 +951,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String nothingToRestore(String store) {
     return '이 $store 계정에서 이전 구매 내역을 찾지 못했어요.';
   }
+
+  @override
+  String get appLockTurnedOff => '휴대폰에 화면 잠금이 없어서 앱 잠금을 껐어요.';
+
+  @override
+  String get deleteTakeConfirm => '이 테이크를 삭제할까요? 영상은 되돌릴 수 없어요.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\'$title\'을(를) 영구 삭제할까요? 되돌릴 수 없어요.';
+  }
+
+  @override
+  String get deleteForeverTakes => '앱에 보관된 이 대본의 테이크도 함께 삭제돼요.';
 }

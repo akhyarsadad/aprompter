@@ -271,5 +271,9 @@
   "subscriptionTerms": "Maand- en jaarabonnementen worden automatisch verlengd tegen dezelfde prijs tot je opzegt. Zeg op elk moment op in je {store}-accountinstellingen. Levenslang is een eenmalige aankoop.",
   "termsOfUse": "Gebruiksvoorwaarden",
   "privacyPolicy": "Privacybeleid",
-  "nothingToRestore": "Geen eerdere aankoop gevonden voor dit {store}-account."
+  "nothingToRestore": "Geen eerdere aankoop gevonden voor dit {store}-account.",
+  "appLockTurnedOff": "Je telefoon heeft geen schermvergrendeling, dus de app-vergrendeling is uitgezet.",
+  "deleteTakeConfirm": "Deze take verwijderen? De video kan niet worden teruggehaald.",
+  "deleteForeverConfirm": "\"{title}\" definitief verwijderen? Dit kan niet ongedaan worden gemaakt.",
+  "deleteForeverTakes": "De takes ervan die in de app staan, worden ook verwijderd."
 }

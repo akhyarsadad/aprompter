@@ -995,4 +995,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Für dieses $store-Konto wurde kein früherer Kauf gefunden.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Dein Handy hat keine Displaysperre, deshalb wurde die App-Sperre ausgeschaltet.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Diesen Take löschen? Das Video lässt sich nicht wiederherstellen.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '„$title“ endgültig löschen? Das lässt sich nicht rückgängig machen.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Die Takes dazu, die in der App liegen, werden ebenfalls gelöscht.';
 }

@@ -1014,4 +1014,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'В этом аккаунте $store не найдено прошлых покупок.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'На вашем телефоне нет блокировки экрана, поэтому блокировка приложения отключена.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Удалить этот дубль? Видео нельзя будет восстановить.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Удалить «$title» навсегда? Это действие нельзя отменить.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Его дубли, сохранённые в приложении, тоже будут удалены.';
 }

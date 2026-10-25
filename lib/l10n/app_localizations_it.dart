@@ -992,4 +992,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Nessun acquisto precedente trovato su questo account $store.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Il tuo telefono non ha un blocco schermo, quindi il blocco app è stato disattivato.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Eliminare questa ripresa? Il video non potrà essere recuperato.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Eliminare definitivamente \"$title\"? Non si può annullare.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Verranno eliminate anche le sue riprese salvate nell\'app.';
 }

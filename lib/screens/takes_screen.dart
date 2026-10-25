@@ -10,6 +10,7 @@ import '../l10n/l10n.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
 import '../services/storage.dart';
+import '../widgets/confirm_dialog.dart';
 
 /// What the creator decided after watching a take.
 enum TakeDecision { keep, retake }
@@ -185,16 +186,73 @@ class TakesScreen extends StatelessWidget {
   }
 }
 
-class _SavedTakeScreen extends StatelessWidget {
+class _SavedTakeScreen extends StatefulWidget {
   const _SavedTakeScreen({required this.take});
 
   final Take take;
 
   @override
-  Widget build(BuildContext context) {
+  State<_SavedTakeScreen> createState() => _SavedTakeScreenState();
+}
+
+class _SavedTakeScreenState extends State<_SavedTakeScreen> {
+  /// The video, found by its name: the app's folder may have moved since it
+  /// was recorded (iOS, after an App Store update).
+  late final Future<File> _file = AppScope.read(context).takeFile(widget.take);
+
+  Future<void> _share() async {
+    final box = context.findRenderObject() as RenderBox?;
+    final File file;
+    try {
+      file = await _file;
+    } catch (_) {
+      return; // No video to share.
+    }
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(file.path)],
+        sharePositionOrigin: box == null
+            ? null
+            : box.localToGlobal(Offset.zero) & box.size,
+      ),
+    );
+  }
+
+  Future<void> _saveToGallery() async {
+    final l = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final file = await _file;
+      if (!await Gal.hasAccess(toAlbum: true)) {
+        await Gal.requestAccess(toAlbum: true);
+      }
+      await Gal.putVideo(file.path, album: 'APrompter');
+      messenger.showSnackBar(SnackBar(content: Text(l.savedToGallery)));
+    } on GalException catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l.saveFailedBody(e.type.message))),
+      );
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(l.saveFailedBody('$e'))));
+    }
+  }
+
+  Future<void> _delete() async {
     final l = context.l10n;
     final state = AppScope.read(context);
-    final messenger = ScaffoldMessenger.of(context);
+    final sure = await confirmDeletion(
+      context,
+      message: l.deleteTakeConfirm,
+      action: l.deleteTake,
+    );
+    if (!sure) return;
+    await state.deleteTake(widget.take);
+    if (mounted) Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -204,53 +262,30 @@ class _SavedTakeScreen extends StatelessWidget {
           IconButton(
             tooltip: l.share,
             icon: const Icon(Icons.ios_share),
-            onPressed: () {
-              final box = context.findRenderObject() as RenderBox?;
-              SharePlus.instance.share(
-                ShareParams(
-                  files: [XFile(take.path)],
-                  sharePositionOrigin: box == null
-                      ? null
-                      : box.localToGlobal(Offset.zero) & box.size,
-                ),
-              );
-            },
+            onPressed: _share,
           ),
           IconButton(
             tooltip: l.saveToGallery,
             icon: const Icon(Icons.photo_library_outlined),
-            onPressed: () async {
-              try {
-                if (!await Gal.hasAccess(toAlbum: true)) {
-                  await Gal.requestAccess(toAlbum: true);
-                }
-                await Gal.putVideo(take.path, album: 'APrompter');
-                messenger.showSnackBar(
-                  SnackBar(content: Text(l.savedToGallery)),
-                );
-              } on GalException catch (e) {
-                messenger.showSnackBar(
-                  SnackBar(content: Text(l.saveFailedBody(e.type.message))),
-                );
-              }
-            },
+            onPressed: _saveToGallery,
           ),
           IconButton(
             tooltip: l.deleteTake,
             icon: const Icon(Icons.delete_outline),
-            onPressed: () async {
-              await state.removeTake(take);
-              try {
-                await File(take.path).delete();
-              } catch (_) {
-                // Already gone.
-              }
-              if (context.mounted) Navigator.pop(context);
-            },
+            onPressed: _delete,
           ),
         ],
       ),
-      body: TakePlayer(path: take.path),
+      body: FutureBuilder<File>(
+        future: _file,
+        builder: (context, snapshot) => switch (snapshot) {
+          AsyncSnapshot(:final File data) => TakePlayer(path: data.path),
+          AsyncSnapshot(hasError: true) => const Center(
+            child: Icon(Icons.videocam_off, color: Colors.white54, size: 48),
+          ),
+          _ => const Center(child: CircularProgressIndicator()),
+        },
+      ),
     );
   }
 }

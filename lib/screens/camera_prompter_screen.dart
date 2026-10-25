@@ -5,7 +5,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -393,24 +392,23 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
 
   /// Y3: the take stays inside the app, out of Google Photos / iCloud.
   Future<void> _keepInApp(XFile file, int seconds) async {
+    final state = AppScope.read(context);
     try {
-      final dir = Directory(
-        '${(await getApplicationDocumentsDirectory()).path}/takes',
-      );
+      final dir = await state.takesDirectory();
       await dir.create(recursive: true);
       final now = DateTime.now();
-      final ext = file.path.contains('.') ? file.path.split('.').last : 'mp4';
-      final path =
-          '${dir.path}/${widget.script.id}-${now.millisecondsSinceEpoch}.$ext';
-      await File(file.path).copy(path);
+      final recorded = file.path.split(RegExp(r'[/\\]')).last;
+      final ext = recorded.contains('.') ? recorded.split('.').last : 'mp4';
+      // Only the file name is stored: the app's folder changes on iOS with
+      // every App Store update (see AppState.takeFile).
+      final name = '${widget.script.id}-${now.millisecondsSinceEpoch}.$ext';
+      await File(file.path).copy('${dir.path}/$name');
       try {
         await File(file.path).delete();
       } catch (_) {}
-      if (!mounted) return;
-      final state = AppScope.read(context);
       await state.addTake(
         Take(
-          path: path,
+          path: name,
           scriptId: widget.script.id,
           recordedAt: now,
           seconds: seconds,

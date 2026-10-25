@@ -1011,4 +1011,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String nothingToRestore(String store) {
     return 'Nie znaleziono wcześniejszych zakupów na tym koncie $store.';
   }
+
+  @override
+  String get appLockTurnedOff =>
+      'Twój telefon nie ma blokady ekranu, więc blokada aplikacji została wyłączona.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Usunąć to ujęcie? Nagrania nie da się przywrócić.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Usunąć „$title” na zawsze? Nie da się tego cofnąć.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Jego ujęcia zapisane w aplikacji też zostaną usunięte.';
 }

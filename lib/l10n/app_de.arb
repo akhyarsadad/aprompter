@@ -271,5 +271,9 @@
   "subscriptionTerms": "Monats- und Jahresabos verlängern sich automatisch zum gleichen Preis, bis du kündigst. Kündige jederzeit in deinen {store}-Kontoeinstellungen. Lebenslang ist ein einmaliger Kauf.",
   "termsOfUse": "Nutzungsbedingungen",
   "privacyPolicy": "Datenschutzerklärung",
-  "nothingToRestore": "Für dieses {store}-Konto wurde kein früherer Kauf gefunden."
+  "nothingToRestore": "Für dieses {store}-Konto wurde kein früherer Kauf gefunden.",
+  "appLockTurnedOff": "Dein Handy hat keine Displaysperre, deshalb wurde die App-Sperre ausgeschaltet.",
+  "deleteTakeConfirm": "Diesen Take löschen? Das Video lässt sich nicht wiederherstellen.",
+  "deleteForeverConfirm": "„{title}“ endgültig löschen? Das lässt sich nicht rückgängig machen.",
+  "deleteForeverTakes": "Die Takes dazu, die in der App liegen, werden ebenfalls gelöscht."
 }

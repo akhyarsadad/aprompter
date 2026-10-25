@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/widgets.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
@@ -11,13 +12,20 @@ import 'storage.dart';
 
 /// App-wide state: the script library and prompter settings.
 class AppState extends ChangeNotifier {
-  AppState(this.storage)
+  /// [takesDirectory] is where takes kept in the app are stored; tests pass
+  /// a temporary folder.
+  AppState(this.storage, {Future<Directory> Function()? takesDirectory})
     : _scripts = storage.loadScripts(),
       _settings = storage.loadSettings(),
       _trash = storage.loadTrash(),
-      _locale = parseLocaleTag(storage.loadLocale());
+      _locale = parseLocaleTag(storage.loadLocale()),
+      _takesDirectory = takesDirectory ?? _documentsTakes {
+    _expiredTrashCleared = _clearExpiredTrash();
+  }
 
   final Storage storage;
+  final Future<Directory> Function() _takesDirectory;
+  late final Future<void> _expiredTrashCleared;
   List<Script> _scripts;
   PrompterSettings _settings;
   List<TrashedScript> _trash;
@@ -253,22 +261,47 @@ class AppState extends ChangeNotifier {
     await _persist(() => storage.saveTrash(_trash));
   }
 
-  /// Deletes a script from "Recently deleted" for good, with its versions.
+  /// Deletes a script from "Recently deleted" for good, with its versions
+  /// and the takes kept in the app.
   Future<void> deleteForever(String id) async {
     _trash = _trash.where((t) => t.script.id != id).toList();
     notifyListeners();
     await _persist(() => storage.saveTrash(_trash));
+    await _deleteBelongings(id);
+  }
+
+  /// What a script leaves behind when it goes for good: its earlier versions
+  /// and the takes kept in the app, entries and videos.
+  Future<void> _deleteBelongings(String id) async {
     await _persist(() => storage.saveVersions(id, const []));
-    // Takes kept in the app belong to the script.
     for (final take in takesOf(id)) {
-      await removeTake(take);
-      try {
-        await File(take.path).delete();
-      } catch (_) {
-        // Already gone.
-      }
+      await deleteTake(take);
     }
   }
+
+  /// Scripts deleted more than [Storage.trashDays] days ago leave
+  /// "Recently deleted" (see [Storage.loadTrash]); this deletes what they
+  /// left behind, as [deleteForever] does. Runs once, when the app starts.
+  Future<void> _clearExpiredTrash() async {
+    try {
+      final expired = {
+        for (final id in storage.loadExpiredTrashIds())
+          // A script that is back in the library keeps everything.
+          if (byId(id) == null && !_trash.any((t) => t.script.id == id)) id,
+      };
+      if (expired.isEmpty) return;
+      for (final id in expired) {
+        await _deleteBelongings(id);
+      }
+      await _persist(() => storage.saveTrash(_trash));
+    } catch (_) {
+      // Tried again on the next start.
+    }
+  }
+
+  /// Completes once what expired scripts left behind is deleted.
+  @visibleForTesting
+  Future<void> get expiredTrashCleared => _expiredTrashCleared;
 
   /// Takes of script [id] kept inside the app (C4), newest first.
   List<Take> takesOf(String id) =>
@@ -279,7 +312,29 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Forgets a take; the caller deletes the file.
+  /// Where takes kept in the app are stored.
+  Future<Directory> takesDirectory() => _takesDirectory();
+
+  static Future<Directory> _documentsTakes() async =>
+      Directory('${(await getApplicationDocumentsDirectory()).path}/takes');
+
+  /// The video of [take]. Always looked up by its file name in
+  /// [takesDirectory]: iOS gives the app a new folder on every App Store
+  /// update, so a full path stored before an update leads nowhere.
+  Future<File> takeFile(Take take) async =>
+      File('${(await takesDirectory()).path}/${take.fileName}');
+
+  /// Deletes a take kept in the app: its entry and its video.
+  Future<void> deleteTake(Take take) async {
+    await removeTake(take);
+    try {
+      await (await takeFile(take)).delete();
+    } catch (_) {
+      // Already gone.
+    }
+  }
+
+  /// Forgets a take; the caller deletes the file (see [deleteTake]).
   Future<void> removeTake(Take take) async {
     await _persist(
       () => storage.saveTakes([
@@ -312,14 +367,29 @@ class AppState extends ChangeNotifier {
   }
 
   /// Adds scripts from a backup. A script that already exists is replaced
-  /// only by a newer copy. Returns how many scripts were added or updated.
+  /// only by a newer copy; so is one in "Recently deleted", which otherwise
+  /// stays there. Returns how many scripts were added or updated.
   Future<int> importScripts(List<Script> incoming) async {
     var changed = 0;
     final byIdMap = {for (final s in _scripts) s.id: s};
+    final trashed = {for (final t in _trash) t.script.id: t.script};
+    final replacedTrash = <String>{};
     for (final s in incoming) {
       final existing = byIdMap[s.id];
-      if (existing == null || s.updatedAt.isAfter(existing.updatedAt)) {
-        if (existing != null && existing.body != s.body) {
+      if (existing == null) {
+        final deleted = trashed[s.id];
+        if (deleted != null) {
+          // An older copy from a backup doesn't replace a newer deleted one.
+          if (!s.updatedAt.isAfter(deleted.updatedAt)) continue;
+          if (deleted.body != s.body) {
+            await _keepVersion(deleted, newBody: '');
+          }
+          replacedTrash.add(s.id);
+        }
+        byIdMap[s.id] = s;
+        changed++;
+      } else if (s.updatedAt.isAfter(existing.updatedAt)) {
+        if (existing.body != s.body) {
           await _keepVersion(existing, newBody: '');
         }
         byIdMap[s.id] = s;
@@ -329,7 +399,7 @@ class AppState extends ChangeNotifier {
     if (changed == 0) return 0;
     _scripts = byIdMap.values.toList()
       ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
-    _trash = _trash.where((t) => !byIdMap.containsKey(t.script.id)).toList();
+    _trash = _trash.where((t) => !replacedTrash.contains(t.script.id)).toList();
     notifyListeners();
     await _persist(() => storage.saveScripts(_scripts));
     await _persist(() => storage.saveTrash(_trash));

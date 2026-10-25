@@ -26,7 +26,7 @@
   "rehearse": "Répéter",
   "float": "Flottant",
   "record": "Filmer",
-  "words": "{count, plural, =1{1 mot} other{{count} mots}}",
+  "words": "{count, plural, =0{0 mot} =1{1 mot} other{{count} mots}}",
   "takes": "{count, plural, =1{1 prise} other{{count} prises}}",
   "noScriptsYet": "Aucun script pour l'instant",
   "noScriptsHint": "Touchez « Nouveau script » et choisissez un modèle pour commencer.",
@@ -271,5 +271,9 @@
   "subscriptionTerms": "Les formules mensuelle et annuelle se renouvellent automatiquement au même prix jusqu'à leur résiliation. Résiliez à tout moment dans les réglages de votre compte {store}. L'offre à vie est un achat unique.",
   "termsOfUse": "Conditions d'utilisation",
   "privacyPolicy": "Politique de confidentialité",
-  "nothingToRestore": "Aucun achat précédent trouvé sur ce compte {store}."
+  "nothingToRestore": "Aucun achat précédent trouvé sur ce compte {store}.",
+  "appLockTurnedOff": "Votre téléphone n'a pas de verrouillage d'écran, le verrouillage de l'appli a donc été désactivé.",
+  "deleteTakeConfirm": "Supprimer cette prise ? La vidéo ne pourra pas être récupérée.",
+  "deleteForeverConfirm": "Supprimer définitivement « {title} » ? Cette action est irréversible.",
+  "deleteForeverTakes": "Ses prises conservées dans l'appli seront aussi supprimées."
 }

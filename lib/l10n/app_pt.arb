@@ -26,7 +26,7 @@
   "rehearse": "Ensaiar",
   "float": "Flutuar",
   "record": "Gravar",
-  "words": "{count, plural, =1{1 palavra} other{{count} palavras}}",
+  "words": "{count, plural, =0{0 palavras} =1{1 palavra} other{{count} palavras}}",
   "takes": "{count, plural, =1{1 take} other{{count} takes}}",
   "noScriptsYet": "Nenhum roteiro ainda",
   "noScriptsHint": "Toque em \"Novo roteiro\" e escolha um modelo para começar.",
@@ -271,5 +271,9 @@
   "subscriptionTerms": "Os planos mensal e anual são renovados automaticamente pelo mesmo preço até você cancelar. Cancele quando quiser nas configurações da sua conta {store}. O vitalício é uma compra única.",
   "termsOfUse": "Termos de Uso",
   "privacyPolicy": "Política de Privacidade",
-  "nothingToRestore": "Nenhuma compra anterior encontrada nesta conta {store}."
+  "nothingToRestore": "Nenhuma compra anterior encontrada nesta conta {store}.",
+  "appLockTurnedOff": "Seu celular não tem bloqueio de tela, então o bloqueio do app foi desativado.",
+  "deleteTakeConfirm": "Excluir este take? Não será possível recuperar o vídeo.",
+  "deleteForeverConfirm": "Excluir \"{title}\" para sempre? Não dá para desfazer.",
+  "deleteForeverTakes": "Os takes dele guardados no app também serão excluídos."
 }

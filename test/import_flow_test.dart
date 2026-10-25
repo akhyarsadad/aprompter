@@ -330,7 +330,11 @@ void main() {
     tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(auth, (
       call,
     ) async {
-      return call.method == 'authenticate' ? allow : null;
+      return switch (call.method) {
+        'authenticate' => allow,
+        'isDeviceSupported' => true, // the phone has a screen lock
+        _ => null,
+      };
     });
     addTearDown(
       () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(

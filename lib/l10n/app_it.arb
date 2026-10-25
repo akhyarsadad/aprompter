@@ -271,5 +271,9 @@
   "subscriptionTerms": "I piani mensile e annuale si rinnovano automaticamente allo stesso prezzo finché non li annulli. Annulla quando vuoi dalle impostazioni del tuo account {store}. A vita è un acquisto una tantum.",
   "termsOfUse": "Termini di utilizzo",
   "privacyPolicy": "Informativa sulla privacy",
-  "nothingToRestore": "Nessun acquisto precedente trovato su questo account {store}."
+  "nothingToRestore": "Nessun acquisto precedente trovato su questo account {store}.",
+  "appLockTurnedOff": "Il tuo telefono non ha un blocco schermo, quindi il blocco app è stato disattivato.",
+  "deleteTakeConfirm": "Eliminare questa ripresa? Il video non potrà essere recuperato.",
+  "deleteForeverConfirm": "Eliminare definitivamente \"{title}\"? Non si può annullare.",
+  "deleteForeverTakes": "Verranno eliminate anche le sue riprese salvate nell'app."
 }

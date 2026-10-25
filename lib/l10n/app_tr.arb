@@ -271,5 +271,9 @@
   "subscriptionTerms": "Aylık ve yıllık planlar iptal edene kadar aynı fiyattan otomatik olarak yenilenir. İstediğin zaman {store} hesap ayarlarından iptal edebilirsin. Ömür boyu, tek seferlik bir satın almadır.",
   "termsOfUse": "Kullanım Koşulları",
   "privacyPolicy": "Gizlilik Politikası",
-  "nothingToRestore": "Bu {store} hesabında önceki bir satın alma bulunamadı."
+  "nothingToRestore": "Bu {store} hesabında önceki bir satın alma bulunamadı.",
+  "appLockTurnedOff": "Telefonunda ekran kilidi yok, bu yüzden uygulama kilidi kapatıldı.",
+  "deleteTakeConfirm": "Bu çekim silinsin mi? Video geri getirilemez.",
+  "deleteForeverConfirm": "\"{title}\" kalıcı olarak silinsin mi? Geri getirilemez.",
+  "deleteForeverTakes": "Uygulamada saklanan çekimleri de silinir."
 }
