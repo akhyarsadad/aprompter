@@ -90,19 +90,26 @@ import UIKit
   // MARK: - Share Extension import
 
   /// Dart calls `takePending` (on start and whenever we send `incoming`); it
-  /// returns every item the Share Extension saved and removes them, so each
-  /// item is delivered exactly once.
+  /// returns the items the Share Extension saved and removes them, so each
+  /// item is delivered exactly once. A large share is handed over in parts
+  /// (see ImportInbox.maxBytesPerTake): after replying, `incoming` is sent
+  /// again while items are left.
   private func setUpImportChannel(_ channel: FlutterMethodChannel) {
     importChannel = channel
     let queue = importQueue
-    channel.setMethodCallHandler { call, result in
+    channel.setMethodCallHandler { [weak self] call, result in
       guard call.method == "takePending" else {
         result(FlutterMethodNotImplemented)
         return
       }
       queue.async {
-        let items = ImportInbox.takeAll()
-        DispatchQueue.main.async { result(items) }
+        let taken = ImportInbox.takePending()
+        DispatchQueue.main.async {
+          result(taken.items)
+          if taken.hasMore {
+            self?.importChannel?.invokeMethod("incoming", arguments: nil)
+          }
+        }
       }
     }
 
@@ -159,22 +166,42 @@ enum ImportInbox {
       .appendingPathComponent("ImportInbox", isDirectory: true)
   }
 
+  /// Bytes one `takePending` reply carries at most (about; at least one file
+  /// always goes). The codec copies them again, so a share of many large
+  /// files is handed over in parts instead of all at once.
+  static let maxBytesPerTake = 40 * 1024 * 1024
+
   static func hasPending() -> Bool {
     return !pendingFiles().isEmpty
   }
 
-  /// Decodes and deletes every pending item, oldest first. Empty when the
-  /// container or the inbox doesn't exist.
-  static func takeAll() -> [[String: Any]] {
+  /// Decodes and deletes pending items, oldest first, until about
+  /// `maxBytesPerTake` bytes are collected. Files past that stay in the inbox
+  /// and `hasMore` is true; only returned (or unreadable) files are deleted.
+  /// Empty when the container or the inbox doesn't exist.
+  static func takePending() -> (items: [[String: Any]], hasMore: Bool) {
     var items: [[String: Any]] = []
+    var collectedBytes = 0
     for file in pendingFiles() {
-      if let data = try? Data(contentsOf: file), let item = decode(data) {
-        items.append(item)
+      // The file's bytes are base64 in the JSON: 3 bytes per 4 characters.
+      let fileSize = (try? file.resourceValues(forKeys: [.fileSizeKey]))?.fileSize ?? 0
+      let estimatedBytes = fileSize / 4 * 3
+      if collectedBytes > 0 && collectedBytes + estimatedBytes > maxBytesPerTake {
+        return (items, true)
       }
-      // Unreadable files are removed too, so one bad file can't wedge the inbox.
-      try? FileManager.default.removeItem(at: file)
+      // Frees the JSON and its base64 text before the next file is read.
+      autoreleasepool {
+        if let data = try? Data(contentsOf: file), let item = decode(data) {
+          if let bytes = item["bytes"] as? FlutterStandardTypedData {
+            collectedBytes += bytes.data.count
+          }
+          items.append(item)
+        }
+        // Unreadable files are removed too, so one bad file can't wedge the inbox.
+        try? FileManager.default.removeItem(at: file)
+      }
     }
-    return items
+    return (items, false)
   }
 
   private static func pendingFiles() -> [URL] {

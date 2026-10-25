@@ -25,12 +25,32 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>NSExtensionActivationRule</key>
-			<dict>
-				<key>NSExtensionActivationSupportsFileWithMaxCount</key>
-				<integer>10</integer>
-				<key>NSExtensionActivationSupportsText</key>
-				<true/>
-			</dict>
+			<string>extensionItems.@count &lt;= 10
+AND SUBQUERY (
+    extensionItems,
+    $extensionItem,
+    $extensionItem.attachments.@count &gt; 10
+).@count == 0
+AND SUBQUERY (
+    extensionItems,
+    $extensionItem,
+    SUBQUERY (
+        $extensionItem.attachments,
+        $attachment,
+        (
+            ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.text"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.wordprocessingml.document"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.oasis-open.opendocument.text"
+            OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.data"
+        )
+        AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image")
+        AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.audiovisual-content")
+        AND NOT (
+            ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
+            AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.file-url")
+        )
+    ).@count &gt;= 1
+).@count &gt;= 1</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>

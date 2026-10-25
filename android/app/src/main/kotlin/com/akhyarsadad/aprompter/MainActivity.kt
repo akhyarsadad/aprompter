@@ -2,6 +2,7 @@ package com.akhyarsadad.aprompter
 
 import android.app.Activity
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,8 @@ import java.io.File
 import java.io.InputStream
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 // A FragmentActivity so local_auth can show the biometric prompt (app lock).
 class MainActivity : FlutterFragmentActivity() {
@@ -153,7 +156,8 @@ class MainActivity : FlutterFragmentActivity() {
  * needs standard or singleTop: with singleTask, reopening the app from the
  * launcher icon after confirming a payment in a bank app clears the billing
  * screen and cancels the purchase. So this activity hands the shared content
- * to ImportInbox, brings up the single existing MainActivity and finishes.
+ * to ImportInbox, brings the task of the single existing MainActivity to the
+ * front (starts it only when there is none) and finishes.
  *
  * Duplicates: only this activity reads share intents, once, in onCreate
  * (never when restored or relaunched from Recents). MainActivity never reads
@@ -173,24 +177,82 @@ class ImportActivity : Activity() {
             Log.w(ImportInbox.TAG, "Could not import shared content", e)
         }
         try {
-            // The launcher's own intent (same action, category and component),
-            // so this behaves exactly like tapping the app icon: onNewIntent on
-            // a MainActivity that is on top, the task as the user left it
-            // otherwise (an open purchase sheet is not closed), a new task when
-            // the app is not running; never a second MainActivity. The content
-            // travels through ImportInbox, not this intent, so the task keeps a
-            // plain launcher intent for later relaunches.
-            startActivity(
-                Intent(Intent.ACTION_MAIN)
-                    .addCategory(Intent.CATEGORY_LAUNCHER)
-                    .setClass(this, MainActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
-            )
+            // The content travels through ImportInbox, not an intent: once the
+            // items are read, ImportInbox calls `incoming` on the channel the
+            // running MainActivity registered (it never needs onNewIntent), and
+            // a MainActivity that starts fresh asks for them with takePending.
+            // So bringing the existing task forward is all a share needs.
+            if (!bringAppTaskToFront()) {
+                // No task has MainActivity at its base (the app is not running,
+                // or only an emptied task is left in Recents), so this starts
+                // the only one. The launcher's own intent (same action, category
+                // and component), so the task keeps a plain launcher intent for
+                // later relaunches.
+                startActivity(
+                    Intent(Intent.ACTION_MAIN)
+                        .addCategory(Intent.CATEGORY_LAUNCHER)
+                        .setClass(this, MainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                )
+            }
         } catch (e: Exception) {
             Log.w(ImportInbox.TAG, "Could not open APrompter", e)
         }
         // Theme.NoDisplay: must finish before onResume.
         finish()
+    }
+
+    /**
+     * Brings the task whose base activity is MainActivity to the front, as the
+     * user left it (an open purchase sheet, file picker or Custom Tab stays on
+     * top), right above the app that shared, so Back returns there. Returns
+     * false when there is no such task or it could not be brought forward.
+     *
+     * It starts the task's own base intent. Android reuses the task's
+     * MainActivity only for an intent equal to the one that started the task
+     * (same action, data, type, package, component and categories): then a
+     * MainActivity on top gets onNewIntent, and a covered one stays covered.
+     * A fixed launcher intent is not equal for a task started with a package
+     * in its intent (getLaunchIntentForPackage, e.g. "Open" in the Play Store),
+     * which gets a NEW MainActivity on top of whatever covers the old one: a
+     * second Flutter engine writing the same scripts.
+     *
+     * Not AppTask.moveToFront: on Android 9 to 15 it moves the home screen to
+     * the front first, so Back from APrompter would go to the launcher instead
+     * of back to the app that shared.
+     */
+    private fun bringAppTaskToFront(): Boolean {
+        val main = ComponentName(this, MainActivity::class.java)
+        val manager: ActivityManager? = getSystemService(ActivityManager::class.java)
+        val tasks: List<ActivityManager.AppTask> = try {
+            manager?.appTasks ?: return false
+        } catch (e: RuntimeException) {
+            Log.w(ImportInbox.TAG, "Could not list APrompter's tasks", e)
+            return false
+        }
+        for (task in tasks) {
+            try {
+                val info: ActivityManager.RecentTaskInfo? = task.taskInfo
+                val base: Intent? = info?.baseIntent
+                if (info?.baseActivity == main && base != null) {
+                    // Only the filter part (no extras), always explicit, and
+                    // only these flags: not the launcher's RESET_TASK_IF_NEEDED,
+                    // which may clear or reparent what sits above MainActivity.
+                    startActivity(
+                        base.cloneFilter()
+                            .setComponent(main)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                    )
+                    return true
+                }
+            } catch (e: RuntimeException) {
+                // SecurityException, IllegalArgumentException when the task was
+                // removed meanwhile, or ActivityNotFoundException: the caller
+                // then starts MainActivity with the launcher intent.
+                Log.w(ImportInbox.TAG, "Could not bring APrompter's task to the front", e)
+            }
+        }
+        return false
     }
 }
 
@@ -209,7 +271,8 @@ internal class ImportRequest(
  * then wait here until Dart calls `takePending`, which hands them over once
  * and removes them. Items that arrive before Dart is listening simply wait:
  * Dart calls `takePending` when its home screen is up, and `incoming` tells a
- * running app that more arrived.
+ * running app that more arrived. When too many bytes wait already, the next
+ * file is read once Dart has taken them (see MAX_PENDING_BYTES).
  *
  * An item is a text, a file, or (Android only) both: one share of a text plus
  * one text-like file comes as ONE item with `text` and `bytes` set; see read().
@@ -217,13 +280,20 @@ internal class ImportRequest(
 internal object ImportInbox {
     const val TAG = "APrompterImport"
 
-    /** Per-file limit from the channel contract. */
+    /**
+     * Per-file limit from the channel contract. tooLarge means exactly this:
+     * the file itself is over it. Nothing else marks a file tooLarge.
+     */
     private const val MAX_FILE_BYTES = 10 * 1024 * 1024
 
     /**
-     * Total bytes allowed to wait for Dart at once. Keeps a share of many large
-     * files from running the app out of memory (the codec copies them again);
-     * files past it are reported as tooLarge, like a file over 10 MB.
+     * File bytes allowed to wait for Dart at once, so a share (or several) of
+     * many large files cannot run the app out of memory: the bytes sit on the
+     * Java heap and the codec copies them again. A file is read only while one
+     * more of up to MAX_FILE_BYTES fits under this; otherwise the reader thread
+     * hands Dart what it has and waits until Dart has taken the pending items.
+     * Waiting, not refusing: a file that is not itself over MAX_FILE_BYTES is
+     * never reported as tooLarge, and no per-share file count is needed.
      */
     private const val MAX_PENDING_BYTES = 24 * 1024 * 1024
 
@@ -245,9 +315,11 @@ internal object ImportInbox {
         "srt", "vtt", "html", "htm", "xhtml",
     )
 
-    private val lock = Any()
+    private val lock = ReentrantLock()
+    /** Signalled when Dart has taken the pending items. */
+    private val drained = lock.newCondition()
     private val pending = ArrayList<HashMap<String, Any>>() // guarded by lock
-    private var pendingBytes = 0 // guarded by lock
+    private var pendingBytes = 0 // guarded by lock; grows only on the reader thread
     private val reader: ExecutorService = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
     private var channel: MethodChannel? = null // main thread only
@@ -268,12 +340,49 @@ internal object ImportInbox {
         if (this.channel === channel) this.channel = null
     }
 
-    private fun takePending(): List<Map<String, Any>> = synchronized(lock) {
+    private fun takePending(): List<Map<String, Any>> = lock.withLock {
         val taken = ArrayList<Map<String, Any>>(pending)
         pending.clear()
         pendingBytes = 0
+        drained.signalAll()
         taken
     }
+
+    /** Hands items to Dart: they wait in [pending], and `incoming` tells a running app. */
+    private fun queue(items: List<HashMap<String, Any>>) {
+        if (items.isEmpty()) return
+        lock.withLock {
+            pending.addAll(items)
+            pendingBytes += byteCount(items)
+        }
+        mainHandler.post { channel?.invokeMethod("incoming", null) }
+    }
+
+    /** True when [held] bytes not queued yet plus one more file fit next to the pending ones. */
+    private fun hasRoom(held: Int): Boolean = lock.withLock {
+        pendingBytes + held <= MAX_PENDING_BYTES - MAX_FILE_BYTES
+    }
+
+    /**
+     * Blocks the reader thread until one more file fits next to the pending
+     * items. Only called while something is pending, for which `incoming` was
+     * posted (or Dart's start-up takePending is still to come), so Dart will
+     * take it and end the wait.
+     */
+    private fun awaitRoom() {
+        lock.withLock {
+            while (pendingBytes > MAX_PENDING_BYTES - MAX_FILE_BYTES) drained.awaitUninterruptibly()
+        }
+    }
+
+    private fun byteCount(items: List<Map<String, Any>>): Int {
+        var total = 0
+        for (item in items) (item["bytes"] as? ByteArray)?.let { total += it.size }
+        return total
+    }
+
+    private fun textItems(texts: List<String>): List<HashMap<String, Any>> =
+        texts.map { hashMapOf<String, Any>("text" to it) }
 
     /**
      * Pulls text and Uris out of a SEND, SEND_MULTIPLE or VIEW intent. No I/O.
@@ -345,16 +454,7 @@ internal object ImportInbox {
         val kept = request.uris.filter { keepReadAccess(app, it) }
         reader.execute {
             try {
-                val items = read(app, request)
-                if (items.isNotEmpty()) {
-                    synchronized(lock) {
-                        pending.addAll(items)
-                        for (item in items) {
-                            (item["bytes"] as? ByteArray)?.let { pendingBytes += it.size }
-                        }
-                    }
-                    mainHandler.post { channel?.invokeMethod("incoming", null) }
-                }
+                read(app, request)
             } catch (e: Throwable) {
                 // Never let a bad file take the app down from this thread.
                 Log.w(TAG, "Import failed", e)
@@ -417,7 +517,8 @@ internal object ImportInbox {
         val textLike: Boolean,
     )
 
-    private fun read(context: Context, request: ImportRequest): List<HashMap<String, Any>> {
+    /** Reads the request's files and queues them, with its texts, for Dart. Reader thread only. */
+    private fun read(context: Context, request: ImportRequest) {
         val shared = request.uris.mapNotNull { describe(context, it, request.type) }
         // Images, video and audio cannot become a script, and they come along
         // with what can: a note with a photo attached (sent as */*, which
@@ -427,17 +528,31 @@ internal object ImportInbox {
         // instead of the app opening with nothing.
         val documents = shared.filter { !it.media }
         val files = if (documents.isEmpty() && request.texts.isEmpty()) shared else documents
-        var budget = MAX_PENDING_BYTES - synchronized(lock) { pendingBytes }
+        // This share's texts and files that are not queued yet.
+        val texts = ArrayList(request.texts)
         val read = ArrayList<HashMap<String, Any>>()
+        var split = false
         for (file in files) {
-            val cap = minOf(MAX_FILE_BYTES, maxOf(budget, 0))
-            val item = readFile(context, file, cap) ?: continue
-            (item["bytes"] as? ByteArray)?.let { budget -= it.size }
-            read.add(item)
+            val held = byteCount(read)
+            if (!hasRoom(held)) {
+                // No room for one more file of up to 10 MB. Never tooLarge for
+                // that: queue what this share read so far (so Dart can take it)
+                // and wait until Dart has taken the pending items. Only a share
+                // of several files gets split this way, so the one-text-plus-
+                // one-file merge below is not affected.
+                if (held > 0) {
+                    queue(textItems(texts) + read)
+                    texts.clear()
+                    read.clear()
+                    split = true
+                }
+                awaitRoom()
+            }
+            readFile(context, file)?.let { read.add(it) }
         }
         val items = ArrayList<HashMap<String, Any>>()
         val single = read.singleOrNull()
-        if (request.texts.size == 1 && files.size == 1 && files[0].textLike &&
+        if (texts.size == 1 && files.size == 1 && files[0].textLike &&
             single != null && single["bytes"] != null
         ) {
             // One text plus one text-like file in a single share is one thing:
@@ -448,17 +563,18 @@ internal object ImportInbox {
             // too large, or is another kind of file) text and file go as
             // separate items, so the text is never lost behind a file Dart
             // cannot use.
-            single["text"] = request.texts[0]
+            single["text"] = texts[0]
             items.add(single)
         } else {
-            for (text in request.texts) items.add(hashMapOf<String, Any>("text" to text))
+            items.addAll(textItems(texts))
             items.addAll(read)
         }
         // A title hint only makes sense for a single item; several files
-        // sharing one subject would all get the same title.
+        // sharing one subject would all get the same title. A split share
+        // had several items, some already queued above.
         val subject = request.subject
-        if (subject != null && items.size == 1) items[0]["subject"] = subject
-        return items
+        if (subject != null && items.size == 1 && !split) items[0]["subject"] = subject
+        queue(items)
     }
 
     /**
@@ -496,15 +612,15 @@ internal object ImportInbox {
 
     /**
      * One file as a channel item, or null when it cannot be read at all
-     * (no permission, gone, refused). Over [cap] bytes: name only, tooLarge.
+     * (no permission, gone, refused). Over MAX_FILE_BYTES: name only, tooLarge.
      */
-    private fun readFile(context: Context, file: SharedFile, cap: Int): HashMap<String, Any>? {
+    private fun readFile(context: Context, file: SharedFile): HashMap<String, Any>? {
         try {
             val item = HashMap<String, Any>()
             file.name?.let { item["name"] = it }
             file.mimeType?.let { item["mimeType"] = it }
             val input = context.contentResolver.openInputStream(file.uri) ?: return null
-            val bytes = input.use { readCapped(it, cap) }
+            val bytes = input.use { readCapped(it, MAX_FILE_BYTES) }
             if (bytes != null) item["bytes"] = bytes else item["tooLarge"] = true
             return item
         } catch (e: SecurityException) {
