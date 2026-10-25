@@ -1,0 +1,7 @@
+// Share Extension settings for Release and Profile.
+// Only Flutter's generated settings (FLUTTER_BUILD_NAME / FLUTTER_BUILD_NUMBER,
+// which the extension's Info.plist uses so its version always matches the
+// app's). Deliberately not Flutter/Release.xcconfig: if CocoaPods is ever
+// added, that file starts including Pods-Runner settings, which must not leak
+// into the extension.
+#include "../Flutter/Generated.xcconfig"

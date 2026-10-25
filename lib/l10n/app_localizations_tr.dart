@@ -528,7 +528,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Prompter\'ı istediğin yere taşımak için üstteki çubuğu, boyutlandırmak için köşeyi sürükle. Android\'de yüzen pencere her yere sürüklenebilir ve yerini hatırlar.';
+      'Prompter\'ı istediğin yere taşımak için üstteki çubuğu, boyutlandırmak için köşeyi sürükle.';
 
   @override
   String get app => 'Uygulama';
@@ -548,4 +548,471 @@ class AppLocalizationsTr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n dk';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Kaydedilemedi — telefonunda yer kalmamış olabilir. Uygulama açık kaldıkça çalışman korunur.';
+
+  @override
+  String get versionHistory => 'Sürüm geçmişi';
+
+  @override
+  String get noVersions =>
+      'Henüz önceki sürüm yok. Sen yazarken otomatik olarak saklanır.';
+
+  @override
+  String get restore => 'Geri yükle';
+
+  @override
+  String get versionRestored => 'Önceki sürüm geri yüklendi';
+
+  @override
+  String get recentlyDeleted => 'Son silinenler';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Silinen senaryolar burada $days gün kalır.',
+      one: 'Silinen senaryolar burada 1 gün kalır.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Kalıcı olarak sil';
+
+  @override
+  String deletedOn(String date) {
+    return 'Silinme: $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" geri yüklendi';
+  }
+
+  @override
+  String get backUpScripts => 'Tüm senaryoları yedekle';
+
+  @override
+  String get restoreBackup => 'Yedekten geri yükle';
+
+  @override
+  String get backupShareTitle => 'APrompter yedeği';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count senaryo geri yüklendi',
+      one: '1 senaryo geri yüklendi',
+      zero: 'Bu yedekteki her şey zaten burada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Bu dosya bir APrompter yedeği değil.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm kdk hızda bile $target süresine sığmaz — yaklaşık $words kelime kısalt.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera hazır değildi, bu yüzden kayıt başlamadı. Tekrar dene.';
+
+  @override
+  String get previousSection => 'Önceki bölüm';
+
+  @override
+  String get nextSection => 'Sonraki bölüm';
+
+  @override
+  String get floatingNotificationBody => 'APrompter\'ı açmak için dokun';
+
+  @override
+  String get customTarget => 'Özel…';
+
+  @override
+  String get customTargetTitle => 'Hedef süre';
+
+  @override
+  String get customTargetHint => 'Dakika ve saniye, ör. 5:00';
+
+  @override
+  String get saved => 'Kaydedildi';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone ve iPad, uygulamaların diğer uygulamaların üzerinde durmasına izin vermez. Senaryo kameranın altındayken çekmek için Kaydet\'i kullan.';
+
+  @override
+  String get hashtagHint =>
+      'Hashtag satırları (#fyp #ad) soluk gösterilir ve süreye sayılmaz. Bölüm için boşluklu \"# \" kullan.';
+
+  @override
+  String get appLock => 'Uygulama kilidi';
+
+  @override
+  String get appLockHint =>
+      'APrompter\'ı açmak için parmak izi, yüz veya telefon PIN\'i iste';
+
+  @override
+  String get appLockUnavailable => 'Önce bu telefonda bir ekran kilidi ayarla.';
+
+  @override
+  String get unlock => 'Kilidi aç';
+
+  @override
+  String get unlockReason =>
+      'Senaryolarını görmek için APrompter\'ın kilidini aç';
+
+  @override
+  String get autoStopWait => 'Son satırdan sonra bekleme';
+
+  @override
+  String get beforeYouRecord => 'Çekimden önce';
+
+  @override
+  String get recordAnyway => 'Yine de kaydet';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Boş alanına yalnızca yaklaşık $minutes dk video sığar. Yer aç veya video kalitesini düşür.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Pil %$level — uzun bir çekim yarıda kesilebilir. Mümkünse şarja tak.';
+  }
+
+  @override
+  String get brightScreen => 'Prompter sırasında tam parlaklık';
+
+  @override
+  String get brightScreenHint => 'Dışarıda okuması daha kolay';
+
+  @override
+  String get cameraBusy =>
+      'Kamerayı başka bir uygulama kullanıyor. Onu kapatıp tekrar dene.';
+
+  @override
+  String get cameraIntroTitle => 'Kamera ve mikrofon';
+
+  @override
+  String get cameraIntroBody =>
+      'Senaryo ekrandayken seni çekmek için APrompter\'ın kameraya ve mikrofona ihtiyacı var. Telefonun birazdan soracak. Videolar telefonunda kalır.';
+
+  @override
+  String get continueLabel => 'Devam';
+
+  @override
+  String get notNow => 'Şimdi değil';
+
+  @override
+  String get colorWhite => 'Beyaz';
+
+  @override
+  String get colorYellow => 'Sarı';
+
+  @override
+  String get colorGreen => 'Yeşil';
+
+  @override
+  String get colorBlue => 'Mavi';
+
+  @override
+  String get colorPink => 'Pembe';
+
+  @override
+  String get colorBlack => 'Siyah';
+
+  @override
+  String get damagedData => 'Okunamayan veri';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date tarihinde ayrıldı · $size karakter';
+  }
+
+  @override
+  String get tryToRecover => 'Kurtarmayı dene';
+
+  @override
+  String get nothingRecovered => 'İçinden hiçbir senaryo okunamadı.';
+
+  @override
+  String get floatLowRam =>
+      'Bu telefon uygulamaları diğerlerinin üzerinde gösteremiyor (düşük bellek veya Android Go). Bunun yerine Kaydet\'i kullan.';
+
+  @override
+  String get oemTipsTitle => 'Yüzen prompter\'ı açık tut';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand telefonlar pil tasarrufu için yüzen pencereleri kapatabilir. Ayarlar → Uygulamalar → APrompter içinde: diğer uygulamaların üzerinde göstermeye (ve açılır pencerelere) izin ver, pili \"Kısıtlanmamış\" yap ve bildirimlere izin ver.';
+  }
+
+  @override
+  String get focusLine => 'Geçerli satıra odaklan';
+
+  @override
+  String get focusLineHint => 'Diğer satırları soluklaştırır';
+
+  @override
+  String get stepByLine => 'Satır satır';
+
+  @override
+  String get stepByLineHint =>
+      'Her dokunuş veya kumanda basışı bir satır ilerler — otomatik kaydırma yok';
+
+  @override
+  String get reduceEffects => 'Efektleri azalt';
+
+  @override
+  String get reduceEffectsHint =>
+      'Geçiş ve gölge yok: eski telefonlarda daha akıcı, pil tasarrufu sağlar';
+
+  @override
+  String get letterSpacing => 'Harf aralığı';
+
+  @override
+  String get pasteAsNewScript => 'Yeni senaryo olarak yapıştır';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Notlar, Keep, Notion, Dokümanlar veya herhangi bir uygulamadan kopyalanan metin';
+
+  @override
+  String get importFiles => 'Dosyaları içe aktar';
+
+  @override
+  String get importFilesHint =>
+      'Word, metin, Markdown, RTF, HTML, Evernote, altyazı veya yedek';
+
+  @override
+  String get clipboardEmpty =>
+      'Yapıştırılacak bir şey yok. Önce senaryonu diğer uygulamada kopyala.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count senaryo içe aktarıldı',
+      one: '1 senaryo içe aktarıldı',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Ücretsiz plan $count senaryo içerir. Hiçbir şey kaybolmadı: notun veya dosyan olduğu yerde duruyor. Daha fazlasını içe aktarmak için yükselt.',
+      one: 'Ücretsiz plan 1 senaryo içerir. Hiçbir şey kaybolmadı: notun veya dosyan olduğu yerde duruyor. Daha fazlasını içe aktarmak için yükselt.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF\'ler içe aktarılamaz. PDF\'i aç, metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importOldFormat =>
+      'Eski Word (.doc) ve Pages dosyaları okunamaz. Dosyayı .docx veya metin olarak kaydet ya da metni kopyalayıp \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importUnsupported =>
+      'APrompter bu tür dosyaları okuyamaz. Metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importEmpty => 'İçinde içe aktarılacak metin yok.';
+
+  @override
+  String get importTooLarge =>
+      'Bu, tek bir senaryo için çok uzun. İhtiyacın olan kısmı kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importLinkOnly =>
+      'Metin değil, yalnızca bir bağlantı geldi. Bağlantıyı aç, metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get importUnreadable =>
+      'Okunamadı. Metni kopyala ve \"Yeni senaryo olarak yapıştır\" seçeneğini kullan.';
+
+  @override
+  String get saveAsTextFile => 'Metin dosyası olarak kaydet';
+
+  @override
+  String get saveTextFileFailed => 'Metin dosyası oluşturulamadı. Tekrar dene.';
+
+  @override
+  String get mySetup => 'Kurulumum';
+
+  @override
+  String get mySetupHint => 'Kaydettiğin kurulum';
+
+  @override
+  String get saveMySetup => 'Kurulumum olarak kaydet';
+
+  @override
+  String get resetAllSettings => 'Tüm ayarları sıfırla';
+
+  @override
+  String get runHadJumps =>
+      'Bu denemede atlamalar yaptın, bu yüzden tempo önerilemiyor.';
+
+  @override
+  String get keepTake => 'Sakla';
+
+  @override
+  String get retake => 'Yeniden çek';
+
+  @override
+  String get reviewTakes => 'Her çekimi gözden geçir';
+
+  @override
+  String get reviewTakesHint => 'İzle, sonra sakla ya da yeniden çek';
+
+  @override
+  String get takesToGallery => 'Çekimleri galeriye kaydet';
+
+  @override
+  String get takesToGalleryHint =>
+      'Kapalı: çekimler uygulamada kalır, Google Photos ve iCloud\'a gitmez';
+
+  @override
+  String get takesTitle => 'Çekimler';
+
+  @override
+  String get takesEmpty =>
+      'Uygulamada saklanan çekimler burada görünür. Burada tutmak için ayarlarda \"Çekimleri galeriye kaydet\"i kapat.';
+
+  @override
+  String get saveToGallery => 'Galeriye kaydet';
+
+  @override
+  String get savedToGallery => 'Galerine kaydedildi';
+
+  @override
+  String get deleteTake => 'Çekimi sil';
+
+  @override
+  String takeKeptInApp(int n) {
+    return '$n. çekim uygulamada saklandı';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Abonelik veya tek seferlik satın alma ile sınırsız senaryo.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Planlar yüklenemedi. Bağlantını kontrol edip tekrar dene.';
+
+  @override
+  String get purchaseFailed => 'Satın alma başarısız oldu. Tekrar dene.';
+
+  @override
+  String get restoreFailed => 'Satın alımlar geri yüklenemedi. Tekrar dene.';
+
+  @override
+  String get restorePurchases => 'Satın alımları geri yükle';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Bu senaryo $count kelimeyi aşıyor. Uzun senaryolar APrompter Unlimited\'ın bir parçasıdır.';
+  }
+
+  @override
+  String get upgrade => 'Yükselt';
+
+  @override
+  String planMonthly(String price) {
+    return 'Aylık · $price / ay';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Yıllık · $price / yıl';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Ömür boyu · $price tek seferlik';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '%$percent tasarruf';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Aylık ve yıllık planlar iptal edene kadar aynı süre için otomatik olarak yenilenir. Bir sonraki ücreti önlemek için dönem bitmeden en az 24 saat önce $store hesap ayarlarından iptal et. Ömür boyu, tek seferlik bir satın almadır.';
+  }
+
+  @override
+  String get termsOfUse => 'Kullanım Koşulları';
+
+  @override
+  String get privacyPolicy => 'Gizlilik Politikası';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Bu $store hesabında önceki bir satın alma bulunamadı.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'Telefonunda ekran kilidi yok, bu yüzden uygulama kilidi kapatıldı.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Bu çekim silinsin mi? Video geri getirilemez.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" kalıcı olarak silinsin mi? Geri getirilemez.';
+  }
+
+  @override
+  String get deleteForeverTakes => 'Uygulamada saklanan çekimleri de silinir.';
+
+  @override
+  String get purchasePending =>
+      'Ödeme beklemede. Onaylandığında APrompter Unlimited otomatik olarak açılır.';
+
+  @override
+  String get positionHintFloat =>
+      'Yüzen pencere her yere sürüklenebilir ve yerini hatırlar.';
+
+  @override
+  String get readingLine => 'Okuma çizgisinin konumu';
+
+  @override
+  String get readingLineHint =>
+      'Telefon kamerası ekranın üstündedir: çizgi yukarıdayken bakışın lense yakın kalır.';
+
+  @override
+  String get readingLineNearCamera => 'Kameraya yakın';
+
+  @override
+  String get readingLineMiddle => 'Orta';
+
+  @override
+  String get readingLineDragHint =>
+      'Prova\'da ve başlamadan önce Kaydet\'te çizginin soldaki okunu yukarı ya da aşağı da sürükleyebilirsin.';
 }

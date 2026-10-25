@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "ביטול";
+
+/* Share extension: close the confirmation */
+"Done" = "סיום";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "נוסף ל-APrompter";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "לא ניתן היה להוסיף את זה ל-APrompter";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "פתחו את APrompter כדי להתחיל לקרוא.";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "זה ארוך מדי לתסריט אחד.";

@@ -82,6 +82,10 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
         Script.fromJson(msg['script'] as Map<String, dynamic>),
         PrompterSettings.fromJson(msg['settings'] as Map<String, dynamic>),
       );
+    } else if (msg['type'] == 'update') {
+      // The script was edited in the app: show the new text in place.
+      final script = Script.fromJson(msg['script'] as Map<String, dynamic>);
+      if (script.id == _script?.id) setState(() => _script = script);
     }
   }
 
@@ -103,6 +107,25 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
     } else {
       _controller.play();
     }
+  }
+
+  /// F9: pace set in the window is kept for the app and the next float.
+  Future<void> _savePace(double wpm) async {
+    _settings = _settings.copyWith(wpm: wpm);
+    final storage = await Storage.open();
+    await storage.reload();
+    await storage.saveSettings(storage.loadSettings().copyWith(wpm: wpm));
+  }
+
+  /// The reading line moved in the window (screen readers; drags move the
+  /// window itself) is kept for the app and the next float, like the pace.
+  Future<void> _saveGuidePosition(double position) async {
+    setState(() => _settings = _settings.copyWith(guidePosition: position));
+    final storage = await Storage.open();
+    await storage.reload();
+    await storage.saveSettings(
+      storage.loadSettings().copyWith(guidePosition: position),
+    );
   }
 
   Future<void> _toggleMinimize() async {
@@ -154,11 +177,34 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
               flex: 4,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: PrompterControls(
-                  controller: _controller,
-                  wordCount: _script?.wordCount ?? 0,
-                  onPlay: _start,
-                  dense: true,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Drags move the window, so these are the way back to
+                    // a line or section.
+                    IconButton(
+                      tooltip: context.l10n.previousSection,
+                      visualDensity: VisualDensity.compact,
+                      color: Colors.white,
+                      onPressed: _controller.previousSection,
+                      icon: const Icon(Icons.skip_previous),
+                    ),
+                    IconButton(
+                      tooltip: context.l10n.nextSection,
+                      visualDensity: VisualDensity.compact,
+                      color: Colors.white,
+                      onPressed: _controller.nextSection,
+                      icon: const Icon(Icons.skip_next),
+                    ),
+                    PrompterControls(
+                      controller: _controller,
+                      wordCount: _script?.wordCount ?? 0,
+                      pauses: _script?.pauses ?? 0,
+                      onPlay: _start,
+                      onWpmChanged: _savePace,
+                      dense: true,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -207,6 +253,7 @@ class _FloatingPrompterState extends State<_FloatingPrompter> {
                             manualScroll: false,
                             autofocus: false,
                             onTap: _start,
+                            onGuidePositionChanged: _saveGuidePosition,
                           ),
                   ),
                   if (_counting)

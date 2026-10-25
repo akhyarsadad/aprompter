@@ -103,6 +103,7 @@ class AppLocalizationsPt extends AppLocalizations {
       locale: localeName,
       other: '$count palavras',
       one: '1 palavra',
+      zero: '0 palavras',
     );
     return '$_temp0';
   }
@@ -545,7 +546,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Arraste a barra no topo do prompter para movê-lo para qualquer lugar e o canto para redimensionar. No Android, a janela flutuante pode ser arrastada para qualquer lugar e lembra a posição.';
+      'Arraste a barra no topo do prompter para movê-lo para qualquer lugar e o canto para redimensionar.';
 
   @override
   String get app => 'App';
@@ -565,4 +566,474 @@ class AppLocalizationsPt extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Não foi possível salvar — o celular pode estar sem espaço. Seu trabalho fica guardado enquanto o app estiver aberto.';
+
+  @override
+  String get versionHistory => 'Histórico de versões';
+
+  @override
+  String get noVersions =>
+      'Ainda não há versões anteriores. Elas são guardadas automaticamente enquanto você escreve.';
+
+  @override
+  String get restore => 'Restaurar';
+
+  @override
+  String get versionRestored => 'Versão anterior restaurada';
+
+  @override
+  String get recentlyDeleted => 'Excluídos recentemente';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Roteiros excluídos ficam aqui por $days dias.',
+      one: 'Roteiros excluídos ficam aqui por 1 dia.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Excluir para sempre';
+
+  @override
+  String deletedOn(String date) {
+    return 'Excluído em $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" restaurado';
+  }
+
+  @override
+  String get backUpScripts => 'Fazer backup de todos os roteiros';
+
+  @override
+  String get restoreBackup => 'Restaurar de um backup';
+
+  @override
+  String get backupShareTitle => 'Backup do APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count roteiros restaurados',
+      one: '1 roteiro restaurado',
+      zero: 'Tudo deste backup já está aqui',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Esse arquivo não é um backup do APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Mesmo a $wpm ppm não cabe em $target — corte cerca de $words palavras.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'A câmera não estava pronta, então a gravação não começou. Tente de novo.';
+
+  @override
+  String get previousSection => 'Seção anterior';
+
+  @override
+  String get nextSection => 'Próxima seção';
+
+  @override
+  String get floatingNotificationBody => 'Toque para abrir o APrompter';
+
+  @override
+  String get customTarget => 'Personalizado…';
+
+  @override
+  String get customTargetTitle => 'Duração alvo';
+
+  @override
+  String get customTargetHint => 'Minutos e segundos, ex.: 5:00';
+
+  @override
+  String get saved => 'Salvo';
+
+  @override
+  String get floatNotOnIos =>
+      'O iPhone e o iPad não deixam apps flutuarem sobre outros apps. Use Gravar para filmar com o roteiro sob a câmera.';
+
+  @override
+  String get hashtagHint =>
+      'Linhas de hashtag (#fyp #ad) aparecem esmaecidas e não contam no tempo. Use \"# \" com espaço para uma seção.';
+
+  @override
+  String get appLock => 'Bloqueio do app';
+
+  @override
+  String get appLockHint =>
+      'Pedir digital, rosto ou PIN do celular para abrir o APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Configure primeiro um bloqueio de tela neste celular.';
+
+  @override
+  String get unlock => 'Desbloquear';
+
+  @override
+  String get unlockReason => 'Desbloqueie o APrompter para ver seus roteiros';
+
+  @override
+  String get autoStopWait => 'Espera após a última linha';
+
+  @override
+  String get beforeYouRecord => 'Antes de gravar';
+
+  @override
+  String get recordAnyway => 'Gravar mesmo assim';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Seu espaço livre comporta só uns $minutes min de vídeo. Libere espaço ou reduza a qualidade do vídeo.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Bateria em $level% — um take longo pode ser interrompido. Conecte o carregador se puder.';
+  }
+
+  @override
+  String get brightScreen => 'Brilho máximo durante o prompter';
+
+  @override
+  String get brightScreenHint => 'Mais fácil de ler ao ar livre';
+
+  @override
+  String get cameraBusy =>
+      'Outro app está usando a câmera. Feche-o e tente de novo.';
+
+  @override
+  String get cameraIntroTitle => 'Câmera e microfone';
+
+  @override
+  String get cameraIntroBody =>
+      'Para filmar você com o roteiro na tela, o APrompter precisa da câmera e do microfone. Seu celular vai pedir em seguida. Os vídeos ficam no seu celular.';
+
+  @override
+  String get continueLabel => 'Continuar';
+
+  @override
+  String get notNow => 'Agora não';
+
+  @override
+  String get colorWhite => 'Branco';
+
+  @override
+  String get colorYellow => 'Amarelo';
+
+  @override
+  String get colorGreen => 'Verde';
+
+  @override
+  String get colorBlue => 'Azul';
+
+  @override
+  String get colorPink => 'Rosa';
+
+  @override
+  String get colorBlack => 'Preto';
+
+  @override
+  String get damagedData => 'Dados ilegíveis';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Separado em $date · $size caracteres';
+  }
+
+  @override
+  String get tryToRecover => 'Tentar recuperar';
+
+  @override
+  String get nothingRecovered => 'Nenhum roteiro pôde ser lido.';
+
+  @override
+  String get floatLowRam =>
+      'Este celular não consegue mostrar apps sobre outros apps (pouca memória ou Android Go). Use Gravar.';
+
+  @override
+  String get oemTipsTitle => 'Mantenha o prompter flutuante ativo';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Celulares $brand podem fechar janelas flutuantes para economizar bateria. Em Configurações → Apps → APrompter: permita sobrepor a outros apps (e janelas pop-up), defina a bateria como \"Sem restrições\" e permita notificações.';
+  }
+
+  @override
+  String get focusLine => 'Destacar a linha atual';
+
+  @override
+  String get focusLineHint => 'Escurece as outras linhas';
+
+  @override
+  String get stepByLine => 'Linha por linha';
+
+  @override
+  String get stepByLineHint =>
+      'Cada toque ou clique do controle avança uma linha — sem rolagem automática';
+
+  @override
+  String get reduceEffects => 'Reduzir efeitos';
+
+  @override
+  String get reduceEffectsHint =>
+      'Sem transições ou sombras: mais fluido em celulares antigos, economiza bateria';
+
+  @override
+  String get letterSpacing => 'Espaçamento entre letras';
+
+  @override
+  String get pasteAsNewScript => 'Colar como novo roteiro';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Texto copiado do Notas, Keep, Notion, Docs ou qualquer app';
+
+  @override
+  String get importFiles => 'Importar arquivos';
+
+  @override
+  String get importFilesHint =>
+      'Word, texto, Markdown, RTF, HTML, Evernote, legendas ou um backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Nada para colar. Copie seu roteiro no outro app primeiro.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count roteiros importados',
+      one: '1 roteiro importado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'O plano gratuito comporta $count roteiros. Nada se perdeu: sua nota ou arquivo continua onde estava. Faça upgrade para importar mais.',
+      one: 'O plano gratuito comporta 1 roteiro. Nada se perdeu: sua nota ou arquivo continua onde estava. Faça upgrade para importar mais.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDFs não podem ser importados. Abra o PDF, copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importOldFormat =>
+      'Arquivos antigos do Word (.doc) e do Pages não podem ser lidos. Salve como .docx ou texto, ou copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importUnsupported =>
+      'O APrompter não consegue ler esse tipo de arquivo. Copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importEmpty => 'Não há texto para importar.';
+
+  @override
+  String get importTooLarge =>
+      'É grande demais para um roteiro. Copie a parte de que precisa e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importLinkOnly =>
+      'Só chegou um link, não o texto. Abra-o, copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get importUnreadable =>
+      'Não foi possível ler. Copie o texto e use \"Colar como novo roteiro\".';
+
+  @override
+  String get saveAsTextFile => 'Salvar como arquivo de texto';
+
+  @override
+  String get saveTextFileFailed =>
+      'Não foi possível criar o arquivo de texto. Tente de novo.';
+
+  @override
+  String get mySetup => 'Minha configuração';
+
+  @override
+  String get mySetupHint => 'A configuração que você salvou';
+
+  @override
+  String get saveMySetup => 'Salvar como minha configuração';
+
+  @override
+  String get resetAllSettings => 'Redefinir todas as configurações';
+
+  @override
+  String get runHadJumps =>
+      'Você pulou trechos nesta passada, então não dá para sugerir um ritmo.';
+
+  @override
+  String get keepTake => 'Manter';
+
+  @override
+  String get retake => 'Regravar';
+
+  @override
+  String get reviewTakes => 'Revisar cada take';
+
+  @override
+  String get reviewTakesHint => 'Assista e depois mantenha ou grave de novo';
+
+  @override
+  String get takesToGallery => 'Salvar takes na galeria';
+
+  @override
+  String get takesToGalleryHint =>
+      'Desativado: os takes ficam no app, fora do Google Photos e do iCloud';
+
+  @override
+  String get takesTitle => 'Takes';
+
+  @override
+  String get takesEmpty =>
+      'Takes mantidos no app aparecem aqui. Desative \"Salvar takes na galeria\" nas configurações para mantê-los aqui.';
+
+  @override
+  String get saveToGallery => 'Salvar na galeria';
+
+  @override
+  String get savedToGallery => 'Salvo na sua galeria';
+
+  @override
+  String get deleteTake => 'Excluir take';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Take $n mantido no app';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Roteiros ilimitados, com uma assinatura ou uma compra única.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Não foi possível carregar os planos. Verifique sua conexão e tente de novo.';
+
+  @override
+  String get purchaseFailed => 'A compra falhou. Tente de novo.';
+
+  @override
+  String get restoreFailed =>
+      'Não foi possível restaurar as compras. Tente de novo.';
+
+  @override
+  String get restorePurchases => 'Restaurar compras';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Este roteiro passa de $count palavras. Roteiros longos fazem parte do APrompter Unlimited.';
+  }
+
+  @override
+  String get upgrade => 'Fazer upgrade';
+
+  @override
+  String planMonthly(String price) {
+    return 'Mensal · $price / mês';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Anual · $price / ano';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Vitalício · $price pagamento único';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Economize $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Os planos mensal e anual são renovados automaticamente pelo mesmo período até você cancelar. Para evitar a próxima cobrança, cancele pelo menos 24 horas antes do fim do período nas configurações da sua conta $store. O vitalício é uma compra única.';
+  }
+
+  @override
+  String get termsOfUse => 'Termos de Uso';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Nenhuma compra anterior encontrada nesta conta $store.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'Seu celular não tem bloqueio de tela, então o bloqueio do app foi desativado.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Excluir este take? Não será possível recuperar o vídeo.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Excluir \"$title\" para sempre? Não dá para desfazer.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Os takes dele guardados no app também serão excluídos.';
+
+  @override
+  String get purchasePending =>
+      'Pagamento pendente. O APrompter Unlimited é desbloqueado automaticamente assim que for aprovado.';
+
+  @override
+  String get positionHintFloat =>
+      'A janela flutuante pode ser arrastada para qualquer lugar e lembra a posição.';
+
+  @override
+  String get readingLine => 'Posição da linha de leitura';
+
+  @override
+  String get readingLineHint =>
+      'A câmera do celular fica acima da tela: com a linha no alto, seu olhar fica perto da lente.';
+
+  @override
+  String get readingLineNearCamera => 'Perto da câmera';
+
+  @override
+  String get readingLineMiddle => 'Meio';
+
+  @override
+  String get readingLineDragHint =>
+      'Em Ensaiar, e em Gravar antes de começar, você também pode arrastar a seta esquerda da linha para cima ou para baixo.';
 }

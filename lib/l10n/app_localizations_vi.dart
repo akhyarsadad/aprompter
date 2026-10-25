@@ -526,7 +526,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Kéo thanh trên cùng của máy nhắc chữ để đặt ở bất kỳ đâu, và kéo góc để đổi kích thước. Trên Android, cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó.';
+      'Kéo thanh trên cùng của máy nhắc chữ để đặt ở bất kỳ đâu, và kéo góc để đổi kích thước.';
 
   @override
   String get app => 'Ứng dụng';
@@ -546,4 +546,472 @@ class AppLocalizationsVi extends AppLocalizations {
   String minutesShort(int n) {
     return '$n phút';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Không lưu được — có thể điện thoại đã hết dung lượng. Nội dung vẫn được giữ khi ứng dụng còn mở.';
+
+  @override
+  String get versionHistory => 'Lịch sử phiên bản';
+
+  @override
+  String get noVersions =>
+      'Chưa có phiên bản cũ. Chúng được tự động lưu khi bạn viết.';
+
+  @override
+  String get restore => 'Khôi phục';
+
+  @override
+  String get versionRestored => 'Đã khôi phục phiên bản cũ';
+
+  @override
+  String get recentlyDeleted => 'Đã xóa gần đây';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Kịch bản đã xóa được giữ ở đây $days ngày.',
+      one: 'Kịch bản đã xóa được giữ ở đây 1 ngày.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Xóa vĩnh viễn';
+
+  @override
+  String deletedOn(String date) {
+    return 'Đã xóa $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'Đã khôi phục \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'Sao lưu tất cả kịch bản';
+
+  @override
+  String get restoreBackup => 'Khôi phục từ bản sao lưu';
+
+  @override
+  String get backupShareTitle => 'Bản sao lưu APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã khôi phục $count kịch bản',
+      one: 'Đã khôi phục 1 kịch bản',
+      zero: 'Mọi thứ trong bản sao lưu này đã có sẵn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Tệp này không phải bản sao lưu APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Dù ở $wpm từ/phút vẫn không vừa $target — hãy cắt khoảng $words từ.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Camera chưa sẵn sàng nên chưa bắt đầu quay. Hãy thử lại.';
+
+  @override
+  String get previousSection => 'Phần trước';
+
+  @override
+  String get nextSection => 'Phần tiếp theo';
+
+  @override
+  String get floatingNotificationBody => 'Chạm để mở APrompter';
+
+  @override
+  String get customTarget => 'Tùy chỉnh…';
+
+  @override
+  String get customTargetTitle => 'Thời lượng mục tiêu';
+
+  @override
+  String get customTargetHint => 'Phút và giây, vd: 5:00';
+
+  @override
+  String get saved => 'Đã lưu';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone và iPad không cho ứng dụng nổi trên ứng dụng khác. Dùng Quay để quay với kịch bản ngay dưới camera.';
+
+  @override
+  String get hashtagHint =>
+      'Dòng hashtag (#fyp #ad) được làm mờ và không tính giờ. Dùng \"# \" có dấu cách để tạo phần.';
+
+  @override
+  String get appLock => 'Khóa ứng dụng';
+
+  @override
+  String get appLockHint =>
+      'Yêu cầu vân tay, khuôn mặt hoặc mã PIN điện thoại để mở APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Hãy thiết lập khóa màn hình trên điện thoại này trước.';
+
+  @override
+  String get unlock => 'Mở khóa';
+
+  @override
+  String get unlockReason => 'Mở khóa APrompter để xem kịch bản của bạn';
+
+  @override
+  String get autoStopWait => 'Chờ sau dòng cuối';
+
+  @override
+  String get beforeYouRecord => 'Trước khi quay';
+
+  @override
+  String get recordAnyway => 'Vẫn quay';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Dung lượng trống chỉ đủ cho khoảng $minutes phút video. Hãy giải phóng dung lượng hoặc giảm chất lượng video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Pin còn $level% — lần quay dài có thể bị ngắt. Hãy cắm sạc nếu được.';
+  }
+
+  @override
+  String get brightScreen => 'Độ sáng tối đa khi nhắc chữ';
+
+  @override
+  String get brightScreenHint => 'Dễ đọc hơn ngoài trời';
+
+  @override
+  String get cameraBusy =>
+      'Ứng dụng khác đang dùng camera. Hãy đóng ứng dụng đó và thử lại.';
+
+  @override
+  String get cameraIntroTitle => 'Camera và micrô';
+
+  @override
+  String get cameraIntroBody =>
+      'Để quay bạn khi kịch bản hiện trên màn hình, APrompter cần camera và micrô. Điện thoại sẽ hỏi bạn ngay sau đây. Video được giữ trên điện thoại của bạn.';
+
+  @override
+  String get continueLabel => 'Tiếp tục';
+
+  @override
+  String get notNow => 'Để sau';
+
+  @override
+  String get colorWhite => 'Trắng';
+
+  @override
+  String get colorYellow => 'Vàng';
+
+  @override
+  String get colorGreen => 'Xanh lá';
+
+  @override
+  String get colorBlue => 'Xanh dương';
+
+  @override
+  String get colorPink => 'Hồng';
+
+  @override
+  String get colorBlack => 'Đen';
+
+  @override
+  String get damagedData => 'Dữ liệu không đọc được';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Để riêng ngày $date · $size ký tự';
+  }
+
+  @override
+  String get tryToRecover => 'Thử khôi phục';
+
+  @override
+  String get nothingRecovered => 'Không đọc được kịch bản nào từ dữ liệu này.';
+
+  @override
+  String get floatLowRam =>
+      'Điện thoại này không thể hiển thị ứng dụng trên ứng dụng khác (ít bộ nhớ hoặc Android Go). Hãy dùng Quay.';
+
+  @override
+  String get oemTipsTitle => 'Giữ máy nhắc chữ nổi luôn chạy';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Điện thoại $brand có thể đóng cửa sổ nổi để tiết kiệm pin. Trong Cài đặt → Ứng dụng → APrompter: cho phép hiển thị trên ứng dụng khác (và cửa sổ bật lên), đặt pin thành \"Không hạn chế\" và cho phép thông báo.';
+  }
+
+  @override
+  String get focusLine => 'Làm nổi dòng hiện tại';
+
+  @override
+  String get focusLineHint => 'Làm mờ các dòng khác';
+
+  @override
+  String get stepByLine => 'Từng dòng';
+
+  @override
+  String get stepByLineHint =>
+      'Mỗi lần nhấn hoặc bấm điều khiển chuyển một dòng — không tự cuộn';
+
+  @override
+  String get reduceEffects => 'Giảm hiệu ứng';
+
+  @override
+  String get reduceEffectsHint =>
+      'Không mờ dần hay đổ bóng: mượt hơn trên máy cũ, tiết kiệm pin';
+
+  @override
+  String get letterSpacing => 'Khoảng cách chữ';
+
+  @override
+  String get pasteAsNewScript => 'Dán thành kịch bản mới';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Văn bản đã sao chép từ Ghi chú, Keep, Notion, Docs hoặc bất kỳ ứng dụng nào';
+
+  @override
+  String get importFiles => 'Nhập tệp';
+
+  @override
+  String get importFilesHint =>
+      'Word, văn bản, Markdown, RTF, HTML, Evernote, phụ đề hoặc bản sao lưu';
+
+  @override
+  String get clipboardEmpty =>
+      'Không có gì để dán. Hãy sao chép kịch bản trong ứng dụng kia trước.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã nhập $count kịch bản',
+      one: 'Đã nhập 1 kịch bản',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Gói miễn phí chứa được $count kịch bản. Không mất gì cả: ghi chú hoặc tệp của bạn vẫn ở chỗ cũ. Hãy nâng cấp để nhập thêm.',
+      one: 'Gói miễn phí chứa được 1 kịch bản. Không mất gì cả: ghi chú hoặc tệp của bạn vẫn ở chỗ cũ. Hãy nâng cấp để nhập thêm.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Không thể nhập PDF. Hãy mở PDF, sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importOldFormat =>
+      'Không đọc được tệp Word cũ (.doc) và tệp Pages. Hãy lưu thành .docx hoặc văn bản, hoặc sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter không đọc được loại tệp này. Hãy sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importEmpty => 'Không có văn bản nào để nhập.';
+
+  @override
+  String get importTooLarge =>
+      'Quá dài cho một kịch bản. Hãy sao chép phần bạn cần rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importLinkOnly =>
+      'Chỉ nhận được một liên kết, không có văn bản. Hãy mở nó, sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get importUnreadable =>
+      'Không đọc được. Hãy sao chép văn bản rồi dùng \"Dán thành kịch bản mới\".';
+
+  @override
+  String get saveAsTextFile => 'Lưu thành tệp văn bản';
+
+  @override
+  String get saveTextFileFailed => 'Không tạo được tệp văn bản. Hãy thử lại.';
+
+  @override
+  String get mySetup => 'Thiết lập của tôi';
+
+  @override
+  String get mySetupHint => 'Thiết lập bạn đã lưu';
+
+  @override
+  String get saveMySetup => 'Lưu làm thiết lập của tôi';
+
+  @override
+  String get resetAllSettings => 'Đặt lại mọi cài đặt';
+
+  @override
+  String get runHadJumps =>
+      'Bạn đã nhảy qua lại trong lần chạy này nên không thể gợi ý tốc độ.';
+
+  @override
+  String get keepTake => 'Giữ';
+
+  @override
+  String get retake => 'Quay lần nữa';
+
+  @override
+  String get reviewTakes => 'Xem lại từng lần quay';
+
+  @override
+  String get reviewTakesHint => 'Xem rồi giữ lại hoặc quay lần nữa';
+
+  @override
+  String get takesToGallery => 'Lưu lần quay vào thư viện';
+
+  @override
+  String get takesToGalleryHint =>
+      'Tắt: lần quay nằm trong ứng dụng, không vào Google Photos và iCloud';
+
+  @override
+  String get takesTitle => 'Các lần quay';
+
+  @override
+  String get takesEmpty =>
+      'Lần quay giữ trong ứng dụng sẽ hiện ở đây. Tắt \"Lưu lần quay vào thư viện\" trong cài đặt để giữ chúng ở đây.';
+
+  @override
+  String get saveToGallery => 'Lưu vào thư viện';
+
+  @override
+  String get savedToGallery => 'Đã lưu vào thư viện';
+
+  @override
+  String get deleteTake => 'Xóa lần quay';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Đã giữ lần quay $n trong ứng dụng';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Kịch bản không giới hạn, với gói thuê bao hoặc mua một lần.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Không tải được các gói. Kiểm tra kết nối rồi thử lại.';
+
+  @override
+  String get purchaseFailed => 'Mua không thành công. Thử lại.';
+
+  @override
+  String get restoreFailed => 'Không khôi phục được giao dịch mua. Thử lại.';
+
+  @override
+  String get restorePurchases => 'Khôi phục giao dịch mua';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Kịch bản này dài hơn $count từ. Kịch bản dài là một phần của APrompter Unlimited.';
+  }
+
+  @override
+  String get upgrade => 'Nâng cấp';
+
+  @override
+  String planMonthly(String price) {
+    return 'Hằng tháng · $price / tháng';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Hằng năm · $price / năm';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Trọn đời · $price một lần';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Tiết kiệm $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Gói tháng và gói năm tự động gia hạn với cùng thời hạn cho đến khi bạn hủy. Để tránh bị tính phí kỳ tiếp theo, hãy hủy ít nhất 24 giờ trước khi kỳ hiện tại kết thúc trong phần cài đặt tài khoản $store của bạn. Gói trọn đời là giao dịch mua một lần.';
+  }
+
+  @override
+  String get termsOfUse => 'Điều khoản sử dụng';
+
+  @override
+  String get privacyPolicy => 'Chính sách quyền riêng tư';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Không tìm thấy giao dịch mua trước đây trong tài khoản $store này.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'Điện thoại của bạn không có khóa màn hình nên khóa ứng dụng đã được tắt.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Xóa lần quay này? Video sẽ không thể khôi phục.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Xóa vĩnh viễn \"$title\"? Không thể khôi phục.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Các lần quay của kịch bản này lưu trong ứng dụng cũng sẽ bị xóa.';
+
+  @override
+  String get purchasePending =>
+      'Thanh toán đang chờ xử lý. APrompter Unlimited sẽ tự động mở khóa sau khi được chấp thuận.';
+
+  @override
+  String get positionHintFloat =>
+      'Cửa sổ nổi kéo được khắp nơi và nhớ vị trí của nó.';
+
+  @override
+  String get readingLine => 'Vị trí đường dẫn đọc';
+
+  @override
+  String get readingLineHint =>
+      'Camera điện thoại nằm phía trên màn hình: đặt đường đọc cao giúp mắt bạn ở gần ống kính.';
+
+  @override
+  String get readingLineNearCamera => 'Gần camera';
+
+  @override
+  String get readingLineMiddle => 'Giữa';
+
+  @override
+  String get readingLineDragHint =>
+      'Trong Tập dượt, và trong Quay trước khi bắt đầu, bạn cũng có thể kéo mũi tên bên trái của đường lên hoặc xuống.';
 }

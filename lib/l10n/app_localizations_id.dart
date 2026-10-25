@@ -526,7 +526,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran. Di Android, jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
+      'Seret bilah di atas prompter untuk memindahkannya ke mana saja, dan sudutnya untuk mengubah ukuran.';
 
   @override
   String get app => 'Aplikasi';
@@ -546,4 +546,471 @@ class AppLocalizationsId extends AppLocalizations {
   String minutesShort(int n) {
     return '$n mnt';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Gagal menyimpan — mungkin penyimpanan ponsel penuh. Pekerjaan tetap aman selama aplikasi masih terbuka.';
+
+  @override
+  String get versionHistory => 'Riwayat versi';
+
+  @override
+  String get noVersions =>
+      'Belum ada versi sebelumnya. Versi disimpan otomatis selama kamu menulis.';
+
+  @override
+  String get restore => 'Pulihkan';
+
+  @override
+  String get versionRestored => 'Versi sebelumnya dipulihkan';
+
+  @override
+  String get recentlyDeleted => 'Baru dihapus';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Naskah yang dihapus disimpan di sini selama $days hari.',
+      one: 'Naskah yang dihapus disimpan di sini selama 1 hari.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Hapus permanen';
+
+  @override
+  String deletedOn(String date) {
+    return 'Dihapus $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" dipulihkan';
+  }
+
+  @override
+  String get backUpScripts => 'Cadangkan semua naskah';
+
+  @override
+  String get restoreBackup => 'Pulihkan dari cadangan';
+
+  @override
+  String get backupShareTitle => 'Cadangan APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count naskah dipulihkan',
+      one: '1 naskah dipulihkan',
+      zero: 'Semua isi cadangan ini sudah ada',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'File itu bukan cadangan APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Bahkan pada $wpm kpm, ini tidak muat dalam $target — pangkas sekitar $words kata.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Kamera belum siap, jadi rekaman tidak dimulai. Coba lagi.';
+
+  @override
+  String get previousSection => 'Bagian sebelumnya';
+
+  @override
+  String get nextSection => 'Bagian berikutnya';
+
+  @override
+  String get floatingNotificationBody => 'Ketuk untuk membuka APrompter';
+
+  @override
+  String get customTarget => 'Kustom…';
+
+  @override
+  String get customTargetTitle => 'Durasi target';
+
+  @override
+  String get customTargetHint => 'Menit dan detik, mis. 5:00';
+
+  @override
+  String get saved => 'Tersimpan';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone dan iPad tidak mengizinkan aplikasi melayang di atas aplikasi lain. Gunakan Rekam untuk merekam dengan naskah di bawah kamera.';
+
+  @override
+  String get hashtagHint =>
+      'Baris hashtag (#fyp #ad) ditampilkan redup dan tidak dihitung waktunya. Gunakan \"# \" dengan spasi untuk bagian.';
+
+  @override
+  String get appLock => 'Kunci aplikasi';
+
+  @override
+  String get appLockHint =>
+      'Minta sidik jari, wajah, atau PIN HP untuk membuka APrompter';
+
+  @override
+  String get appLockUnavailable => 'Atur kunci layar di HP ini dulu.';
+
+  @override
+  String get unlock => 'Buka kunci';
+
+  @override
+  String get unlockReason => 'Buka kunci APrompter untuk melihat naskahmu';
+
+  @override
+  String get autoStopWait => 'Jeda setelah baris terakhir';
+
+  @override
+  String get beforeYouRecord => 'Sebelum merekam';
+
+  @override
+  String get recordAnyway => 'Tetap rekam';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Ruang kosongmu hanya cukup untuk sekitar $minutes mnt video. Kosongkan ruang atau turunkan kualitas video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Baterai $level% — take panjang bisa terpotong. Colokkan charger kalau bisa.';
+  }
+
+  @override
+  String get brightScreen => 'Kecerahan penuh saat prompter jalan';
+
+  @override
+  String get brightScreenHint => 'Lebih mudah dibaca di luar ruangan';
+
+  @override
+  String get cameraBusy =>
+      'Aplikasi lain sedang memakai kamera. Tutup lalu coba lagi.';
+
+  @override
+  String get cameraIntroTitle => 'Kamera dan mikrofon';
+
+  @override
+  String get cameraIntroBody =>
+      'Untuk merekammu dengan naskah di layar, APrompter butuh kamera dan mikrofon. HP-mu akan meminta izin berikutnya. Video tetap di HP-mu.';
+
+  @override
+  String get continueLabel => 'Lanjut';
+
+  @override
+  String get notNow => 'Nanti saja';
+
+  @override
+  String get colorWhite => 'Putih';
+
+  @override
+  String get colorYellow => 'Kuning';
+
+  @override
+  String get colorGreen => 'Hijau';
+
+  @override
+  String get colorBlue => 'Biru';
+
+  @override
+  String get colorPink => 'Merah muda';
+
+  @override
+  String get colorBlack => 'Hitam';
+
+  @override
+  String get damagedData => 'Data tak terbaca';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Disisihkan pada $date · $size karakter';
+  }
+
+  @override
+  String get tryToRecover => 'Coba pulihkan';
+
+  @override
+  String get nothingRecovered => 'Tidak ada naskah yang bisa dibaca.';
+
+  @override
+  String get floatLowRam =>
+      'HP ini tidak bisa menampilkan aplikasi di atas aplikasi lain (memori rendah atau Android Go). Pakai Rekam saja.';
+
+  @override
+  String get oemTipsTitle => 'Jaga prompter melayang tetap aktif';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'HP $brand bisa menutup jendela melayang untuk hemat baterai. Di Pengaturan → Aplikasi → APrompter: izinkan tampil di atas aplikasi lain (dan jendela pop-up), atur baterai ke \"Tidak dibatasi\", dan izinkan notifikasi.';
+  }
+
+  @override
+  String get focusLine => 'Fokus ke baris saat ini';
+
+  @override
+  String get focusLineHint => 'Meredupkan baris lainnya';
+
+  @override
+  String get stepByLine => 'Baris demi baris';
+
+  @override
+  String get stepByLineHint =>
+      'Setiap ketukan atau tombol remote maju satu baris — tanpa gulir otomatis';
+
+  @override
+  String get reduceEffects => 'Kurangi efek';
+
+  @override
+  String get reduceEffectsHint =>
+      'Tanpa fade atau bayangan: lebih lancar di HP lama, hemat baterai';
+
+  @override
+  String get letterSpacing => 'Jarak huruf';
+
+  @override
+  String get pasteAsNewScript => 'Tempel sebagai naskah baru';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Teks yang disalin dari Catatan, Keep, Notion, Docs, atau aplikasi apa pun';
+
+  @override
+  String get importFiles => 'Impor file';
+
+  @override
+  String get importFilesHint =>
+      'Word, teks, Markdown, RTF, HTML, Evernote, subtitle, atau cadangan';
+
+  @override
+  String get clipboardEmpty =>
+      'Tidak ada yang bisa ditempel. Salin dulu naskahmu di aplikasi lain.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count naskah diimpor',
+      one: '1 naskah diimpor',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Paket gratis memuat $count naskah. Tidak ada yang hilang: catatan atau file-mu masih di tempatnya. Tingkatkan untuk mengimpor lebih banyak.',
+      one: 'Paket gratis memuat 1 naskah. Tidak ada yang hilang: catatan atau file-mu masih di tempatnya. Tingkatkan untuk mengimpor lebih banyak.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF tidak bisa diimpor. Buka PDF-nya, salin teksnya, lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importOldFormat =>
+      'File Word lama (.doc) dan Pages tidak bisa dibaca. Simpan sebagai .docx atau teks, atau salin teksnya lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter tidak bisa membaca jenis file itu. Salin teksnya lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importEmpty => 'Tidak ada teks untuk diimpor.';
+
+  @override
+  String get importTooLarge =>
+      'Terlalu panjang untuk satu naskah. Salin bagian yang kamu perlukan lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importLinkOnly =>
+      'Yang masuk hanya tautan, bukan teksnya. Buka tautannya, salin teksnya, lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get importUnreadable =>
+      'Tidak bisa dibaca. Salin teksnya lalu pakai \"Tempel sebagai naskah baru\".';
+
+  @override
+  String get saveAsTextFile => 'Simpan sebagai file teks';
+
+  @override
+  String get saveTextFileFailed => 'File teks tidak bisa dibuat. Coba lagi.';
+
+  @override
+  String get mySetup => 'Setelanku';
+
+  @override
+  String get mySetupHint => 'Setelan yang kamu simpan';
+
+  @override
+  String get saveMySetup => 'Simpan sebagai setelanku';
+
+  @override
+  String get resetAllSettings => 'Reset semua pengaturan';
+
+  @override
+  String get runHadJumps =>
+      'Kamu melompat-lompat di sesi ini, jadi tempo tidak bisa disarankan.';
+
+  @override
+  String get keepTake => 'Simpan';
+
+  @override
+  String get retake => 'Ulangi';
+
+  @override
+  String get reviewTakes => 'Tinjau setiap take';
+
+  @override
+  String get reviewTakesHint => 'Tonton, lalu simpan atau ulangi';
+
+  @override
+  String get takesToGallery => 'Simpan take ke galeri';
+
+  @override
+  String get takesToGalleryHint =>
+      'Mati: take tetap di aplikasi, tidak masuk Google Photos dan iCloud';
+
+  @override
+  String get takesTitle => 'Take';
+
+  @override
+  String get takesEmpty =>
+      'Take yang disimpan di aplikasi muncul di sini. Matikan \"Simpan take ke galeri\" di pengaturan agar tersimpan di sini.';
+
+  @override
+  String get saveToGallery => 'Simpan ke galeri';
+
+  @override
+  String get savedToGallery => 'Disimpan ke galerimu';
+
+  @override
+  String get deleteTake => 'Hapus take';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Take $n disimpan di aplikasi';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Naskah tanpa batas, dengan langganan atau pembelian sekali bayar.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Paket tidak bisa dimuat. Periksa koneksimu lalu coba lagi.';
+
+  @override
+  String get purchaseFailed => 'Pembelian gagal. Coba lagi.';
+
+  @override
+  String get restoreFailed => 'Pembelian tidak bisa dipulihkan. Coba lagi.';
+
+  @override
+  String get restorePurchases => 'Pulihkan pembelian';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Naskah ini lebih dari $count kata. Naskah panjang termasuk dalam APrompter Unlimited.';
+  }
+
+  @override
+  String get upgrade => 'Tingkatkan';
+
+  @override
+  String planMonthly(String price) {
+    return 'Bulanan · $price / bulan';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Tahunan · $price / tahun';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Seumur hidup · $price sekali bayar';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Hemat $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Paket bulanan dan tahunan diperpanjang otomatis untuk periode yang sama sampai kamu membatalkannya. Agar tidak ditagih lagi, batalkan paling lambat 24 jam sebelum periode berakhir di pengaturan akun $store kamu. Seumur hidup adalah pembelian sekali bayar.';
+  }
+
+  @override
+  String get termsOfUse => 'Ketentuan Penggunaan';
+
+  @override
+  String get privacyPolicy => 'Kebijakan Privasi';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Tidak ada pembelian sebelumnya di akun $store ini.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'HP kamu tidak punya kunci layar, jadi kunci aplikasi dimatikan.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Hapus take ini? Videonya tidak bisa dikembalikan.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Hapus permanen \"$title\"? Ini tidak bisa dibatalkan.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Take-nya yang disimpan di aplikasi juga ikut terhapus.';
+
+  @override
+  String get purchasePending =>
+      'Pembayaran tertunda. APrompter Unlimited terbuka otomatis setelah pembayaran disetujui.';
+
+  @override
+  String get positionHintFloat =>
+      'Jendela melayang bisa diseret ke mana saja dan mengingat posisinya.';
+
+  @override
+  String get readingLine => 'Posisi garis baca';
+
+  @override
+  String get readingLineHint =>
+      'Kamera HP ada di atas layar: garis yang tinggi menjaga matamu tetap dekat lensa.';
+
+  @override
+  String get readingLineNearCamera => 'Dekat kamera';
+
+  @override
+  String get readingLineMiddle => 'Tengah';
+
+  @override
+  String get readingLineDragHint =>
+      'Di Latihan, dan di Rekam sebelum mulai, kamu juga bisa menyeret panah kiri garis ke atas atau ke bawah.';
 }

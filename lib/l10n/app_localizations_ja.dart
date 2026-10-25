@@ -519,7 +519,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'プロンプター上部のバーをドラッグすると好きな場所に移動でき、角をドラッグするとサイズを変えられます。Android ではフローティングウィンドウをどこへでも動かせ、位置も記憶します。';
+      'プロンプター上部のバーをドラッグすると好きな場所に移動でき、角をドラッグするとサイズを変えられます。';
 
   @override
   String get app => 'アプリ';
@@ -539,4 +539,454 @@ class AppLocalizationsJa extends AppLocalizations {
   String minutesShort(int n) {
     return '$n分';
   }
+
+  @override
+  String get storageSaveFailed =>
+      '保存できませんでした。端末の空き容量が不足している可能性があります。アプリを開いている間は内容が保持されます。';
+
+  @override
+  String get versionHistory => 'バージョン履歴';
+
+  @override
+  String get noVersions => '以前のバージョンはまだありません。書いている間に自動で保存されます。';
+
+  @override
+  String get restore => '復元';
+
+  @override
+  String get versionRestored => '以前のバージョンを復元しました';
+
+  @override
+  String get recentlyDeleted => '最近削除した項目';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '削除した台本はここに$days日間保管されます。',
+      one: '削除した台本はここに1日間保管されます。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '完全に削除';
+
+  @override
+  String deletedOn(String date) {
+    return '$dateに削除';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '「$title」を復元しました';
+  }
+
+  @override
+  String get backUpScripts => 'すべての台本をバックアップ';
+
+  @override
+  String get restoreBackup => 'バックアップから復元';
+
+  @override
+  String get backupShareTitle => 'APrompter バックアップ';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count件の台本を復元しました',
+      one: '1件の台本を復元しました',
+      zero: 'このバックアップの内容はすべて復元済みです',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'このファイルは APrompter のバックアップではありません。';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm 語/分でも $target に収まりません。約$words語削ってください。';
+  }
+
+  @override
+  String get cameraNotReady => 'カメラの準備ができていなかったため、撮影を開始できませんでした。もう一度お試しください。';
+
+  @override
+  String get previousSection => '前のセクション';
+
+  @override
+  String get nextSection => '次のセクション';
+
+  @override
+  String get floatingNotificationBody => 'タップして APrompter を開く';
+
+  @override
+  String get customTarget => 'カスタム…';
+
+  @override
+  String get customTargetTitle => '目標の長さ';
+
+  @override
+  String get customTargetHint => '分と秒（例：5:00）';
+
+  @override
+  String get saved => '保存しました';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone と iPad ではアプリを他のアプリの上に表示できません。「撮影」なら台本をカメラの下に表示して撮影できます。';
+
+  @override
+  String get hashtagHint =>
+      'ハッシュタグの行（#fyp #ad）は薄く表示され、時間に含まれません。セクションには「# 」（スペース付き）を使います。';
+
+  @override
+  String get appLock => 'アプリのロック';
+
+  @override
+  String get appLockHint => 'APrompter を開くときに指紋・顔・端末の PIN を求めます';
+
+  @override
+  String get appLockUnavailable => '先にこの端末で画面ロックを設定してください。';
+
+  @override
+  String get unlock => 'ロック解除';
+
+  @override
+  String get unlockReason => '台本を見るには APrompter のロックを解除してください';
+
+  @override
+  String get autoStopWait => '最後の行のあとの待ち時間';
+
+  @override
+  String get beforeYouRecord => '撮影の前に';
+
+  @override
+  String get recordAnyway => 'このまま撮影';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '空き容量では約 $minutes 分の動画しか撮れません。容量を空けるか画質を下げてください。';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'バッテリー残量 $level% — 長いテイクは途中で切れるかもしれません。できれば充電してください。';
+  }
+
+  @override
+  String get brightScreen => 'プロンプター中は最大の明るさ';
+
+  @override
+  String get brightScreenHint => '屋外でも読みやすくなります';
+
+  @override
+  String get cameraBusy => '別のアプリがカメラを使用中です。そのアプリを閉じてもう一度お試しください。';
+
+  @override
+  String get cameraIntroTitle => 'カメラとマイク';
+
+  @override
+  String get cameraIntroBody =>
+      '台本を画面に表示しながら撮影するため、APrompter はカメラとマイクを使います。このあと端末から確認が表示されます。動画は端末内に保存されます。';
+
+  @override
+  String get continueLabel => '続ける';
+
+  @override
+  String get notNow => '後で';
+
+  @override
+  String get colorWhite => '白';
+
+  @override
+  String get colorYellow => '黄';
+
+  @override
+  String get colorGreen => '緑';
+
+  @override
+  String get colorBlue => '青';
+
+  @override
+  String get colorPink => 'ピンク';
+
+  @override
+  String get colorBlack => '黒';
+
+  @override
+  String get damagedData => '読み取れないデータ';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date に退避 · $size 文字';
+  }
+
+  @override
+  String get tryToRecover => '復元を試す';
+
+  @override
+  String get nothingRecovered => '台本を読み取れませんでした。';
+
+  @override
+  String get floatLowRam =>
+      'この端末は他のアプリの上に重ねて表示できません（低メモリ端末または Android Go）。代わりに撮影を使ってください。';
+
+  @override
+  String get oemTipsTitle => 'フローティングプロンプターを維持する';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand の端末は電池節約のためにフローティング画面を閉じることがあります。設定 → アプリ → APrompter で、他のアプリの上に重ねて表示（とポップアップ画面）を許可し、バッテリーを「制限なし」にして、通知を許可してください。';
+  }
+
+  @override
+  String get focusLine => '現在の行を強調';
+
+  @override
+  String get focusLineHint => '他の行を暗くします';
+
+  @override
+  String get stepByLine => '1行ずつ';
+
+  @override
+  String get stepByLineHint => 'タップやリモコンを押すたびに1行進みます（自動スクロールなし）';
+
+  @override
+  String get reduceEffects => 'エフェクトを減らす';
+
+  @override
+  String get reduceEffectsHint => 'フェードや影なし：古い端末でもなめらか、電池も節約';
+
+  @override
+  String get letterSpacing => '文字間隔';
+
+  @override
+  String get pasteAsNewScript => '新しい台本として貼り付け';
+
+  @override
+  String get pasteAsNewScriptHint => 'メモ、Keep、Notion、ドキュメントなど、どのアプリでコピーした文章でも';
+
+  @override
+  String get importFiles => 'ファイルを読み込む';
+
+  @override
+  String get importFilesHint =>
+      'Word、テキスト、Markdown、RTF、HTML、Evernote、字幕、バックアップ';
+
+  @override
+  String get clipboardEmpty => '貼り付ける内容がありません。先にほかのアプリで台本をコピーしてください。';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count件の台本を読み込みました',
+      one: '1件の台本を読み込みました',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '無料プランで保存できる台本は$count件です。何も失われていません。メモやファイルは元の場所に残っています。もっと読み込むにはアップグレードしてください。',
+      one: '無料プランで保存できる台本は1件です。何も失われていません。メモやファイルは元の場所に残っています。もっと読み込むにはアップグレードしてください。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF は読み込めません。PDF を開いて文章をコピーし、「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importOldFormat =>
+      '古い Word（.doc）や Pages のファイルは読み込めません。.docx かテキストで保存するか、文章をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importUnsupported =>
+      'この種類のファイルは APrompter で読み込めません。文章をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importEmpty => '読み込める文章がありません。';
+
+  @override
+  String get importTooLarge =>
+      '1つの台本には長すぎます。必要な部分をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importLinkOnly =>
+      '届いたのはリンクだけで、文章はありませんでした。リンクを開いて文章をコピーし、「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importUnreadable => '読み取れませんでした。文章をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get saveAsTextFile => 'テキストファイルとして保存';
+
+  @override
+  String get saveTextFileFailed => 'テキストファイルを作成できませんでした。もう一度お試しください。';
+
+  @override
+  String get mySetup => 'マイ設定';
+
+  @override
+  String get mySetupHint => '保存した設定';
+
+  @override
+  String get saveMySetup => 'マイ設定として保存';
+
+  @override
+  String get resetAllSettings => 'すべての設定をリセット';
+
+  @override
+  String get runHadJumps => '今回は途中で移動したため、ペースを提案できません。';
+
+  @override
+  String get keepTake => '残す';
+
+  @override
+  String get retake => '撮り直す';
+
+  @override
+  String get reviewTakes => 'テイクごとに確認';
+
+  @override
+  String get reviewTakesHint => '見てから、残すか撮り直すかを選べます';
+
+  @override
+  String get takesToGallery => 'テイクを写真に保存';
+
+  @override
+  String get takesToGalleryHint =>
+      'オフ：テイクはアプリ内に残り、Google Photos や iCloud に入りません';
+
+  @override
+  String get takesTitle => 'テイク';
+
+  @override
+  String get takesEmpty =>
+      'アプリ内に残したテイクがここに表示されます。ここに残すには、設定で「テイクを写真に保存」をオフにしてください。';
+
+  @override
+  String get saveToGallery => '写真に保存';
+
+  @override
+  String get savedToGallery => '写真に保存しました';
+
+  @override
+  String get deleteTake => 'テイクを削除';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'テイク $n をアプリ内に残しました';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody => 'サブスクリプションまたは買い切りで、台本を無制限に作れます。';
+
+  @override
+  String get offeringsLoadFailed => 'プランを読み込めませんでした。接続を確認して、もう一度お試しください。';
+
+  @override
+  String get purchaseFailed => '購入できませんでした。もう一度お試しください。';
+
+  @override
+  String get restoreFailed => '購入を復元できませんでした。もう一度お試しください。';
+
+  @override
+  String get restorePurchases => '購入を復元';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'この台本は$count語を超えています。長い台本は APrompter Unlimited に含まれます。';
+  }
+
+  @override
+  String get upgrade => 'アップグレード';
+
+  @override
+  String planMonthly(String price) {
+    return '月額 · $price / 月';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '年額 · $price / 年';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '買い切り · $price（1回のみ）';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent%お得';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '月額・年額プランは、解約するまで同じ期間で自動更新されます。次回の請求を避けるには、期間終了の24時間前までに$storeのアカウント設定から解約してください。買い切りは1回限りの購入です。';
+  }
+
+  @override
+  String get termsOfUse => '利用規約';
+
+  @override
+  String get privacyPolicy => 'プライバシーポリシー';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'この$storeアカウントには以前の購入が見つかりませんでした。';
+  }
+
+  @override
+  String get appLockTurnedOff => 'この端末に画面ロックが設定されていないため、アプリのロックをオフにしました。';
+
+  @override
+  String get deleteTakeConfirm => 'このテイクを削除しますか？動画は元に戻せません。';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '「$title」を完全に削除しますか？元に戻せません。';
+  }
+
+  @override
+  String get deleteForeverTakes => 'アプリ内に保存したこの台本のテイクも削除されます。';
+
+  @override
+  String get purchasePending =>
+      'お支払いは保留中です。承認されると APrompter Unlimited が自動的に有効になります。';
+
+  @override
+  String get positionHintFloat => 'フローティングウィンドウはどこへでも動かせ、位置も記憶します。';
+
+  @override
+  String get readingLine => '読み位置の高さ';
+
+  @override
+  String get readingLineHint => '端末のカメラは画面の上にあるので、ラインを高くすると視線がレンズの近くに保たれます。';
+
+  @override
+  String get readingLineNearCamera => 'カメラ寄り';
+
+  @override
+  String get readingLineMiddle => '中央';
+
+  @override
+  String get readingLineDragHint =>
+      '「リハーサル」と、開始前の「撮影」では、ラインの左の矢印を上下にドラッグして動かすこともできます。';
 }

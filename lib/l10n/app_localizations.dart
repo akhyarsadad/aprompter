@@ -1076,7 +1076,7 @@ abstract class AppLocalizations {
   /// No description provided for @positionHint.
   ///
   /// In en, this message translates to:
-  /// **'Drag the bar on top of the prompter to move it anywhere, and the corner to resize. On Android the floating window can be dragged anywhere and remembers its spot.'**
+  /// **'Drag the bar on top of the prompter to move it anywhere, and the corner to resize.'**
   String get positionHint;
 
   /// No description provided for @app.
@@ -1108,6 +1108,744 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{n} min'**
   String minutesShort(int n);
+
+  /// No description provided for @storageSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save — your phone may be out of storage. Your work is kept while the app stays open.'**
+  String get storageSaveFailed;
+
+  /// No description provided for @versionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Version history'**
+  String get versionHistory;
+
+  /// No description provided for @noVersions.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier versions yet. They are kept automatically while you write.'**
+  String get noVersions;
+
+  /// No description provided for @restore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get restore;
+
+  /// No description provided for @versionRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier version restored'**
+  String get versionRestored;
+
+  /// No description provided for @recentlyDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently deleted'**
+  String get recentlyDeleted;
+
+  /// No description provided for @trashHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =1{Deleted scripts stay here for 1 day.} other{Deleted scripts stay here for {days} days.}}'**
+  String trashHint(int days);
+
+  /// No description provided for @deleteForever.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete forever'**
+  String get deleteForever;
+
+  /// No description provided for @deletedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted {date}'**
+  String deletedOn(String date);
+
+  /// No description provided for @restoredScript.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored \"{title}\"'**
+  String restoredScript(String title);
+
+  /// No description provided for @backUpScripts.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up all scripts'**
+  String get backUpScripts;
+
+  /// No description provided for @restoreBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from a backup'**
+  String get restoreBackup;
+
+  /// No description provided for @backupShareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'APrompter backup'**
+  String get backupShareTitle;
+
+  /// No description provided for @importedScripts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Everything in this backup is already here} =1{1 script restored} other{{count} scripts restored}}'**
+  String importedScripts(int count);
+
+  /// No description provided for @notABackup.
+  ///
+  /// In en, this message translates to:
+  /// **'That file isn\'t an APrompter backup.'**
+  String get notABackup;
+
+  /// No description provided for @fitImpossible.
+  ///
+  /// In en, this message translates to:
+  /// **'Even at {wpm} wpm this won\'t fit {target} — cut about {words} words.'**
+  String fitImpossible(int wpm, String target, int words);
+
+  /// No description provided for @cameraNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The camera wasn\'t ready, so recording didn\'t start. Try again.'**
+  String get cameraNotReady;
+
+  /// No description provided for @previousSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous section'**
+  String get previousSection;
+
+  /// No description provided for @nextSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Next section'**
+  String get nextSection;
+
+  /// No description provided for @floatingNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to open APrompter'**
+  String get floatingNotificationBody;
+
+  /// No description provided for @customTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom…'**
+  String get customTarget;
+
+  /// No description provided for @customTargetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Target length'**
+  String get customTargetTitle;
+
+  /// No description provided for @customTargetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes and seconds, e.g. 5:00'**
+  String get customTargetHint;
+
+  /// No description provided for @saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get saved;
+
+  /// No description provided for @floatNotOnIos.
+  ///
+  /// In en, this message translates to:
+  /// **'Apps can\'t float over other apps on iPhone and iPad. Use Record to film with the script under the camera.'**
+  String get floatNotOnIos;
+
+  /// No description provided for @hashtagHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hashtag lines (#fyp #ad) are shown dimmed and not timed. Use \"# \" with a space for a section.'**
+  String get hashtagHint;
+
+  /// No description provided for @appLock.
+  ///
+  /// In en, this message translates to:
+  /// **'App lock'**
+  String get appLock;
+
+  /// No description provided for @appLockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for fingerprint, face or phone PIN to open APrompter'**
+  String get appLockHint;
+
+  /// No description provided for @appLockUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up a screen lock on this phone first.'**
+  String get appLockUnavailable;
+
+  /// No description provided for @unlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get unlock;
+
+  /// No description provided for @unlockReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock APrompter to see your scripts'**
+  String get unlockReason;
+
+  /// No description provided for @autoStopWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait after the last line'**
+  String get autoStopWait;
+
+  /// No description provided for @beforeYouRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Before you record'**
+  String get beforeYouRecord;
+
+  /// No description provided for @recordAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Record anyway'**
+  String get recordAnyway;
+
+  /// No description provided for @lowStorageWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Only about {minutes} min of video fits in your free space. Free up space or lower the video quality.'**
+  String lowStorageWarning(int minutes);
+
+  /// No description provided for @lowBatteryWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery is at {level}% — a long take may get cut off. Plug in if you can.'**
+  String lowBatteryWarning(int level);
+
+  /// No description provided for @brightScreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Full brightness while prompting'**
+  String get brightScreen;
+
+  /// No description provided for @brightScreenHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Easier to read outdoors'**
+  String get brightScreenHint;
+
+  /// No description provided for @cameraBusy.
+  ///
+  /// In en, this message translates to:
+  /// **'Another app is using the camera. Close it and try again.'**
+  String get cameraBusy;
+
+  /// No description provided for @cameraIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera and microphone'**
+  String get cameraIntroTitle;
+
+  /// No description provided for @cameraIntroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To film you with the script on screen, APrompter needs your camera and microphone. Your phone will ask next. Videos stay on your phone.'**
+  String get cameraIntroBody;
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @notNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get notNow;
+
+  /// No description provided for @colorWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get colorWhite;
+
+  /// No description provided for @colorYellow.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get colorYellow;
+
+  /// No description provided for @colorGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get colorGreen;
+
+  /// No description provided for @colorBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get colorBlue;
+
+  /// No description provided for @colorPink.
+  ///
+  /// In en, this message translates to:
+  /// **'Pink'**
+  String get colorPink;
+
+  /// No description provided for @colorBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'Black'**
+  String get colorBlack;
+
+  /// No description provided for @damagedData.
+  ///
+  /// In en, this message translates to:
+  /// **'Unreadable data'**
+  String get damagedData;
+
+  /// No description provided for @damagedDataHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Kept aside on {date} · {size} characters'**
+  String damagedDataHint(String date, int size);
+
+  /// No description provided for @tryToRecover.
+  ///
+  /// In en, this message translates to:
+  /// **'Try to recover'**
+  String get tryToRecover;
+
+  /// No description provided for @nothingRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'No scripts could be read from it.'**
+  String get nothingRecovered;
+
+  /// No description provided for @floatLowRam.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone can\'t show apps over other apps (low-memory or Android Go phone). Use Record instead.'**
+  String get floatLowRam;
+
+  /// No description provided for @oemTipsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the floating prompter alive'**
+  String get oemTipsTitle;
+
+  /// No description provided for @oemTipsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{brand} phones may close floating windows to save battery. In Settings → Apps → APrompter: allow display over other apps (and pop-up windows), set battery to \"No restrictions\", and allow notifications.'**
+  String oemTipsBody(String brand);
+
+  /// No description provided for @focusLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Focus on the current line'**
+  String get focusLine;
+
+  /// No description provided for @focusLineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Dims the other lines'**
+  String get focusLineHint;
+
+  /// No description provided for @stepByLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line by line'**
+  String get stepByLine;
+
+  /// No description provided for @stepByLineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Each tap or remote press moves one line — no automatic scrolling'**
+  String get stepByLineHint;
+
+  /// No description provided for @reduceEffects.
+  ///
+  /// In en, this message translates to:
+  /// **'Reduce effects'**
+  String get reduceEffects;
+
+  /// No description provided for @reduceEffectsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No fades or shadows: smoother on older phones, saves battery'**
+  String get reduceEffectsHint;
+
+  /// No description provided for @letterSpacing.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter spacing'**
+  String get letterSpacing;
+
+  /// No description provided for @pasteAsNewScript.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste as new script'**
+  String get pasteAsNewScript;
+
+  /// No description provided for @pasteAsNewScriptHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Text copied from Notes, Keep, Notion, Docs or any app'**
+  String get pasteAsNewScriptHint;
+
+  /// No description provided for @importFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Import files'**
+  String get importFiles;
+
+  /// No description provided for @importFilesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Word, text, Markdown, RTF, HTML, Evernote, subtitles or a backup'**
+  String get importFilesHint;
+
+  /// No description provided for @clipboardEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to paste. Copy your script in the other app first.'**
+  String get clipboardEmpty;
+
+  /// No description provided for @importedNewScripts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 script imported} other{{count} scripts imported}}'**
+  String importedNewScripts(int count);
+
+  /// No description provided for @importFreeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{The free plan holds 1 script. Nothing is lost: your note or file is still where it was. Upgrade to import more.} other{The free plan holds {count} scripts. Nothing is lost: your note or file is still where it was. Upgrade to import more.}}'**
+  String importFreeLimit(int count);
+
+  /// No description provided for @importPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDFs can\'t be imported. Open the PDF, copy the text, then use Paste as new script.'**
+  String get importPdf;
+
+  /// No description provided for @importOldFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Old Word (.doc) and Pages files can\'t be read. Save as .docx or text, or copy the text and use Paste as new script.'**
+  String get importOldFormat;
+
+  /// No description provided for @importUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'APrompter can\'t read that kind of file. Copy the text and use Paste as new script.'**
+  String get importUnsupported;
+
+  /// No description provided for @importEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no text in it to import.'**
+  String get importEmpty;
+
+  /// No description provided for @importTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s too big for one script. Copy the part you need and use Paste as new script.'**
+  String get importTooLarge;
+
+  /// No description provided for @importLinkOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a link came through, not the text. Open it, copy the text and use Paste as new script.'**
+  String get importLinkOnly;
+
+  /// No description provided for @importUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read that. Copy the text and use Paste as new script.'**
+  String get importUnreadable;
+
+  /// No description provided for @saveAsTextFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as text file'**
+  String get saveAsTextFile;
+
+  /// No description provided for @saveTextFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the text file. Try again.'**
+  String get saveTextFileFailed;
+
+  /// No description provided for @mySetup.
+  ///
+  /// In en, this message translates to:
+  /// **'My setup'**
+  String get mySetup;
+
+  /// No description provided for @mySetupHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The setup you saved'**
+  String get mySetupHint;
+
+  /// No description provided for @saveMySetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as my setup'**
+  String get saveMySetup;
+
+  /// No description provided for @resetAllSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset all settings'**
+  String get resetAllSettings;
+
+  /// No description provided for @runHadJumps.
+  ///
+  /// In en, this message translates to:
+  /// **'You skipped around during this run, so it can\'t suggest a pace.'**
+  String get runHadJumps;
+
+  /// No description provided for @keepTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep'**
+  String get keepTake;
+
+  /// No description provided for @retake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get retake;
+
+  /// No description provided for @reviewTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Review each take'**
+  String get reviewTakes;
+
+  /// No description provided for @reviewTakesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch it, then keep it or go again'**
+  String get reviewTakesHint;
+
+  /// No description provided for @takesToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Save takes to the gallery'**
+  String get takesToGallery;
+
+  /// No description provided for @takesToGalleryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Off: takes stay inside the app, out of Google Photos and iCloud'**
+  String get takesToGalleryHint;
+
+  /// No description provided for @takesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes'**
+  String get takesTitle;
+
+  /// No description provided for @takesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Takes kept inside the app show up here. Turn off \"Save takes to the gallery\" in settings to keep them here.'**
+  String get takesEmpty;
+
+  /// No description provided for @saveToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to gallery'**
+  String get saveToGallery;
+
+  /// No description provided for @savedToGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to your gallery'**
+  String get savedToGallery;
+
+  /// No description provided for @deleteTake.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete take'**
+  String get deleteTake;
+
+  /// No description provided for @takeKeptInApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Take {n} kept in the app'**
+  String takeKeptInApp(int n);
+
+  /// No description provided for @upgradeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'APrompter Unlimited'**
+  String get upgradeTitle;
+
+  /// No description provided for @upgradeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited scripts, with a subscription or a one-time purchase.'**
+  String get upgradeBody;
+
+  /// No description provided for @offeringsLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load plans. Check your connection and try again.'**
+  String get offeringsLoadFailed;
+
+  /// No description provided for @purchaseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase failed. Try again.'**
+  String get purchaseFailed;
+
+  /// No description provided for @restoreFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t restore purchases. Try again.'**
+  String get restoreFailed;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get restorePurchases;
+
+  /// No description provided for @wordCapBannerText.
+  ///
+  /// In en, this message translates to:
+  /// **'This script is over {count} words. Long scripts are part of APrompter Unlimited.'**
+  String wordCapBannerText(int count);
+
+  /// No description provided for @upgrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade'**
+  String get upgrade;
+
+  /// No description provided for @planMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly · {price} / month'**
+  String planMonthly(String price);
+
+  /// No description provided for @planYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly · {price} / year'**
+  String planYearly(String price);
+
+  /// No description provided for @planLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime · {price} once'**
+  String planLifetime(String price);
+
+  /// No description provided for @planSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save {percent}%'**
+  String planSave(int percent);
+
+  /// No description provided for @subscriptionTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly and yearly plans renew automatically for the same period until you cancel. To avoid the next charge, cancel at least 24 hours before the period ends in your {store} account settings. Lifetime is a one-time purchase.'**
+  String subscriptionTerms(String store);
+
+  /// No description provided for @termsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get termsOfUse;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @nothingToRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier purchase found on this {store} account.'**
+  String nothingToRestore(String store);
+
+  /// No description provided for @appLockTurnedOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone has no screen lock, so app lock was turned off.'**
+  String get appLockTurnedOff;
+
+  /// No description provided for @deleteTakeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this take? The video can\'t be brought back.'**
+  String get deleteTakeConfirm;
+
+  /// No description provided for @deleteForeverConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{title}\" for good? It can\'t be brought back.'**
+  String deleteForeverConfirm(String title);
+
+  /// No description provided for @deleteForeverTakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Its takes kept in the app are deleted too.'**
+  String get deleteForeverTakes;
+
+  /// No description provided for @purchasePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending. APrompter Unlimited unlocks automatically once it\'s approved.'**
+  String get purchasePending;
+
+  /// No description provided for @positionHintFloat.
+  ///
+  /// In en, this message translates to:
+  /// **'The floating window can be dragged anywhere and remembers its spot.'**
+  String get positionHintFloat;
+
+  /// No description provided for @readingLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading line position'**
+  String get readingLine;
+
+  /// No description provided for @readingLineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone cameras sit above the screen: a high line keeps your eyes near the lens.'**
+  String get readingLineHint;
+
+  /// No description provided for @readingLineNearCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Near camera'**
+  String get readingLineNearCamera;
+
+  /// No description provided for @readingLineMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle'**
+  String get readingLineMiddle;
+
+  /// No description provided for @readingLineDragHint.
+  ///
+  /// In en, this message translates to:
+  /// **'In Rehearse, and in Record before you start, you can also drag the line\'s left arrow up or down.'**
+  String get readingLineDragHint;
 }
 
 class _AppLocalizationsDelegate

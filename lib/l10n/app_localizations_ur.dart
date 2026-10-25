@@ -527,7 +527,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'پرامپٹر کو کہیں بھی لے جانے کے لیے اوپر والی پٹی، اور سائز بدلنے کے لیے کونا گھسیٹیں۔ اینڈرائیڈ پر تیرتی ونڈو کہیں بھی گھسیٹی جا سکتی ہے اور اپنی جگہ یاد رکھتی ہے۔';
+      'پرامپٹر کو کہیں بھی لے جانے کے لیے اوپر والی پٹی، اور سائز بدلنے کے لیے کونا گھسیٹیں۔';
 
   @override
   String get app => 'ایپ';
@@ -547,4 +547,470 @@ class AppLocalizationsUr extends AppLocalizations {
   String minutesShort(int n) {
     return '$n منٹ';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'محفوظ نہیں ہو سکا — شاید فون کی اسٹوریج بھر گئی ہے۔ ایپ کھلی رہنے تک آپ کا کام محفوظ ہے۔';
+
+  @override
+  String get versionHistory => 'ورژن کی تاریخ';
+
+  @override
+  String get noVersions =>
+      'ابھی کوئی پرانا ورژن نہیں۔ لکھتے وقت یہ خود بخود محفوظ ہوتے ہیں۔';
+
+  @override
+  String get restore => 'بحال کریں';
+
+  @override
+  String get versionRestored => 'پرانا ورژن بحال ہو گیا';
+
+  @override
+  String get recentlyDeleted => 'حال ہی میں حذف شدہ';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'حذف شدہ اسکرپٹ یہاں $days دن رہتے ہیں۔',
+      one: 'حذف شدہ اسکرپٹ یہاں 1 دن رہتے ہیں۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'ہمیشہ کے لیے حذف کریں';
+
+  @override
+  String deletedOn(String date) {
+    return '$date کو حذف ہوا';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" بحال ہو گیا';
+  }
+
+  @override
+  String get backUpScripts => 'تمام اسکرپٹس کا بیک اپ لیں';
+
+  @override
+  String get restoreBackup => 'بیک اپ سے بحال کریں';
+
+  @override
+  String get backupShareTitle => 'APrompter بیک اپ';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اسکرپٹس بحال ہوئے',
+      one: '1 اسکرپٹ بحال ہوا',
+      zero: 'اس بیک اپ کی ہر چیز پہلے سے موجود ہے',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'یہ فائل APrompter بیک اپ نہیں ہے۔';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm ل/م پر بھی یہ $target میں نہیں آئے گا — تقریباً $words الفاظ کم کریں۔';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'کیمرا تیار نہیں تھا، اس لیے ریکارڈنگ شروع نہیں ہوئی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get previousSection => 'پچھلا حصہ';
+
+  @override
+  String get nextSection => 'اگلا حصہ';
+
+  @override
+  String get floatingNotificationBody => 'APrompter کھولنے کے لیے ٹیپ کریں';
+
+  @override
+  String get customTarget => 'حسبِ ضرورت…';
+
+  @override
+  String get customTargetTitle => 'ہدف دورانیہ';
+
+  @override
+  String get customTargetHint => 'منٹ اور سیکنڈ، مثلاً 5:00';
+
+  @override
+  String get saved => 'محفوظ ہو گیا';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone اور iPad ایپس کو دوسری ایپس کے اوپر تیرنے نہیں دیتے۔ کیمرے کے نیچے اسکرپٹ کے ساتھ فلم بنانے کے لیے ریکارڈ استعمال کریں۔';
+
+  @override
+  String get hashtagHint =>
+      'ہیش ٹیگ والی لائنیں (#fyp #ad) مدھم دکھتی ہیں اور ان کا وقت نہیں گنا جاتا۔ حصے کے لیے اسپیس کے ساتھ \"# \" استعمال کریں۔';
+
+  @override
+  String get appLock => 'ایپ لاک';
+
+  @override
+  String get appLockHint =>
+      'APrompter کھولنے کے لیے فنگر پرنٹ، چہرہ یا فون کا PIN مانگیں';
+
+  @override
+  String get appLockUnavailable => 'پہلے اس فون پر اسکرین لاک سیٹ کریں۔';
+
+  @override
+  String get unlock => 'ان لاک کریں';
+
+  @override
+  String get unlockReason => 'اپنے اسکرپٹ دیکھنے کے لیے APrompter ان لاک کریں';
+
+  @override
+  String get autoStopWait => 'آخری لائن کے بعد انتظار';
+
+  @override
+  String get beforeYouRecord => 'ریکارڈ کرنے سے پہلے';
+
+  @override
+  String get recordAnyway => 'پھر بھی ریکارڈ کریں';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'خالی جگہ میں صرف تقریباً $minutes منٹ کی ویڈیو آئے گی۔ جگہ خالی کریں یا ویڈیو کا معیار کم کریں۔';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'بیٹری $level% پر ہے — لمبا ٹیک بیچ میں کٹ سکتا ہے۔ ہو سکے تو چارجر لگائیں۔';
+  }
+
+  @override
+  String get brightScreen => 'پرامپٹنگ کے دوران پوری چمک';
+
+  @override
+  String get brightScreenHint => 'باہر پڑھنا آسان';
+
+  @override
+  String get cameraBusy =>
+      'کوئی اور ایپ کیمرہ استعمال کر رہی ہے۔ اسے بند کر کے دوبارہ کوشش کریں۔';
+
+  @override
+  String get cameraIntroTitle => 'کیمرہ اور مائیکروفون';
+
+  @override
+  String get cameraIntroBody =>
+      'اسکرین پر اسکرپٹ کے ساتھ آپ کو فلمانے کے لیے APrompter کو کیمرہ اور مائیکروفون چاہیے۔ آپ کا فون اب اجازت مانگے گا۔ ویڈیوز آپ کے فون پر ہی رہتی ہیں۔';
+
+  @override
+  String get continueLabel => 'جاری رکھیں';
+
+  @override
+  String get notNow => 'ابھی نہیں';
+
+  @override
+  String get colorWhite => 'سفید';
+
+  @override
+  String get colorYellow => 'پیلا';
+
+  @override
+  String get colorGreen => 'سبز';
+
+  @override
+  String get colorBlue => 'نیلا';
+
+  @override
+  String get colorPink => 'گلابی';
+
+  @override
+  String get colorBlack => 'سیاہ';
+
+  @override
+  String get damagedData => 'ناقابلِ پڑھائی ڈیٹا';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date کو الگ رکھا گیا · $size حروف';
+  }
+
+  @override
+  String get tryToRecover => 'بحال کرنے کی کوشش کریں';
+
+  @override
+  String get nothingRecovered => 'اس میں سے کوئی اسکرپٹ نہیں پڑھا جا سکا۔';
+
+  @override
+  String get floatLowRam =>
+      'یہ فون ایپس کو دوسری ایپس کے اوپر نہیں دکھا سکتا (کم میموری یا Android Go فون)۔ اس کی بجائے ریکارڈ استعمال کریں۔';
+
+  @override
+  String get oemTipsTitle => 'تیرتا پرامپٹر چلتا رکھیں';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand فون بیٹری بچانے کے لیے تیرتی ونڈوز بند کر سکتے ہیں۔ ترتیبات → ایپس → APrompter میں: دوسری ایپس کے اوپر دکھانے (اور پاپ اپ ونڈوز) کی اجازت دیں، بیٹری کو \"غیر محدود\" پر رکھیں اور اطلاعات کی اجازت دیں۔';
+  }
+
+  @override
+  String get focusLine => 'موجودہ لائن پر فوکس';
+
+  @override
+  String get focusLineHint => 'باقی لائنیں مدھم کرتا ہے';
+
+  @override
+  String get stepByLine => 'لائن بہ لائن';
+
+  @override
+  String get stepByLineHint =>
+      'ہر ٹیپ یا ریموٹ دبانے پر ایک لائن آگے — خودکار اسکرول نہیں';
+
+  @override
+  String get reduceEffects => 'ایفیکٹس کم کریں';
+
+  @override
+  String get reduceEffectsHint =>
+      'فیڈ یا سائے نہیں: پرانے فونز پر ہموار، بیٹری کی بچت';
+
+  @override
+  String get letterSpacing => 'حروف کا فاصلہ';
+
+  @override
+  String get pasteAsNewScript => 'نئے اسکرپٹ کے طور پر پیسٹ کریں';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'نوٹس، Keep، Notion، Docs یا کسی بھی ایپ سے کاپی کیا گیا ٹیکسٹ';
+
+  @override
+  String get importFiles => 'فائلیں درآمد کریں';
+
+  @override
+  String get importFilesHint =>
+      'Word، ٹیکسٹ، Markdown، RTF، HTML، Evernote، سب ٹائٹلز یا بیک اپ';
+
+  @override
+  String get clipboardEmpty =>
+      'پیسٹ کرنے کو کچھ نہیں۔ پہلے دوسری ایپ میں اپنا اسکرپٹ کاپی کریں۔';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اسکرپٹس درآمد ہوئے',
+      one: '1 اسکرپٹ درآمد ہوا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'مفت پلان میں $count اسکرپٹس رکھے جا سکتے ہیں۔ کچھ ضائع نہیں ہوا: آپ کا نوٹ یا فائل اپنی جگہ موجود ہے۔ مزید درآمد کرنے کے لیے اپ گریڈ کریں۔',
+      one: 'مفت پلان میں 1 اسکرپٹ رکھا جا سکتا ہے۔ کچھ ضائع نہیں ہوا: آپ کا نوٹ یا فائل اپنی جگہ موجود ہے۔ مزید درآمد کرنے کے لیے اپ گریڈ کریں۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF درآمد نہیں ہو سکتیں۔ PDF کھولیں، ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importOldFormat =>
+      'پرانی Word (.doc) اور Pages فائلیں نہیں پڑھی جا سکتیں۔ اسے .docx یا ٹیکسٹ کے طور پر محفوظ کریں، یا ٹیکسٹ کاپی کر کے \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importUnsupported =>
+      'APrompter اس قسم کی فائل نہیں پڑھ سکتا۔ ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importEmpty => 'اس میں درآمد کرنے کے لیے کوئی ٹیکسٹ نہیں۔';
+
+  @override
+  String get importTooLarge =>
+      'یہ ایک اسکرپٹ کے لیے بہت لمبا ہے۔ ضرورت کا حصہ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importLinkOnly =>
+      'صرف ایک لنک آیا، ٹیکسٹ نہیں۔ اسے کھولیں، ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importUnreadable =>
+      'پڑھا نہیں جا سکا۔ ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get saveAsTextFile => 'ٹیکسٹ فائل کے طور پر محفوظ کریں';
+
+  @override
+  String get saveTextFileFailed => 'ٹیکسٹ فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get mySetup => 'میرا سیٹ اپ';
+
+  @override
+  String get mySetupHint => 'آپ کا محفوظ کیا ہوا سیٹ اپ';
+
+  @override
+  String get saveMySetup => 'میرے سیٹ اپ کے طور پر محفوظ کریں';
+
+  @override
+  String get resetAllSettings => 'تمام ترتیبات ری سیٹ کریں';
+
+  @override
+  String get runHadJumps =>
+      'اس رن میں آپ آگے پیچھے گئے، اس لیے رفتار تجویز نہیں کی جا سکتی۔';
+
+  @override
+  String get keepTake => 'رکھیں';
+
+  @override
+  String get retake => 'دوبارہ لیں';
+
+  @override
+  String get reviewTakes => 'ہر ٹیک کا جائزہ لیں';
+
+  @override
+  String get reviewTakesHint => 'دیکھیں، پھر رکھیں یا دوبارہ لیں';
+
+  @override
+  String get takesToGallery => 'ٹیکس گیلری میں محفوظ کریں';
+
+  @override
+  String get takesToGalleryHint =>
+      'بند: ٹیکس ایپ میں رہتے ہیں، Google Photos اور iCloud سے باہر';
+
+  @override
+  String get takesTitle => 'ٹیکس';
+
+  @override
+  String get takesEmpty =>
+      'ایپ میں رکھے گئے ٹیکس یہاں دکھتے ہیں۔ انہیں یہاں رکھنے کے لیے ترتیبات میں \"ٹیکس گیلری میں محفوظ کریں\" بند کریں۔';
+
+  @override
+  String get saveToGallery => 'گیلری میں محفوظ کریں';
+
+  @override
+  String get savedToGallery => 'گیلری میں محفوظ ہو گیا';
+
+  @override
+  String get deleteTake => 'ٹیک حذف کریں';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'ٹیک $n ایپ میں رکھ لیا گیا';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody => 'سبسکرپشن یا ایک بار کی خریداری سے لامحدود اسکرپٹ۔';
+
+  @override
+  String get offeringsLoadFailed =>
+      'پلان لوڈ نہیں ہو سکے۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get purchaseFailed => 'خریداری نہیں ہو سکی۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get restoreFailed => 'خریداریاں بحال نہیں ہو سکیں۔ دوبارہ کوشش کریں۔';
+
+  @override
+  String get restorePurchases => 'خریداریاں بحال کریں';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'یہ اسکرپٹ $count الفاظ سے زیادہ ہے۔ لمبے اسکرپٹ APrompter Unlimited کا حصہ ہیں۔';
+  }
+
+  @override
+  String get upgrade => 'اپ گریڈ';
+
+  @override
+  String planMonthly(String price) {
+    return 'ماہانہ · $price / ماہ';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'سالانہ · $price / سال';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'تاحیات · $price ایک بار';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent% بچت';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'ماہانہ اور سالانہ پلان منسوخ کرنے تک اسی مدت کے لیے خودکار طور پر تجدید ہوتے رہتے ہیں۔ اگلی ادائیگی سے بچنے کے لیے، مدت ختم ہونے سے کم از کم 24 گھنٹے پہلے اپنے $store اکاؤنٹ کی ترتیبات میں منسوخ کریں۔ تاحیات پلان ایک بار کی خریداری ہے۔';
+  }
+
+  @override
+  String get termsOfUse => 'استعمال کی شرائط';
+
+  @override
+  String get privacyPolicy => 'رازداری کی پالیسی';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'اس $store اکاؤنٹ میں کوئی سابقہ خریداری نہیں ملی۔';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'آپ کے فون پر کوئی اسکرین لاک نہیں ہے، اس لیے ایپ لاک بند کر دیا گیا۔';
+
+  @override
+  String get deleteTakeConfirm =>
+      'یہ ٹیک حذف کریں؟ ویڈیو واپس نہیں لائی جا سکے گی۔';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" کو ہمیشہ کے لیے حذف کریں؟ اسے واپس نہیں لایا جا سکے گا۔';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'ایپ میں رکھے گئے اس کے ٹیکس بھی حذف ہو جائیں گے۔';
+
+  @override
+  String get purchasePending =>
+      'ادائیگی زیرِ التوا ہے۔ منظوری ملتے ہی APrompter Unlimited خودبخود کھل جائے گا۔';
+
+  @override
+  String get positionHintFloat =>
+      'تیرتی ونڈو کہیں بھی گھسیٹی جا سکتی ہے اور اپنی جگہ یاد رکھتی ہے۔';
+
+  @override
+  String get readingLine => 'پڑھنے کی لکیر کی جگہ';
+
+  @override
+  String get readingLineHint =>
+      'فون کا کیمرہ اسکرین کے اوپر ہوتا ہے: لکیر اوپر رکھنے سے آپ کی نظر لینس کے قریب رہتی ہے۔';
+
+  @override
+  String get readingLineNearCamera => 'کیمرے کے قریب';
+
+  @override
+  String get readingLineMiddle => 'درمیان';
+
+  @override
+  String get readingLineDragHint =>
+      'مشق میں، اور ریکارڈ میں شروع کرنے سے پہلے، آپ لکیر کے بائیں تیر کو اوپر یا نیچے گھسیٹ بھی سکتے ہیں۔';
 }

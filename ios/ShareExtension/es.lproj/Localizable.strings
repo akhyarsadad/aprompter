@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "Cancelar";
+
+/* Share extension: close the confirmation */
+"Done" = "OK";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "Añadido a APrompter";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "No se ha podido añadir a APrompter";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "Abre APrompter para empezar a leer.";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "Es demasiado largo para un solo guion.";

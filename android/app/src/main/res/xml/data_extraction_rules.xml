@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Backup and restore on Android 12 and later (android:dataExtractionRules);
+     backup_rules.xml has the same rule for older versions. -->
+<data-extraction-rules>
+    <!-- Google Drive keeps at most 25 MB per app, and past that the WHOLE
+         backup stops, scripts and settings (shared_prefs) included. So the
+         in-app video takes in app_flutter/takes (the documents directory) stay
+         out of it; everything else is backed up as before. -->
+    <cloud-backup>
+        <exclude domain="root" path="app_flutter/takes/" />
+    </cloud-backup>
+    <!-- No device-transfer section: moving to a new phone (cable or Wi-Fi) has
+         no size limit, so everything goes along, takes included. -->
+</data-extraction-rules>

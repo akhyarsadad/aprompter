@@ -1,4 +1,5 @@
 import '../l10n/l10n.dart';
+import 'script.dart';
 
 /// Starting points for common short-form video formats.
 class ScriptTemplate {
@@ -53,7 +54,24 @@ List<ScriptTemplate> scriptTemplates(AppLocalizations l) {
 /// Target video lengths offered when writing a script, in seconds.
 const targetLengths = <int>[15, 30, 60, 90, 180];
 
-String targetLabel(AppLocalizations l, int seconds) =>
-    seconds < 60 || seconds % 60 != 0
+String targetLabel(AppLocalizations l, int seconds) => seconds < 60
     ? l.secondsShort(seconds)
-    : l.minutesShort(seconds ~/ 60);
+    : seconds % 60 == 0
+    ? l.minutesShort(seconds ~/ 60)
+    : formatDuration(Duration(seconds: seconds));
+
+/// Reads a custom target: "5:00" or "4:30" (minutes:seconds) or "12"
+/// (minutes). Null if it isn't a sensible length (1 s to 3 h).
+int? parseTargetInput(String input) {
+  final text = input.trim().replaceAll(',', '.');
+  int? seconds;
+  final mmss = RegExp(r'^(\d{1,3}):(\d{1,2})$').firstMatch(text);
+  if (mmss != null) {
+    final s = int.parse(mmss.group(2)!);
+    if (s < 60) seconds = int.parse(mmss.group(1)!) * 60 + s;
+  } else if (double.tryParse(text) case final double minutes) {
+    seconds = (minutes * 60).round();
+  }
+  if (seconds == null || seconds < 1 || seconds > 3 * 3600) return null;
+  return seconds;
+}

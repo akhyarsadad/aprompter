@@ -1,0 +1,1039 @@
+import UIKit
+import UniformTypeIdentifiers
+
+/// "Share to APrompter".
+///
+/// Saves whatever was shared (text from Notes, Messages, Mail…, or documents
+/// from Files, Mail and other apps) into the App Group inbox and shows a short
+/// confirmation. APrompter collects the items through the `aprompter/import`
+/// channel (`takePending`) the next time it is active. The app is never
+/// launched from here.
+///
+/// Inbox format (read by `ImportInbox` in Runner/AppDelegate.swift): one JSON
+/// file per item in `<App Group>/ImportInbox/`, named
+/// `<15-digit ms timestamp>-<4-digit index>-<UUID>.json`, so sorting by name
+/// gives arrival order without reading file dates. Keys (all optional): `text`,
+/// `subject`, `name`, `mimeType`, `bytesBase64`, `tooLarge`. Each file is
+/// written to `ImportStaging/` first and then moved into the inbox, so the app
+/// never sees a half-written item.
+///
+/// Items match Android's (see `ShareCollector`): one text plus one text-like
+/// file in a share is ONE item with both `text` and `bytes`, and `subject` is
+/// only set when the share yields a single item. Cancel removes whatever this
+/// share already put in the inbox. A share of nothing but files or text over
+/// 10 MB fails here (with the reason) instead of saying "Added".
+///
+/// The card's texts are in `<locale>.lproj/Localizable.strings`, one per
+/// language the app supports.
+final class ShareViewController: UIViewController {
+  private let card = UIView()
+  private let spinner = UIActivityIndicatorView(style: .large)
+  private let iconView = UIImageView()
+  private let titleLabel = UILabel()
+  private let messageLabel = UILabel()
+  private let button = UIButton(type: .system)
+
+  private let cancelFlag = CancelFlag()
+  /// This share's inbox writer (nil without the App Group container). Kept
+  /// here so Cancel can take back what it already wrote.
+  private var inbox: Inbox?
+  private var started = false
+  private var importDone = false
+  private var finished = false
+
+  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    modalPresentationStyle = .overFullScreen
+  }
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    modalPresentationStyle = .overFullScreen
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    // Only the Cancel/Done button (or the auto-close) ends the request.
+    isModalInPresentation = true
+    buildCard()
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    guard !started else { return }
+    started = true
+
+    let extensionItems =
+      extensionContext?.inputItems.compactMap { $0 as? NSExtensionItem } ?? []
+    let cancelFlag = self.cancelFlag
+    let inbox = Inbox()
+    self.inbox = inbox
+    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+      let outcome =
+        inbox.map {
+          ShareImporter.importItems(extensionItems, into: $0, isCancelled: { cancelFlag.isSet })
+        } ?? .failed
+      DispatchQueue.main.async {
+        self?.showResult(outcome)
+      }
+    }
+  }
+
+  // MARK: - UI
+
+  private func buildCard() {
+    view.backgroundColor = UIColor.black.withAlphaComponent(0.25)
+
+    // Lifted a step in dark mode so the card stands out from the dimmed app.
+    card.backgroundColor = UIColor(dynamicProvider: { traits in
+      traits.userInterfaceStyle == .dark ? .secondarySystemBackground : .systemBackground
+    })
+    card.layer.cornerRadius = 20
+    card.layer.cornerCurve = .continuous
+    card.layer.shadowColor = UIColor.black.cgColor
+    card.layer.shadowOpacity = 0.18
+    card.layer.shadowRadius = 24
+    card.layer.shadowOffset = CGSize(width: 0, height: 8)
+    card.translatesAutoresizingMaskIntoConstraints = false
+    view.addSubview(card)
+
+    spinner.hidesWhenStopped = true
+    spinner.startAnimating()
+
+    iconView.contentMode = .center
+    iconView.isHidden = true
+
+    titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+    titleLabel.adjustsFontForContentSizeCategory = true
+    titleLabel.textAlignment = .center
+    titleLabel.numberOfLines = 0
+    titleLabel.isHidden = true
+
+    messageLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+    messageLabel.adjustsFontForContentSizeCategory = true
+    messageLabel.textColor = .secondaryLabel
+    messageLabel.textAlignment = .center
+    messageLabel.numberOfLines = 0
+    messageLabel.isHidden = true
+
+    button.setTitle(
+      NSLocalizedString("Cancel", comment: "Share extension: stop adding the shared item"),
+      for: .normal)
+    button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+    button.titleLabel?.adjustsFontForContentSizeCategory = true
+    button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+
+    let stack = UIStackView(arrangedSubviews: [spinner, iconView, titleLabel, messageLabel, button])
+    stack.axis = .vertical
+    stack.alignment = .fill
+    stack.spacing = 12
+    stack.translatesAutoresizingMaskIntoConstraints = false
+    card.addSubview(stack)
+
+    let preferredWidth = card.widthAnchor.constraint(equalToConstant: 300)
+    preferredWidth.priority = .defaultHigh
+    NSLayoutConstraint.activate([
+      card.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      card.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+      card.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 24),
+      card.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -24),
+      card.topAnchor.constraint(
+        greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+      card.bottomAnchor.constraint(
+        lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+      preferredWidth,
+      stack.topAnchor.constraint(equalTo: card.topAnchor, constant: 24),
+      stack.leadingAnchor.constraint(equalTo: card.leadingAnchor, constant: 20),
+      stack.trailingAnchor.constraint(equalTo: card.trailingAnchor, constant: -20),
+      stack.bottomAnchor.constraint(equalTo: card.bottomAnchor, constant: -12),
+      button.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
+    ])
+  }
+
+  private func showResult(_ outcome: ShareOutcome) {
+    guard !finished else { return }
+    importDone = true
+    let success = outcome == .added
+
+    spinner.stopAnimating()
+    spinner.isHidden = true
+
+    let symbol = success ? "checkmark.circle.fill" : "exclamationmark.triangle.fill"
+    iconView.image = UIImage(
+      systemName: symbol,
+      withConfiguration: UIImage.SymbolConfiguration(pointSize: 44, weight: .semibold))
+    iconView.tintColor = success ? .systemGreen : .systemOrange
+    iconView.isHidden = false
+
+    titleLabel.text =
+      success
+      ? NSLocalizedString(
+        "Added to APrompter",
+        comment: "Share extension: the shared text or file was saved for the app")
+      : NSLocalizedString(
+        "Couldn't add this to APrompter",
+        comment: "Share extension: nothing in the share could be saved")
+    titleLabel.isHidden = false
+
+    let message: String?
+    switch outcome {
+    case .added:
+      message = NSLocalizedString(
+        "Open APrompter to start reading.",
+        comment: "Share extension: hint shown after the item was saved")
+    case .tooLarge:
+      message = NSLocalizedString(
+        "That's too big for one script.",
+        comment: "Share extension: nothing was added because the shared text or file is over 10 MB")
+    case .failed:
+      message = nil
+    }
+    messageLabel.text = message
+    messageLabel.isHidden = message == nil
+
+    button.setTitle(
+      NSLocalizedString("Done", comment: "Share extension: close the confirmation"),
+      for: .normal)
+
+    let announcement = [titleLabel.text, message].compactMap { $0 }.joined(separator: " ")
+    UIAccessibility.post(notification: .announcement, argument: announcement)
+
+    if success {
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+        self?.finish()
+      }
+    }
+  }
+
+  @objc private func buttonTapped() {
+    if importDone {
+      finish()
+      return
+    }
+    // Cancel while still loading: stop before anything else is saved, and take
+    // back what this share already saved, so Cancel leaves nothing behind.
+    cancelFlag.set()
+    inbox?.discardWritten()
+    guard !finished else { return }
+    finished = true
+    extensionContext?.cancelRequest(withError: CocoaError(.userCancelled))
+  }
+
+  private func finish() {
+    guard !finished else { return }
+    finished = true
+    extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+  }
+}
+
+// MARK: - Import
+
+/// How a share ended, for the card.
+private enum ShareOutcome {
+  /// At least one item the app can open was saved.
+  case added
+  /// Everything importable was over the size limit; nothing was saved.
+  case tooLarge
+  /// Nothing could be saved.
+  case failed
+}
+
+/// One thing to hand to the app (see the `aprompter/import` contract).
+private struct SharedItem {
+  var text: String?
+  var subject: String?
+  var name: String?
+  var mimeType: String?
+  var bytes: Data?
+  var tooLarge = false
+  /// Not written to the inbox. A file whose content is text or a document
+  /// (see `ShareImporter.isTextLike`).
+  var textLike = false
+
+  /// Files always have a name; texts never do.
+  var isFile: Bool { return name != nil }
+
+  /// A file read in full that can carry a text shared with it as one item.
+  var canCarryText: Bool { return isFile && textLike && bytes != nil }
+}
+
+private final class CancelFlag {
+  private let lock = NSLock()
+  private var value = false
+
+  var isSet: Bool {
+    lock.lock()
+    defer { lock.unlock() }
+    return value
+  }
+
+  func set() {
+    lock.lock()
+    value = true
+    lock.unlock()
+  }
+}
+
+/// Holds an NSItemProvider result handed over from its callback queue.
+private final class ResultBox {
+  private let lock = NSLock()
+  private var stored: SharedItem?
+
+  var item: SharedItem? {
+    get {
+      lock.lock()
+      defer { lock.unlock() }
+      return stored
+    }
+    set {
+      lock.lock()
+      stored = newValue
+      lock.unlock()
+    }
+  }
+}
+
+private enum ShareImporter {
+  static let appGroupId = "group.com.akhyarsadad.aprompter"
+  /// Darwin notification the app listens for (ImportInbox.changedNotification).
+  static let inboxChangedNotification = "com.akhyarsadad.aprompter.importInboxChanged"
+  /// Same cap as on Android: bigger files are passed on as `tooLarge`, without bytes.
+  static let maxFileBytes = 10 * 1024 * 1024
+  /// Per load attempt; iCloud files may have to download first.
+  static let loadTimeout: Double = 60
+
+  /// Plain-text flavours whose in-memory data is decoded into `text`.
+  static let plainTextIdentifiers: Set<String> = [
+    "public.plain-text",
+    "public.utf8-plain-text",
+    "public.utf16-plain-text",
+    "public.utf16-external-plain-text",
+    "public.text",
+  ]
+
+  /// Script files by extension, the same list as Android's TEXT_EXTENSIONS,
+  /// for files whose type the system does not know.
+  static let textLikeExtensions: Set<String> = [
+    "txt", "text", "md", "markdown", "fountain", "rtf", "docx", "odt",
+    "srt", "vtt", "html", "htm", "xhtml",
+  ]
+
+  /// At most this many attachments are imported from one share.
+  static let maxAttachments = 10
+
+  /// Documents that count as text-like although they don't conform to public.text.
+  static let textLikeDocumentIdentifiers: Set<String> = [
+    "org.openxmlformats.wordprocessingml.document",
+    "org.oasis-open.opendocument.text",
+  ]
+
+  /// Word and OpenDocument text templates: the app imports them like the
+  /// documents themselves, although they are not text-like for merging.
+  static let documentTemplateIdentifiers: Set<String> = [
+    "org.openxmlformats.wordprocessingml.template",
+    "org.oasis-open.opendocument.text-template",
+  ]
+
+  /// Data the app turns away (see `isRefused`), besides PDFs, spreadsheets,
+  /// presentations, iWork files and archives other than zip.
+  static let refusedDocumentIdentifiers: Set<String> = [
+    "org.openxmlformats.spreadsheetml.sheet",
+    "org.openxmlformats.presentationml.presentation",
+    "org.oasis-open.opendocument.spreadsheet",
+    "org.oasis-open.opendocument.presentation",
+  ]
+
+  /// A plain zip archive. Only these exact types pass as archives: EPUB, JAR
+  /// and other zip-based containers conform to public.zip-archive too, but
+  /// the app cannot open them.
+  static let zipIdentifiers: Set<String> = [
+    "public.zip-archive",
+    "com.pkware.zip-archive",
+  ]
+
+  /// Name of shared text over the size limit, passed on as a too-large file.
+  static let tooLargeTextName = "Shared text.txt"
+
+  private enum Attempt {
+    case fileURL
+    case text(UTType)
+    case document(UTType)
+  }
+
+  /// Saves everything importable into `inbox`, one attachment at a time so at
+  /// most two files are in memory at once (share extensions have a tight
+  /// memory limit). Must not run on the main thread. When cancelled, or when
+  /// everything saved is too large to open, removes what it already saved.
+  static func importItems(
+    _ extensionItems: [NSExtensionItem], into inbox: Inbox,
+    isCancelled: @escaping () -> Bool
+  ) -> ShareOutcome {
+    var shareSubject: String?
+    for extensionItem in extensionItems {
+      if let title = trimmed(extensionItem.attributedTitle?.string) {
+        shareSubject = title
+        break
+      }
+    }
+    let collector = ShareCollector(
+      inbox: inbox, shareSubject: shareSubject, isCancelled: isCancelled)
+    var seenTexts = Set<String>()
+    // The activation rule can only cap attachments per extension item, so
+    // the share-wide limit is enforced here.
+    var attachmentsSeen = 0
+
+    extensionItemLoop: for extensionItem in extensionItems {
+      let subject = trimmed(extensionItem.attributedTitle?.string)
+      var foundAny = false
+
+      for provider in extensionItem.attachments ?? [] {
+        if isCancelled() || attachmentsSeen >= maxAttachments { break extensionItemLoop }
+        attachmentsSeen += 1
+        autoreleasepool {
+          guard var item = load(provider) else { return }
+          foundAny = true
+          // Some apps attach the same text more than once.
+          if let text = item.text, !seenTexts.insert(text).inserted { return }
+          item.subject = subject
+          collector.add(item)
+        }
+      }
+
+      // Text that only came as the item's content text (no usable attachment).
+      if !foundAny, !isCancelled(), let content = extensionItem.attributedContentText {
+        autoreleasepool {
+          guard var item = textItem(content) else { return }
+          if let text = item.text, !seenTexts.insert(text).inserted { return }
+          item.subject = subject
+          collector.add(item)
+        }
+      }
+    }
+
+    if !isCancelled() {
+      autoreleasepool {
+        collector.finish()
+      }
+    }
+    // Checked once more after the last write: a Cancel that came in while
+    // writing must not leave part of the share behind.
+    if isCancelled() {
+      inbox.discardWritten()
+      return .failed
+    }
+    if collector.saved == 0 {
+      return .failed
+    }
+    if collector.usable == 0 {
+      // Only items over the size limit: the app could open none of them, so
+      // the card says why and nothing is left behind for the app.
+      inbox.discardWritten()
+      return .tooLarge
+    }
+
+    CFNotificationCenterPostNotification(
+      CFNotificationCenterGetDarwinNotifyCenter(),
+      CFNotificationName(rawValue: inboxChangedNotification as CFString),
+      nil,
+      nil,
+      true)
+    return .added
+  }
+
+  /// Tries the provider's representations, best first: a real file, then plain
+  /// text (Notes, Messages, .txt/.md files), then other documents (RTF, Word,
+  /// ODT, HTML, other data). Photos, videos, audio and web links are skipped.
+  private static func load(_ provider: NSItemProvider) -> SharedItem? {
+    var attempts: [Attempt] = []
+    if provider.hasItemConformingToTypeIdentifier(UTType.fileURL.identifier) {
+      attempts.append(.fileURL)
+    }
+    let types = provider.registeredTypeIdentifiers.compactMap { UTType($0) }
+    for type in types where isText(type) {
+      attempts.append(.text(type))
+    }
+    for type in types where !isText(type) && isDocument(type) {
+      attempts.append(.document(type))
+    }
+    for attempt in attempts {
+      if let item = loadSynchronously(attempt, provider: provider) {
+        return item
+      }
+    }
+    return nil
+  }
+
+  private static func isText(_ type: UTType) -> Bool {
+    return type.conforms(to: .plainText) || type == .text
+  }
+
+  /// Anything that is data but not a link, an image, a video, audio or a type
+  /// the app turns away (see `isRefused`).
+  private static func isDocument(_ type: UTType) -> Bool {
+    return type.conforms(to: .data)
+      && !type.conforms(to: .url)
+      && !type.conforms(to: .image)
+      && !type.conforms(to: .audiovisualContent)
+      && !isRefused(type)
+  }
+
+  /// Data the app cannot turn into a script: PDFs, spreadsheets,
+  /// presentations, iWork files and archives other than a plain zip (a zip of
+  /// notes, such as a Notion or Obsidian export, is imported; EPUB and other
+  /// zip-based containers are not). Word and OpenDocument text files and
+  /// their templates are zip-based but always pass. The activation rule in
+  /// Info.plist turns the same types away, so the share sheet does not offer
+  /// APrompter for them.
+  private static func isRefused(_ type: UTType) -> Bool {
+    if conforms(type, toAnyOf: textLikeDocumentIdentifiers)
+      || conforms(type, toAnyOf: documentTemplateIdentifiers)
+    {
+      return false
+    }
+    if type.conforms(to: .pdf) || type.conforms(to: .spreadsheet)
+      || type.conforms(to: .presentation)
+      || conforms(type, toAnyOf: refusedDocumentIdentifiers)
+    {
+      return true
+    }
+    // Pages, Numbers and Keynote documents, single-file or package.
+    if type.identifier.hasPrefix("com.apple.iwork.")
+      || type.supertypes.contains(where: { $0.identifier.hasPrefix("com.apple.iwork.") })
+    {
+      return true
+    }
+    return type.conforms(to: .archive) && !zipIdentifiers.contains(type.identifier)
+  }
+
+  /// Whether `type` is, or conforms to, one of `identifiers` (which need not
+  /// be declared on this device).
+  private static func conforms(_ type: UTType, toAnyOf identifiers: Set<String>) -> Bool {
+    if identifiers.contains(type.identifier) {
+      return true
+    }
+    return type.supertypes.contains { identifiers.contains($0.identifier) }
+  }
+
+  /// Text, a Word or ODT document, or a script file by its extension (the
+  /// same idea as Android's textLike). Only these can carry a shared text.
+  private static func isTextLike(fileName: String, types: [UTType?]) -> Bool {
+    let ext = (fileName as NSString).pathExtension.lowercased()
+    if textLikeExtensions.contains(ext) {
+      return true
+    }
+    for case let type? in types {
+      // JSON (backups, exports) and source code conform to public.text but
+      // are not scripts; Android doesn't merge them with shared text either.
+      if type.conforms(to: .json) || type.conforms(to: .sourceCode) {
+        continue
+      }
+      if type.conforms(to: .text) || textLikeDocumentIdentifiers.contains(type.identifier) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /// Runs one NSItemProvider load and blocks this (background) thread until
+  /// it reports back. The callbacks run on NSItemProvider's own queues.
+  private static func loadSynchronously(_ attempt: Attempt, provider: NSItemProvider) -> SharedItem? {
+    let box = ResultBox()
+    let semaphore = DispatchSemaphore(value: 0)
+    start(attempt, provider: provider) { item in
+      box.item = item
+      semaphore.signal()
+    }
+    guard semaphore.wait(timeout: .now() + loadTimeout) == .success else { return nil }
+    return box.item
+  }
+
+  /// Calls `completion` exactly once.
+  private static func start(
+    _ attempt: Attempt, provider: NSItemProvider,
+    completion: @escaping (SharedItem?) -> Void
+  ) {
+    let suggestedName = provider.suggestedName
+    switch attempt {
+    case .fileURL:
+      provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) {
+        loaded, _ in
+        // Web links are not files; fileItem also skips photos, videos and
+        // audio by the file's own type.
+        guard let url = ShareImporter.url(from: loaded), url.isFileURL else {
+          completion(nil)
+          return
+        }
+        completion(
+          ShareImporter.fileItem(
+            at: url, type: nil, suggestedName: suggestedName, keepFileName: true))
+      }
+
+    case .text(let type):
+      provider.loadItem(forTypeIdentifier: type.identifier, options: nil) { loaded, _ in
+        completion(
+          ShareImporter.makeItem(from: loaded, type: type, suggestedName: suggestedName))
+      }
+
+    case .document(let type):
+      _ = provider.loadFileRepresentation(forTypeIdentifier: type.identifier) {
+        temporaryURL, _ in
+        if let temporaryURL = temporaryURL {
+          // The copy is deleted when this handler returns, so read it now.
+          completion(
+            ShareImporter.fileItem(
+              at: temporaryURL, type: type, suggestedName: suggestedName, keepFileName: false))
+          return
+        }
+        // Some apps only share documents as in-memory data.
+        provider.loadItem(forTypeIdentifier: type.identifier, options: nil) { loaded, _ in
+          completion(
+            ShareImporter.makeItem(from: loaded, type: type, suggestedName: suggestedName))
+        }
+      }
+    }
+  }
+
+  private static func url(from loaded: NSSecureCoding?) -> URL? {
+    if let url = loaded as? URL {
+      return url
+    }
+    if let data = loaded as? Data {
+      return URL(dataRepresentation: data, relativeTo: nil)
+    }
+    if let string = loaded as? String {
+      return URL(string: string)
+    }
+    return nil
+  }
+
+  /// loadItem can hand back a URL, String, NSAttributedString or Data.
+  private static func makeItem(
+    from loaded: NSSecureCoding?, type: UTType, suggestedName: String?
+  ) -> SharedItem? {
+    if let url = loaded as? URL {
+      if url.isFileURL {
+        return fileItem(at: url, type: type, suggestedName: suggestedName, keepFileName: true)
+      }
+      return isText(type) ? textItem(url.absoluteString) : nil
+    }
+    if let string = loaded as? String {
+      if isText(type) {
+        return textItem(string)
+      }
+      if string.utf8.count > maxFileBytes {
+        // Not copied into Data just to find out it is too large.
+        return tooLargeFileItem(type: type, suggestedName: suggestedName)
+      }
+      return dataItem(Data(string.utf8), type: type, suggestedName: suggestedName)
+    }
+    if let attributed = loaded as? NSAttributedString {
+      return textItem(attributed)
+    }
+    if let data = loaded as? Data {
+      return dataItem(data, type: type, suggestedName: suggestedName)
+    }
+    return nil
+  }
+
+  /// Shared text. Over the size limit it becomes a too-large text file,
+  /// checked before anything copies the text (trimming, the inbox JSON).
+  private static func textItem(_ text: String) -> SharedItem? {
+    if text.utf8.count > maxFileBytes {
+      return tooLargeTextItem()
+    }
+    guard trimmed(text) != nil else { return nil }
+    var item = SharedItem()
+    item.text = text
+    item.mimeType = "text/plain"
+    return item
+  }
+
+  private static func textItem(_ attributed: NSAttributedString) -> SharedItem? {
+    // More UTF-16 units than the limit means more UTF-8 bytes too, so this
+    // needs no copy of the text.
+    if attributed.length > maxFileBytes {
+      return tooLargeTextItem()
+    }
+    return textItem(attributed.string)
+  }
+
+  /// Shared text over the size limit: a text file without its content.
+  private static func tooLargeTextItem() -> SharedItem {
+    var item = SharedItem()
+    item.name = tooLargeTextName
+    item.mimeType = "text/plain"
+    item.textLike = true
+    item.tooLarge = true
+    return item
+  }
+
+  /// A shared document over the size limit: its name, without its content.
+  private static func tooLargeFileItem(type: UTType, suggestedName: String?) -> SharedItem {
+    var item = SharedItem()
+    let name = fileName(url: nil, type: type, suggestedName: suggestedName, keepFileName: false)
+    item.name = name
+    item.mimeType = mimeType(fileName: name, type: type)
+    item.textLike = isTextLike(fileName: name, types: [type])
+    item.tooLarge = true
+    return item
+  }
+
+  /// In-memory data: plain text becomes `text`, anything else a named file.
+  private static func dataItem(_ data: Data, type: UTType, suggestedName: String?) -> SharedItem? {
+    if data.isEmpty {
+      return nil
+    }
+    if plainTextIdentifiers.contains(type.identifier) {
+      // Too large text is not decoded at all.
+      if data.count > maxFileBytes {
+        return tooLargeTextItem()
+      }
+      let utf16 = type.identifier.hasPrefix("public.utf16")
+      if let string = String(data: data, encoding: utf16 ? .utf16 : .utf8) {
+        return textItem(string)
+      }
+    }
+    if data.count > maxFileBytes {
+      return tooLargeFileItem(type: type, suggestedName: suggestedName)
+    }
+    var item = SharedItem()
+    let name = fileName(url: nil, type: type, suggestedName: suggestedName, keepFileName: false)
+    item.name = name
+    item.mimeType = mimeType(fileName: name, type: type)
+    item.textLike = isTextLike(fileName: name, types: [type])
+    item.bytes = data
+    return item
+  }
+
+  /// Reads a shared file. Files over the cap keep their name but no bytes.
+  ///
+  /// The file's own type (what the file system reports, else what its
+  /// extension stands for, else the provider's `type`) must pass the same rule
+  /// as typed documents: photos, videos, audio and links are skipped, also
+  /// when they come as a plain file URL.
+  private static func fileItem(
+    at url: URL, type: UTType?, suggestedName: String?, keepFileName: Bool
+  ) -> SharedItem? {
+    guard url.isFileURL else { return nil }
+    let scoped = url.startAccessingSecurityScopedResource()
+    defer {
+      if scoped {
+        url.stopAccessingSecurityScopedResource()
+      }
+    }
+
+    let values = try? url.resourceValues(
+      forKeys: [.isDirectoryKey, .fileSizeKey, .contentTypeKey])
+    if values?.isDirectory == true {
+      return nil
+    }
+    let pathExtension = url.pathExtension
+    let extensionType: UTType? =
+      pathExtension.isEmpty ? nil : UTType(filenameExtension: pathExtension)
+    let fileType = values?.contentType ?? extensionType ?? type
+    if let fileType = fileType, !isDocument(fileType) {
+      return nil
+    }
+
+    // The provider's type names a temporary copy better than the copy itself.
+    let namingType = type ?? fileType
+    var item = SharedItem()
+    let name = fileName(
+      url: url, type: namingType, suggestedName: suggestedName, keepFileName: keepFileName)
+    item.name = name
+    item.mimeType = mimeType(fileName: name, type: namingType)
+    item.textLike = isTextLike(fileName: name, types: [fileType, type])
+
+    if let size = values?.fileSize, size > maxFileBytes {
+      item.tooLarge = true
+      return item
+    }
+    guard let data = try? Data(contentsOf: url), !data.isEmpty else { return nil }
+    if data.count > maxFileBytes {
+      item.tooLarge = true
+    } else {
+      item.bytes = data
+    }
+    return item
+  }
+
+  /// The original file name with its extension (the app picks the parser by
+  /// extension). `suggestedName` often lacks the extension. Empty when there
+  /// is no name at all: then the app titles the script from its content
+  /// instead of a made-up English name, and `mimeType` still says what it is.
+  private static func fileName(
+    url: URL?, type: UTType?, suggestedName: String?, keepFileName: Bool
+  ) -> String {
+    let urlName = url?.lastPathComponent ?? ""
+    let hasURLName = !urlName.isEmpty && urlName != "/"
+    if keepFileName && hasURLName {
+      return urlName
+    }
+    let urlExtension = url?.pathExtension ?? ""
+    let ext = urlExtension.isEmpty ? (type?.preferredFilenameExtension ?? "") : urlExtension
+    if let suggested = trimmed(suggestedName) {
+      let suggestedExtension = (suggested as NSString).pathExtension
+      if ext.isEmpty || suggestedExtension.lowercased() == ext.lowercased() {
+        return suggested
+      }
+      return suggested + "." + ext
+    }
+    if hasURLName {
+      return urlName
+    }
+    return ""
+  }
+
+  private static func mimeType(fileName: String, type: UTType?) -> String? {
+    let ext = (fileName as NSString).pathExtension
+    if !ext.isEmpty, let mime = UTType(filenameExtension: ext)?.preferredMIMEType {
+      return mime
+    }
+    return type?.preferredMIMEType
+  }
+
+  private static func trimmed(_ string: String?) -> String? {
+    guard let string = string else { return nil }
+    let result = string.trimmingCharacters(in: .whitespacesAndNewlines)
+    return result.isEmpty ? nil : result
+  }
+}
+
+/// Turns one share's texts and files into inbox items the same way Android
+/// does, so Dart sees the same items on both platforms:
+/// - exactly one text and exactly one text-like file read in full become ONE
+///   item carrying the text plus the file's name, bytes and mimeType (a notes
+///   app attaching its export next to the body is one script, not two);
+/// - otherwise every text and every file is an item of its own, texts first;
+/// - `subject` (the share's title) is only set when the share yields exactly
+///   one item, text or file; several items sharing one title would all get it.
+///
+/// Until that is decided it holds at most one text and one file. As soon as
+/// the share is known to yield several items it writes what it holds and
+/// passes everything after it straight through, so no more than two files
+/// are ever in memory.
+private final class ShareCollector {
+  private let inbox: Inbox
+  private let shareSubject: String?
+  private let isCancelled: () -> Bool
+  private var heldText: SharedItem?
+  private var heldFile: SharedItem?
+  /// The share yields several items: nothing is held, no subject is set.
+  private var passingThrough = false
+  private(set) var saved = 0
+  /// Saved items the app can open: all but the too-large ones.
+  private(set) var usable = 0
+
+  init(inbox: Inbox, shareSubject: String?, isCancelled: @escaping () -> Bool) {
+    self.inbox = inbox
+    self.shareSubject = shareSubject
+    self.isCancelled = isCancelled
+  }
+
+  func add(_ item: SharedItem) {
+    if passingThrough {
+      write(item, subject: nil)
+      return
+    }
+    if item.isFile {
+      guard heldFile == nil else {
+        passThrough(adding: item)
+        return
+      }
+      heldFile = item
+    } else {
+      guard heldText == nil else {
+        passThrough(adding: item)
+        return
+      }
+      heldText = item
+    }
+    // A text and a file stay one item only if the file can carry the text.
+    if heldText != nil, let file = heldFile, !file.canCarryText {
+      passThrough(adding: nil)
+    }
+  }
+
+  /// Writes the one item this share yields, if it yields exactly one.
+  func finish() {
+    guard !passingThrough else { return }
+    let only: SharedItem
+    if var file = heldFile {
+      if let text = heldText {
+        file.text = text.text
+        file.subject = file.subject ?? text.subject
+      }
+      only = file
+    } else if let text = heldText {
+      only = text
+    } else {
+      return
+    }
+    heldText = nil
+    heldFile = nil
+    write(only, subject: only.subject ?? shareSubject)
+  }
+
+  /// Writes the held items and `extra`, texts first, and lets everything
+  /// after them through as it comes.
+  private func passThrough(adding extra: SharedItem?) {
+    passingThrough = true
+    var items: [SharedItem] = []
+    if let text = heldText {
+      items.append(text)
+    }
+    if let extra = extra, !extra.isFile {
+      items.append(extra)
+    }
+    if let file = heldFile {
+      items.append(file)
+    }
+    if let extra = extra, extra.isFile {
+      items.append(extra)
+    }
+    heldText = nil
+    heldFile = nil
+    for item in items {
+      write(item, subject: nil)
+    }
+  }
+
+  private func write(_ item: SharedItem, subject: String?) {
+    var item = item
+    item.subject = subject
+    if inbox.write(item, isCancelled: isCancelled) {
+      saved += 1
+      if !item.tooLarge {
+        usable += 1
+      }
+    }
+  }
+}
+
+/// Writes items into the App Group inbox (see the format at the top).
+///
+/// `write` runs on the import thread; `discardWritten` may run on any thread
+/// (Cancel calls it on the main thread). The lock makes the last cancel check
+/// and the move into the inbox one step, so once Cancel has discarded, no item
+/// of this share can appear in the inbox any more.
+private final class Inbox {
+  private let inbox: URL
+  private let staging: URL
+  /// Shared by all items of this share, so they stay together and in order.
+  private let batch: String
+  /// Import thread only.
+  private var nextIndex = 0
+  private let fileManager = FileManager.default
+  private let lock = NSLock()
+  /// Names moved into the inbox by this share (all start with `batch`). Guarded by `lock`.
+  private var written: [String] = []
+  /// Set by `discardWritten`; refuses later writes. Guarded by `lock`.
+  private var discarded = false
+
+  init?() {
+    guard
+      let container = FileManager.default.containerURL(
+        forSecurityApplicationGroupIdentifier: ShareImporter.appGroupId)
+    else { return nil }
+    inbox = container.appendingPathComponent("ImportInbox", isDirectory: true)
+    staging = container.appendingPathComponent("ImportStaging", isDirectory: true)
+    let nowMillis = Int64(Date().timeIntervalSince1970 * 1000)
+    batch = Inbox.padded(nowMillis, width: 15)
+    do {
+      try fileManager.createDirectory(at: inbox, withIntermediateDirectories: true, attributes: nil)
+      try fileManager.createDirectory(
+        at: staging, withIntermediateDirectories: true, attributes: nil)
+    } catch {
+      return nil
+    }
+    removeStaleStagingFiles(nowMillis: nowMillis)
+  }
+
+  /// Saves one item. `isCancelled` is checked again right before the item is
+  /// moved into the inbox; nothing is written once the share was cancelled.
+  func write(_ item: SharedItem, isCancelled: () -> Bool) -> Bool {
+    if isCancelled() {
+      return false
+    }
+    var json: [String: Any] = [:]
+    if let text = item.text {
+      json["text"] = text
+    }
+    if let subject = item.subject {
+      json["subject"] = subject
+    }
+    if let name = item.name {
+      json["name"] = name
+    }
+    if let mimeType = item.mimeType {
+      json["mimeType"] = mimeType
+    }
+    if let bytes = item.bytes {
+      json["bytesBase64"] = bytes.base64EncodedString()
+    }
+    if item.tooLarge {
+      json["tooLarge"] = true
+    }
+
+    let index = Inbox.padded(Int64(nextIndex), width: 4)
+    let fileName = "\(batch)-\(index)-\(UUID().uuidString).json"
+    nextIndex += 1
+
+    guard let data = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+      return false
+    }
+    let stagedURL = staging.appendingPathComponent(fileName, isDirectory: false)
+    do {
+      try data.write(to: stagedURL)
+    } catch {
+      try? fileManager.removeItem(at: stagedURL)
+      return false
+    }
+
+    lock.lock()
+    defer { lock.unlock() }
+    guard !discarded, !isCancelled() else {
+      try? fileManager.removeItem(at: stagedURL)
+      return false
+    }
+    do {
+      try fileManager.moveItem(
+        at: stagedURL, to: inbox.appendingPathComponent(fileName, isDirectory: false))
+      written.append(fileName)
+      return true
+    } catch {
+      try? fileManager.removeItem(at: stagedURL)
+      return false
+    }
+  }
+
+  /// Removes every item this share already moved into the inbox and refuses
+  /// any later write. Safe to call more than once and from any thread.
+  func discardWritten() {
+    lock.lock()
+    defer { lock.unlock() }
+    discarded = true
+    for name in written {
+      try? fileManager.removeItem(at: inbox.appendingPathComponent(name, isDirectory: false))
+    }
+    written.removeAll()
+  }
+
+  /// Leftovers of a share that was killed mid-write. Their age comes from the
+  /// timestamp in the name, not from file dates.
+  private func removeStaleStagingFiles(nowMillis: Int64) {
+    guard let names = try? fileManager.contentsOfDirectory(atPath: staging.path) else { return }
+    for name in names {
+      let stamp = Int64(String(name.prefix(while: { $0.isASCII && $0.isNumber }))) ?? 0
+      if nowMillis - stamp > 60 * 60 * 1000 {
+        try? fileManager.removeItem(at: staging.appendingPathComponent(name, isDirectory: false))
+      }
+    }
+  }
+
+  private static func padded(_ value: Int64, width: Int) -> String {
+    let digits = String(value)
+    guard digits.count < width else { return digits }
+    return String(repeating: "0", count: width - digits.count) + digits
+  }
+}

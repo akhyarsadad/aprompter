@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../models/prompter_settings.dart';
@@ -80,10 +82,22 @@ class _MovablePrompterBoxState extends State<MovablePrompterBox> {
     }
   }
 
+  /// A3: 48 dp touch targets (accessibility minimum).
+  static const _target = 48.0;
+  static const _gripWidth = 96.0;
+
   @override
   Widget build(BuildContext context) {
     final r = _rect.shift(widget.area.topLeft);
     final moving = _live != null;
+    // The grip stays clear of the left 48 dp, where the prompter's reading
+    // line handle can sit: centred when the box is wide enough, otherwise
+    // moved (and narrowed) to the right.
+    final gripWidth = math.min(
+      _gripWidth,
+      math.max(_target, r.width - _target),
+    );
+    final gripLeft = math.max(_target, (r.width - gripWidth) / 2);
     return Positioned.fromRect(
       rect: r,
       child: Stack(
@@ -102,27 +116,25 @@ class _MovablePrompterBoxState extends State<MovablePrompterBox> {
           // Move grip.
           Positioned(
             top: 0,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Tooltip(
-                message: widget.moveTooltip ?? '',
-                child: GestureDetector(
-                  key: const ValueKey('prompter-move'),
-                  behavior: HitTestBehavior.opaque,
-                  onPanUpdate: _move,
-                  onPanEnd: _commit,
+            left: gripLeft,
+            width: gripWidth,
+            height: _target,
+            child: Tooltip(
+              message: widget.moveTooltip ?? '',
+              child: GestureDetector(
+                key: const ValueKey('prompter-move'),
+                behavior: HitTestBehavior.opaque,
+                onPanUpdate: _move,
+                onPanEnd: _commit,
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  padding: const EdgeInsets.only(top: 10),
                   child: Container(
-                    width: 72,
-                    height: 24,
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: 40,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: Colors.white70,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
+                    width: 40,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.white70,
+                      borderRadius: BorderRadius.circular(3),
                     ),
                   ),
                 ),
@@ -141,8 +153,8 @@ class _MovablePrompterBoxState extends State<MovablePrompterBox> {
                 onPanUpdate: _resize,
                 onPanEnd: _commit,
                 child: const SizedBox(
-                  width: 36,
-                  height: 36,
+                  width: _target,
+                  height: _target,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Padding(

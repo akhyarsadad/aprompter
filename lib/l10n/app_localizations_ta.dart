@@ -532,7 +532,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'ப்ராம்ப்டரை எங்கும் நகர்த்த மேலுள்ள பட்டையையும், அளவை மாற்ற மூலையையும் இழுக்கவும். Android-இல் மிதக்கும் சாளரத்தை எங்கும் இழுக்கலாம், அது தன் இடத்தை நினைவில் வைக்கும்.';
+      'ப்ராம்ப்டரை எங்கும் நகர்த்த மேலுள்ள பட்டையையும், அளவை மாற்ற மூலையையும் இழுக்கவும்.';
 
   @override
   String get app => 'ஆப்';
@@ -552,4 +552,477 @@ class AppLocalizationsTa extends AppLocalizations {
   String minutesShort(int n) {
     return '$n நி.';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'சேமிக்க முடியவில்லை — ஃபோன் சேமிப்பகம் நிரம்பியிருக்கலாம். ஆப் திறந்திருக்கும் வரை உங்கள் வேலை பாதுகாப்பாக இருக்கும்.';
+
+  @override
+  String get versionHistory => 'பதிப்பு வரலாறு';
+
+  @override
+  String get noVersions =>
+      'முந்தைய பதிப்புகள் இன்னும் இல்லை. நீங்கள் எழுதும்போது தானாகச் சேமிக்கப்படும்.';
+
+  @override
+  String get restore => 'மீட்டமை';
+
+  @override
+  String get versionRestored => 'முந்தைய பதிப்பு மீட்டமைக்கப்பட்டது';
+
+  @override
+  String get recentlyDeleted => 'சமீபத்தில் நீக்கியவை';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'நீக்கிய ஸ்கிரிப்ட்கள் இங்கே $days நாட்கள் இருக்கும்.',
+      one: 'நீக்கிய ஸ்கிரிப்ட்கள் இங்கே 1 நாள் இருக்கும்.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'நிரந்தரமாக நீக்கு';
+
+  @override
+  String deletedOn(String date) {
+    return '$date அன்று நீக்கப்பட்டது';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" மீட்டமைக்கப்பட்டது';
+  }
+
+  @override
+  String get backUpScripts => 'எல்லா ஸ்கிரிப்ட்களையும் காப்புப்பிரதி எடு';
+
+  @override
+  String get restoreBackup => 'காப்புப்பிரதியிலிருந்து மீட்டமை';
+
+  @override
+  String get backupShareTitle => 'APrompter காப்புப்பிரதி';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ஸ்கிரிப்ட்கள் மீட்டமைக்கப்பட்டன',
+      one: '1 ஸ்கிரிப்ட் மீட்டமைக்கப்பட்டது',
+      zero: 'இந்தக் காப்புப்பிரதியில் உள்ளவை அனைத்தும் ஏற்கனவே உள்ளன',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'இந்தக் கோப்பு APrompter காப்புப்பிரதி அல்ல.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '$wpm சொ/நி வேகத்திலும் இது $target-க்குள் அடங்காது — சுமார் $words சொற்களைக் குறைக்கவும்.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'கேமரா தயாராக இல்லை, அதனால் பதிவு தொடங்கவில்லை. மீண்டும் முயலவும்.';
+
+  @override
+  String get previousSection => 'முந்தைய பகுதி';
+
+  @override
+  String get nextSection => 'அடுத்த பகுதி';
+
+  @override
+  String get floatingNotificationBody => 'APrompter-ஐத் திறக்க தட்டவும்';
+
+  @override
+  String get customTarget => 'தனிப்பயன்…';
+
+  @override
+  String get customTargetTitle => 'இலக்கு நீளம்';
+
+  @override
+  String get customTargetHint => 'நிமிடம், வினாடி, எ.கா. 5:00';
+
+  @override
+  String get saved => 'சேமிக்கப்பட்டது';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone மற்றும் iPad-இல் ஆப்கள் மற்ற ஆப்களின் மேல் மிதக்க முடியாது. கேமராவுக்குக் கீழே ஸ்கிரிப்டுடன் படம்பிடிக்க பதிவு பயன்படுத்தவும்.';
+
+  @override
+  String get hashtagHint =>
+      'ஹேஷ்டேக் வரிகள் (#fyp #ad) மங்கலாகக் காட்டப்படும், நேரம் கணக்கிடப்படாது. பகுதிக்கு இடைவெளியுடன் \"# \" பயன்படுத்தவும்.';
+
+  @override
+  String get appLock => 'ஆப் பூட்டு';
+
+  @override
+  String get appLockHint =>
+      'APrompter-ஐத் திறக்க கைரேகை, முகம் அல்லது ஃபோன் PIN கேட்கும்';
+
+  @override
+  String get appLockUnavailable =>
+      'முதலில் இந்த ஃபோனில் திரைப் பூட்டை அமைக்கவும்.';
+
+  @override
+  String get unlock => 'திற';
+
+  @override
+  String get unlockReason =>
+      'உங்கள் ஸ்கிரிப்ட்களைப் பார்க்க APrompter-ஐத் திறக்கவும்';
+
+  @override
+  String get autoStopWait => 'கடைசி வரிக்குப் பின் காத்திருப்பு';
+
+  @override
+  String get beforeYouRecord => 'பதிவு செய்யும் முன்';
+
+  @override
+  String get recordAnyway => 'இருந்தாலும் பதிவுசெய்';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'காலி இடத்தில் சுமார் $minutes நி. வீடியோ மட்டுமே பொருந்தும். இடத்தைக் காலி செய்யவும் அல்லது வீடியோ தரத்தைக் குறைக்கவும்.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'பேட்டரி $level% — நீண்ட டேக் இடையில் நின்றுவிடலாம். முடிந்தால் சார்ஜரை இணைக்கவும்.';
+  }
+
+  @override
+  String get brightScreen => 'ப்ராம்ப்டிங்கின்போது முழு ஒளிர்வு';
+
+  @override
+  String get brightScreenHint => 'வெளியே படிக்க எளிது';
+
+  @override
+  String get cameraBusy =>
+      'வேறொரு ஆப் கேமராவைப் பயன்படுத்துகிறது. அதை மூடிவிட்டு மீண்டும் முயலவும்.';
+
+  @override
+  String get cameraIntroTitle => 'கேமரா மற்றும் மைக்ரோஃபோன்';
+
+  @override
+  String get cameraIntroBody =>
+      'திரையில் ஸ்கிரிப்டுடன் உங்களைப் படம்பிடிக்க APrompter-க்கு கேமராவும் மைக்ரோஃபோனும் தேவை. அடுத்து உங்கள் ஃபோன் அனுமதி கேட்கும். வீடியோக்கள் உங்கள் ஃபோனிலேயே இருக்கும்.';
+
+  @override
+  String get continueLabel => 'தொடர்';
+
+  @override
+  String get notNow => 'இப்போது வேண்டாம்';
+
+  @override
+  String get colorWhite => 'வெள்ளை';
+
+  @override
+  String get colorYellow => 'மஞ்சள்';
+
+  @override
+  String get colorGreen => 'பச்சை';
+
+  @override
+  String get colorBlue => 'நீலம்';
+
+  @override
+  String get colorPink => 'இளஞ்சிவப்பு';
+
+  @override
+  String get colorBlack => 'கருப்பு';
+
+  @override
+  String get damagedData => 'படிக்க முடியாத தரவு';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '$date அன்று தனியாக வைக்கப்பட்டது · $size எழுத்துகள்';
+  }
+
+  @override
+  String get tryToRecover => 'மீட்க முயல்';
+
+  @override
+  String get nothingRecovered =>
+      'இதிலிருந்து எந்த ஸ்கிரிப்டையும் படிக்க முடியவில்லை.';
+
+  @override
+  String get floatLowRam =>
+      'இந்த ஃபோனால் பிற ஆப்களின் மேல் ஆப்களைக் காட்ட முடியாது (குறைந்த நினைவகம் அல்லது Android Go ஃபோன்). பதிலாக பதிவு-ஐப் பயன்படுத்தவும்.';
+
+  @override
+  String get oemTipsTitle => 'மிதக்கும் ப்ராம்ப்டரை இயக்கத்தில் வைக்க';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'பேட்டரியைச் சேமிக்க $brand ஃபோன்கள் மிதக்கும் சாளரங்களை மூடலாம். அமைப்புகள் → ஆப்ஸ் → APrompter-இல்: பிற ஆப்களின் மேல் காட்ட (மற்றும் பாப்-அப் சாளரங்கள்) அனுமதிக்கவும், பேட்டரியை \"கட்டுப்பாடற்றது\" என அமைக்கவும், அறிவிப்புகளை அனுமதிக்கவும்.';
+  }
+
+  @override
+  String get focusLine => 'தற்போதைய வரியில் கவனம்';
+
+  @override
+  String get focusLineHint => 'மற்ற வரிகளை மங்கச் செய்யும்';
+
+  @override
+  String get stepByLine => 'வரி வரியாக';
+
+  @override
+  String get stepByLineHint =>
+      'ஒவ்வொரு தட்டலும் ரிமோட் அழுத்தமும் ஒரு வரி நகர்த்தும் — தானியங்கு உருட்டல் இல்லை';
+
+  @override
+  String get reduceEffects => 'எஃபெக்ட்களைக் குறை';
+
+  @override
+  String get reduceEffectsHint =>
+      'மங்கல், நிழல் இல்லை: பழைய ஃபோன்களில் சீராக, பேட்டரி மிச்சம்';
+
+  @override
+  String get letterSpacing => 'எழுத்து இடைவெளி';
+
+  @override
+  String get pasteAsNewScript => 'புதிய ஸ்கிரிப்டாக ஒட்டு';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Notes, Keep, Notion, Docs அல்லது எந்த ஆப்பிலிருந்தும் நகலெடுத்த உரை';
+
+  @override
+  String get importFiles => 'கோப்புகளை இறக்கு';
+
+  @override
+  String get importFilesHint =>
+      'Word, உரை, Markdown, RTF, HTML, Evernote, வசனங்கள் அல்லது காப்புப்பிரதி';
+
+  @override
+  String get clipboardEmpty =>
+      'ஒட்ட எதுவும் இல்லை. முதலில் மற்ற ஆப்பில் உங்கள் ஸ்கிரிப்டை நகலெடுக்கவும்.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ஸ்கிரிப்ட்கள் இறக்கப்பட்டன',
+      one: '1 ஸ்கிரிப்ட் இறக்கப்பட்டது',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'இலவசத் திட்டத்தில் $count ஸ்கிரிப்ட்கள் மட்டுமே வைக்கலாம். எதுவும் இழக்கப்படவில்லை: உங்கள் குறிப்பு அல்லது கோப்பு அதே இடத்தில் உள்ளது. மேலும் இறக்க மேம்படுத்தவும்.',
+      one: 'இலவசத் திட்டத்தில் 1 ஸ்கிரிப்ட் மட்டுமே வைக்கலாம். எதுவும் இழக்கப்படவில்லை: உங்கள் குறிப்பு அல்லது கோப்பு அதே இடத்தில் உள்ளது. மேலும் இறக்க மேம்படுத்தவும்.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF-களை இறக்க முடியாது. PDF-ஐத் திறந்து, உரையை நகலெடுத்து, \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importOldFormat =>
+      'பழைய Word (.doc), Pages கோப்புகளைப் படிக்க முடியாது. அதை .docx அல்லது உரையாகச் சேமிக்கவும், அல்லது உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importUnsupported =>
+      'இந்த வகைக் கோப்பை APrompter-ஆல் படிக்க முடியாது. உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importEmpty => 'இதில் இறக்க எந்த உரையும் இல்லை.';
+
+  @override
+  String get importTooLarge =>
+      'ஒரு ஸ்கிரிப்டுக்கு இது மிக நீளம். தேவையான பகுதியை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importLinkOnly =>
+      'உரை அல்ல, இணைப்பு மட்டுமே வந்தது. அதைத் திறந்து, உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get importUnreadable =>
+      'படிக்க முடியவில்லை. உரையை நகலெடுத்து \"புதிய ஸ்கிரிப்டாக ஒட்டு\" என்பதைப் பயன்படுத்தவும்.';
+
+  @override
+  String get saveAsTextFile => 'உரைக் கோப்பாகச் சேமி';
+
+  @override
+  String get saveTextFileFailed =>
+      'உரைக் கோப்பை உருவாக்க முடியவில்லை. மீண்டும் முயலவும்.';
+
+  @override
+  String get mySetup => 'என் அமைப்பு';
+
+  @override
+  String get mySetupHint => 'நீங்கள் சேமித்த அமைப்பு';
+
+  @override
+  String get saveMySetup => 'என் அமைப்பாகச் சேமி';
+
+  @override
+  String get resetAllSettings => 'எல்லா அமைப்புகளையும் மீட்டமை';
+
+  @override
+  String get runHadJumps =>
+      'இந்த ஓட்டத்தில் முன்னும் பின்னும் தாவினீர்கள், அதனால் வேகத்தைப் பரிந்துரைக்க முடியாது.';
+
+  @override
+  String get keepTake => 'வைத்திரு';
+
+  @override
+  String get retake => 'மீண்டும் எடு';
+
+  @override
+  String get reviewTakes => 'ஒவ்வொரு டேக்கையும் பார்';
+
+  @override
+  String get reviewTakesHint =>
+      'பார்த்துவிட்டு வைத்திருக்கவும் அல்லது மீண்டும் எடுக்கவும்';
+
+  @override
+  String get takesToGallery => 'டேக்குகளை கேலரியில் சேமி';
+
+  @override
+  String get takesToGalleryHint =>
+      'ஆஃப்: டேக்குகள் ஆப்பிலேயே இருக்கும், Google Photos, iCloud-க்குச் செல்லாது';
+
+  @override
+  String get takesTitle => 'டேக்குகள்';
+
+  @override
+  String get takesEmpty =>
+      'ஆப்பில் வைத்த டேக்குகள் இங்கே தெரியும். இங்கே வைக்க அமைப்புகளில் \"டேக்குகளை கேலரியில் சேமி\"-ஐ ஆஃப் செய்யவும்.';
+
+  @override
+  String get saveToGallery => 'கேலரியில் சேமி';
+
+  @override
+  String get savedToGallery => 'கேலரியில் சேமிக்கப்பட்டது';
+
+  @override
+  String get deleteTake => 'டேக்கை நீக்கு';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'டேக் $n ஆப்பில் வைக்கப்பட்டது';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'சந்தா அல்லது ஒருமுறை வாங்குதல் மூலம் வரம்பற்ற ஸ்கிரிப்டுகள்.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'திட்டங்களை ஏற்ற முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயலவும்.';
+
+  @override
+  String get purchaseFailed => 'வாங்குதல் தோல்வியடைந்தது. மீண்டும் முயலவும்.';
+
+  @override
+  String get restoreFailed =>
+      'வாங்கியவற்றை மீட்டெடுக்க முடியவில்லை. மீண்டும் முயலவும்.';
+
+  @override
+  String get restorePurchases => 'வாங்கியவற்றை மீட்டெடு';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'இந்த ஸ்கிரிப்ட் $count சொற்களுக்கு மேல் உள்ளது. நீளமான ஸ்கிரிப்டுகள் APrompter Unlimited-இன் ஒரு பகுதி.';
+  }
+
+  @override
+  String get upgrade => 'மேம்படுத்து';
+
+  @override
+  String planMonthly(String price) {
+    return 'மாதாந்திரம் · $price / மாதம்';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'ஆண்டுதோறும் · $price / ஆண்டு';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'வாழ்நாள் · $price ஒருமுறை';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '$percent% சேமிப்பு';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'மாதாந்திர மற்றும் ஆண்டு திட்டங்கள் நீங்கள் ரத்து செய்யும் வரை அதே காலத்துக்குத் தானாகப் புதுப்பிக்கப்படும். அடுத்த கட்டணத்தைத் தவிர்க்க, காலம் முடிவதற்குக் குறைந்தது 24 மணிநேரத்துக்கு முன் உங்கள் $store கணக்கு அமைப்புகளில் ரத்து செய்யவும். வாழ்நாள் திட்டம் ஒருமுறை வாங்குவதாகும்.';
+  }
+
+  @override
+  String get termsOfUse => 'பயன்பாட்டு விதிமுறைகள்';
+
+  @override
+  String get privacyPolicy => 'தனியுரிமைக் கொள்கை';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'இந்த $store கணக்கில் முந்தைய வாங்குதல் எதுவும் இல்லை.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'உங்கள் ஃபோனில் திரைப் பூட்டு இல்லை, அதனால் ஆப் பூட்டு அணைக்கப்பட்டது.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'இந்த டேக்கை நீக்கவா? வீடியோவைத் திரும்பப் பெற முடியாது.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '\"$title\" ஐ நிரந்தரமாக நீக்கவா? திரும்பப் பெற முடியாது.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'ஆப்பில் வைத்திருக்கும் இதன் டேக்குகளும் நீக்கப்படும்.';
+
+  @override
+  String get purchasePending =>
+      'கட்டணம் நிலுவையில் உள்ளது. அங்கீகரிக்கப்பட்டதும் APrompter Unlimited தானாகத் திறக்கும்.';
+
+  @override
+  String get positionHintFloat =>
+      'மிதக்கும் சாளரத்தை எங்கும் இழுக்கலாம், அது தன் இடத்தை நினைவில் வைக்கும்.';
+
+  @override
+  String get readingLine => 'வாசிப்பு வரியின் இடம்';
+
+  @override
+  String get readingLineHint =>
+      'ஃபோன் கேமரா திரைக்கு மேலே உள்ளது: வரியை மேலே வைத்தால் உங்கள் பார்வை லென்ஸ் அருகே இருக்கும்.';
+
+  @override
+  String get readingLineNearCamera => 'கேமரா அருகே';
+
+  @override
+  String get readingLineMiddle => 'நடுவில்';
+
+  @override
+  String get readingLineDragHint =>
+      'ஒத்திகையிலும், பதிவில் தொடங்கும் முன்பும் வரியின் இடது அம்புக்குறியை மேலே அல்லது கீழே இழுக்கலாம்.';
 }

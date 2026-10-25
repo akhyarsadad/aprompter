@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
@@ -7,13 +12,26 @@ import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../models/templates.dart';
 import '../services/app_state.dart';
+import '../services/backup.dart';
+import '../services/entitlements.dart';
 import '../services/floating_prompter.dart';
+import '../services/incoming_shares.dart';
+import '../services/script_import.dart';
 import '../services/storage.dart';
+import '../services/system_settings.dart';
+import '../widgets/app_lock.dart';
 import '../widgets/guards.dart';
 import '../widgets/settings_sheet.dart';
 import 'camera_prompter_screen.dart';
 import 'editor_screen.dart';
+import 'paywall_screen.dart';
 import 'read_screen.dart';
+import 'takes_screen.dart';
+import 'trash_screen.dart';
+
+/// How long a share's free-plan answer outlives the import that got it,
+/// for batches native code reads after that (a slow cloud download).
+const _importGateQuiet = Duration(seconds: 30);
 
 /// Script library (journey J7).
 class HomeScreen extends StatefulWidget {
@@ -27,18 +45,125 @@ class _HomeScreenState extends State<HomeScreen> {
   ScriptStatus? _filter;
   String _query = '';
 
+  /// Notes and files shared to APrompter from other apps.
+  final _shares = IncomingShares();
+  bool _taking = false;
+  bool _takeAgain = false;
+  bool _waitingForUnlock = false;
+
+  /// The free plan's answer for the share coming in. Native code reads a
+  /// big share's next files only once Dart has taken the previous ones, so
+  /// its last batches can arrive after the run of [_takeShares] that asked
+  /// to upgrade has ended: they get the same answer, without the sheet
+  /// again. Sharing something else means leaving the app for the other one,
+  /// which starts afresh, and so does a quiet [_importGateQuiet] (two apps
+  /// side by side).
+  _ImportGate? _importGate;
+  Timer? _importGateExpiry;
+
+  void _forgetImportGate() {
+    _importGateExpiry?.cancel();
+    _importGate = null;
+  }
+
+  // F9: pace (and reading line) changed in the floating window is picked up
+  // on return.
+  late final _lifecycle = AppLifecycleListener(
+    onResume: () {
+      AppScope.read(context).reloadSettings();
+      _scheduleTake();
+    },
+    onHide: _forgetImportGate,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle;
+    _shares.listen(_scheduleTake);
+    // Shared before the app was running (cold start).
+    _scheduleTake();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Subscribes to the app lock: whatever was shared while locked comes in
+    // once it is unlocked.
+    if (!AppLockGate.lockedOf(context) && _waitingForUnlock) {
+      _waitingForUnlock = false;
+      _scheduleTake();
+    }
+  }
+
+  /// Takes shares after the next frame. Frames only run while the app is on
+  /// screen, and by then a returning app lock is already up — Android can
+  /// announce a share before the app is even shown again.
+  void _scheduleTake() {
+    WidgetsBinding.instance
+      ..addPostFrameCallback((_) => _takeShares())
+      ..scheduleFrame();
+  }
+
+  @override
+  void dispose() {
+    _importGateExpiry?.cancel();
+    _shares.dispose();
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  /// Brings in what other apps shared: on start, when the app comes back
+  /// and when native code says something arrived. Never twice at once, and
+  /// never behind the app lock.
+  Future<void> _takeShares() async {
+    if (!mounted) return;
+    if (AppLockGate.isLocked(context)) {
+      _waitingForUnlock = true;
+      return;
+    }
+    if (_taking) {
+      _takeAgain = true;
+      return;
+    }
+    _taking = true;
+    var took = false;
+    try {
+      do {
+        _takeAgain = false;
+        final shares = await _shares.takePending();
+        if (shares.isEmpty || !mounted) continue;
+        took = true;
+        // Native code can hand one big share over in several batches: they
+        // are still one import, which asks to upgrade at most once.
+        _importGateExpiry?.cancel();
+        final gate = _importGate ??= _ImportGate();
+        final results = [for (final share in shares) await importShare(share)];
+        if (!mounted) return;
+        await _addImports(context, results, gate: gate);
+      } while (_takeAgain && mounted);
+    } finally {
+      _taking = false;
+      if (took && mounted && _importGate != null) {
+        _importGateExpiry?.cancel();
+        _importGateExpiry = Timer(_importGateQuiet, _forgetImportGate);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final state = AppScope.of(context);
-    final q = _query.toLowerCase();
+    final unlimited = EntitlementsScope.of(context).isUnlimited;
+    final q = foldForSearch(_query);
     final scripts = state.scripts
         .where((s) => _filter == null || s.status == _filter)
         .where(
           (s) =>
               q.isEmpty ||
-              s.title.toLowerCase().contains(q) ||
-              s.body.toLowerCase().contains(q),
+              foldForSearch(s.title).contains(q) ||
+              foldForSearch(s.body).contains(q),
         )
         .toList();
 
@@ -54,6 +179,32 @@ class _HomeScreenState extends State<HomeScreen> {
               settings: state.settings,
               onChanged: state.updateSettings,
             ),
+          ),
+          PopupMenuButton<_LibraryAction>(
+            onSelected: (a) => _onLibraryAction(context, a),
+            itemBuilder: (_) => [
+              // The plans, without first having to hit a limit.
+              if (!unlimited) ...[
+                PopupMenuItem(
+                  value: _LibraryAction.upgrade,
+                  child: _MenuRow(Icons.workspace_premium_outlined, l.upgrade),
+                ),
+                const PopupMenuDivider(),
+              ],
+              PopupMenuItem(
+                value: _LibraryAction.trash,
+                child: _MenuRow(Icons.delete_sweep_outlined, l.recentlyDeleted),
+              ),
+              const PopupMenuDivider(),
+              PopupMenuItem(
+                value: _LibraryAction.backup,
+                child: _MenuRow(Icons.backup_outlined, l.backUpScripts),
+              ),
+              PopupMenuItem(
+                value: _LibraryAction.restore,
+                child: _MenuRow(Icons.settings_backup_restore, l.restoreBackup),
+              ),
+            ],
           ),
         ],
       ),
@@ -119,10 +270,125 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+enum _LibraryAction { upgrade, trash, backup, restore }
+
+Future<void> _onLibraryAction(
+  BuildContext context,
+  _LibraryAction action,
+) async {
+  final l = context.l10n;
+  final state = AppScope.read(context);
+  final messenger = ScaffoldMessenger.of(context);
+  switch (action) {
+    case _LibraryAction.upgrade:
+      await showUpgradeFlow(context);
+    case _LibraryAction.trash:
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(builder: (_) => const TrashScreen()),
+      );
+    case _LibraryAction.backup:
+      final now = DateTime.now();
+      final box = context.findRenderObject() as RenderBox?;
+      await SharePlus.instance.share(
+        ShareParams(
+          title: l.backupShareTitle,
+          files: [
+            XFile.fromData(
+              utf8.encode(Backup.encode(state.scripts, now: now)),
+              mimeType: 'application/json',
+              name: Backup.fileName(now),
+            ),
+          ],
+          fileNameOverrides: [Backup.fileName(now)],
+          sharePositionOrigin: box == null
+              ? null
+              : box.localToGlobal(Offset.zero) & box.size,
+        ),
+      );
+    case _LibraryAction.restore:
+      final file = await FilePicker.pickFile();
+      if (file == null) return;
+      String? text;
+      try {
+        text = utf8.decode(await file.readAsBytes(), allowMalformed: true);
+      } catch (_) {
+        text = null;
+      }
+      final scripts = text == null ? null : Backup.decode(text);
+      if (scripts == null) {
+        messenger.showSnackBar(SnackBar(content: Text(l.notABackup)));
+        return;
+      }
+      final count = await state.importScripts(scripts);
+      messenger.showSnackBar(SnackBar(content: Text(l.importedScripts(count))));
+  }
+}
+
+class _MenuRow extends StatelessWidget {
+  const _MenuRow(this.icon, this.text);
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      Icon(icon, size: 20),
+      const SizedBox(width: 12),
+      Expanded(child: Text(text)),
+    ],
+  );
+}
+
+/// Lower-cases and strips accents so "cafe" finds "Café" and "istanbul"
+/// finds "İstanbul".
+String foldForSearch(String text) {
+  final lower = text.replaceAll('İ', 'i').replaceAll('I', 'ı').toLowerCase();
+  final out = StringBuffer();
+  for (final rune in lower.runes) {
+    final c = String.fromCharCode(rune);
+    out.write(_accents[c] ?? c);
+  }
+  // Dotless ı only differs from i in Turkish casing; search treats them alike.
+  return out.toString().replaceAll('ı', 'i');
+}
+
+// dart format off
+const _accents = {
+  'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a', 'ā': 'a',
+  'ă': 'a', 'ą': 'a', 'ç': 'c', 'ć': 'c', 'č': 'c', 'ď': 'd', 'đ': 'd',
+  'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e', 'ē': 'e', 'ę': 'e', 'ě': 'e',
+  'ğ': 'g', 'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i', 'ī': 'i', 'ł': 'l',
+  'ñ': 'n', 'ń': 'n', 'ň': 'n', 'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o',
+  'ö': 'o', 'ø': 'o', 'ō': 'o', 'ő': 'o', 'ř': 'r', 'ś': 's', 'š': 's',
+  'ş': 's', 'ș': 's', 'ß': 'ss', 'ť': 't', 'ț': 't', 'ù': 'u', 'ú': 'u',
+  'û': 'u', 'ü': 'u', 'ū': 'u', 'ů': 'u', 'ű': 'u', 'ý': 'y', 'ÿ': 'y',
+  'ź': 'z', 'ż': 'z', 'ž': 'z', 'ơ': 'o', 'ư': 'u', 'ạ': 'a', 'ả': 'a',
+  'ấ': 'a', 'ầ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a', 'ắ': 'a', 'ằ': 'a',
+  'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a', 'ẹ': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ế': 'e',
+  'ề': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e', 'ỉ': 'i', 'ị': 'i', 'ọ': 'o',
+  'ỏ': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o', 'ớ': 'o',
+  'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o', 'ụ': 'u', 'ủ': 'u', 'ứ': 'u',
+  'ừ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u', 'ỳ': 'y', 'ỵ': 'y', 'ỷ': 'y',
+  'ỹ': 'y',
+};
+// dart format on
+
 /// J1: pick a template, then open the editor.
 Future<void> _newScript(BuildContext context) async {
+  final state = AppScope.read(context);
+  final entitlements = EntitlementsScope.read(context);
+  if (!canCreateScript(
+    state.scriptsCountingTowardFreeLimit,
+    entitlements.isUnlimited,
+  )) {
+    // Bought, restored, or the store has just confirmed a subscription it
+    // hadn't answered for yet: carry on to the templates.
+    if (!await showUpgradeFlow(context) || !context.mounted) return;
+  }
   final l = context.l10n;
-  final template = await showModalBottomSheet<ScriptTemplate>(
+  final choice = await showModalBottomSheet<Object>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
@@ -136,6 +402,19 @@ Future<void> _newScript(BuildContext context) async {
               l.startFromTemplate,
               style: Theme.of(context).textTheme.titleMedium,
             ),
+          ),
+          // W12: bring in a script written elsewhere.
+          ListTile(
+            leading: const Icon(Icons.content_paste),
+            title: Text(l.pasteAsNewScript),
+            subtitle: Text(l.pasteAsNewScriptHint),
+            onTap: () => Navigator.pop(context, _Bring.paste),
+          ),
+          ListTile(
+            leading: const Icon(Icons.upload_file),
+            title: Text(l.importFiles),
+            subtitle: Text(l.importFilesHint),
+            onTap: () => Navigator.pop(context, _Bring.files),
           ),
           for (final t in scriptTemplates(l))
             ListTile(
@@ -152,20 +431,283 @@ Future<void> _newScript(BuildContext context) async {
       ),
     ),
   );
-  if (template == null || !context.mounted) return;
-  final script = Storage.newScript().copyWith(
-    body: template.body,
-    targetSeconds: () => template.body.isEmpty ? null : 60,
-  );
-  _edit(context, script);
+  if (choice == null || !context.mounted) return;
+  switch (choice) {
+    case _Bring.paste:
+      return _pasteAsNewScript(context);
+    case _Bring.files:
+      return _importFiles(context);
+    case ScriptTemplate template:
+      final script = Storage.newScript().copyWith(
+        body: template.body,
+        targetSeconds: () => template.body.isEmpty ? null : 60,
+      );
+      _edit(context, script);
+  }
 }
+
+/// Ways to bring in a script written elsewhere, from the New script sheet.
+enum _Bring { paste, files }
+
+/// F2: phone makers that close floating windows to save battery.
+const _aggressiveOems = {
+  'xiaomi',
+  'redmi',
+  'poco',
+  'huawei',
+  'honor',
+  'oppo',
+  'realme',
+  'vivo',
+  'iqoo',
+  'oneplus',
+  'samsung',
+  'meizu',
+  'tecno',
+  'infinix',
+  'itel',
+};
+
+/// Explains, once, what to allow on phones that kill floating windows.
+Future<void> _oemTipsOnce(BuildContext context, String manufacturer) async {
+  final storage = AppScope.read(context).storage;
+  if (!_aggressiveOems.contains(manufacturer) || storage.oemTipsSeen) return;
+  await storage.setOemTipsSeen();
+  if (!context.mounted) return;
+  final l = context.l10n;
+  final brand = manufacturer.isEmpty
+      ? ''
+      : manufacturer[0].toUpperCase() + manufacturer.substring(1);
+  await showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    builder: (context) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l.oemTipsTitle, style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 8),
+            Text(l.oemTipsBody(brand)),
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: openAppSettings,
+              icon: const Icon(Icons.settings),
+              label: Text(l.openSettings),
+            ),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l.continueLabel),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+/// Makes a script of what is on the clipboard — copied from Notes, Keep,
+/// Notion, Docs, a chat…
+Future<void> _pasteAsNewScript(BuildContext context) async {
+  final l = context.l10n;
+  final messenger = ScaffoldMessenger.of(context);
+  String? text;
+  try {
+    text = (await Clipboard.getData(Clipboard.kTextPlain))?.text;
+  } catch (_) {
+    text = null;
+  }
+  if (!context.mounted) return;
+  if (text == null || text.trim().isEmpty) {
+    messenger.showSnackBar(SnackBar(content: Text(l.clipboardEmpty)));
+    return;
+  }
+  final result = await importFromTextAsync(text, fromClipboard: true);
+  if (!context.mounted) return;
+  await _addImports(context, [result]);
+}
+
+/// Imports any files: text, Markdown, Word, RTF, HTML, Evernote, subtitles
+/// or an APrompter backup. Any type can be picked (Android's picker fails on
+/// extensions it can't map to a type); what isn't a script says why.
+Future<void> _importFiles(BuildContext context) async {
+  final l = context.l10n;
+  final messenger = ScaffoldMessenger.of(context);
+  List<PlatformFile> files;
+  try {
+    files = await FilePicker.pickFiles();
+  } catch (_) {
+    // PlatformException from the picker, or no picker on this platform.
+    messenger.showSnackBar(SnackBar(content: Text(l.importUnreadable)));
+    return;
+  }
+  if (files.isEmpty || !context.mounted) return;
+  final results = <ImportResult>[];
+  for (final file in files) {
+    final size = file.lengthSync();
+    if (size != null && size > maxImportBytes) {
+      results.add(const ImportFailed(ImportFailure.tooLarge));
+      continue;
+    }
+    try {
+      final bytes = await file.readAsBytes();
+      results.add(await importFromFileAsync(file.name, bytes));
+    } catch (_) {
+      results.add(const ImportFailed(ImportFailure.unreadable));
+    }
+  }
+  if (!context.mounted) return;
+  await _addImports(context, results);
+}
+
+/// Adds imported scripts to the library. Each new script respects the free
+/// plan like New script does; one script opens in the editor, several are
+/// counted, and anything that failed says why and what to do.
+///
+/// Backups merge without the free-plan check, like "Restore from a backup"
+/// in the library menu, which takes the very same file: they bring back the
+/// person's own scripts.
+///
+/// [gate] carries the free-plan answer across calls that make up one
+/// import; by default every call is an import of its own.
+Future<void> _addImports(
+  BuildContext context,
+  List<ImportResult> results, {
+  _ImportGate? gate,
+}) async {
+  final l = context.l10n;
+  final state = AppScope.read(context);
+  final entitlements = EntitlementsScope.read(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final shown = <Script>[]; // what this import brought, new or already here
+  var created = 0;
+  int? restored;
+  ImportFailure? failure;
+  final g = gate ?? _ImportGate();
+
+  bool canAdd() => canCreateScript(
+    state.scriptsCountingTowardFreeLimit,
+    entitlements.isUnlimited,
+  );
+
+  for (final result in results) {
+    switch (result) {
+      case ImportFailed(:final reason):
+        failure ??= reason;
+      case ImportedBackup(:final scripts):
+        restored = (restored ?? 0) + await state.importScripts(scripts);
+      case ImportedScripts(:final scripts):
+        for (final imported in scripts) {
+          final title = imported.title ?? '';
+          // The same note shared twice opens the copy already here. An
+          // import without a title was saved as "Untitled" by the editor.
+          final existing = state.scripts
+              .where(
+                (s) =>
+                    s.body == imported.body &&
+                    (s.title == title ||
+                        (title.isEmpty && s.title == l.untitled)),
+              )
+              .firstOrNull;
+          if (existing != null) {
+            if (!shown.any((s) => s.id == existing.id)) shown.add(existing);
+            continue;
+          }
+          // Past the free plan nothing new is added, but backups and
+          // failures later in the batch still come through. Asked once per
+          // share; Unlimited bought meanwhile lets the rest in.
+          if (!canAdd() && !g.askedToUpgrade && context.mounted) {
+            g.askedToUpgrade = true;
+            await showUpgradeFlow(context);
+          }
+          if (!canAdd()) {
+            g.blocked = true;
+            continue;
+          }
+          final script = Storage.newScript().copyWith(
+            title: title,
+            body: imported.body,
+          );
+          await state.upsert(script);
+          shown.add(script);
+          created++;
+        }
+    }
+  }
+  if (!context.mounted) return;
+  const long = Duration(seconds: 8);
+  if (restored != null) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(l.importedScripts(restored))),
+    );
+  }
+  if (g.blocked && !g.toldBlocked) {
+    g.toldBlocked = true;
+    // Nothing is lost: the note or file is still in the other app.
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l.importFreeLimit(maxFreeScripts)),
+        duration: long,
+      ),
+    );
+  }
+  if (failure != null) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(_failureText(l, failure)), duration: long),
+    );
+  }
+  if (shown.length == 1) {
+    // Already open (shared again while editing it): that editor stays the
+    // only one, so it can't be overwritten by an older copy.
+    if (!EditorScreen.isOpen(shown.single.id)) _edit(context, shown.single);
+  } else if (created > 0) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(l.importedNewScripts(created))),
+    );
+  }
+}
+
+/// The free plan's answer during one import, which can span several calls
+/// to [_addImports] (a share native code hands over in batches): the
+/// upgrade sheet is offered at most once, and once declined the rest of the
+/// import adds nothing new and says so once.
+class _ImportGate {
+  bool askedToUpgrade = false;
+  bool blocked = false;
+  bool toldBlocked = false;
+}
+
+String _failureText(AppLocalizations l, ImportFailure failure) =>
+    switch (failure) {
+      ImportFailure.unsupportedFormat => l.importUnsupported,
+      ImportFailure.pdf => l.importPdf,
+      ImportFailure.binaryDocument => l.importOldFormat,
+      ImportFailure.empty => l.importEmpty,
+      ImportFailure.tooLarge => l.importTooLarge,
+      ImportFailure.linkOnly => l.importLinkOnly,
+      ImportFailure.unreadable => l.importUnreadable,
+    };
 
 void _edit(BuildContext context, Script script) => Navigator.push(
   context,
   MaterialPageRoute<void>(builder: (_) => EditorScreen(script: script)),
 );
 
-enum _Action { edit, duplicate, share, caption, draft, ready, recorded, delete }
+enum _Action {
+  edit,
+  duplicate,
+  share,
+  saveText,
+  caption,
+  takes,
+  draft,
+  ready,
+  recorded,
+  delete,
+}
 
 class _ScriptCard extends StatelessWidget {
   const _ScriptCard({super.key, required this.script});
@@ -177,6 +719,15 @@ class _ScriptCard extends StatelessWidget {
     final l = context.l10n;
     final state = AppScope.read(context);
     final messenger = ScaffoldMessenger.of(context);
+    final device = await deviceInfo();
+    // O6: Android Go / low-RAM phones can't draw over other apps.
+    if (device.lowRam) {
+      messenger.showSnackBar(SnackBar(content: Text(l.floatLowRam)));
+      return;
+    }
+    if (!context.mounted) return;
+    await _oemTipsOnce(context, device.manufacturer);
+    if (!context.mounted) return;
     if (!await FloatingPrompter.ensurePermission()) {
       messenger.showSnackBar(
         SnackBar(content: Text(l.overlayPermissionNeeded)),
@@ -199,6 +750,14 @@ class _ScriptCard extends StatelessWidget {
       case _Action.edit:
         _edit(context, script);
       case _Action.duplicate:
+        final entitlements = EntitlementsScope.read(context);
+        if (!canCreateScript(
+          state.scriptsCountingTowardFreeLimit,
+          entitlements.isUnlimited,
+        )) {
+          // Unlimited now (bought, restored, or confirmed late): duplicate.
+          if (!await showUpgradeFlow(context) || !context.mounted) return;
+        }
         final copy = await state.duplicate(
           script.id,
           titleSuffix: l.copySuffix,
@@ -217,10 +776,41 @@ class _ScriptCard extends StatelessWidget {
                 : box.localToGlobal(Offset.zero) & box.size,
           ),
         );
+      case _Action.saveText:
+        // A .txt any notes app, Files or a computer opens; importing it
+        // gives the same script back.
+        final box = context.findRenderObject() as RenderBox?;
+        final name = textFileName(script.title, fallback: l.untitled);
+        try {
+          await SharePlus.instance.share(
+            ShareParams(
+              title: script.title.isEmpty ? l.untitled : script.title,
+              files: [
+                XFile.fromData(
+                  utf8.encode(scriptAsText(script.title, script.body)),
+                  mimeType: 'text/plain',
+                  name: name,
+                ),
+              ],
+              fileNameOverrides: [name],
+              sharePositionOrigin: box == null
+                  ? null
+                  : box.localToGlobal(Offset.zero) & box.size,
+            ),
+          );
+        } catch (_) {
+          // The temporary file couldn't be written (storage full…).
+          messenger.showSnackBar(SnackBar(content: Text(l.saveTextFileFailed)));
+        }
       case _Action.caption:
         if (!ensureSpeakable(context, script)) return;
-        await Clipboard.setData(ClipboardData(text: spokenText(script.body)));
+        await Clipboard.setData(ClipboardData(text: captionText(script.body)));
         messenger.showSnackBar(SnackBar(content: Text(l.captionCopied)));
+      case _Action.takes:
+        await Navigator.push(
+          context,
+          MaterialPageRoute<void>(builder: (_) => TakesScreen(script: script)),
+        );
       case _Action.draft:
         await state.upsert(script.copyWith(status: ScriptStatus.draft));
       case _Action.ready:
@@ -271,12 +861,6 @@ class _ScriptCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    statusIcon(script.status),
-                    size: 18,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       script.title.isEmpty ? l.untitled : script.title,
@@ -284,6 +868,8 @@ class _ScriptCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  _StatusBadge(status: script.status),
                   PopupMenuButton<_Action>(
                     onSelected: (a) => _onAction(context, a),
                     itemBuilder: (_) => [
@@ -291,9 +877,19 @@ class _ScriptCard extends StatelessWidget {
                       _item(_Action.duplicate, Icons.copy_all, l.duplicate),
                       _item(_Action.share, Icons.share_outlined, l.share),
                       _item(
+                        _Action.saveText,
+                        Icons.description_outlined,
+                        l.saveAsTextFile,
+                      ),
+                      _item(
                         _Action.caption,
                         Icons.closed_caption_outlined,
                         l.copyAsCaption,
+                      ),
+                      _item(
+                        _Action.takes,
+                        Icons.video_library_outlined,
+                        l.takesTitle,
                       ),
                       const PopupMenuDivider(),
                       for (final MapEntry(key: status, value: action)
@@ -334,6 +930,19 @@ class _ScriptCard extends StatelessWidget {
                       onPressed: () => _float(context),
                       icon: const Icon(Icons.picture_in_picture_alt_outlined),
                       label: Text(l.float),
+                    )
+                  else if (defaultTargetPlatform == TargetPlatform.iOS)
+                    // Shown greyed out so people learn why, instead of
+                    // hunting for a feature they read about.
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        foregroundColor: theme.disabledColor,
+                      ),
+                      onPressed: () => ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(l.floatNotOnIos))),
+                      icon: const Icon(Icons.picture_in_picture_alt_outlined),
+                      label: Text(l.float),
                     ),
                   FilledButton.icon(
                     onPressed: () => _open(
@@ -368,6 +977,53 @@ class _ScriptCard extends StatelessWidget {
           ],
         ),
       );
+}
+
+/// Colored dot + label, scannable at a glance without opening the menu.
+class _StatusBadge extends StatelessWidget {
+  const _StatusBadge({required this.status});
+
+  final ScriptStatus status;
+
+  static Color _color(BuildContext context, ScriptStatus s) {
+    final theme = Theme.of(context);
+    return switch (s) {
+      ScriptStatus.draft => theme.colorScheme.outline,
+      ScriptStatus.ready => theme.colorScheme.primary,
+      ScriptStatus.recorded => Colors.green,
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final color = _color(context, status);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            status.label(context.l10n),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _EmptyState extends StatelessWidget {

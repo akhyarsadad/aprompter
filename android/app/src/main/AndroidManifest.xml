@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- In-app purchases (RevenueCat / Play Billing) need the network. Flutter
+         only adds INTERNET to the debug and profile manifests, not release. -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Camera prompter: record video with sound. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -13,6 +16,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
@@ -20,13 +24,14 @@
         android:label="APrompter"
         android:requestLegacyExternalStorage="true"
         android:localeConfig="@xml/locales_config"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
@@ -43,6 +48,51 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <!-- "Share to APrompter" and "Open with APrompter" for scripts kept in notes
+             apps, mail and file managers. These filters live on an invisible
+             trampoline, not on MainActivity: a share arrives inside the sending
+             app's task, where a singleTop MainActivity would be created a second
+             time (a second Flutter engine writing the same saved scripts).
+             MainActivity stays singleTop rather than singleTask because Play
+             Billing cancels a purchase when a singleTask app is reopened from the
+             launcher icon after the user confirmed payment in their bank app.
+             ImportActivity forwards to the one existing MainActivity instead (see
+             MainActivity.kt). Only text-like types: no */*, media or
+             application/octet-stream, so the app does not show up in every
+             share sheet. -->
+        <activity
+            android:name=".ImportActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="application/rtf" />
+                <data android:mimeType="application/x-rtf" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                <data android:mimeType="application/vnd.oasis.opendocument.text" />
+                <data android:mimeType="application/x-subrip" />
+                <data android:mimeType="application/xhtml+xml" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="text/*" />
+                <data android:mimeType="application/rtf" />
+                <data android:mimeType="application/x-rtf" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                <data android:mimeType="application/vnd.oasis.opendocument.text" />
+                <data android:mimeType="application/x-subrip" />
+                <data android:mimeType="application/xhtml+xml" />
             </intent-filter>
         </activity>
         <service
@@ -68,6 +118,11 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- url_launcher opens the Terms of Use and Privacy Policy links. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 </manifest>

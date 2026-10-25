@@ -102,7 +102,7 @@ class AppLocalizationsFil extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count salita',
-      one: '1 salita',
+      one: '$count salita',
     );
     return '$_temp0';
   }
@@ -113,7 +113,7 @@ class AppLocalizationsFil extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count take',
-      one: '1 take',
+      one: '$count take',
     );
     return '$_temp0';
   }
@@ -189,7 +189,7 @@ class AppLocalizationsFil extends AppLocalizations {
       locale: localeName,
       other:
           '$count mahahabang pangungusap (25+ salita) — hatiin para makahinga',
-      one: '1 mahabang pangungusap (25+ salita) — hatiin para makahinga',
+      one: '$count mahabang pangungusap (25+ salita) — hatiin para makahinga',
     );
     return '$_temp0';
   }
@@ -550,7 +550,7 @@ class AppLocalizationsFil extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'I-drag ang bar sa itaas ng prompter para ilipat ito kahit saan, at ang sulok para baguhin ang laki. Sa Android, puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto.';
+      'I-drag ang bar sa itaas ng prompter para ilipat ito kahit saan, at ang sulok para baguhin ang laki.';
 
   @override
   String get app => 'App';
@@ -570,4 +570,474 @@ class AppLocalizationsFil extends AppLocalizations {
   String minutesShort(int n) {
     return '$n min';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Hindi ma-save — baka puno na ang storage ng phone mo. Naka-keep ang gawa mo habang bukas ang app.';
+
+  @override
+  String get versionHistory => 'History ng bersyon';
+
+  @override
+  String get noVersions =>
+      'Wala pang naunang bersyon. Awtomatiko itong sine-save habang nagsusulat ka.';
+
+  @override
+  String get restore => 'I-restore';
+
+  @override
+  String get versionRestored => 'Na-restore ang naunang bersyon';
+
+  @override
+  String get recentlyDeleted => 'Kamakailang binura';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Nananatili rito ang mga binurang script nang $days araw.',
+      one: 'Nananatili rito ang mga binurang script nang $days araw.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Burahin nang tuluyan';
+
+  @override
+  String deletedOn(String date) {
+    return 'Binura noong $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return 'Na-restore ang \"$title\"';
+  }
+
+  @override
+  String get backUpScripts => 'I-back up ang lahat ng script';
+
+  @override
+  String get restoreBackup => 'I-restore mula sa backup';
+
+  @override
+  String get backupShareTitle => 'Backup ng APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Na-restore ang $count script',
+      one: 'Na-restore ang $count script',
+      zero: 'Nandito na ang lahat ng nasa backup na ito',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Hindi APrompter backup ang file na iyan.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Kahit sa $wpm spm, hindi kakasya ito sa $target — magbawas ng mga $words salita.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Hindi pa handa ang camera kaya hindi nagsimula ang pag-record. Subukan ulit.';
+
+  @override
+  String get previousSection => 'Nakaraang section';
+
+  @override
+  String get nextSection => 'Susunod na section';
+
+  @override
+  String get floatingNotificationBody => 'I-tap para buksan ang APrompter';
+
+  @override
+  String get customTarget => 'Custom…';
+
+  @override
+  String get customTargetTitle => 'Target na haba';
+
+  @override
+  String get customTargetHint => 'Minuto at segundo, hal. 5:00';
+
+  @override
+  String get saved => 'Na-save';
+
+  @override
+  String get floatNotOnIos =>
+      'Hindi pinapayagan ng iPhone at iPad na lumutang ang app sa ibabaw ng ibang app. Gamitin ang I-record para mag-film na nasa ilalim ng camera ang script.';
+
+  @override
+  String get hashtagHint =>
+      'Malabo ang mga linyang hashtag (#fyp #ad) at hindi tinitiyempo. Gumamit ng \"# \" na may space para sa section.';
+
+  @override
+  String get appLock => 'Lock ng app';
+
+  @override
+  String get appLockHint =>
+      'Humingi ng fingerprint, mukha o PIN ng phone para buksan ang APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Mag-set up muna ng screen lock sa phone na ito.';
+
+  @override
+  String get unlock => 'I-unlock';
+
+  @override
+  String get unlockReason =>
+      'I-unlock ang APrompter para makita ang mga script mo';
+
+  @override
+  String get autoStopWait => 'Hintay pagkatapos ng huling linya';
+
+  @override
+  String get beforeYouRecord => 'Bago ka mag-record';
+
+  @override
+  String get recordAnyway => 'I-record pa rin';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Mga $minutes min lang ng video ang kasya sa libreng space mo. Magbakante ng space o ibaba ang kalidad ng video.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Nasa $level% ang baterya — baka maputol ang mahabang take. Mag-charge kung kaya.';
+  }
+
+  @override
+  String get brightScreen => 'Full brightness habang nagpo-prompt';
+
+  @override
+  String get brightScreenHint => 'Mas madaling basahin sa labas';
+
+  @override
+  String get cameraBusy =>
+      'May ibang app na gumagamit ng camera. Isara ito at subukan ulit.';
+
+  @override
+  String get cameraIntroTitle => 'Camera at mikropono';
+
+  @override
+  String get cameraIntroBody =>
+      'Para ma-film ka habang nasa screen ang script, kailangan ng APrompter ang camera at mikropono mo. Magtatanong ang phone mo sa susunod. Nananatili sa phone mo ang mga video.';
+
+  @override
+  String get continueLabel => 'Magpatuloy';
+
+  @override
+  String get notNow => 'Hindi muna';
+
+  @override
+  String get colorWhite => 'Puti';
+
+  @override
+  String get colorYellow => 'Dilaw';
+
+  @override
+  String get colorGreen => 'Berde';
+
+  @override
+  String get colorBlue => 'Asul';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorBlack => 'Itim';
+
+  @override
+  String get damagedData => 'Hindi mabasang data';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Itinabi noong $date · $size character';
+  }
+
+  @override
+  String get tryToRecover => 'Subukang i-recover';
+
+  @override
+  String get nothingRecovered => 'Walang script na nabasa mula rito.';
+
+  @override
+  String get floatLowRam =>
+      'Hindi kayang magpakita ng phone na ito ng app sa ibabaw ng ibang app (low-memory o Android Go). Gamitin na lang ang I-record.';
+
+  @override
+  String get oemTipsTitle => 'Panatilihing gumagana ang lumulutang na prompter';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Puwedeng isara ng mga $brand phone ang mga lumulutang na window para makatipid sa baterya. Sa Settings → Apps → APrompter: payagan ang pagpapakita sa ibabaw ng ibang app (at mga pop-up window), itakda ang baterya sa \"Hindi pinaghihigpitan\", at payagan ang mga notification.';
+  }
+
+  @override
+  String get focusLine => 'Mag-focus sa kasalukuyang linya';
+
+  @override
+  String get focusLineHint => 'Pinalalabo ang ibang linya';
+
+  @override
+  String get stepByLine => 'Linya-linya';
+
+  @override
+  String get stepByLineHint =>
+      'Bawat tap o pindot sa remote ay isang linya — walang auto-scroll';
+
+  @override
+  String get reduceEffects => 'Bawasan ang effects';
+
+  @override
+  String get reduceEffectsHint =>
+      'Walang fade o anino: mas smooth sa lumang phone, tipid sa baterya';
+
+  @override
+  String get letterSpacing => 'Pagitan ng letra';
+
+  @override
+  String get pasteAsNewScript => 'I-paste bilang bagong script';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Text na kinopya mo mula sa Notes, Keep, Notion, Docs o anumang app';
+
+  @override
+  String get importFiles => 'Mag-import ng mga file';
+
+  @override
+  String get importFilesHint =>
+      'Word, text, Markdown, RTF, HTML, Evernote, subtitle o backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Walang ipe-paste. Kopyahin muna ang script mo sa ibang app.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Na-import ang $count script',
+      one: 'Na-import ang $count script',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Hanggang $count script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
+      one:
+          'Hanggang $count script lang ang libreng plan. Walang nawala: nasa dati pa ring lugar ang note o file mo. Mag-upgrade para mag-import ng higit pa.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Hindi ma-import ang PDF. Buksan ang PDF, kopyahin ang text, at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importOldFormat =>
+      'Hindi mabasa ang lumang Word (.doc) at Pages file. I-save ito bilang .docx o text, o kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importUnsupported =>
+      'Hindi kayang basahin ng APrompter ang ganitong file. Kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importEmpty => 'Walang text dito na mai-import.';
+
+  @override
+  String get importTooLarge =>
+      'Masyadong mahaba para sa isang script. Kopyahin ang bahaging kailangan mo at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importLinkOnly =>
+      'Link lang ang dumating, hindi ang text. Buksan ito, kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get importUnreadable =>
+      'Hindi ito mabasa. Kopyahin ang text at gamitin ang \"I-paste bilang bagong script\".';
+
+  @override
+  String get saveAsTextFile => 'I-save bilang text file';
+
+  @override
+  String get saveTextFileFailed => 'Hindi magawa ang text file. Subukan ulit.';
+
+  @override
+  String get mySetup => 'Setup ko';
+
+  @override
+  String get mySetupHint => 'Ang setup na na-save mo';
+
+  @override
+  String get saveMySetup => 'I-save bilang setup ko';
+
+  @override
+  String get resetAllSettings => 'I-reset lahat ng settings';
+
+  @override
+  String get runHadJumps =>
+      'Tumalon-talon ka sa run na ito, kaya hindi ito makapagmungkahi ng pace.';
+
+  @override
+  String get keepTake => 'Itago';
+
+  @override
+  String get retake => 'Ulitin';
+
+  @override
+  String get reviewTakes => 'I-review ang bawat take';
+
+  @override
+  String get reviewTakesHint => 'Panoorin, tapos itago o ulitin';
+
+  @override
+  String get takesToGallery => 'I-save ang mga take sa gallery';
+
+  @override
+  String get takesToGalleryHint =>
+      'Naka-off: nasa loob ng app ang mga take, wala sa Google Photos at iCloud';
+
+  @override
+  String get takesTitle => 'Mga take';
+
+  @override
+  String get takesEmpty =>
+      'Dito lalabas ang mga take na itinago sa app. I-off ang \"I-save ang mga take sa gallery\" sa settings para dito sila itago.';
+
+  @override
+  String get saveToGallery => 'I-save sa gallery';
+
+  @override
+  String get savedToGallery => 'Na-save sa gallery mo';
+
+  @override
+  String get deleteTake => 'Burahin ang take';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Itinago sa app ang take $n';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Walang limitasyong script, sa pamamagitan ng subscription o isang beses na bayad.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Hindi ma-load ang mga plano. Tingnan ang iyong koneksyon at subukan ulit.';
+
+  @override
+  String get purchaseFailed => 'Hindi natuloy ang pagbili. Subukan ulit.';
+
+  @override
+  String get restoreFailed => 'Hindi ma-restore ang mga binili. Subukan ulit.';
+
+  @override
+  String get restorePurchases => 'I-restore ang mga binili';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'Lampas na sa $count salita ang script na ito. Bahagi ng APrompter Unlimited ang mahahabang script.';
+  }
+
+  @override
+  String get upgrade => 'Mag-upgrade';
+
+  @override
+  String planMonthly(String price) {
+    return 'Buwanan · $price / buwan';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Taunan · $price / taon';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Panghabambuhay · $price isang beses';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Makatipid ng $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Awtomatikong nagre-renew ang buwanan at taunang plano para sa parehong tagal hanggang kanselahin mo. Para hindi ka na masingil sa susunod, magkansela nang hindi bababa sa 24 na oras bago matapos ang panahon sa settings ng iyong $store account. Isang beses na bayad ang Panghabambuhay.';
+  }
+
+  @override
+  String get termsOfUse => 'Mga Tuntunin ng Paggamit';
+
+  @override
+  String get privacyPolicy => 'Patakaran sa Privacy';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'Walang nakitang naunang binili sa $store account na ito.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'Walang screen lock ang phone mo, kaya in-off ang lock ng app.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Burahin ang take na ito? Hindi na maibabalik ang video.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Burahin nang tuluyan ang \"$title\"? Hindi na ito maibabalik.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Mabubura rin ang mga take nito na nasa loob ng app.';
+
+  @override
+  String get purchasePending =>
+      'Nakabinbin ang bayad. Awtomatikong mabubuksan ang APrompter Unlimited kapag naaprubahan na ito.';
+
+  @override
+  String get positionHintFloat =>
+      'Puwedeng i-drag kahit saan ang lumulutang na window at tinatandaan nito ang puwesto.';
+
+  @override
+  String get readingLine => 'Puwesto ng linya ng pagbasa';
+
+  @override
+  String get readingLineHint =>
+      'Nasa itaas ng screen ang camera ng phone: kapag mataas ang linya, malapit sa lens ang mga mata mo.';
+
+  @override
+  String get readingLineNearCamera => 'Malapit sa camera';
+
+  @override
+  String get readingLineMiddle => 'Gitna';
+
+  @override
+  String get readingLineDragHint =>
+      'Sa Mag-ensayo, at sa I-record bago ka magsimula, puwede mo ring i-drag pataas o pababa ang kaliwang arrow ng linya.';
 }

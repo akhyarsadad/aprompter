@@ -516,8 +516,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get resetPosition => '重置位置（顶部、全宽）';
 
   @override
-  String get positionHint =>
-      '拖动提词器顶部的横条可移到任意位置，拖动角落可调整大小。在 Android 上，悬浮窗可拖到任意位置并会记住位置。';
+  String get positionHint => '拖动提词器顶部的横条可移到任意位置，拖动角落可调整大小。';
 
   @override
   String get app => '应用';
@@ -537,6 +536,443 @@ class AppLocalizationsZh extends AppLocalizations {
   String minutesShort(int n) {
     return '$n 分钟';
   }
+
+  @override
+  String get storageSaveFailed => '无法保存——手机存储空间可能已满。应用保持打开时，你的内容会一直保留。';
+
+  @override
+  String get versionHistory => '版本历史';
+
+  @override
+  String get noVersions => '暂无早期版本。你写作时会自动保存。';
+
+  @override
+  String get restore => '恢复';
+
+  @override
+  String get versionRestored => '已恢复早期版本';
+
+  @override
+  String get recentlyDeleted => '最近删除';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '已删除的脚本会在此保留 $days 天。',
+      one: '已删除的脚本会在此保留 1 天。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '永久删除';
+
+  @override
+  String deletedOn(String date) {
+    return '删除于 $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '已恢复“$title”';
+  }
+
+  @override
+  String get backUpScripts => '备份所有脚本';
+
+  @override
+  String get restoreBackup => '从备份恢复';
+
+  @override
+  String get backupShareTitle => 'APrompter 备份';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已恢复 $count 个脚本',
+      one: '已恢复 1 个脚本',
+      zero: '此备份中的内容都已存在',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => '该文件不是 APrompter 备份。';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '即使 $wpm 词/分也无法控制在 $target 内——请删减约 $words 个词。';
+  }
+
+  @override
+  String get cameraNotReady => '相机尚未就绪，未开始录制。请重试。';
+
+  @override
+  String get previousSection => '上一段';
+
+  @override
+  String get nextSection => '下一段';
+
+  @override
+  String get floatingNotificationBody => '点按打开 APrompter';
+
+  @override
+  String get customTarget => '自定义…';
+
+  @override
+  String get customTargetTitle => '目标时长';
+
+  @override
+  String get customTargetHint => '分和秒，例如 5:00';
+
+  @override
+  String get saved => '已保存';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone 和 iPad 不允许应用悬浮在其他应用上方。请使用“拍摄”，在镜头下方显示脚本进行录制。';
+
+  @override
+  String get hashtagHint => '话题标签行（#fyp #ad）会变暗显示且不计时。段落请使用带空格的“# ”。';
+
+  @override
+  String get appLock => '应用锁';
+
+  @override
+  String get appLockHint => '打开 APrompter 时需验证指纹、面容或手机 PIN 码';
+
+  @override
+  String get appLockUnavailable => '请先在这台手机上设置锁屏。';
+
+  @override
+  String get unlock => '解锁';
+
+  @override
+  String get unlockReason => '解锁 APrompter 以查看你的脚本';
+
+  @override
+  String get autoStopWait => '最后一行后的等待时间';
+
+  @override
+  String get beforeYouRecord => '拍摄前提醒';
+
+  @override
+  String get recordAnyway => '仍然拍摄';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '剩余空间只够拍约 $minutes 分钟视频。请清理空间或降低视频画质。';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return '电量仅剩 $level%，长条视频可能会中断。请尽量连接充电器。';
+  }
+
+  @override
+  String get brightScreen => '提词时屏幕最亮';
+
+  @override
+  String get brightScreenHint => '户外更易看清';
+
+  @override
+  String get cameraBusy => '其他应用正在使用相机。请关闭后重试。';
+
+  @override
+  String get cameraIntroTitle => '相机和麦克风';
+
+  @override
+  String get cameraIntroBody =>
+      '为了在屏幕显示脚本的同时拍摄你，APrompter 需要使用相机和麦克风。手机接下来会询问授权。视频只保存在你的手机上。';
+
+  @override
+  String get continueLabel => '继续';
+
+  @override
+  String get notNow => '以后再说';
+
+  @override
+  String get colorWhite => '白色';
+
+  @override
+  String get colorYellow => '黄色';
+
+  @override
+  String get colorGreen => '绿色';
+
+  @override
+  String get colorBlue => '蓝色';
+
+  @override
+  String get colorPink => '粉色';
+
+  @override
+  String get colorBlack => '黑色';
+
+  @override
+  String get damagedData => '无法读取的数据';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '于 $date 单独保存 · $size 个字符';
+  }
+
+  @override
+  String get tryToRecover => '尝试恢复';
+
+  @override
+  String get nothingRecovered => '未能从中读取任何脚本。';
+
+  @override
+  String get floatLowRam => '这台手机无法在其他应用上层显示（低内存或 Android Go 手机）。请改用拍摄。';
+
+  @override
+  String get oemTipsTitle => '让悬浮提词器保持运行';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand 手机可能会为省电关闭悬浮窗。在 设置 → 应用 → APrompter 中：允许在其他应用上层显示（及弹出窗口），将电池设为“无限制”，并允许通知。';
+  }
+
+  @override
+  String get focusLine => '聚焦当前行';
+
+  @override
+  String get focusLineHint => '调暗其他行';
+
+  @override
+  String get stepByLine => '逐行模式';
+
+  @override
+  String get stepByLineHint => '每次点按或按遥控器前进一行，不自动滚动';
+
+  @override
+  String get reduceEffects => '减少特效';
+
+  @override
+  String get reduceEffectsHint => '无淡入淡出和阴影：旧手机更流畅，也更省电';
+
+  @override
+  String get letterSpacing => '字间距';
+
+  @override
+  String get pasteAsNewScript => '粘贴为新脚本';
+
+  @override
+  String get pasteAsNewScriptHint => '从备忘录、Keep、Notion、文档或任意应用复制的文字';
+
+  @override
+  String get importFiles => '导入文件';
+
+  @override
+  String get importFilesHint => 'Word、文本、Markdown、RTF、HTML、Evernote、字幕或备份';
+
+  @override
+  String get clipboardEmpty => '没有可粘贴的内容。请先在其他应用中复制你的脚本。';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已导入 $count 个脚本',
+      one: '已导入 1 个脚本',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '免费版只能保存 $count 个脚本。没有任何内容丢失：你的笔记或文件仍在原处。升级即可导入更多。',
+      one: '免费版只能保存 1 个脚本。没有任何内容丢失：你的笔记或文件仍在原处。升级即可导入更多。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf => '无法导入 PDF。请打开 PDF，复制文字，然后使用“粘贴为新脚本”。';
+
+  @override
+  String get importOldFormat =>
+      '无法读取旧版 Word（.doc）和 Pages 文件。请另存为 .docx 或文本，或复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get importUnsupported => 'APrompter 无法读取这类文件。请复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get importEmpty => '里面没有可导入的文字。';
+
+  @override
+  String get importTooLarge => '内容太长，无法作为一个脚本。请复制需要的部分，然后使用“粘贴为新脚本”。';
+
+  @override
+  String get importLinkOnly => '只收到一个链接，没有文字。请打开它，复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get importUnreadable => '无法读取。请复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get saveAsTextFile => '另存为文本文件';
+
+  @override
+  String get saveTextFileFailed => '无法创建文本文件。请重试。';
+
+  @override
+  String get mySetup => '我的设置';
+
+  @override
+  String get mySetupHint => '你保存的设置';
+
+  @override
+  String get saveMySetup => '保存为我的设置';
+
+  @override
+  String get resetAllSettings => '重置所有设置';
+
+  @override
+  String get runHadJumps => '这次过程中有跳转，无法建议语速。';
+
+  @override
+  String get keepTake => '保留';
+
+  @override
+  String get retake => '重拍';
+
+  @override
+  String get reviewTakes => '逐条检查';
+
+  @override
+  String get reviewTakesHint => '看一遍，再决定保留还是重拍';
+
+  @override
+  String get takesToGallery => '将片段保存到相册';
+
+  @override
+  String get takesToGalleryHint => '关闭：片段只留在应用内，不进入 Google Photos 和 iCloud';
+
+  @override
+  String get takesTitle => '拍摄片段';
+
+  @override
+  String get takesEmpty => '留在应用内的片段会显示在这里。在设置中关闭“将片段保存到相册”即可保留在这里。';
+
+  @override
+  String get saveToGallery => '保存到相册';
+
+  @override
+  String get savedToGallery => '已保存到相册';
+
+  @override
+  String get deleteTake => '删除这一条';
+
+  @override
+  String takeKeptInApp(int n) {
+    return '第 $n 条已保留在应用内';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody => '不限数量的脚本，可通过订阅或一次性购买获得。';
+
+  @override
+  String get offeringsLoadFailed => '无法加载方案。请检查网络连接后重试。';
+
+  @override
+  String get purchaseFailed => '购买失败，请重试。';
+
+  @override
+  String get restoreFailed => '无法恢复购买，请重试。';
+
+  @override
+  String get restorePurchases => '恢复购买';
+
+  @override
+  String wordCapBannerText(int count) {
+    return '此脚本超过 $count 个词。长脚本属于 APrompter Unlimited 的功能。';
+  }
+
+  @override
+  String get upgrade => '升级';
+
+  @override
+  String planMonthly(String price) {
+    return '每月 · $price / 月';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '每年 · $price / 年';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '终身 · $price 一次性';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '节省 $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '月度和年度方案会按相同周期自动续订，直到你取消。如需避免下次扣费，请在当期结束前至少 24 小时在 $store 账户设置中取消。终身方案为一次性购买。';
+  }
+
+  @override
+  String get termsOfUse => '使用条款';
+
+  @override
+  String get privacyPolicy => '隐私政策';
+
+  @override
+  String nothingToRestore(String store) {
+    return '在此 $store 账户中未找到以往的购买记录。';
+  }
+
+  @override
+  String get appLockTurnedOff => '你的手机没有设置锁屏，所以已关闭应用锁。';
+
+  @override
+  String get deleteTakeConfirm => '删除这一条片段？视频将无法恢复。';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '永久删除“$title”？删除后无法恢复。';
+  }
+
+  @override
+  String get deleteForeverTakes => '保存在应用内的相关片段也会一并删除。';
+
+  @override
+  String get purchasePending => '付款待处理。获批后，APrompter Unlimited 会自动解锁。';
+
+  @override
+  String get positionHintFloat => '悬浮窗可拖到任意位置并会记住位置。';
+
+  @override
+  String get readingLine => '阅读线位置';
+
+  @override
+  String get readingLineHint => '手机摄像头在屏幕上方：阅读线越靠上，视线越贴近镜头。';
+
+  @override
+  String get readingLineNearCamera => '靠近摄像头';
+
+  @override
+  String get readingLineMiddle => '中间';
+
+  @override
+  String get readingLineDragHint => '在“排练”中，以及“拍摄”开始前，也可以上下拖动阅读线左侧的箭头。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -1050,8 +1486,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get resetPosition => '重設位置（頂端、全寬）';
 
   @override
-  String get positionHint =>
-      '拖曳提詞機頂端的橫條可移到任何位置，拖曳角落可調整大小。在 Android 上，懸浮視窗可拖到任何位置並會記住位置。';
+  String get positionHint => '拖曳提詞機頂端的橫條可移到任何位置，拖曳角落可調整大小。';
 
   @override
   String get app => 'App';
@@ -1071,4 +1506,441 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String minutesShort(int n) {
     return '$n 分鐘';
   }
+
+  @override
+  String get storageSaveFailed => '無法儲存——手機儲存空間可能已滿。App 保持開啟時，你的內容會一直保留。';
+
+  @override
+  String get versionHistory => '版本記錄';
+
+  @override
+  String get noVersions => '尚無較早版本。你撰寫時會自動保存。';
+
+  @override
+  String get restore => '復原';
+
+  @override
+  String get versionRestored => '已復原較早版本';
+
+  @override
+  String get recentlyDeleted => '最近刪除';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '已刪除的腳本會在此保留 $days 天。',
+      one: '已刪除的腳本會在此保留 1 天。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => '永久刪除';
+
+  @override
+  String deletedOn(String date) {
+    return '刪除於 $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '已復原「$title」';
+  }
+
+  @override
+  String get backUpScripts => '備份所有腳本';
+
+  @override
+  String get restoreBackup => '從備份復原';
+
+  @override
+  String get backupShareTitle => 'APrompter 備份';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已復原 $count 個腳本',
+      one: '已復原 1 個腳本',
+      zero: '此備份中的內容皆已存在',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => '此檔案不是 APrompter 備份。';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return '即使 $wpm 詞/分也無法控制在 $target 內——請刪減約 $words 個詞。';
+  }
+
+  @override
+  String get cameraNotReady => '相機尚未就緒，未開始錄影。請再試一次。';
+
+  @override
+  String get previousSection => '上一段';
+
+  @override
+  String get nextSection => '下一段';
+
+  @override
+  String get floatingNotificationBody => '點一下以開啟 APrompter';
+
+  @override
+  String get customTarget => '自訂…';
+
+  @override
+  String get customTargetTitle => '目標長度';
+
+  @override
+  String get customTargetHint => '分和秒，例如 5:00';
+
+  @override
+  String get saved => '已儲存';
+
+  @override
+  String get floatNotOnIos =>
+      'iPhone 和 iPad 不允許 App 懸浮在其他 App 上方。請使用「拍攝」，在鏡頭下方顯示腳本進行錄影。';
+
+  @override
+  String get hashtagHint => '主題標籤行（#fyp #ad）會變暗顯示且不計時。段落請使用帶空格的「# 」。';
+
+  @override
+  String get appLock => 'App 鎖定';
+
+  @override
+  String get appLockHint => '開啟 APrompter 時需驗證指紋、臉孔或手機 PIN 碼';
+
+  @override
+  String get appLockUnavailable => '請先在這支手機上設定螢幕鎖定。';
+
+  @override
+  String get unlock => '解鎖';
+
+  @override
+  String get unlockReason => '解鎖 APrompter 以查看你的腳本';
+
+  @override
+  String get autoStopWait => '最後一行後的等待時間';
+
+  @override
+  String get beforeYouRecord => '拍攝前提醒';
+
+  @override
+  String get recordAnyway => '仍要拍攝';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return '剩餘空間只夠拍約 $minutes 分鐘影片。請清出空間或降低影片畫質。';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return '電量僅剩 $level%，長條影片可能會中斷。請盡量接上充電器。';
+  }
+
+  @override
+  String get brightScreen => '提詞時螢幕最亮';
+
+  @override
+  String get brightScreenHint => '戶外更容易看清楚';
+
+  @override
+  String get cameraBusy => '其他 App 正在使用相機。請關閉後再試一次。';
+
+  @override
+  String get cameraIntroTitle => '相機和麥克風';
+
+  @override
+  String get cameraIntroBody =>
+      '為了在螢幕顯示腳本的同時拍攝你，APrompter 需要使用相機和麥克風。手機接下來會詢問授權。影片只會保存在你的手機上。';
+
+  @override
+  String get continueLabel => '繼續';
+
+  @override
+  String get notNow => '稍後再說';
+
+  @override
+  String get colorWhite => '白色';
+
+  @override
+  String get colorYellow => '黃色';
+
+  @override
+  String get colorGreen => '綠色';
+
+  @override
+  String get colorBlue => '藍色';
+
+  @override
+  String get colorPink => '粉紅色';
+
+  @override
+  String get colorBlack => '黑色';
+
+  @override
+  String get damagedData => '無法讀取的資料';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return '於 $date 另外保存 · $size 個字元';
+  }
+
+  @override
+  String get tryToRecover => '嘗試復原';
+
+  @override
+  String get nothingRecovered => '無法從中讀取任何腳本。';
+
+  @override
+  String get floatLowRam => '這支手機無法在其他應用程式上層顯示（低記憶體或 Android Go 手機）。請改用拍攝。';
+
+  @override
+  String get oemTipsTitle => '讓懸浮提詞機保持運作';
+
+  @override
+  String oemTipsBody(String brand) {
+    return '$brand 手機可能會為了省電關閉懸浮視窗。在 設定 → 應用程式 → APrompter 中：允許顯示在其他應用程式上層（及彈出式視窗），將電池設為「不受限制」，並允許通知。';
+  }
+
+  @override
+  String get focusLine => '聚焦目前這一行';
+
+  @override
+  String get focusLineHint => '調暗其他行';
+
+  @override
+  String get stepByLine => '逐行模式';
+
+  @override
+  String get stepByLineHint => '每點一下或按一次遙控器前進一行，不會自動捲動';
+
+  @override
+  String get reduceEffects => '減少特效';
+
+  @override
+  String get reduceEffectsHint => '不淡入淡出、無陰影：舊手機更流暢，也更省電';
+
+  @override
+  String get letterSpacing => '字元間距';
+
+  @override
+  String get pasteAsNewScript => '貼上為新腳本';
+
+  @override
+  String get pasteAsNewScriptHint => '從備忘錄、Keep、Notion、文件或任何應用程式複製的文字';
+
+  @override
+  String get importFiles => '匯入檔案';
+
+  @override
+  String get importFilesHint => 'Word、文字、Markdown、RTF、HTML、Evernote、字幕或備份';
+
+  @override
+  String get clipboardEmpty => '沒有可貼上的內容。請先在其他應用程式中複製你的腳本。';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已匯入 $count 個腳本',
+      one: '已匯入 1 個腳本',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '免費方案只能保存 $count 個腳本。沒有任何內容遺失：你的筆記或檔案仍在原處。升級即可匯入更多。',
+      one: '免費方案只能保存 1 個腳本。沒有任何內容遺失：你的筆記或檔案仍在原處。升級即可匯入更多。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf => '無法匯入 PDF。請開啟 PDF、複製文字，再使用「貼上為新腳本」。';
+
+  @override
+  String get importOldFormat =>
+      '無法讀取舊版 Word（.doc）和 Pages 檔案。請另存為 .docx 或文字檔，或複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get importUnsupported => 'APrompter 無法讀取這類檔案。請複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get importEmpty => '裡面沒有可匯入的文字。';
+
+  @override
+  String get importTooLarge => '內容太長，無法作為一個腳本。請複製需要的部分，再使用「貼上為新腳本」。';
+
+  @override
+  String get importLinkOnly => '只收到一個連結，沒有文字。請開啟它，複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get importUnreadable => '無法讀取。請複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get saveAsTextFile => '另存為文字檔';
+
+  @override
+  String get saveTextFileFailed => '無法建立文字檔。請再試一次。';
+
+  @override
+  String get mySetup => '我的設定';
+
+  @override
+  String get mySetupHint => '你儲存的設定';
+
+  @override
+  String get saveMySetup => '儲存為我的設定';
+
+  @override
+  String get resetAllSettings => '重設所有設定';
+
+  @override
+  String get runHadJumps => '這次過程中有跳段，無法建議語速。';
+
+  @override
+  String get keepTake => '保留';
+
+  @override
+  String get retake => '重拍';
+
+  @override
+  String get reviewTakes => '逐條檢查';
+
+  @override
+  String get reviewTakesHint => '看過一遍，再決定保留或重拍';
+
+  @override
+  String get takesToGallery => '將片段儲存到相簿';
+
+  @override
+  String get takesToGalleryHint => '關閉：片段只留在 App 內，不會進入 Google Photos 和 iCloud';
+
+  @override
+  String get takesTitle => '拍攝片段';
+
+  @override
+  String get takesEmpty => '留在 App 內的片段會顯示在這裡。在設定中關閉「將片段儲存到相簿」即可保留在這裡。';
+
+  @override
+  String get saveToGallery => '儲存到相簿';
+
+  @override
+  String get savedToGallery => '已儲存到相簿';
+
+  @override
+  String get deleteTake => '刪除這一條';
+
+  @override
+  String takeKeptInApp(int n) {
+    return '第 $n 條已保留在 App 內';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody => '不限數量的腳本，可透過訂閱或一次性購買取得。';
+
+  @override
+  String get offeringsLoadFailed => '無法載入方案。請檢查網路連線後再試一次。';
+
+  @override
+  String get purchaseFailed => '購買失敗，請再試一次。';
+
+  @override
+  String get restoreFailed => '無法恢復購買項目，請再試一次。';
+
+  @override
+  String get restorePurchases => '恢復購買項目';
+
+  @override
+  String wordCapBannerText(int count) {
+    return '此腳本超過 $count 個字詞。長腳本屬於 APrompter Unlimited 的功能。';
+  }
+
+  @override
+  String get upgrade => '升級';
+
+  @override
+  String planMonthly(String price) {
+    return '每月 · $price / 月';
+  }
+
+  @override
+  String planYearly(String price) {
+    return '每年 · $price / 年';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return '終身 · $price 一次付清';
+  }
+
+  @override
+  String planSave(int percent) {
+    return '省下 $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return '月方案和年方案會以相同週期自動續訂，直到你取消為止。如要避免下次扣款，請在本期結束前至少 24 小時於 $store 帳號設定中取消。終身方案為一次性購買。';
+  }
+
+  @override
+  String get termsOfUse => '使用條款';
+
+  @override
+  String get privacyPolicy => '隱私權政策';
+
+  @override
+  String nothingToRestore(String store) {
+    return '在這個 $store 帳號中找不到先前的購買項目。';
+  }
+
+  @override
+  String get appLockTurnedOff => '你的手機沒有設定螢幕鎖定，所以已關閉 App 鎖定。';
+
+  @override
+  String get deleteTakeConfirm => '要刪除這一條片段嗎？影片將無法復原。';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return '要永久刪除「$title」嗎？刪除後無法復原。';
+  }
+
+  @override
+  String get deleteForeverTakes => '存放在 App 內的相關片段也會一併刪除。';
+
+  @override
+  String get purchasePending => '付款處理中。核准後，APrompter Unlimited 會自動解鎖。';
+
+  @override
+  String get positionHintFloat => '懸浮視窗可拖到任何位置並會記住位置。';
+
+  @override
+  String get readingLine => '閱讀線位置';
+
+  @override
+  String get readingLineHint => '手機鏡頭在螢幕上方：閱讀線越高，視線越貼近鏡頭。';
+
+  @override
+  String get readingLineNearCamera => '靠近鏡頭';
+
+  @override
+  String get readingLineMiddle => '中間';
+
+  @override
+  String get readingLineDragHint => '在「排練」中，以及「拍攝」開始前，也可以上下拖曳閱讀線左側的箭頭。';
 }

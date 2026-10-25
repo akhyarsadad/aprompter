@@ -540,7 +540,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'גררו את הפס שבראש הפרומפטר כדי להזיז אותו לכל מקום, ואת הפינה כדי לשנות גודל. באנדרואיד אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו.';
+      'גררו את הפס שבראש הפרומפטר כדי להזיז אותו לכל מקום, ואת הפינה כדי לשנות גודל.';
 
   @override
   String get app => 'אפליקציה';
@@ -560,4 +560,468 @@ class AppLocalizationsHe extends AppLocalizations {
   String minutesShort(int n) {
     return '$n דק׳';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'השמירה נכשלה — ייתכן שאין מקום בטלפון. העבודה נשמרת כל עוד האפליקציה פתוחה.';
+
+  @override
+  String get versionHistory => 'היסטוריית גרסאות';
+
+  @override
+  String get noVersions =>
+      'אין עדיין גרסאות קודמות. הן נשמרות אוטומטית בזמן הכתיבה.';
+
+  @override
+  String get restore => 'שחזור';
+
+  @override
+  String get versionRestored => 'גרסה קודמת שוחזרה';
+
+  @override
+  String get recentlyDeleted => 'נמחקו לאחרונה';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'תסריטים שנמחקו נשמרים כאן $days ימים.',
+      two: 'תסריטים שנמחקו נשמרים כאן יומיים.',
+      one: 'תסריטים שנמחקו נשמרים כאן יום אחד.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'מחיקה לצמיתות';
+
+  @override
+  String deletedOn(String date) {
+    return 'נמחק ב־$date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '\"$title\" שוחזר';
+  }
+
+  @override
+  String get backUpScripts => 'גיבוי כל התסריטים';
+
+  @override
+  String get restoreBackup => 'שחזור מגיבוי';
+
+  @override
+  String get backupShareTitle => 'גיבוי APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count תסריטים שוחזרו',
+      one: 'תסריט אחד שוחזר',
+      zero: 'כל מה שבגיבוי הזה כבר כאן',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'הקובץ הזה אינו גיבוי של APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'גם ב־$wpm מ/ד זה לא ייכנס ב־$target — קצרו בערך $words מילים.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'המצלמה לא הייתה מוכנה, ולכן הצילום לא התחיל. נסו שוב.';
+
+  @override
+  String get previousSection => 'הקטע הקודם';
+
+  @override
+  String get nextSection => 'הקטע הבא';
+
+  @override
+  String get floatingNotificationBody => 'הקישו כדי לפתוח את APrompter';
+
+  @override
+  String get customTarget => 'מותאם אישית…';
+
+  @override
+  String get customTargetTitle => 'אורך יעד';
+
+  @override
+  String get customTargetHint => 'דקות ושניות, למשל 5:00';
+
+  @override
+  String get saved => 'נשמר';
+
+  @override
+  String get floatNotOnIos =>
+      'ב־iPhone וב־iPad אפליקציות לא יכולות לצוף מעל אפליקציות אחרות. השתמשו ב\"צילום\" כדי לצלם עם התסריט מתחת למצלמה.';
+
+  @override
+  String get hashtagHint =>
+      'שורות האשטגים (#fyp #ad) מוצגות מעומעמות ולא נכללות בתזמון. לקטע השתמשו ב־\"# \" עם רווח.';
+
+  @override
+  String get appLock => 'נעילת האפליקציה';
+
+  @override
+  String get appLockHint =>
+      'דרישת טביעת אצבע, פנים או קוד PIN של הטלפון לפתיחת APrompter';
+
+  @override
+  String get appLockUnavailable => 'קודם צריך להגדיר נעילת מסך בטלפון הזה.';
+
+  @override
+  String get unlock => 'ביטול נעילה';
+
+  @override
+  String get unlockReason => 'בטלו את נעילת APrompter כדי לראות את התסריטים';
+
+  @override
+  String get autoStopWait => 'המתנה אחרי השורה האחרונה';
+
+  @override
+  String get beforeYouRecord => 'לפני הצילום';
+
+  @override
+  String get recordAnyway => 'לצלם בכל זאת';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'בשטח הפנוי נכנסים רק כ-$minutes דק׳ וידאו. פנו מקום או הורידו את איכות הווידאו.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'הסוללה ב-$level% — טייק ארוך עלול להיקטע. חברו למטען אם אפשר.';
+  }
+
+  @override
+  String get brightScreen => 'בהירות מלאה בזמן הפרומפטר';
+
+  @override
+  String get brightScreenHint => 'קל יותר לקרוא בחוץ';
+
+  @override
+  String get cameraBusy => 'אפליקציה אחרת משתמשת במצלמה. סגרו אותה ונסו שוב.';
+
+  @override
+  String get cameraIntroTitle => 'מצלמה ומיקרופון';
+
+  @override
+  String get cameraIntroBody =>
+      'כדי לצלם אתכם עם התסריט על המסך, APrompter צריכה גישה למצלמה ולמיקרופון. הטלפון יבקש אישור מיד. הסרטונים נשארים בטלפון שלכם.';
+
+  @override
+  String get continueLabel => 'המשך';
+
+  @override
+  String get notNow => 'לא עכשיו';
+
+  @override
+  String get colorWhite => 'לבן';
+
+  @override
+  String get colorYellow => 'צהוב';
+
+  @override
+  String get colorGreen => 'ירוק';
+
+  @override
+  String get colorBlue => 'כחול';
+
+  @override
+  String get colorPink => 'ורוד';
+
+  @override
+  String get colorBlack => 'שחור';
+
+  @override
+  String get damagedData => 'נתונים שלא ניתן לקרוא';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'נשמרו בצד ב-$date · $size תווים';
+  }
+
+  @override
+  String get tryToRecover => 'ניסיון שחזור';
+
+  @override
+  String get nothingRecovered => 'לא ניתן היה לקרוא מהם אף תסריט.';
+
+  @override
+  String get floatLowRam =>
+      'הטלפון הזה לא יכול להציג אפליקציות מעל אפליקציות אחרות (זיכרון נמוך או Android Go). השתמשו בצילום במקום.';
+
+  @override
+  String get oemTipsTitle => 'שמירה על הפרומפטר הצף פעיל';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'טלפונים של $brand עלולים לסגור חלונות צפים כדי לחסוך בסוללה. בהגדרות → אפליקציות → APrompter: אשרו הצגה מעל אפליקציות אחרות (וחלונות קופצים), הגדירו את הסוללה ל\"ללא הגבלה\" ואשרו התראות.';
+  }
+
+  @override
+  String get focusLine => 'התמקדות בשורה הנוכחית';
+
+  @override
+  String get focusLineHint => 'מעמעם את שאר השורות';
+
+  @override
+  String get stepByLine => 'שורה אחרי שורה';
+
+  @override
+  String get stepByLineHint =>
+      'כל הקשה או לחיצה בשלט מתקדמת שורה אחת — בלי גלילה אוטומטית';
+
+  @override
+  String get reduceEffects => 'הפחתת אפקטים';
+
+  @override
+  String get reduceEffectsHint =>
+      'בלי מעברים או צללים: חלק יותר בטלפונים ישנים וחוסך סוללה';
+
+  @override
+  String get letterSpacing => 'ריווח אותיות';
+
+  @override
+  String get pasteAsNewScript => 'הדבקה כתסריט חדש';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'טקסט שהעתקתם מהפתקים, Keep, Notion, Docs או מכל אפליקציה';
+
+  @override
+  String get importFiles => 'ייבוא קבצים';
+
+  @override
+  String get importFilesHint =>
+      'Word, טקסט, Markdown, RTF, HTML, Evernote, כתוביות או גיבוי';
+
+  @override
+  String get clipboardEmpty =>
+      'אין מה להדביק. העתיקו קודם את התסריט באפליקציה האחרת.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count תסריטים יובאו',
+      one: 'תסריט אחד יובא',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'בתוכנית החינמית יש מקום ל-$count תסריטים. שום דבר לא אבד: הפתק או הקובץ נשארו במקומם. שדרגו כדי לייבא עוד.',
+      one: 'בתוכנית החינמית יש מקום לתסריט אחד. שום דבר לא אבד: הפתק או הקובץ נשארו במקומם. שדרגו כדי לייבא עוד.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'אי אפשר לייבא קובצי PDF. פתחו את ה-PDF, העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importOldFormat =>
+      'אי אפשר לקרוא קובצי Word ישנים (.doc) וקובצי Pages. שמרו כ-.docx או כטקסט, או העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importUnsupported =>
+      'אי אפשר לקרוא סוג קובץ כזה ב-APrompter. העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importEmpty => 'אין בו טקסט לייבוא.';
+
+  @override
+  String get importTooLarge =>
+      'זה ארוך מדי לתסריט אחד. העתיקו את החלק שאתם צריכים והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importLinkOnly =>
+      'הגיע רק קישור, בלי הטקסט. פתחו אותו, העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get importUnreadable =>
+      'לא ניתן לקרוא את זה. העתיקו את הטקסט והשתמשו ב\"הדבקה כתסריט חדש\".';
+
+  @override
+  String get saveAsTextFile => 'שמירה כקובץ טקסט';
+
+  @override
+  String get saveTextFileFailed => 'לא ניתן ליצור את קובץ הטקסט. נסו שוב.';
+
+  @override
+  String get mySetup => 'ההגדרה שלי';
+
+  @override
+  String get mySetupHint => 'ההגדרה ששמרתם';
+
+  @override
+  String get saveMySetup => 'שמירה כהגדרה שלי';
+
+  @override
+  String get resetAllSettings => 'איפוס כל ההגדרות';
+
+  @override
+  String get runHadJumps => 'היו קפיצות בתסריט במהלך ההרצה, לכן אין הצעת קצב.';
+
+  @override
+  String get keepTake => 'לשמור';
+
+  @override
+  String get retake => 'טייק חוזר';
+
+  @override
+  String get reviewTakes => 'צפייה בכל טייק';
+
+  @override
+  String get reviewTakesHint => 'צפו בו, ואז שמרו או צלמו שוב';
+
+  @override
+  String get takesToGallery => 'שמירת טייקים בגלריה';
+
+  @override
+  String get takesToGalleryHint =>
+      'כבוי: הטייקים נשארים באפליקציה, מחוץ ל-Google Photos ול-iCloud';
+
+  @override
+  String get takesTitle => 'טייקים';
+
+  @override
+  String get takesEmpty =>
+      'טייקים שנשמרו באפליקציה יופיעו כאן. כבו את \"שמירת טייקים בגלריה\" בהגדרות כדי לשמור אותם כאן.';
+
+  @override
+  String get saveToGallery => 'שמירה בגלריה';
+
+  @override
+  String get savedToGallery => 'נשמר בגלריה';
+
+  @override
+  String get deleteTake => 'מחיקת הטייק';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'טייק $n נשמר באפליקציה';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody => 'תסריטים ללא הגבלה, במנוי או ברכישה חד-פעמית.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'לא ניתן לטעון את התוכניות. בדקו את החיבור ונסו שוב.';
+
+  @override
+  String get purchaseFailed => 'הרכישה נכשלה. נסו שוב.';
+
+  @override
+  String get restoreFailed => 'לא ניתן לשחזר רכישות. נסו שוב.';
+
+  @override
+  String get restorePurchases => 'שחזור רכישות';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'התסריט הזה ארוך מ-$count מילים. תסריטים ארוכים הם חלק מ-APrompter Unlimited.';
+  }
+
+  @override
+  String get upgrade => 'שדרוג';
+
+  @override
+  String planMonthly(String price) {
+    return 'חודשי · $price / חודש';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'שנתי · $price / שנה';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'לכל החיים · $price חד-פעמי';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'חיסכון של $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'התוכניות החודשית והשנתית מתחדשות אוטומטית לאותה תקופה עד שתבטלו. כדי להימנע מהחיוב הבא, בטלו לפחות 24 שעות לפני סוף התקופה בהגדרות החשבון שלכם ב-$store. \'לכל החיים\' היא רכישה חד-פעמית.';
+  }
+
+  @override
+  String get termsOfUse => 'תנאי שימוש';
+
+  @override
+  String get privacyPolicy => 'מדיניות פרטיות';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'לא נמצאו רכישות קודמות בחשבון $store הזה.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'בטלפון שלכם אין נעילת מסך, ולכן נעילת האפליקציה כובתה.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'למחוק את הטייק הזה? לא יהיה אפשר לשחזר את הסרטון.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'למחוק את \"$title\" לצמיתות? אי אפשר לבטל את הפעולה.';
+  }
+
+  @override
+  String get deleteForeverTakes => 'גם הטייקים שלו שנשמרו באפליקציה יימחקו.';
+
+  @override
+  String get purchasePending =>
+      'התשלום ממתין לאישור. APrompter Unlimited ייפתח אוטומטית ברגע שיאושר.';
+
+  @override
+  String get positionHintFloat =>
+      'אפשר לגרור את החלון הצף לכל מקום, והוא זוכר את מיקומו.';
+
+  @override
+  String get readingLine => 'מיקום קו הקריאה';
+
+  @override
+  String get readingLineHint =>
+      'מצלמת הטלפון נמצאת מעל המסך: קו גבוה שומר את העיניים קרוב לעדשה.';
+
+  @override
+  String get readingLineNearCamera => 'ליד המצלמה';
+
+  @override
+  String get readingLineMiddle => 'אמצע';
+
+  @override
+  String get readingLineDragHint =>
+      'ב\"חזרה\", וב\"צילום\" לפני שמתחילים, אפשר גם לגרור את החץ השמאלי של הקו למעלה או למטה.';
 }

@@ -8,6 +8,7 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import 'storage.dart';
+import 'system_settings.dart';
 
 /// Shows the prompter as a floating window above other apps (Android only).
 ///
@@ -67,9 +68,12 @@ class FloatingPrompter {
         positionGravity: PositionGravity.none,
         startPosition: OverlayPosition(start.dx, start.dy),
         overlayTitle: l.floatingNotificationTitle,
-        overlayContent: script.title.isEmpty ? l.untitled : script.title,
+        // The script title stays out of the notification shade.
+        overlayContent: l.floatingNotificationBody,
       );
     }
+    // Keep the script out of screen recordings and live streams.
+    await secureOverlay();
     await FlutterOverlayWindow.shareData(
       jsonEncode({
         'type': 'load',
@@ -77,6 +81,22 @@ class FloatingPrompter {
         'settings': settings.toJson(),
         'locale': storage.loadLocale(),
       }),
+    );
+  }
+
+  /// Sends edits of [script] to the floating window if it is showing it,
+  /// keeping the reader's place.
+  static Future<void> update(Storage storage, Script script) async {
+    if (!isSupported) return;
+    try {
+      if (!await FlutterOverlayWindow.isActive()) return;
+    } catch (_) {
+      return;
+    }
+    if (storage.loadActiveScript()?.id != script.id) return;
+    await storage.saveActiveScript(script);
+    await FlutterOverlayWindow.shareData(
+      jsonEncode({'type': 'update', 'script': script.toJson()}),
     );
   }
 

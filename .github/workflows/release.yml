@@ -1,0 +1,420 @@
+name: Release builds
+
+# Store builds, run by hand (Actions → Release builds → Run workflow) or by
+# pushing a tag like v1.0.0-3. Needs the repository secrets described in
+# docs/STORE_RELEASE.md §1 "Signing and release builds"; a job whose secrets are missing
+# stops at its first step and says which ones to add.
+
+on:
+  workflow_dispatch:
+    inputs:
+      android:
+        description: Signed Android App Bundle for Google Play
+        type: boolean
+        default: true
+      ios:
+        description: iPhone build uploaded to TestFlight
+        type: boolean
+        default: true
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: '3.47.5'
+  # Play and App Store Connect both reject a build number they have seen
+  # before. Each job uses run number × 100 + attempt (run 7 → 701, its
+  # re-run → 702), a plain integer as Play's versionCode requires.
+
+jobs:
+  android:
+    name: Android App Bundle (Google Play)
+    if: github.event_name == 'push' || inputs.android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check signing secrets
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ]; then
+            echo "::error::Add the repository secrets ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD first (docs/STORE_RELEASE.md §1, 'Signing and release builds')."
+            exit 1
+          fi
+          echo "BUILD_CODE=$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - name: Write the upload key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          keystore="$RUNNER_TEMP/upload-keystore"
+          printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 --decode > "$keystore"
+          alias="${KEY_ALIAS:-upload}"
+          # Fail now, not after a 10-minute build, if the key doesn't open.
+          if ! keytool -list -keystore "$keystore" -storepass:env KEYSTORE_PASSWORD -alias "$alias" > /dev/null 2>&1; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 and ANDROID_KEYSTORE_PASSWORD (or ANDROID_KEY_ALIAS) don't open the upload key. Copy the key again with base64 -i aprompter-upload.p12 | pbcopy and re-check the password."
+            exit 1
+          fi
+          # Java properties treat a backslash as an escape and drop leading spaces.
+          esc() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/^[[:space:]]/\\&/'; }
+          # Read by android/app/build.gradle.kts. Alias and key password
+          # default to "upload" and the keystore password (a .p12 made as
+          # in the docs has one password for both).
+          {
+            echo "storeFile=$keystore"
+            echo "storePassword=$(esc "$KEYSTORE_PASSWORD")"
+            echo "keyAlias=$alias"
+            echo "keyPassword=$(esc "${KEY_PASSWORD:-$KEYSTORE_PASSWORD}")"
+          } > android/key.properties
+      - run: flutter pub get
+      - run: flutter build appbundle --release --build-number="$BUILD_CODE"
+      - name: Check it is signed with the upload key
+        run: |
+          aab=build/app/outputs/bundle/release/app-release.aab
+          keytool -printcert -jarfile "$aab" > "$RUNNER_TEMP/signer.txt"
+          grep -E 'Owner:|SHA256:' "$RUNNER_TEMP/signer.txt"
+          if grep -q 'CN=Android Debug' "$RUNNER_TEMP/signer.txt"; then
+            echo "::error::The bundle is signed with the debug key; check the ANDROID_* secrets."
+            exit 1
+          fi
+      - name: Remove the key from the runner
+        if: always()
+        run: rm -f android/key.properties "$RUNNER_TEMP/upload-keystore"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aprompter-play-bundle-${{ env.BUILD_CODE }}
+          path: build/app/outputs/bundle/release/app-release.aab
+          # Public repo: anyone signed in can download artifacts, so keep
+          # the bundle only as long as it takes to upload it to Play.
+          retention-days: 3
+
+  ios:
+    name: iPhone build to TestFlight
+    if: github.event_name == 'push' || inputs.ios
+    # Pinned: macos-latest will move to macOS 27 / Xcode 27. App Store Connect
+    # has required Xcode 26 + the iOS 26 SDK since 2026-04-28.
+    runs-on: macos-26
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      XCODE_APP: /Applications/Xcode_26.6.app
+      APP_ID: com.akhyarsadad.aprompter
+      EXT_ID: com.akhyarsadad.aprompter.ShareExtension
+      APP_GROUP: group.com.akhyarsadad.aprompter
+      ARCHIVE: build/ios/archive/Runner.xcarchive
+    # Signing: the archive is built unsigned, ad-hoc signed here with each
+    # target's .entitlements (an unsigned archive silently loses the App
+    # Group on export), then `xcodebuild -exportArchive` signs it in Apple's
+    # cloud with the App Store Connect API key. No certificate, profile or
+    # registered device is stored anywhere.
+    steps:
+      - name: Check App Store Connect secrets
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          missing=()
+          for name in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8; do
+            [ -n "${!name}" ] || missing+=("$name")
+          done
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::error title=Missing secrets::Add the repository secrets ${missing[*]} (Settings > Secrets and variables > Actions; docs/STORE_RELEASE.md §1, 'Signing and release builds')."
+            exit 1
+          fi
+          team="${APPLE_TEAM_ID//[[:space:]]/}"
+          kid="${ASC_KEY_ID//[[:space:]]/}"
+          iss=$(printf '%s' "${ASC_ISSUER_ID//[[:space:]]/}" | tr '[:upper:]' '[:lower:]')
+          ok=1
+          [[ "$team" =~ ^[A-Z0-9]{10}$ ]] || { echo "::error::APPLE_TEAM_ID must be the 10-character Team ID from developer.apple.com > Account > Membership details."; ok=0; }
+          [[ "$kid" =~ ^[A-Z0-9]{10}$ ]] || { echo "::error::ASC_KEY_ID must be the 10-character Key ID listed next to the key under App Store Connect > Users and Access > Integrations > Team Keys."; ok=0; }
+          [[ "$iss" =~ ^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$ ]] || { echo "::error::ASC_ISSUER_ID must be the Issuer ID (a UUID) shown above the Team Keys table."; ok=0; }
+          [ "$ok" = 1 ] || exit 1
+          # Identifiers, not credentials (the .p8 is the credential); later steps read them from here.
+          { echo "APPLE_TEAM_ID=$team"; echo "ASC_KEY_ID=$kid"; echo "ASC_ISSUER_ID=$iss"; } >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Select Xcode
+        run: |
+          if [ ! -d "$XCODE_APP" ]; then
+            echo "::error::$XCODE_APP is not on this runner image. Installed: $(for x in /Applications/Xcode*.app; do basename "$x"; done | tr '\n' ' '). Change XCODE_APP in release.yml (uploads need Xcode 26 or later)."
+            exit 1
+          fi
+          sudo xcode-select --switch "$XCODE_APP/Contents/Developer"
+          xcodebuild -version
+          echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Check the App Store Connect setup
+        # Fails in a minute, before the long build, when the key, the app
+        # record or the App IDs are not set up. The key file is deleted at
+        # the end of this step so it is not on disk while packages build.
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          umask 077
+          mkdir -p "$RUNNER_TEMP/asc"
+          key="$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+          trap 'rm -f "$key"' EXIT
+          if [[ "$ASC_KEY_P8" == *"BEGIN PRIVATE KEY"* ]]; then
+            printf '%s\n' "$ASC_KEY_P8" | tr -d '\r' > "$key"
+          else
+            printf '%s' "$ASC_KEY_P8" | tr -d ' \r\n' | base64 --decode > "$key" 2>/dev/null || true
+          fi
+          if ! openssl pkey -in "$key" -noout 2>/dev/null; then
+            echo "::error::ASC_KEY_P8 is not a readable .p8 key. Paste the whole AuthKey_XXXXXXXXXX.p8 file, including the BEGIN and END PRIVATE KEY lines (its base64 also works)."
+            exit 1
+          fi
+          ASC_KEY_PATH="$key" python3 - <<'PY'
+          import base64, json, os, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
+
+          KEY_ID, ISSUER, KEY = os.environ["ASC_KEY_ID"], os.environ["ASC_ISSUER_ID"], os.environ["ASC_KEY_PATH"]
+          APP_ID, EXT_ID, GROUP = os.environ["APP_ID"], os.environ["EXT_ID"], os.environ["APP_GROUP"]
+
+          def b64url(data):
+              return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
+
+          def der_to_raw(der):
+              # openssl writes ECDSA-Sig-Value (DER SEQUENCE of r, s); a JWT wants r||s, 32 bytes each.
+              i = 2 if der[1] < 0x80 else 2 + (der[1] & 0x7F)
+              out = b""
+              for _ in range(2):
+                  assert der[i] == 0x02, "unexpected signature encoding"
+                  n = der[i + 1]
+                  out += der[i + 2:i + 2 + n].lstrip(b"\0").rjust(32, b"\0")
+                  i += 2 + n
+              return out
+
+          now = int(time.time())
+          head = b64url(json.dumps({"alg": "ES256", "kid": KEY_ID, "typ": "JWT"}).encode())
+          body = b64url(json.dumps({"iss": ISSUER, "iat": now, "exp": now + 600, "aud": "appstoreconnect-v1"}).encode())
+          der = subprocess.run(["openssl", "dgst", "-sha256", "-sign", KEY], input=f"{head}.{body}".encode(),
+                               capture_output=True, check=True).stdout
+          token = f"{head}.{body}.{b64url(der_to_raw(der))}"
+
+          def get(path, params=None):
+              url = "https://api.appstoreconnect.apple.com" + path
+              if params:
+                  url += "?" + urllib.parse.urlencode(params)
+              req = urllib.request.Request(url, headers={"Authorization": "Bearer " + token})
+              try:
+                  with urllib.request.urlopen(req, timeout=60) as resp:
+                      return resp.status, json.load(resp)
+              except urllib.error.HTTPError as err:
+                  try:
+                      return err.code, json.load(err)
+                  except Exception:
+                      return err.code, {}
+              except urllib.error.URLError as err:
+                  print(f"::error::Could not reach App Store Connect ({err.reason}). Re-run the job; if it keeps failing, check https://developer.apple.com/system-status/.")
+                  sys.exit(1)
+
+          def why(body):
+              return "; ".join(f"{e.get('code')}: {e.get('detail')}" for e in body.get("errors", [])) or "no details"
+
+          problems = []
+          def problem(msg):
+              print(f"::error::{msg}")
+              problems.append(msg)
+
+          status, apps = get("/v1/apps", {"filter[bundleId]": APP_ID})
+          if status == 401:
+              problem("App Store Connect rejected the API key (401). ASC_KEY_ID and ASC_ISSUER_ID must belong to this .p8, "
+                      "and it must be a Team key (Users and Access > Integrations > Team Keys), not an Individual key or a revoked one.")
+              sys.exit(1)
+          if status != 200:
+              problem(f"App Store Connect API answered {status} ({why(apps)}). Accept any pending agreements in App Store Connect "
+                      "(Business) and on developer.apple.com, and use a Team key with the Admin role.")
+              sys.exit(1)
+          record = [a for a in apps.get("data", []) if a["attributes"].get("bundleId") == APP_ID]
+          if record:
+              print(f"App record: {record[0]['attributes'].get('name')} (Apple ID {record[0]['id']})")
+          else:
+              problem(f"No app with bundle ID {APP_ID} in App Store Connect. Create it: App Store Connect > Apps > + > New App, "
+                      f"platform iOS, bundle ID {APP_ID}.")
+
+          status, ids = get("/v1/bundleIds", {"filter[identifier]": f"{APP_ID},{EXT_ID}", "limit": "200"})
+          if status != 200:
+              problem(f"The key cannot read Identifiers ({status}: {why(ids)}). Cloud signing needs a Team key with the Admin role; "
+                      "a key's role cannot be changed, so generate a new Admin key and update ASC_KEY_ID and ASC_KEY_P8.")
+          else:
+              found = {b["attributes"]["identifier"]: b for b in ids.get("data", [])}
+              for ident in (APP_ID, EXT_ID):
+                  if ident not in found:
+                      problem(f"App ID {ident} is not registered. developer.apple.com > Certificates, Identifiers & Profiles > "
+                              f"Identifiers > + > App IDs > App > Explicit, bundle ID {ident}, tick App Groups, then Configure > {GROUP}.")
+                      continue
+                  status, caps = get(f"/v1/bundleIds/{found[ident]['id']}/bundleIdCapabilities")
+                  kinds = {c["attributes"].get("capabilityType") for c in caps.get("data", [])}
+                  if status != 200:
+                      problem(f"Could not read the capabilities of {ident} ({status}: {why(caps)}).")
+                  elif "APP_GROUPS" not in kinds:
+                      problem(f"App ID {ident} does not have App Groups on. Identifiers > {ident} > tick App Groups > "
+                              f"Configure > tick {GROUP} > Save.")
+                  else:
+                      print(f"App ID {ident}: App Groups on (which group is checked after export)")
+          sys.exit(1 if problems else 0)
+          PY
+
+      - run: flutter pub get
+
+      - name: Build the archive (unsigned)
+        run: |
+          # Same number as the Android versionCode of this run and attempt.
+          n=$((GITHUB_RUN_NUMBER * 100 + GITHUB_RUN_ATTEMPT))
+          echo "IOS_BUILD_NUMBER=$n" >> "$GITHUB_ENV"
+          flutter build ipa --release --no-codesign --build-number="$n"
+
+      - name: Ad-hoc sign the archive with its entitlements
+        run: |
+          app="$ARCHIVE/Products/Applications/Runner.app"
+          ext="$app/PlugIns/ShareExtension.appex"
+          [ -d "$app" ] || { echo "::error::No Runner.app in $ARCHIVE; see the build step."; exit 1; }
+          [ -d "$ext" ] || { echo "::error::Runner.app/PlugIns/ShareExtension.appex is missing from the archive."; exit 1; }
+          for b in "$app" "$ext"; do
+            id=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$b/Info.plist")
+            v=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$b/Info.plist")
+            s=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$b/Info.plist")
+            echo "$id $s ($v)"
+            [ "$v" = "$IOS_BUILD_NUMBER" ] || { echo "::error::$id has build number $v, expected $IOS_BUILD_NUMBER."; exit 1; }
+          done
+          # Inside out: find -depth lists nested code before what contains it.
+          find "$app" -depth \( -name '*.framework' -o -name '*.dylib' \) -print0 |
+            while IFS= read -r -d '' f; do codesign --force --sign - "$f" || exit 1; done
+          codesign --force --sign - --entitlements ios/ShareExtension/ShareExtension.entitlements "$ext"
+          codesign --force --sign - --entitlements ios/Runner/Runner.entitlements "$app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          for b in "$app" "$ext"; do
+            ents=$(codesign -d --entitlements - --xml "$b" 2>/dev/null || true)
+            grep -qF "$APP_GROUP" <<<"$ents" || { echo "::error::$(basename "$b") lacks $APP_GROUP after ad-hoc signing."; exit 1; }
+          done
+          echo "Archive carries $APP_GROUP on Runner.app and ShareExtension.appex"
+
+      - name: Write the API key and export options
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          umask 077
+          mkdir -p "$RUNNER_TEMP/asc"
+          key="$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+          if [[ "$ASC_KEY_P8" == *"BEGIN PRIVATE KEY"* ]]; then
+            printf '%s\n' "$ASC_KEY_P8" | tr -d '\r' > "$key"
+          else
+            printf '%s' "$ASC_KEY_P8" | tr -d ' \r\n' | base64 --decode > "$key"
+          fi
+          echo "ASC_KEY_PATH=$key" >> "$GITHUB_ENV"
+          for dest in export upload; do
+            cat > "$RUNNER_TEMP/asc/ExportOptions-$dest.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>$dest</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>teamID</key><string>$APPLE_TEAM_ID</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          EOF
+            plutil -lint "$RUNNER_TEMP/asc/ExportOptions-$dest.plist"
+          done
+
+      - name: Cloud-sign the IPA
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist "$RUNNER_TEMP/asc/ExportOptions-export.plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tee "$RUNNER_TEMP/export.log"
+
+      - name: Check the IPA's signature and App Group
+        run: |
+          ipa=$(find "$RUNNER_TEMP/export" -maxdepth 1 -name '*.ipa' | head -n 1)
+          [ -n "$ipa" ] || { echo "::error::The export made no .ipa; see the step above."; exit 1; }
+          rm -rf "$RUNNER_TEMP/ipa" && mkdir -p "$RUNNER_TEMP/ipa"
+          unzip -q "$ipa" -d "$RUNNER_TEMP/ipa"
+          app="$RUNNER_TEMP/ipa/Payload/Runner.app"
+          bad=0
+          for b in "$app" "$app/PlugIns/ShareExtension.appex"; do
+            name=$(basename "$b")
+            sig=$(codesign -dvv "$b" 2>&1 || true)
+            ents=$(codesign -d --entitlements - --xml "$b" 2>/dev/null || true)
+            [ -f "$b/embedded.mobileprovision" ] || { echo "::error::$name has no embedded.mobileprovision."; bad=1; continue; }
+            security cms -D -i "$b/embedded.mobileprovision" > "$RUNNER_TEMP/profile.plist"
+            profile=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/profile.plist")
+            groups=$(/usr/libexec/PlistBuddy -c 'Print :Entitlements:com.apple.security.application-groups' "$RUNNER_TEMP/profile.plist" 2>/dev/null || true)
+            echo "$name: $(grep -m1 '^Authority=' <<<"$sig" | cut -d: -f1), profile \"$profile\""
+            grep -q '^Authority=Apple Distribution' <<<"$sig" || { echo "::error::$name is not signed with an Apple Distribution certificate."; bad=1; }
+            grep -qF "$APP_GROUP" <<<"$ents" || { echo "::error::$name lost $APP_GROUP in the export."; bad=1; }
+            grep -qF "$APP_GROUP" <<<"$groups" || { echo "::error::$name's profile has no $APP_GROUP: on developer.apple.com assign the group to that App ID (Identifiers > App Groups > Configure)."; bad=1; }
+            if /usr/libexec/PlistBuddy -c 'Print :ProvisionedDevices' "$RUNNER_TEMP/profile.plist" >/dev/null 2>&1; then
+              echo "::error::$name has a development or ad hoc profile, not an App Store one."; bad=1
+            fi
+          done
+          exit "$bad"
+
+      - name: Upload to App Store Connect
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$ARCHIVE" \
+            -exportPath "$RUNNER_TEMP/upload" \
+            -exportOptionsPlist "$RUNNER_TEMP/asc/ExportOptions-upload.plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$ASC_KEY_PATH" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tee "$RUNNER_TEMP/upload.log"
+          if grep -q 'EXPORT FAILED' "$RUNNER_TEMP/upload.log"; then exit 1; fi
+          version=$(grep -m1 '^version:' pubspec.yaml | sed -E 's/version: *([^+]*).*/\1/')
+          echo "Uploaded APrompter $version ($IOS_BUILD_NUMBER). It shows in App Store Connect > TestFlight once Apple has processed it; Apple emails you when it is ready or if it is rejected." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Show Xcode's distribution log
+        if: failure()
+        run: |
+          # The repository is public, so print the end of the log (tokens
+          # masked) instead of uploading it as an artifact.
+          logs=$( { grep -ho '/[^" ]*\.xcdistributionlogs' "$RUNNER_TEMP"/export.log "$RUNNER_TEMP"/upload.log 2>/dev/null
+                    find "${TMPDIR:-/tmp}" -maxdepth 1 -name '*.xcdistributionlogs' 2>/dev/null; } | sort -u) || true
+          for d in $logs; do
+            for f in "$d"/IDEDistribution.critical.log "$d"/IDEDistribution.standard.log; do
+              [ -f "$f" ] || continue
+              echo "::group::$f"
+              tail -n 200 "$f" | sed -E 's/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/[token]/g'
+              echo "::endgroup::"
+            done
+          done
+
+      - name: Remove the key from the runner
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/asc"

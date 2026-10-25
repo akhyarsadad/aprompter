@@ -555,7 +555,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get positionHint =>
-      'Перетащите полоску сверху суфлёра, чтобы поставить его куда угодно, и угол — чтобы изменить размер. На Android плавающее окно можно перетащить в любое место, и оно запомнит его.';
+      'Перетащите полоску сверху суфлёра, чтобы поставить его куда угодно, и угол — чтобы изменить размер.';
 
   @override
   String get app => 'Приложение';
@@ -575,4 +575,485 @@ class AppLocalizationsRu extends AppLocalizations {
   String minutesShort(int n) {
     return '$n мин';
   }
+
+  @override
+  String get storageSaveFailed =>
+      'Не удалось сохранить — возможно, в телефоне закончилось место. Работа сохранится, пока приложение открыто.';
+
+  @override
+  String get versionHistory => 'История версий';
+
+  @override
+  String get noVersions =>
+      'Прежних версий пока нет. Они сохраняются автоматически, пока вы пишете.';
+
+  @override
+  String get restore => 'Восстановить';
+
+  @override
+  String get versionRestored => 'Прежняя версия восстановлена';
+
+  @override
+  String get recentlyDeleted => 'Недавно удалённые';
+
+  @override
+  String trashHint(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Удалённые сценарии хранятся здесь $days дня.',
+      many: 'Удалённые сценарии хранятся здесь $days дней.',
+      few: 'Удалённые сценарии хранятся здесь $days дня.',
+      one: 'Удалённые сценарии хранятся здесь $days день.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deleteForever => 'Удалить навсегда';
+
+  @override
+  String deletedOn(String date) {
+    return 'Удалено $date';
+  }
+
+  @override
+  String restoredScript(String title) {
+    return '«$title» восстановлен';
+  }
+
+  @override
+  String get backUpScripts => 'Резервная копия всех сценариев';
+
+  @override
+  String get restoreBackup => 'Восстановить из копии';
+
+  @override
+  String get backupShareTitle => 'Резервная копия APrompter';
+
+  @override
+  String importedScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Восстановлено $count сценария',
+      many: 'Восстановлено $count сценариев',
+      few: 'Восстановлено $count сценария',
+      one: 'Восстановлен $count сценарий',
+      zero: 'Всё из этой копии уже здесь',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get notABackup => 'Этот файл не является резервной копией APrompter.';
+
+  @override
+  String fitImpossible(int wpm, String target, int words) {
+    return 'Даже при $wpm сл/мин не уложиться в $target — сократите примерно на $words сл.';
+  }
+
+  @override
+  String get cameraNotReady =>
+      'Камера не была готова, запись не началась. Попробуйте ещё раз.';
+
+  @override
+  String get previousSection => 'Предыдущий раздел';
+
+  @override
+  String get nextSection => 'Следующий раздел';
+
+  @override
+  String get floatingNotificationBody => 'Нажмите, чтобы открыть APrompter';
+
+  @override
+  String get customTarget => 'Своё…';
+
+  @override
+  String get customTargetTitle => 'Целевая длительность';
+
+  @override
+  String get customTargetHint => 'Минуты и секунды, напр. 5:00';
+
+  @override
+  String get saved => 'Сохранено';
+
+  @override
+  String get floatNotOnIos =>
+      'На iPhone и iPad приложения не могут отображаться поверх других. Используйте «Запись», чтобы снимать со сценарием под камерой.';
+
+  @override
+  String get hashtagHint =>
+      'Строки с хештегами (#fyp #ad) приглушены и не учитываются по времени. Для раздела используйте «# » с пробелом.';
+
+  @override
+  String get appLock => 'Блокировка приложения';
+
+  @override
+  String get appLockHint =>
+      'Запрашивать отпечаток, лицо или PIN телефона при открытии APrompter';
+
+  @override
+  String get appLockUnavailable =>
+      'Сначала настройте блокировку экрана на этом телефоне.';
+
+  @override
+  String get unlock => 'Разблокировать';
+
+  @override
+  String get unlockReason => 'Разблокируйте APrompter, чтобы увидеть сценарии';
+
+  @override
+  String get autoStopWait => 'Пауза после последней строки';
+
+  @override
+  String get beforeYouRecord => 'Перед записью';
+
+  @override
+  String get recordAnyway => 'Всё равно записать';
+
+  @override
+  String lowStorageWarning(int minutes) {
+    return 'Свободного места хватит лишь примерно на $minutes мин видео. Освободите место или снизьте качество видео.';
+  }
+
+  @override
+  String lowBatteryWarning(int level) {
+    return 'Заряд $level% — длинный дубль может оборваться. Подключите зарядку, если можете.';
+  }
+
+  @override
+  String get brightScreen => 'Полная яркость во время суфлёра';
+
+  @override
+  String get brightScreenHint => 'Легче читать на улице';
+
+  @override
+  String get cameraBusy =>
+      'Камера занята другим приложением. Закройте его и повторите.';
+
+  @override
+  String get cameraIntroTitle => 'Камера и микрофон';
+
+  @override
+  String get cameraIntroBody =>
+      'Чтобы снимать вас со сценарием на экране, APrompter нужны камера и микрофон. Сейчас телефон спросит разрешение. Видео остаются на вашем телефоне.';
+
+  @override
+  String get continueLabel => 'Продолжить';
+
+  @override
+  String get notNow => 'Не сейчас';
+
+  @override
+  String get colorWhite => 'Белый';
+
+  @override
+  String get colorYellow => 'Жёлтый';
+
+  @override
+  String get colorGreen => 'Зелёный';
+
+  @override
+  String get colorBlue => 'Синий';
+
+  @override
+  String get colorPink => 'Розовый';
+
+  @override
+  String get colorBlack => 'Чёрный';
+
+  @override
+  String get damagedData => 'Нечитаемые данные';
+
+  @override
+  String damagedDataHint(String date, int size) {
+    return 'Отложено $date · $size символов';
+  }
+
+  @override
+  String get tryToRecover => 'Попробовать восстановить';
+
+  @override
+  String get nothingRecovered => 'Не удалось прочитать ни одного сценария.';
+
+  @override
+  String get floatLowRam =>
+      'Этот телефон не может показывать приложения поверх других (мало памяти или Android Go). Используйте Запись.';
+
+  @override
+  String get oemTipsTitle => 'Чтобы плавающий суфлёр не закрывался';
+
+  @override
+  String oemTipsBody(String brand) {
+    return 'Телефоны $brand могут закрывать плавающие окна ради экономии заряда. В Настройки → Приложения → APrompter: разрешите показ поверх других приложений (и всплывающие окна), для батареи выберите «Без ограничений» и разрешите уведомления.';
+  }
+
+  @override
+  String get focusLine => 'Фокус на текущей строке';
+
+  @override
+  String get focusLineHint => 'Затемняет остальные строки';
+
+  @override
+  String get stepByLine => 'По строке';
+
+  @override
+  String get stepByLineHint =>
+      'Каждое касание или нажатие пульта — одна строка, без автопрокрутки';
+
+  @override
+  String get reduceEffects => 'Меньше эффектов';
+
+  @override
+  String get reduceEffectsHint =>
+      'Без затуханий и теней: плавнее на старых телефонах, экономит заряд';
+
+  @override
+  String get letterSpacing => 'Межбуквенный интервал';
+
+  @override
+  String get pasteAsNewScript => 'Вставить как новый сценарий';
+
+  @override
+  String get pasteAsNewScriptHint =>
+      'Текст, скопированный из Заметок, Keep, Notion, Документов или любого приложения';
+
+  @override
+  String get importFiles => 'Импорт файлов';
+
+  @override
+  String get importFilesHint =>
+      'Word, текст, Markdown, RTF, HTML, Evernote, субтитры или резервная копия';
+
+  @override
+  String get clipboardEmpty =>
+      'Нечего вставить. Сначала скопируйте сценарий в другом приложении.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Импортировано $count сценария',
+      many: 'Импортировано $count сценариев',
+      few: 'Импортировано $count сценария',
+      one: 'Импортирован $count сценарий',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'В бесплатном тарифе помещается $count сценария. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+      many:
+          'В бесплатном тарифе помещается $count сценариев. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+      few:
+          'В бесплатном тарифе помещается $count сценария. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+      one:
+          'В бесплатном тарифе помещается $count сценарий. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF нельзя импортировать. Откройте PDF, скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importOldFormat =>
+      'Старые файлы Word (.doc) и Pages не читаются. Сохраните файл как .docx или текст либо скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importUnsupported =>
+      'APrompter не умеет читать такие файлы. Скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importEmpty => 'Здесь нет текста для импорта.';
+
+  @override
+  String get importTooLarge =>
+      'Это слишком длинно для одного сценария. Скопируйте нужную часть и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importLinkOnly =>
+      'Пришла только ссылка, без текста. Откройте её, скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importUnreadable =>
+      'Не удалось прочитать. Скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get saveAsTextFile => 'Сохранить как текстовый файл';
+
+  @override
+  String get saveTextFileFailed =>
+      'Не удалось создать текстовый файл. Попробуйте ещё раз.';
+
+  @override
+  String get mySetup => 'Мои настройки';
+
+  @override
+  String get mySetupHint => 'Сохранённый вами набор настроек';
+
+  @override
+  String get saveMySetup => 'Сохранить как мои настройки';
+
+  @override
+  String get resetAllSettings => 'Сбросить все настройки';
+
+  @override
+  String get runHadJumps =>
+      'В этом прогоне были переходы по тексту, поэтому темп не предложить.';
+
+  @override
+  String get keepTake => 'Оставить';
+
+  @override
+  String get retake => 'Переснять';
+
+  @override
+  String get reviewTakes => 'Просматривать каждый дубль';
+
+  @override
+  String get reviewTakesHint => 'Посмотрите, затем оставьте или переснимите';
+
+  @override
+  String get takesToGallery => 'Сохранять дубли в галерею';
+
+  @override
+  String get takesToGalleryHint =>
+      'Выкл.: дубли остаются в приложении, не попадая в Google Photos и iCloud';
+
+  @override
+  String get takesTitle => 'Дубли';
+
+  @override
+  String get takesEmpty =>
+      'Здесь появляются дубли, сохранённые в приложении. Отключите «Сохранять дубли в галерею» в настройках, чтобы хранить их здесь.';
+
+  @override
+  String get saveToGallery => 'Сохранить в галерею';
+
+  @override
+  String get savedToGallery => 'Сохранено в галерею';
+
+  @override
+  String get deleteTake => 'Удалить дубль';
+
+  @override
+  String takeKeptInApp(int n) {
+    return 'Дубль $n сохранён в приложении';
+  }
+
+  @override
+  String get upgradeTitle => 'APrompter Unlimited';
+
+  @override
+  String get upgradeBody =>
+      'Неограниченное число сценариев — по подписке или разовой покупкой.';
+
+  @override
+  String get offeringsLoadFailed =>
+      'Не удалось загрузить тарифы. Проверьте подключение и попробуйте снова.';
+
+  @override
+  String get purchaseFailed => 'Покупка не удалась. Попробуйте снова.';
+
+  @override
+  String get restoreFailed =>
+      'Не удалось восстановить покупки. Попробуйте снова.';
+
+  @override
+  String get restorePurchases => 'Восстановить покупки';
+
+  @override
+  String wordCapBannerText(int count) {
+    return 'В этом сценарии больше $count слов. Длинные сценарии входят в APrompter Unlimited.';
+  }
+
+  @override
+  String get upgrade => 'Улучшить';
+
+  @override
+  String planMonthly(String price) {
+    return 'Ежемесячно · $price / мес.';
+  }
+
+  @override
+  String planYearly(String price) {
+    return 'Ежегодно · $price / год';
+  }
+
+  @override
+  String planLifetime(String price) {
+    return 'Навсегда · $price разово';
+  }
+
+  @override
+  String planSave(int percent) {
+    return 'Экономия $percent%';
+  }
+
+  @override
+  String subscriptionTerms(String store) {
+    return 'Месячный и годовой тарифы продлеваются автоматически на тот же срок, пока вы их не отмените. Чтобы избежать следующего списания, отмените подписку не позднее чем за 24 часа до конца периода в настройках аккаунта $store. «Навсегда» — разовая покупка.';
+  }
+
+  @override
+  String get termsOfUse => 'Условия использования';
+
+  @override
+  String get privacyPolicy => 'Политика конфиденциальности';
+
+  @override
+  String nothingToRestore(String store) {
+    return 'В этом аккаунте $store не найдено прошлых покупок.';
+  }
+
+  @override
+  String get appLockTurnedOff =>
+      'На вашем телефоне нет блокировки экрана, поэтому блокировка приложения отключена.';
+
+  @override
+  String get deleteTakeConfirm =>
+      'Удалить этот дубль? Видео нельзя будет восстановить.';
+
+  @override
+  String deleteForeverConfirm(String title) {
+    return 'Удалить «$title» навсегда? Это действие нельзя отменить.';
+  }
+
+  @override
+  String get deleteForeverTakes =>
+      'Его дубли, сохранённые в приложении, тоже будут удалены.';
+
+  @override
+  String get purchasePending =>
+      'Платёж ожидает подтверждения. APrompter Unlimited откроется автоматически, как только его одобрят.';
+
+  @override
+  String get positionHintFloat =>
+      'Плавающее окно можно перетащить в любое место, и оно запомнит его.';
+
+  @override
+  String get readingLine => 'Положение линии чтения';
+
+  @override
+  String get readingLineHint =>
+      'Камера телефона находится над экраном: высокая линия держит ваш взгляд у объектива.';
+
+  @override
+  String get readingLineNearCamera => 'У камеры';
+
+  @override
+  String get readingLineMiddle => 'Середина';
+
+  @override
+  String get readingLineDragHint =>
+      'В режиме «Репетиция», а в режиме «Запись» до начала съёмки, можно также перетащить левую стрелку линии вверх или вниз.';
 }

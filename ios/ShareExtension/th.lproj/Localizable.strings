@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "ยกเลิก";
+
+/* Share extension: close the confirmation */
+"Done" = "เสร็จสิ้น";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "เพิ่มไปยัง APrompter แล้ว";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "ไม่สามารถเพิ่มรายการนี้ไปยัง APrompter ได้";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "เปิด APrompter เพื่อเริ่มอ่าน";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "ยาวเกินไปสำหรับสคริปต์เดียว";
