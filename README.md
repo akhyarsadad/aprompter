@@ -128,7 +128,8 @@ lib/
 
 ## Getting started
 
-Requirements: Flutter 3.x (stable), Android Studio / Android SDK for Android, Xcode 15+ for iOS.
+Requirements: Flutter 3.x (stable), Android Studio / Android SDK for Android, Xcode 26+ for iOS
+(App Store Connect only accepts builds made with the current iOS SDK).
 
 ```bash
 flutter pub get
@@ -139,7 +140,7 @@ flutter test           # unit + widget tests
 Release builds:
 
 ```bash
-flutter build apk --release      # or: flutter build appbundle
+flutter build appbundle --release   # Play Store upload (flutter build apk for side-loading)
 flutter build ipa --release      # needs an Apple developer account / signing team
 ```
 
@@ -173,8 +174,8 @@ justify this in the Play Console (the reason is already described in the manifes
 
 ### Paywall setup
 
-Free use: 1 script (the sample script doesn't count) of up to 500 words. **APrompter
-Unlimited** removes the limits: monthly 2.99, yearly 15.99, lifetime 39.99 (USD, before
+Free use: 1 script (the sample script doesn't count); scripts over 500 words show a
+reminder. **APrompter Unlimited** removes the limit: monthly 2.99, yearly 15.99, lifetime 39.99 (USD, before
 tax), sold through the App Store / Google Play and checked with RevenueCat.
 
 There is **no sign-in**. A purchase belongs to the store account (Apple ID / Google

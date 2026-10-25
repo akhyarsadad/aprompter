@@ -22,14 +22,15 @@ requests except the ones described below for APrompter Unlimited.
 
 ## APrompter Unlimited (purchases)
 
-Free use is limited to one script of up to 500 words. Removing that limit is a subscription
-or a one-time purchase made through the Apple App Store or Google Play. The app uses
+Free use is limited to one script (long scripts show a reminder). Removing that limit is a
+subscription or a one-time purchase made through the Apple App Store or Google Play. The app uses
 RevenueCat, a payment-infrastructure provider, to check what you've bought.
 
 - **What's sent, and to whom:** RevenueCat receives a random identifier that the app creates
   on your phone (not your name, email or phone number), your purchase and subscription status
   and receipts from Apple or Google, and basic technical data needed to deliver them (such as
-  app version, device type, country/storefront and IP address).
+  app version, device type, country/storefront, IP address, and timings and error codes of
+  these purchase checks).
   RevenueCat's own policy: https://www.revenuecat.com/privacy/
 - **What's not sent:** your scripts, notes, videos, settings, or anything else in the table
   above. There is no sign-in, so the developer never learns who you are.
@@ -51,12 +52,14 @@ RevenueCat, a payment-infrastructure provider, to check what you've bought.
 
 - **Camera and microphone** — only to record videos when you tap *Record*. Nothing is
   streamed or uploaded.
-- **Photos / gallery (add)** — to save your takes to the "APrompter" album.
+- **Photos / gallery** — to save your takes into an "APrompter" album. On iPhone, creating
+  that album needs photo library access (you can choose limited access); the app doesn't read
+  or upload your other photos.
 - **Display over other apps** (Android) — only for *Float*, the prompter window you put on top
   of other camera apps. The window is marked secure, so screen recordings and live streams
   show it blank.
-- **Notifications** (Android) — Android requires a notification while the floating window is
-  running.
+- **Notifications** (Android) — if you allow them, Android shows a notification while the
+  floating window is running.
 - **Face ID / fingerprint** — only if you turn on *App lock*. The check happens on your
   phone; APrompter never sees your biometric data.
 
@@ -70,15 +73,24 @@ RevenueCat, a payment-infrastructure provider, to check what you've bought.
 
 ## Children
 
-APrompter does not collect personal data from anyone, including children. The only data
-that leaves the phone is the anonymous purchase information described under
-"APrompter Unlimited".
+APrompter is not directed at children under 13 and has no accounts. It doesn't ask anyone,
+including children, for names, emails or other personal details. The only data that leaves
+the phone is the purchase information described under "APrompter Unlimited" (a random
+identifier, purchase records and basic technical data such as IP address), used only to check
+purchases — never to identify, track or advertise to anyone.
 
 ## Deleting your data
 
 Delete scripts in the app (and empty *Recently deleted*), or uninstall the app to remove
 everything it stored. Videos in your gallery are deleted from the gallery app.
 
+**Purchase records:** RevenueCat keeps the random identifier and purchase history while the
+app needs them to check APrompter Unlimited. To have them deleted, write to the support email
+shown on APrompter's App Store or Google Play page with the subject "Delete my APrompter data"
+and say which store you bought in; they are deleted within 30 days. Your purchase itself stays
+with your App Store / Google Play account and can still be restored.
+
 ## Contact
 
-Questions: open an issue at https://github.com/akhyarsadad/aprompter/issues.
+Questions: write to the support email on APrompter's App Store or Google Play page, or open
+an issue at https://github.com/akhyarsadad/aprompter/issues.

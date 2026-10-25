@@ -21,7 +21,11 @@ do it. Work top to bottom; each step says where.
 - [ ] **iOS:** open `ios/Runner.xcworkspace` in Xcode. For **both** targets, *Runner* and
       *ShareExtension*: *Signing & Capabilities* → pick your Team (automatic signing).
       Both already declare the App Group `group.com.akhyarsadad.aprompter`; Xcode registers it
-      for both app ids on first build. Archive with `flutter build ipa`.
+      for both app ids on first build. Archive with `flutter build ipa` using **Xcode 26 or
+      later** (App Store Connect only accepts builds made with the current iOS SDK).
+- [ ] **Android upload:** build with `flutter build appbundle --release` and upload
+      `build/app/outputs/bundle/release/app-release.aab`. Play doesn't accept APKs for new apps;
+      the APK from CI is only for installing on your own phone.
 
 ## 2. Products and prices
 
@@ -44,14 +48,21 @@ The yearly plan works out to 55 % less than 12 months of the monthly plan; the p
 "Save 55%" on it automatically.
 
 App Store only: each product needs a display name, a description and a **review
-screenshot** of the paywall (the upgrade screen: create a second script on a free install,
-see §6). Submit the three products **together with** the first app version.
+screenshot** of the paywall (the upgrade screen: *⋮ menu → Upgrade* on the home screen). Submit
+the three products **together with** the first app version.
 
 ## 3. RevenueCat
 
 - [ ] Create a project and add both apps (bundle id / package `com.akhyarsadad.aprompter`).
       Connect App Store Connect (in-app purchase key) and Google Play (service account).
-- [ ] *Entitlements*: create `unlimited` and attach all five store products.
+- [ ] *Entitlements*: create `unlimited` and attach all **six** store products: App Store
+      `aprompter_unlimited_monthly`, `aprompter_unlimited_yearly`, `aprompter_unlimited_lifetime`,
+      and Google Play `aprompter_unlimited:monthly`, `aprompter_unlimited:yearly` (RevenueCat
+      lists each base plan as its own product) and `aprompter_unlimited_lifetime`.
+- [ ] *Product catalog → Products*: set **`aprompter_unlimited_lifetime`** to
+      **Non-consumable** (both stores, Google Play especially). The app has no sign-in, and a
+      one-time purchase RevenueCat treats as consumable is consumed on Google Play and can then
+      never be restored.
 - [ ] *Offerings*: make the `default` offering **current**, with packages **Monthly**
       (`$rc_monthly`), **Annual** (`$rc_annual`) and **Lifetime** (`$rc_lifetime`). The app
       reads exactly these three slots.
@@ -83,8 +94,9 @@ see §6). Submit the three products **together with** the first app version.
 **Foreground service type `specialUse`**
 
 > Subtype: *floating teleprompter*. The service keeps the user-started prompter window
-> alive while the user films in another app. It runs only while the window is visible,
-> shows an ongoing notification, and stops when the user closes the window.
+> alive while the user films in another app. It runs only while the window is visible, has
+> the standard foreground-service notification (in the notification shade when notifications
+> are allowed, otherwise in Android's task manager), and stops when the user closes the window.
 
 Prepare a 30-second screen recording: open a script → tap *Float* → allow the permission →
 open the camera app → the prompter scrolls over it → close it with ✕.
@@ -94,7 +106,7 @@ open the camera app → the prompter scrolls over it → close it with ✕.
 | Question | Answer |
 |---|---|
 | Does your app collect or share user data? | **Yes** (only for purchases, via RevenueCat) |
-| Data types collected | **Financial info → Purchase history** and **Device or other IDs** (RevenueCat's random app-instance id) — nothing else |
+| Data types collected | **Financial info → Purchase history**, **Device or other IDs** (RevenueCat's random app-instance id) and **App info and performance → Diagnostics** (RevenueCat's purchase-check timings and store error codes, which RevenueCat can switch on remotely) — nothing else. Re-check RevenueCat's current "Google Play Data safety" guide before submitting |
 | Purpose | App functionality (both) |
 | Shared with third parties? | **No** — RevenueCat is a service provider acting for you, which Play doesn't count as sharing |
 | Processed ephemerally? | No |
@@ -122,9 +134,10 @@ policy requirements). *Content rating* questionnaire → no objectionable conten
 
 **Review notes** (paste into *App Review Information → Notes*):
 
-> No account or login is needed. The free tier holds one script (besides the sample). To see
-> the paywall: tap + to create a script, then tap + again. Plans: monthly, yearly, lifetime;
-> "Restore purchases" is on the same screen. Camera and microphone are used only when the user
+> No account or login is needed. To see the paywall: on the home screen open the ⋮ menu →
+> Upgrade. (It also opens on its own when a free user, who can keep one script besides the
+> sample, tries to add a second one.) Plans: monthly, yearly, lifetime; "Restore purchases" is
+> on the same screen. Camera and microphone are used only when the user
 > taps Record; photos access is used to save takes into an "APrompter" album. Face ID is used
 > only for the optional app lock. The share extension imports text and text files shared
 > from other apps as new scripts; nothing is uploaded. Float is Android-only; the iPhone UI
@@ -143,6 +156,8 @@ The app has no crash reporting. Options, in order of privacy:
 - [ ] **Purchases:** iOS sandbox tester + Play license tester. Buy monthly → app unlocks
       without a restart; reinstall → *Restore purchases* unlocks; restore on an account with
       nothing → "No earlier purchase found…"; cancel in the store → locks again after expiry.
+      **Android Lifetime:** buy it → uninstall → reinstall (or a second phone, same Google
+      account) → *Restore purchases* unlocks. If it doesn't, Lifetime isn't Non-consumable (§3).
 - [ ] **Import:** share a note from Apple Notes / Google Keep / Samsung Notes / Notion to
       APrompter; open a `.docx`, `.md`, `.rtf` and `.txt` from Files/Drive/Mail with
       APrompter; *Paste as new script*; *Save as text file* → re-import gives the same script.
@@ -150,4 +165,9 @@ The app has no crash reporting. Options, in order of privacy:
       translations: Filipino, Swahili, Tamil, Urdu and Bengali need the most attention.
 - [ ] Run the device test matrix in `UNHAPPY_PATHS_BACKLOG.md` §17.
 - [ ] TalkBack / VoiceOver pass on Home, Editor, Rehearse, Record, Upgrade.
-- [ ] Store listing screenshots per language (or at least en, es, pt, id, hi, ar).
+- [ ] Store listing screenshots per language (or at least en, es, pt, id, hi, ar). The app
+      runs on iPad, so App Store Connect needs **iPhone 6.9" and iPad 13"** screenshots. In
+      *Pricing and Availability*, untick Apple-silicon Mac / Apple Vision Pro unless you have
+      tested there.
+- [ ] Put a **support email** on both store listings: the privacy policy sends data-deletion
+      requests there.

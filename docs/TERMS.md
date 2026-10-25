@@ -15,11 +15,12 @@ receives your content and can't recover it if your phone is lost, reset or the a
 
 ## Free use and APrompter Unlimited
 
-- Free use includes one script (the welcome script doesn't count) of up to 500 words, plus
-  every prompter, rehearsal and recording feature.
-- **APrompter Unlimited** removes those limits. It is offered as a monthly subscription, a
-  yearly subscription, or a one-time lifetime purchase. Prices are shown in the app before you
-  buy, in your local currency, including any tax your country requires.
+- Free use includes one script (the welcome script doesn't count) plus every prompter,
+  rehearsal and recording feature. Scripts longer than 500 words show a reminder.
+- **APrompter Unlimited** removes the one-script limit and the reminder. It is offered as a
+  monthly subscription, a yearly subscription, or a one-time lifetime purchase. Prices are
+  shown in the app before you buy, in your local currency, including any tax your country
+  requires.
 
 ## Payment, renewal and cancellation
 
