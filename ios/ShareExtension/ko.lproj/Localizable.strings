@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "취소";
+
+/* Share extension: close the confirmation */
+"Done" = "완료";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "APrompter에 추가했어요";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "APrompter에 추가하지 못했어요";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "APrompter를 열고 읽기를 시작하세요.";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "대본 하나로는 너무 길어요.";

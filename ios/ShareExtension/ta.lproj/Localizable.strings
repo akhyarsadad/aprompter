@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "ரத்துசெய்";
+
+/* Share extension: close the confirmation */
+"Done" = "முடிந்தது";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "APrompter-இல் சேர்க்கப்பட்டது";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "இதை APrompter-இல் சேர்க்க முடியவில்லை";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "படிக்கத் தொடங்க APrompter-ஐத் திறக்கவும்.";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "ஒரு ஸ்கிரிப்டுக்கு இது மிக நீளம்.";

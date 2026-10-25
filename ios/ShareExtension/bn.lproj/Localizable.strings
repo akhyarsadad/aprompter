@@ -1,0 +1,17 @@
+/* Share extension: stop adding the shared item */
+"Cancel" = "বাতিল করুন";
+
+/* Share extension: close the confirmation */
+"Done" = "সম্পন্ন";
+
+/* Share extension: the shared text or file was saved for the app */
+"Added to APrompter" = "APrompter-এ যোগ করা হয়েছে";
+
+/* Share extension: nothing in the share could be saved */
+"Couldn't add this to APrompter" = "এটি APrompter-এ যোগ করা যায়নি";
+
+/* Share extension: hint shown after the item was saved */
+"Open APrompter to start reading." = "পড়া শুরু করতে APrompter খুলুন।";
+
+/* Share extension: nothing was added because the shared text or file is over 10 MB */
+"That's too big for one script." = "একটি স্ক্রিপ্টের জন্য এটি অনেক বড়।";
