@@ -813,15 +813,86 @@ class AppLocalizationsRu extends AppLocalizations {
   String get letterSpacing => 'Межбуквенный интервал';
 
   @override
-  String get importTextFile => 'Импорт текстового файла';
+  String get pasteAsNewScript => 'Вставить как новый сценарий';
 
   @override
-  String get importTextFileHint =>
-      'Сценарий .txt или .md из Файлов, Диска или почты';
+  String get pasteAsNewScriptHint =>
+      'Текст, скопированный из Заметок, Keep, Notion, Документов или любого приложения';
 
   @override
-  String get importTextFailed =>
-      'Не удалось прочитать файл. Выберите обычный текстовый файл (.txt).';
+  String get importFiles => 'Импорт файлов';
+
+  @override
+  String get importFilesHint =>
+      'Word, текст, Markdown, RTF, HTML, Evernote, субтитры или резервная копия';
+
+  @override
+  String get clipboardEmpty =>
+      'Нечего вставить. Сначала скопируйте сценарий в другом приложении.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Импортировано $count сценария',
+      many: 'Импортировано $count сценариев',
+      few: 'Импортировано $count сценария',
+      one: 'Импортирован $count сценарий',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'В бесплатном тарифе помещается $count сценария. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+      many:
+          'В бесплатном тарифе помещается $count сценариев. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+      few:
+          'В бесплатном тарифе помещается $count сценария. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+      one:
+          'В бесплатном тарифе помещается $count сценарий. Ничего не потеряно: заметка или файл остались на месте. Чтобы импортировать больше, улучшите тариф.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF нельзя импортировать. Откройте PDF, скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importOldFormat =>
+      'Старые файлы Word (.doc) и Pages не читаются. Сохраните файл как .docx или текст либо скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importUnsupported =>
+      'APrompter не умеет читать такие файлы. Скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importEmpty => 'Здесь нет текста для импорта.';
+
+  @override
+  String get importTooLarge =>
+      'Это слишком длинно для одного сценария. Скопируйте нужную часть и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importLinkOnly =>
+      'Пришла только ссылка, без текста. Откройте её, скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get importUnreadable =>
+      'Не удалось прочитать. Скопируйте текст и выберите «Вставить как новый сценарий».';
+
+  @override
+  String get saveAsTextFile => 'Сохранить как текстовый файл';
+
+  @override
+  String get saveTextFileFailed =>
+      'Не удалось создать текстовый файл. Попробуйте ещё раз.';
 
   @override
   String get mySetup => 'Мои настройки';

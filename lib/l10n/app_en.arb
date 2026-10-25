@@ -480,9 +480,36 @@
   "reduceEffects": "Reduce effects",
   "reduceEffectsHint": "No fades or shadows: smoother on older phones, saves battery",
   "letterSpacing": "Letter spacing",
-  "importTextFile": "Import a text file",
-  "importTextFileHint": "A .txt or .md script from Files, Drive or email",
-  "importTextFailed": "Couldn't read that file. Pick a plain text (.txt) file.",
+  "pasteAsNewScript": "Paste as new script",
+  "pasteAsNewScriptHint": "Text copied from Notes, Keep, Notion, Docs or any app",
+  "importFiles": "Import files",
+  "importFilesHint": "Word, text, Markdown, RTF, HTML, Evernote, subtitles or a backup",
+  "clipboardEmpty": "Nothing to paste. Copy your script in the other app first.",
+  "importedNewScripts": "{count, plural, =1{1 script imported} other{{count} scripts imported}}",
+  "@importedNewScripts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importFreeLimit": "{count, plural, =1{The free plan holds 1 script. Nothing is lost: your note or file is still where it was. Upgrade to import more.} other{The free plan holds {count} scripts. Nothing is lost: your note or file is still where it was. Upgrade to import more.}}",
+  "@importFreeLimit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importPdf": "PDFs can't be imported. Open the PDF, copy the text, then use Paste as new script.",
+  "importOldFormat": "Old Word (.doc) and Pages files can't be read. Save as .docx or text, or copy the text and use Paste as new script.",
+  "importUnsupported": "APrompter can't read that kind of file. Copy the text and use Paste as new script.",
+  "importEmpty": "There's no text in it to import.",
+  "importTooLarge": "That's too big for one script. Copy the part you need and use Paste as new script.",
+  "importLinkOnly": "Only a link came through, not the text. Open it, copy the text and use Paste as new script.",
+  "importUnreadable": "Couldn't read that. Copy the text and use Paste as new script.",
+  "saveAsTextFile": "Save as text file",
+  "saveTextFileFailed": "Couldn't create the text file. Try again.",
   "mySetup": "My setup",
   "mySetupHint": "The setup you saved",
   "saveMySetup": "Save as my setup",

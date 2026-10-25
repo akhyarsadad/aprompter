@@ -778,15 +778,79 @@ class AppLocalizationsBn extends AppLocalizations {
   String get letterSpacing => 'অক্ষরের ব্যবধান';
 
   @override
-  String get importTextFile => 'টেক্সট ফাইল ইমপোর্ট করুন';
+  String get pasteAsNewScript => 'নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন';
 
   @override
-  String get importTextFileHint =>
-      'Files, Drive বা ইমেল থেকে .txt বা .md স্ক্রিপ্ট';
+  String get pasteAsNewScriptHint =>
+      'Notes, Keep, Notion, Docs বা যেকোনো অ্যাপ থেকে কপি করা টেক্সট';
 
   @override
-  String get importTextFailed =>
-      'ফাইলটি পড়া যায়নি। সাধারণ টেক্সট (.txt) ফাইল বেছে নিন।';
+  String get importFiles => 'ফাইল ইমপোর্ট করুন';
+
+  @override
+  String get importFilesHint =>
+      'Word, টেক্সট, Markdown, RTF, HTML, Evernote, সাবটাইটেল বা ব্যাকআপ';
+
+  @override
+  String get clipboardEmpty =>
+      'পেস্ট করার মতো কিছু নেই। আগে অন্য অ্যাপে আপনার স্ক্রিপ্ট কপি করুন।';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি স্ক্রিপ্ট ইমপোর্ট হয়েছে',
+      one: '১টি স্ক্রিপ্ট ইমপোর্ট হয়েছে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'ফ্রি প্ল্যানে $countটি স্ক্রিপ্ট রাখা যায়। কিছুই হারায়নি: আপনার নোট বা ফাইল আগের জায়গাতেই আছে। আরও ইমপোর্ট করতে আপগ্রেড করুন।',
+      one: 'ফ্রি প্ল্যানে ১টি স্ক্রিপ্ট রাখা যায়। কিছুই হারায়নি: আপনার নোট বা ফাইল আগের জায়গাতেই আছে। আরও ইমপোর্ট করতে আপগ্রেড করুন।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF ইমপোর্ট করা যায় না। PDF খুলুন, টেক্সট কপি করুন, তারপর \"নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন\" ব্যবহার করুন।';
+
+  @override
+  String get importOldFormat =>
+      'পুরোনো Word (.doc) ও Pages ফাইল পড়া যায় না। এটি .docx বা টেক্সট হিসেবে সেভ করুন, অথবা টেক্সট কপি করে \"নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন\" ব্যবহার করুন।';
+
+  @override
+  String get importUnsupported =>
+      'APrompter এই ধরনের ফাইল পড়তে পারে না। টেক্সট কপি করে \"নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন\" ব্যবহার করুন।';
+
+  @override
+  String get importEmpty => 'এতে ইমপোর্ট করার মতো কোনো টেক্সট নেই।';
+
+  @override
+  String get importTooLarge =>
+      'একটি স্ক্রিপ্টের জন্য এটি অনেক বড়। দরকারি অংশটুকু কপি করে \"নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন\" ব্যবহার করুন।';
+
+  @override
+  String get importLinkOnly =>
+      'শুধু একটি লিংক এসেছে, টেক্সট নয়। সেটি খুলে টেক্সট কপি করুন এবং \"নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন\" ব্যবহার করুন।';
+
+  @override
+  String get importUnreadable =>
+      'পড়া যায়নি। টেক্সট কপি করে \"নতুন স্ক্রিপ্ট হিসেবে পেস্ট করুন\" ব্যবহার করুন।';
+
+  @override
+  String get saveAsTextFile => 'টেক্সট ফাইল হিসেবে সেভ করুন';
+
+  @override
+  String get saveTextFileFailed =>
+      'টেক্সট ফাইল তৈরি করা যায়নি। আবার চেষ্টা করুন।';
 
   @override
   String get mySetup => 'আমার সেটআপ';

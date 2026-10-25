@@ -760,13 +760,69 @@ class AppLocalizationsZh extends AppLocalizations {
   String get letterSpacing => '字间距';
 
   @override
-  String get importTextFile => '导入文本文件';
+  String get pasteAsNewScript => '粘贴为新脚本';
 
   @override
-  String get importTextFileHint => '从文件、云端硬盘或邮件导入 .txt 或 .md 脚本';
+  String get pasteAsNewScriptHint => '从备忘录、Keep、Notion、文档或任意应用复制的文字';
 
   @override
-  String get importTextFailed => '无法读取该文件。请选择纯文本（.txt）文件。';
+  String get importFiles => '导入文件';
+
+  @override
+  String get importFilesHint => 'Word、文本、Markdown、RTF、HTML、Evernote、字幕或备份';
+
+  @override
+  String get clipboardEmpty => '没有可粘贴的内容。请先在其他应用中复制你的脚本。';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已导入 $count 个脚本',
+      one: '已导入 1 个脚本',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '免费版只能保存 $count 个脚本。没有任何内容丢失：你的笔记或文件仍在原处。升级即可导入更多。',
+      one: '免费版只能保存 1 个脚本。没有任何内容丢失：你的笔记或文件仍在原处。升级即可导入更多。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf => '无法导入 PDF。请打开 PDF，复制文字，然后使用“粘贴为新脚本”。';
+
+  @override
+  String get importOldFormat =>
+      '无法读取旧版 Word（.doc）和 Pages 文件。请另存为 .docx 或文本，或复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get importUnsupported => 'APrompter 无法读取这类文件。请复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get importEmpty => '里面没有可导入的文字。';
+
+  @override
+  String get importTooLarge => '内容太长，无法作为一个脚本。请复制需要的部分，然后使用“粘贴为新脚本”。';
+
+  @override
+  String get importLinkOnly => '只收到一个链接，没有文字。请打开它，复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get importUnreadable => '无法读取。请复制文字后使用“粘贴为新脚本”。';
+
+  @override
+  String get saveAsTextFile => '另存为文本文件';
+
+  @override
+  String get saveTextFileFailed => '无法创建文本文件。请重试。';
 
   @override
   String get mySetup => '我的设置';
@@ -1640,13 +1696,69 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get letterSpacing => '字元間距';
 
   @override
-  String get importTextFile => '匯入文字檔';
+  String get pasteAsNewScript => '貼上為新腳本';
 
   @override
-  String get importTextFileHint => '從檔案、雲端硬碟或電子郵件匯入 .txt 或 .md 腳本';
+  String get pasteAsNewScriptHint => '從備忘錄、Keep、Notion、文件或任何應用程式複製的文字';
 
   @override
-  String get importTextFailed => '無法讀取這個檔案。請選擇純文字（.txt）檔案。';
+  String get importFiles => '匯入檔案';
+
+  @override
+  String get importFilesHint => 'Word、文字、Markdown、RTF、HTML、Evernote、字幕或備份';
+
+  @override
+  String get clipboardEmpty => '沒有可貼上的內容。請先在其他應用程式中複製你的腳本。';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已匯入 $count 個腳本',
+      one: '已匯入 1 個腳本',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '免費方案只能保存 $count 個腳本。沒有任何內容遺失：你的筆記或檔案仍在原處。升級即可匯入更多。',
+      one: '免費方案只能保存 1 個腳本。沒有任何內容遺失：你的筆記或檔案仍在原處。升級即可匯入更多。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf => '無法匯入 PDF。請開啟 PDF、複製文字，再使用「貼上為新腳本」。';
+
+  @override
+  String get importOldFormat =>
+      '無法讀取舊版 Word（.doc）和 Pages 檔案。請另存為 .docx 或文字檔，或複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get importUnsupported => 'APrompter 無法讀取這類檔案。請複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get importEmpty => '裡面沒有可匯入的文字。';
+
+  @override
+  String get importTooLarge => '內容太長，無法作為一個腳本。請複製需要的部分，再使用「貼上為新腳本」。';
+
+  @override
+  String get importLinkOnly => '只收到一個連結，沒有文字。請開啟它，複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get importUnreadable => '無法讀取。請複製文字後使用「貼上為新腳本」。';
+
+  @override
+  String get saveAsTextFile => '另存為文字檔';
+
+  @override
+  String get saveTextFileFailed => '無法建立文字檔。請再試一次。';
 
   @override
   String get mySetup => '我的設定';

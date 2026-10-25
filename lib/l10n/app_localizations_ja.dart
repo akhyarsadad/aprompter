@@ -766,13 +766,75 @@ class AppLocalizationsJa extends AppLocalizations {
   String get letterSpacing => '文字間隔';
 
   @override
-  String get importTextFile => 'テキストファイルを読み込む';
+  String get pasteAsNewScript => '新しい台本として貼り付け';
 
   @override
-  String get importTextFileHint => 'ファイル、ドライブ、メールから .txt や .md の台本を';
+  String get pasteAsNewScriptHint => 'メモ、Keep、Notion、ドキュメントなど、どのアプリでコピーした文章でも';
 
   @override
-  String get importTextFailed => 'ファイルを読み取れませんでした。プレーンテキスト（.txt）ファイルを選んでください。';
+  String get importFiles => 'ファイルを読み込む';
+
+  @override
+  String get importFilesHint =>
+      'Word、テキスト、Markdown、RTF、HTML、Evernote、字幕、バックアップ';
+
+  @override
+  String get clipboardEmpty => '貼り付ける内容がありません。先にほかのアプリで台本をコピーしてください。';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count件の台本を読み込みました',
+      one: '1件の台本を読み込みました',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '無料プランで保存できる台本は$count件です。何も失われていません。メモやファイルは元の場所に残っています。もっと読み込むにはアップグレードしてください。',
+      one: '無料プランで保存できる台本は1件です。何も失われていません。メモやファイルは元の場所に残っています。もっと読み込むにはアップグレードしてください。',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF は読み込めません。PDF を開いて文章をコピーし、「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importOldFormat =>
+      '古い Word（.doc）や Pages のファイルは読み込めません。.docx かテキストで保存するか、文章をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importUnsupported =>
+      'この種類のファイルは APrompter で読み込めません。文章をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importEmpty => '読み込める文章がありません。';
+
+  @override
+  String get importTooLarge =>
+      '1つの台本には長すぎます。必要な部分をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importLinkOnly =>
+      '届いたのはリンクだけで、文章はありませんでした。リンクを開いて文章をコピーし、「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get importUnreadable => '読み取れませんでした。文章をコピーして「新しい台本として貼り付け」を使ってください。';
+
+  @override
+  String get saveAsTextFile => 'テキストファイルとして保存';
+
+  @override
+  String get saveTextFileFailed => 'テキストファイルを作成できませんでした。もう一度お試しください。';
 
   @override
   String get mySetup => 'マイ設定';

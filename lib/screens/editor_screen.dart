@@ -11,6 +11,7 @@ import '../models/templates.dart';
 import '../services/app_state.dart';
 import '../services/entitlements.dart';
 import '../services/floating_prompter.dart';
+import '../services/script_import.dart';
 import '../services/storage.dart';
 import '../widgets/guards.dart';
 import 'camera_prompter_screen.dart';
@@ -23,12 +24,21 @@ class EditorScreen extends StatefulWidget {
 
   final Script script;
 
+  /// Whether an editor for the script with [id] is open, perhaps under
+  /// other screens. A note shared again must not open a second one: the
+  /// editor underneath would later save its older text over the newer.
+  static bool isOpen(String id) =>
+      (_EditorScreenState._openEditors[id] ?? 0) > 0;
+
   @override
   State<EditorScreen> createState() => _EditorScreenState();
 }
 
 class _EditorScreenState extends State<EditorScreen>
     with WidgetsBindingObserver {
+  /// Open editors by script id.
+  static final _openEditors = <String, int>{};
+
   late final _title = TextEditingController(text: widget.script.title);
   late final _body = TextEditingController(text: widget.script.body);
   final _bodyFocus = FocusNode();
@@ -42,6 +52,7 @@ class _EditorScreenState extends State<EditorScreen>
   @override
   void initState() {
     super.initState();
+    _openEditors.update(widget.script.id, (n) => n + 1, ifAbsent: () => 1);
     WidgetsBinding.instance.addObserver(this);
     _title.addListener(_scheduleSave);
     _body.addListener(_scheduleSave);
@@ -315,6 +326,12 @@ class _EditorScreenState extends State<EditorScreen>
 
   @override
   void dispose() {
+    final open = (_openEditors[widget.script.id] ?? 1) - 1;
+    if (open > 0) {
+      _openEditors[widget.script.id] = open;
+    } else {
+      _openEditors.remove(widget.script.id);
+    }
     WidgetsBinding.instance.removeObserver(this);
     _autosave?.cancel();
     _titleDir.dispose();
@@ -740,13 +757,3 @@ class _MarkupToolbar extends StatelessWidget {
     ),
   );
 }
-
-/// Removes what pasting from Google Docs, Word, Notes or WhatsApp brings
-/// along: zero-width characters, non-breaking spaces, tabs, Windows line
-/// ends and list bullets.
-String cleanPastedText(String text) => text
-    .replaceAll('\r\n', '\n')
-    .replaceAll('\r', '\n')
-    .replaceAll(RegExp('[\u200B-\u200D\u2060\uFEFF\u00AD]'), '')
-    .replaceAll(RegExp('[\u00A0\u202F\t]'), ' ')
-    .replaceAll(RegExp(r'^[ ]*[•◦▪▫●○■□‣⁃–—-][ ]+', multiLine: true), '');

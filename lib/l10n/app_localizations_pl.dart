@@ -811,15 +811,85 @@ class AppLocalizationsPl extends AppLocalizations {
   String get letterSpacing => 'Odstęp liter';
 
   @override
-  String get importTextFile => 'Importuj plik tekstowy';
+  String get pasteAsNewScript => 'Wklej jako nowy scenariusz';
 
   @override
-  String get importTextFileHint =>
-      'Scenariusz .txt lub .md z Plików, Dysku lub e-maila';
+  String get pasteAsNewScriptHint =>
+      'Tekst skopiowany z Notatek, Keep, Notion, Dokumentów lub dowolnej aplikacji';
 
   @override
-  String get importTextFailed =>
-      'Nie udało się odczytać pliku. Wybierz zwykły plik tekstowy (.txt).';
+  String get importFiles => 'Importuj pliki';
+
+  @override
+  String get importFilesHint =>
+      'Word, tekst, Markdown, RTF, HTML, Evernote, napisy lub kopia zapasowa';
+
+  @override
+  String get clipboardEmpty =>
+      'Nie ma czego wkleić. Najpierw skopiuj scenariusz w innej aplikacji.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Zaimportowano $count scenariusza',
+      many: 'Zaimportowano $count scenariuszy',
+      few: 'Zaimportowano $count scenariusze',
+      one: 'Zaimportowano 1 scenariusz',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Plan darmowy obejmuje $count scenariusza. Nic nie zginęło: notatka lub plik są tam, gdzie były. Odblokuj, aby importować więcej.',
+      many:
+          'Plan darmowy obejmuje $count scenariuszy. Nic nie zginęło: notatka lub plik są tam, gdzie były. Odblokuj, aby importować więcej.',
+      few:
+          'Plan darmowy obejmuje $count scenariusze. Nic nie zginęło: notatka lub plik są tam, gdzie były. Odblokuj, aby importować więcej.',
+      one: 'Plan darmowy obejmuje 1 scenariusz. Nic nie zginęło: notatka lub plik są tam, gdzie były. Odblokuj, aby importować więcej.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Nie można importować plików PDF. Otwórz PDF, skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.';
+
+  @override
+  String get importOldFormat =>
+      'Starych plików Worda (.doc) i Pages nie da się odczytać. Zapisz plik jako .docx lub tekst albo skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.';
+
+  @override
+  String get importUnsupported =>
+      'APrompter nie odczyta tego typu pliku. Skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.';
+
+  @override
+  String get importEmpty => 'Nie ma tu tekstu do zaimportowania.';
+
+  @override
+  String get importTooLarge =>
+      'To za dużo na jeden scenariusz. Skopiuj potrzebną część i użyj opcji „Wklej jako nowy scenariusz”.';
+
+  @override
+  String get importLinkOnly =>
+      'Dotarł tylko link, bez tekstu. Otwórz go, skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.';
+
+  @override
+  String get importUnreadable =>
+      'Nie udało się tego odczytać. Skopiuj tekst i użyj opcji „Wklej jako nowy scenariusz”.';
+
+  @override
+  String get saveAsTextFile => 'Zapisz jako plik tekstowy';
+
+  @override
+  String get saveTextFileFailed =>
+      'Nie udało się utworzyć pliku tekstowego. Spróbuj ponownie.';
 
   @override
   String get mySetup => 'Moja konfiguracja';

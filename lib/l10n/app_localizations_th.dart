@@ -774,15 +774,77 @@ class AppLocalizationsTh extends AppLocalizations {
   String get letterSpacing => 'ระยะห่างตัวอักษร';
 
   @override
-  String get importTextFile => 'นำเข้าไฟล์ข้อความ';
+  String get pasteAsNewScript => 'วางเป็นสคริปต์ใหม่';
 
   @override
-  String get importTextFileHint =>
-      'สคริปต์ .txt หรือ .md จากไฟล์ ไดรฟ์ หรืออีเมล';
+  String get pasteAsNewScriptHint =>
+      'ข้อความที่คัดลอกจากโน้ต, Keep, Notion, Docs หรือแอปใดก็ได้';
 
   @override
-  String get importTextFailed =>
-      'อ่านไฟล์นั้นไม่ได้ เลือกไฟล์ข้อความธรรมดา (.txt)';
+  String get importFiles => 'นำเข้าไฟล์';
+
+  @override
+  String get importFilesHint =>
+      'Word, ข้อความ, Markdown, RTF, HTML, Evernote, คำบรรยาย หรือข้อมูลสำรอง';
+
+  @override
+  String get clipboardEmpty => 'ไม่มีอะไรให้วาง คัดลอกสคริปต์ในแอปอื่นก่อน';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'นำเข้า $count สคริปต์แล้ว',
+      one: 'นำเข้า 1 สคริปต์แล้ว',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'แพ็กเกจฟรีเก็บได้ $count สคริปต์ ไม่มีอะไรหาย โน้ตหรือไฟล์ของคุณยังอยู่ที่เดิม อัปเกรดเพื่อนำเข้าเพิ่ม',
+      one: 'แพ็กเกจฟรีเก็บได้ 1 สคริปต์ ไม่มีอะไรหาย โน้ตหรือไฟล์ของคุณยังอยู่ที่เดิม อัปเกรดเพื่อนำเข้าเพิ่ม',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'นำเข้า PDF ไม่ได้ เปิด PDF คัดลอกข้อความ แล้วใช้ \"วางเป็นสคริปต์ใหม่\"';
+
+  @override
+  String get importOldFormat =>
+      'อ่านไฟล์ Word แบบเก่า (.doc) และไฟล์ Pages ไม่ได้ บันทึกเป็น .docx หรือข้อความ หรือคัดลอกข้อความแล้วใช้ \"วางเป็นสคริปต์ใหม่\"';
+
+  @override
+  String get importUnsupported =>
+      'APrompter อ่านไฟล์ประเภทนี้ไม่ได้ คัดลอกข้อความแล้วใช้ \"วางเป็นสคริปต์ใหม่\"';
+
+  @override
+  String get importEmpty => 'ไม่มีข้อความให้นำเข้า';
+
+  @override
+  String get importTooLarge =>
+      'ยาวเกินไปสำหรับสคริปต์เดียว คัดลอกส่วนที่ต้องการแล้วใช้ \"วางเป็นสคริปต์ใหม่\"';
+
+  @override
+  String get importLinkOnly =>
+      'ได้มาแค่ลิงก์ ไม่ใช่ข้อความ เปิดลิงก์ คัดลอกข้อความ แล้วใช้ \"วางเป็นสคริปต์ใหม่\"';
+
+  @override
+  String get importUnreadable =>
+      'อ่านไม่ได้ คัดลอกข้อความแล้วใช้ \"วางเป็นสคริปต์ใหม่\"';
+
+  @override
+  String get saveAsTextFile => 'บันทึกเป็นไฟล์ข้อความ';
+
+  @override
+  String get saveTextFileFailed => 'สร้างไฟล์ข้อความไม่ได้ ลองอีกครั้ง';
 
   @override
   String get mySetup => 'ค่าของฉัน';

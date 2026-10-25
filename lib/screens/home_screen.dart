@@ -14,8 +14,11 @@ import '../services/app_state.dart';
 import '../services/backup.dart';
 import '../services/entitlements.dart';
 import '../services/floating_prompter.dart';
+import '../services/incoming_shares.dart';
+import '../services/script_import.dart';
 import '../services/storage.dart';
 import '../services/system_settings.dart';
+import '../widgets/app_lock.dart';
 import '../widgets/guards.dart';
 import '../widgets/settings_sheet.dart';
 import 'camera_prompter_screen.dart';
@@ -37,21 +40,82 @@ class _HomeScreenState extends State<HomeScreen> {
   ScriptStatus? _filter;
   String _query = '';
 
+  /// Notes and files shared to APrompter from other apps.
+  final _shares = IncomingShares();
+  bool _taking = false;
+  bool _takeAgain = false;
+  bool _waitingForUnlock = false;
+
   // F9: pace changed in the floating window is picked up on return.
   late final _lifecycle = AppLifecycleListener(
-    onResume: () => AppScope.read(context).reloadSettings(),
+    onResume: () {
+      AppScope.read(context).reloadSettings();
+      _scheduleTake();
+    },
   );
 
   @override
   void initState() {
     super.initState();
     _lifecycle;
+    _shares.listen(_scheduleTake);
+    // Shared before the app was running (cold start).
+    _scheduleTake();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Subscribes to the app lock: whatever was shared while locked comes in
+    // once it is unlocked.
+    if (!AppLockGate.lockedOf(context) && _waitingForUnlock) {
+      _waitingForUnlock = false;
+      _scheduleTake();
+    }
+  }
+
+  /// Takes shares after the next frame. Frames only run while the app is on
+  /// screen, and by then a returning app lock is already up — Android can
+  /// announce a share before the app is even shown again.
+  void _scheduleTake() {
+    WidgetsBinding.instance
+      ..addPostFrameCallback((_) => _takeShares())
+      ..scheduleFrame();
   }
 
   @override
   void dispose() {
+    _shares.dispose();
     _lifecycle.dispose();
     super.dispose();
+  }
+
+  /// Brings in what other apps shared: on start, when the app comes back
+  /// and when native code says something arrived. Never twice at once, and
+  /// never behind the app lock.
+  Future<void> _takeShares() async {
+    if (!mounted) return;
+    if (AppLockGate.isLocked(context)) {
+      _waitingForUnlock = true;
+      return;
+    }
+    if (_taking) {
+      _takeAgain = true;
+      return;
+    }
+    _taking = true;
+    try {
+      do {
+        _takeAgain = false;
+        final shares = await _shares.takePending();
+        if (shares.isEmpty || !mounted) continue;
+        final results = [for (final share in shares) await importShare(share)];
+        if (!mounted) return;
+        await _addImports(context, results);
+      } while (_takeAgain && mounted);
+    } finally {
+      _taking = false;
+    }
   }
 
   @override
@@ -279,7 +343,7 @@ Future<void> _newScript(BuildContext context) async {
     return;
   }
   final l = context.l10n;
-  final template = await showModalBottomSheet<ScriptTemplate>(
+  final choice = await showModalBottomSheet<Object>(
     context: context,
     showDragHandle: true,
     isScrollControlled: true,
@@ -296,10 +360,16 @@ Future<void> _newScript(BuildContext context) async {
           ),
           // W12: bring in a script written elsewhere.
           ListTile(
+            leading: const Icon(Icons.content_paste),
+            title: Text(l.pasteAsNewScript),
+            subtitle: Text(l.pasteAsNewScriptHint),
+            onTap: () => Navigator.pop(context, _Bring.paste),
+          ),
+          ListTile(
             leading: const Icon(Icons.upload_file),
-            title: Text(l.importTextFile),
-            subtitle: Text(l.importTextFileHint),
-            onTap: () => Navigator.pop(context, _importMarker),
+            title: Text(l.importFiles),
+            subtitle: Text(l.importFilesHint),
+            onTap: () => Navigator.pop(context, _Bring.files),
           ),
           for (final t in scriptTemplates(l))
             ListTile(
@@ -316,16 +386,23 @@ Future<void> _newScript(BuildContext context) async {
       ),
     ),
   );
-  if (template == null || !context.mounted) return;
-  if (identical(template, _importMarker)) return _importTextFile(context);
-  final script = Storage.newScript().copyWith(
-    body: template.body,
-    targetSeconds: () => template.body.isEmpty ? null : 60,
-  );
-  _edit(context, script);
+  if (choice == null || !context.mounted) return;
+  switch (choice) {
+    case _Bring.paste:
+      return _pasteAsNewScript(context);
+    case _Bring.files:
+      return _importFiles(context);
+    case ScriptTemplate template:
+      final script = Storage.newScript().copyWith(
+        body: template.body,
+        targetSeconds: () => template.body.isEmpty ? null : 60,
+      );
+      _edit(context, script);
+  }
 }
 
-const _importMarker = ScriptTemplate('', '', '');
+/// Ways to bring in a script written elsewhere, from the New script sheet.
+enum _Bring { paste, files }
 
 /// F2: phone makers that close floating windows to save battery.
 const _aggressiveOems = {
@@ -387,36 +464,173 @@ Future<void> _oemTipsOnce(BuildContext context, String manufacturer) async {
   );
 }
 
-/// Opens a .txt / .md file as a new script.
-Future<void> _importTextFile(BuildContext context) async {
+/// Makes a script of what is on the clipboard — copied from Notes, Keep,
+/// Notion, Docs, a chat…
+Future<void> _pasteAsNewScript(BuildContext context) async {
   final l = context.l10n;
   final messenger = ScaffoldMessenger.of(context);
-  final file = await FilePicker.pickFile(
-    type: FileType.custom,
-    allowedExtensions: const ['txt', 'md', 'text'],
-  );
-  if (file == null || !context.mounted) return;
   String? text;
   try {
-    final bytes = await file.readAsBytes();
-    text = bytes.length > 2000000
-        ? null
-        : utf8.decode(bytes, allowMalformed: true);
+    text = (await Clipboard.getData(Clipboard.kTextPlain))?.text;
   } catch (_) {
     text = null;
   }
-  if (text == null || text.trim().isEmpty || !context.mounted) {
-    messenger.showSnackBar(SnackBar(content: Text(l.importTextFailed)));
+  if (!context.mounted) return;
+  if (text == null || text.trim().isEmpty) {
+    messenger.showSnackBar(SnackBar(content: Text(l.clipboardEmpty)));
     return;
   }
-  final name = file.name.replaceFirst(RegExp(r'\.[^.]*$'), '');
-  final script = Storage.newScript().copyWith(
-    title: name,
-    body: cleanPastedText(text),
-  );
-  await AppScope.read(context).upsert(script);
-  if (context.mounted) _edit(context, script);
+  final result = await importFromTextAsync(text);
+  if (!context.mounted) return;
+  await _addImports(context, [result]);
 }
+
+/// Imports any files: text, Markdown, Word, RTF, HTML, Evernote, subtitles
+/// or an APrompter backup. Any type can be picked (Android's picker fails on
+/// extensions it can't map to a type); what isn't a script says why.
+Future<void> _importFiles(BuildContext context) async {
+  final l = context.l10n;
+  final messenger = ScaffoldMessenger.of(context);
+  List<PlatformFile> files;
+  try {
+    files = await FilePicker.pickFiles();
+  } catch (_) {
+    // PlatformException from the picker, or no picker on this platform.
+    messenger.showSnackBar(SnackBar(content: Text(l.importUnreadable)));
+    return;
+  }
+  if (files.isEmpty || !context.mounted) return;
+  final results = <ImportResult>[];
+  for (final file in files) {
+    final size = file.lengthSync();
+    if (size != null && size > maxImportBytes) {
+      results.add(const ImportFailed(ImportFailure.tooLarge));
+      continue;
+    }
+    try {
+      final bytes = await file.readAsBytes();
+      results.add(await importFromFileAsync(file.name, bytes));
+    } catch (_) {
+      results.add(const ImportFailed(ImportFailure.unreadable));
+    }
+  }
+  if (!context.mounted) return;
+  await _addImports(context, results);
+}
+
+/// Adds imported scripts to the library. Each new script respects the free
+/// plan like New script does; one script opens in the editor, several are
+/// counted, and anything that failed says why and what to do.
+///
+/// Backups merge without the free-plan check, like "Restore from a backup"
+/// in the library menu, which takes the very same file: they bring back the
+/// person's own scripts.
+Future<void> _addImports(
+  BuildContext context,
+  List<ImportResult> results,
+) async {
+  final l = context.l10n;
+  final state = AppScope.read(context);
+  final entitlements = EntitlementsScope.read(context);
+  final messenger = ScaffoldMessenger.of(context);
+  final shown = <Script>[]; // what this import brought, new or already here
+  var created = 0;
+  int? restored;
+  ImportFailure? failure;
+  var askedToUpgrade = false;
+  var blocked = false;
+
+  bool canAdd() => canCreateScript(
+    state.scriptsCountingTowardFreeLimit,
+    entitlements.isUnlimited,
+  );
+
+  for (final result in results) {
+    switch (result) {
+      case ImportFailed(:final reason):
+        failure ??= reason;
+      case ImportedBackup(:final scripts):
+        restored = (restored ?? 0) + await state.importScripts(scripts);
+      case ImportedScripts(:final scripts):
+        for (final imported in scripts) {
+          final title = imported.title ?? '';
+          // The same note shared twice opens the copy already here. An
+          // import without a title was saved as "Untitled" by the editor.
+          final existing = state.scripts
+              .where(
+                (s) =>
+                    s.body == imported.body &&
+                    (s.title == title ||
+                        (title.isEmpty && s.title == l.untitled)),
+              )
+              .firstOrNull;
+          if (existing != null) {
+            if (!shown.any((s) => s.id == existing.id)) shown.add(existing);
+            continue;
+          }
+          // Past the free plan nothing new is added, but backups and
+          // failures later in the batch still come through.
+          if (blocked) continue;
+          if (!canAdd() && !askedToUpgrade && context.mounted) {
+            askedToUpgrade = true;
+            await showUpgradeFlow(context);
+          }
+          if (!canAdd()) {
+            blocked = true;
+            continue;
+          }
+          final script = Storage.newScript().copyWith(
+            title: title,
+            body: imported.body,
+          );
+          await state.upsert(script);
+          shown.add(script);
+          created++;
+        }
+    }
+  }
+  if (!context.mounted) return;
+  const long = Duration(seconds: 8);
+  if (restored != null) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(l.importedScripts(restored))),
+    );
+  }
+  if (blocked) {
+    // Nothing is lost: the note or file is still in the other app.
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(l.importFreeLimit(maxFreeScripts)),
+        duration: long,
+      ),
+    );
+  }
+  if (failure != null) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(_failureText(l, failure)), duration: long),
+    );
+  }
+  if (shown.length == 1) {
+    // Already open (shared again while editing it): that editor stays the
+    // only one, so it can't be overwritten by an older copy.
+    if (!EditorScreen.isOpen(shown.single.id)) _edit(context, shown.single);
+  } else if (created > 0) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(l.importedNewScripts(created))),
+    );
+  }
+}
+
+String _failureText(AppLocalizations l, ImportFailure failure) =>
+    switch (failure) {
+      ImportFailure.unsupportedFormat => l.importUnsupported,
+      ImportFailure.pdf => l.importPdf,
+      ImportFailure.binaryDocument => l.importOldFormat,
+      ImportFailure.empty => l.importEmpty,
+      ImportFailure.tooLarge => l.importTooLarge,
+      ImportFailure.linkOnly => l.importLinkOnly,
+      ImportFailure.unreadable => l.importUnreadable,
+    };
 
 void _edit(BuildContext context, Script script) => Navigator.push(
   context,
@@ -427,6 +641,7 @@ enum _Action {
   edit,
   duplicate,
   share,
+  saveText,
   caption,
   takes,
   draft,
@@ -502,6 +717,32 @@ class _ScriptCard extends StatelessWidget {
                 : box.localToGlobal(Offset.zero) & box.size,
           ),
         );
+      case _Action.saveText:
+        // A .txt any notes app, Files or a computer opens; importing it
+        // gives the same script back.
+        final box = context.findRenderObject() as RenderBox?;
+        final name = textFileName(script.title, fallback: l.untitled);
+        try {
+          await SharePlus.instance.share(
+            ShareParams(
+              title: script.title.isEmpty ? l.untitled : script.title,
+              files: [
+                XFile.fromData(
+                  utf8.encode(scriptAsText(script.title, script.body)),
+                  mimeType: 'text/plain',
+                  name: name,
+                ),
+              ],
+              fileNameOverrides: [name],
+              sharePositionOrigin: box == null
+                  ? null
+                  : box.localToGlobal(Offset.zero) & box.size,
+            ),
+          );
+        } catch (_) {
+          // The temporary file couldn't be written (storage full…).
+          messenger.showSnackBar(SnackBar(content: Text(l.saveTextFileFailed)));
+        }
       case _Action.caption:
         if (!ensureSpeakable(context, script)) return;
         await Clipboard.setData(ClipboardData(text: captionText(script.body)));
@@ -576,6 +817,11 @@ class _ScriptCard extends StatelessWidget {
                       _item(_Action.edit, Icons.edit_outlined, l.edit),
                       _item(_Action.duplicate, Icons.copy_all, l.duplicate),
                       _item(_Action.share, Icons.share_outlined, l.share),
+                      _item(
+                        _Action.saveText,
+                        Icons.description_outlined,
+                        l.saveAsTextFile,
+                      ),
                       _item(
                         _Action.caption,
                         Icons.closed_caption_outlined,

@@ -780,15 +780,78 @@ class AppLocalizationsUr extends AppLocalizations {
   String get letterSpacing => 'حروف کا فاصلہ';
 
   @override
-  String get importTextFile => 'ٹیکسٹ فائل درآمد کریں';
+  String get pasteAsNewScript => 'نئے اسکرپٹ کے طور پر پیسٹ کریں';
 
   @override
-  String get importTextFileHint =>
-      'فائلز، Drive یا ای میل سے .txt یا .md اسکرپٹ';
+  String get pasteAsNewScriptHint =>
+      'نوٹس، Keep، Notion، Docs یا کسی بھی ایپ سے کاپی کیا گیا ٹیکسٹ';
 
   @override
-  String get importTextFailed =>
-      'یہ فائل نہیں پڑھی جا سکی۔ سادہ ٹیکسٹ (.txt) فائل چنیں۔';
+  String get importFiles => 'فائلیں درآمد کریں';
+
+  @override
+  String get importFilesHint =>
+      'Word، ٹیکسٹ، Markdown، RTF، HTML، Evernote، سب ٹائٹلز یا بیک اپ';
+
+  @override
+  String get clipboardEmpty =>
+      'پیسٹ کرنے کو کچھ نہیں۔ پہلے دوسری ایپ میں اپنا اسکرپٹ کاپی کریں۔';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count اسکرپٹس درآمد ہوئے',
+      one: '1 اسکرپٹ درآمد ہوا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'مفت پلان میں $count اسکرپٹس رکھے جا سکتے ہیں۔ کچھ ضائع نہیں ہوا: آپ کا نوٹ یا فائل اپنی جگہ موجود ہے۔ مزید درآمد کرنے کے لیے اپ گریڈ کریں۔',
+      one: 'مفت پلان میں 1 اسکرپٹ رکھا جا سکتا ہے۔ کچھ ضائع نہیں ہوا: آپ کا نوٹ یا فائل اپنی جگہ موجود ہے۔ مزید درآمد کرنے کے لیے اپ گریڈ کریں۔',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF درآمد نہیں ہو سکتیں۔ PDF کھولیں، ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importOldFormat =>
+      'پرانی Word (.doc) اور Pages فائلیں نہیں پڑھی جا سکتیں۔ اسے .docx یا ٹیکسٹ کے طور پر محفوظ کریں، یا ٹیکسٹ کاپی کر کے \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importUnsupported =>
+      'APrompter اس قسم کی فائل نہیں پڑھ سکتا۔ ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importEmpty => 'اس میں درآمد کرنے کے لیے کوئی ٹیکسٹ نہیں۔';
+
+  @override
+  String get importTooLarge =>
+      'یہ ایک اسکرپٹ کے لیے بہت لمبا ہے۔ ضرورت کا حصہ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importLinkOnly =>
+      'صرف ایک لنک آیا، ٹیکسٹ نہیں۔ اسے کھولیں، ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get importUnreadable =>
+      'پڑھا نہیں جا سکا۔ ٹیکسٹ کاپی کریں اور \"نئے اسکرپٹ کے طور پر پیسٹ کریں\" استعمال کریں۔';
+
+  @override
+  String get saveAsTextFile => 'ٹیکسٹ فائل کے طور پر محفوظ کریں';
+
+  @override
+  String get saveTextFileFailed => 'ٹیکسٹ فائل نہیں بن سکی۔ دوبارہ کوشش کریں۔';
 
   @override
   String get mySetup => 'میرا سیٹ اپ';

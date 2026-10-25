@@ -804,15 +804,79 @@ class AppLocalizationsNl extends AppLocalizations {
   String get letterSpacing => 'Letterafstand';
 
   @override
-  String get importTextFile => 'Tekstbestand importeren';
+  String get pasteAsNewScript => 'Plakken als nieuw script';
 
   @override
-  String get importTextFileHint =>
-      'Een .txt- of .md-script uit Bestanden, Drive of e-mail';
+  String get pasteAsNewScriptHint =>
+      'Tekst gekopieerd uit Notities, Keep, Notion, Docs of elke andere app';
 
   @override
-  String get importTextFailed =>
-      'Kan dat bestand niet lezen. Kies een platte-tekstbestand (.txt).';
+  String get importFiles => 'Bestanden importeren';
+
+  @override
+  String get importFilesHint =>
+      'Word, tekst, Markdown, RTF, HTML, Evernote, ondertitels of een back-up';
+
+  @override
+  String get clipboardEmpty =>
+      'Niets om te plakken. Kopieer je script eerst in de andere app.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count scripts geïmporteerd',
+      one: '1 script geïmporteerd',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Het gratis abonnement bevat $count scripts. Er is niets verloren: je notitie of bestand staat nog waar het stond. Upgrade om meer te importeren.',
+      one: 'Het gratis abonnement bevat 1 script. Er is niets verloren: je notitie of bestand staat nog waar het stond. Upgrade om meer te importeren.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'Pdf\'s kunnen niet worden geïmporteerd. Open de pdf, kopieer de tekst en gebruik \"Plakken als nieuw script\".';
+
+  @override
+  String get importOldFormat =>
+      'Oude Word-bestanden (.doc) en Pages-bestanden kunnen niet worden gelezen. Sla het op als .docx of tekst, of kopieer de tekst en gebruik \"Plakken als nieuw script\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter kan dit soort bestand niet lezen. Kopieer de tekst en gebruik \"Plakken als nieuw script\".';
+
+  @override
+  String get importEmpty => 'Er staat geen tekst in om te importeren.';
+
+  @override
+  String get importTooLarge =>
+      'Dat is te lang voor één script. Kopieer het deel dat je nodig hebt en gebruik \"Plakken als nieuw script\".';
+
+  @override
+  String get importLinkOnly =>
+      'Er kwam alleen een link door, niet de tekst. Open hem, kopieer de tekst en gebruik \"Plakken als nieuw script\".';
+
+  @override
+  String get importUnreadable =>
+      'Kan dat niet lezen. Kopieer de tekst en gebruik \"Plakken als nieuw script\".';
+
+  @override
+  String get saveAsTextFile => 'Opslaan als tekstbestand';
+
+  @override
+  String get saveTextFileFailed =>
+      'Kan het tekstbestand niet maken. Probeer het opnieuw.';
 
   @override
   String get mySetup => 'Mijn opstelling';

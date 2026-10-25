@@ -11,8 +11,27 @@ class AppLockGate extends StatefulWidget {
 
   final Widget child;
 
+  /// Whether the lock screen currently hides the app; [context] rebuilds
+  /// (and gets `didChangeDependencies`) when that changes. False without a
+  /// gate above [context].
+  static bool lockedOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_LockState>()?.locked ?? false;
+
+  /// [lockedOf] without subscribing, for callbacks.
+  static bool isLocked(BuildContext context) =>
+      context.getInheritedWidgetOfExactType<_LockState>()?.locked ?? false;
+
   @override
   State<AppLockGate> createState() => _AppLockGateState();
+}
+
+class _LockState extends InheritedWidget {
+  const _LockState({required this.locked, required super.child});
+
+  final bool locked;
+
+  @override
+  bool updateShouldNotify(_LockState old) => old.locked != locked;
 }
 
 class _AppLockGateState extends State<AppLockGate> {
@@ -69,35 +88,43 @@ class _AppLockGateState extends State<AppLockGate> {
   @override
   Widget build(BuildContext context) {
     final locked = _locked && AppScope.of(context).appLock;
-    return Stack(
-      children: [
-        // Kept alive underneath so nothing in progress is lost.
-        Offstage(offstage: locked, child: widget.child),
-        if (locked)
-          Positioned.fill(
-            child: Material(
-              color: Theme.of(context).colorScheme.surface,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.lock_outline,
-                      size: 56,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(height: 16),
-                    FilledButton.icon(
-                      onPressed: _unlock,
-                      icon: const Icon(Icons.fingerprint),
-                      label: Text(context.l10n.unlock),
-                    ),
-                  ],
+    // Things shared to APrompter wait for this to turn false (see HomeScreen),
+    // so nothing opens or asks for anything behind the lock screen.
+    return _LockState(
+      locked: locked,
+      // Expand: while locked the app underneath is offstage and has no size,
+      // and the lock screen would otherwise be zero pixels wide.
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Kept alive underneath so nothing in progress is lost.
+          Offstage(offstage: locked, child: widget.child),
+          if (locked)
+            Positioned.fill(
+              child: Material(
+                color: Theme.of(context).colorScheme.surface,
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.lock_outline,
+                        size: 56,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(height: 16),
+                      FilledButton.icon(
+                        onPressed: _unlock,
+                        icon: const Icon(Icons.fingerprint),
+                        label: Text(context.l10n.unlock),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

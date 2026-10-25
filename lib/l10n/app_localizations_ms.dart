@@ -782,15 +782,78 @@ class AppLocalizationsMs extends AppLocalizations {
   String get letterSpacing => 'Jarak huruf';
 
   @override
-  String get importTextFile => 'Import fail teks';
+  String get pasteAsNewScript => 'Tampal sebagai skrip baharu';
 
   @override
-  String get importTextFileHint =>
-      'Skrip .txt atau .md daripada Fail, Drive atau e-mel';
+  String get pasteAsNewScriptHint =>
+      'Teks yang disalin daripada Nota, Keep, Notion, Docs atau mana-mana apl';
 
   @override
-  String get importTextFailed =>
-      'Fail itu tidak dapat dibaca. Pilih fail teks biasa (.txt).';
+  String get importFiles => 'Import fail';
+
+  @override
+  String get importFilesHint =>
+      'Word, teks, Markdown, RTF, HTML, Evernote, sari kata atau sandaran';
+
+  @override
+  String get clipboardEmpty =>
+      'Tiada apa-apa untuk ditampal. Salin skrip anda dalam apl lain dahulu.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count skrip diimport',
+      one: '1 skrip diimport',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Pelan percuma memuatkan $count skrip. Tiada apa-apa yang hilang: nota atau fail anda masih di tempatnya. Naik taraf untuk mengimport lebih banyak.',
+      one: 'Pelan percuma memuatkan 1 skrip. Tiada apa-apa yang hilang: nota atau fail anda masih di tempatnya. Naik taraf untuk mengimport lebih banyak.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'PDF tidak boleh diimport. Buka PDF, salin teksnya, kemudian gunakan \"Tampal sebagai skrip baharu\".';
+
+  @override
+  String get importOldFormat =>
+      'Fail Word lama (.doc) dan Pages tidak dapat dibaca. Simpan sebagai .docx atau teks, atau salin teksnya dan gunakan \"Tampal sebagai skrip baharu\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter tidak dapat membaca jenis fail itu. Salin teksnya dan gunakan \"Tampal sebagai skrip baharu\".';
+
+  @override
+  String get importEmpty => 'Tiada teks untuk diimport.';
+
+  @override
+  String get importTooLarge =>
+      'Terlalu panjang untuk satu skrip. Salin bahagian yang anda perlukan dan gunakan \"Tampal sebagai skrip baharu\".';
+
+  @override
+  String get importLinkOnly =>
+      'Hanya pautan yang diterima, bukan teksnya. Bukanya, salin teksnya dan gunakan \"Tampal sebagai skrip baharu\".';
+
+  @override
+  String get importUnreadable =>
+      'Tidak dapat dibaca. Salin teksnya dan gunakan \"Tampal sebagai skrip baharu\".';
+
+  @override
+  String get saveAsTextFile => 'Simpan sebagai fail teks';
+
+  @override
+  String get saveTextFileFailed => 'Fail teks tidak dapat dibuat. Cuba lagi.';
 
   @override
   String get mySetup => 'Persediaan saya';

@@ -1487,23 +1487,101 @@ abstract class AppLocalizations {
   /// **'Letter spacing'**
   String get letterSpacing;
 
-  /// No description provided for @importTextFile.
+  /// No description provided for @pasteAsNewScript.
   ///
   /// In en, this message translates to:
-  /// **'Import a text file'**
-  String get importTextFile;
+  /// **'Paste as new script'**
+  String get pasteAsNewScript;
 
-  /// No description provided for @importTextFileHint.
+  /// No description provided for @pasteAsNewScriptHint.
   ///
   /// In en, this message translates to:
-  /// **'A .txt or .md script from Files, Drive or email'**
-  String get importTextFileHint;
+  /// **'Text copied from Notes, Keep, Notion, Docs or any app'**
+  String get pasteAsNewScriptHint;
 
-  /// No description provided for @importTextFailed.
+  /// No description provided for @importFiles.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t read that file. Pick a plain text (.txt) file.'**
-  String get importTextFailed;
+  /// **'Import files'**
+  String get importFiles;
+
+  /// No description provided for @importFilesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Word, text, Markdown, RTF, HTML, Evernote, subtitles or a backup'**
+  String get importFilesHint;
+
+  /// No description provided for @clipboardEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to paste. Copy your script in the other app first.'**
+  String get clipboardEmpty;
+
+  /// No description provided for @importedNewScripts.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 script imported} other{{count} scripts imported}}'**
+  String importedNewScripts(int count);
+
+  /// No description provided for @importFreeLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{The free plan holds 1 script. Nothing is lost: your note or file is still where it was. Upgrade to import more.} other{The free plan holds {count} scripts. Nothing is lost: your note or file is still where it was. Upgrade to import more.}}'**
+  String importFreeLimit(int count);
+
+  /// No description provided for @importPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDFs can\'t be imported. Open the PDF, copy the text, then use Paste as new script.'**
+  String get importPdf;
+
+  /// No description provided for @importOldFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Old Word (.doc) and Pages files can\'t be read. Save as .docx or text, or copy the text and use Paste as new script.'**
+  String get importOldFormat;
+
+  /// No description provided for @importUnsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'APrompter can\'t read that kind of file. Copy the text and use Paste as new script.'**
+  String get importUnsupported;
+
+  /// No description provided for @importEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'There\'s no text in it to import.'**
+  String get importEmpty;
+
+  /// No description provided for @importTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s too big for one script. Copy the part you need and use Paste as new script.'**
+  String get importTooLarge;
+
+  /// No description provided for @importLinkOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a link came through, not the text. Open it, copy the text and use Paste as new script.'**
+  String get importLinkOnly;
+
+  /// No description provided for @importUnreadable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read that. Copy the text and use Paste as new script.'**
+  String get importUnreadable;
+
+  /// No description provided for @saveAsTextFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as text file'**
+  String get saveAsTextFile;
+
+  /// No description provided for @saveTextFileFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t create the text file. Try again.'**
+  String get saveTextFileFailed;
 
   /// No description provided for @mySetup.
   ///

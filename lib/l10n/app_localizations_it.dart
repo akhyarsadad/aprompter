@@ -799,15 +799,79 @@ class AppLocalizationsIt extends AppLocalizations {
   String get letterSpacing => 'Spaziatura lettere';
 
   @override
-  String get importTextFile => 'Importa un file di testo';
+  String get pasteAsNewScript => 'Incolla come nuovo copione';
 
   @override
-  String get importTextFileHint =>
-      'Un copione .txt o .md da File, Drive o email';
+  String get pasteAsNewScriptHint =>
+      'Testo copiato da Note, Keep, Notion, Documenti o qualsiasi app';
 
   @override
-  String get importTextFailed =>
-      'Impossibile leggere il file. Scegli un file di testo semplice (.txt).';
+  String get importFiles => 'Importa file';
+
+  @override
+  String get importFilesHint =>
+      'Word, testo, Markdown, RTF, HTML, Evernote, sottotitoli o un backup';
+
+  @override
+  String get clipboardEmpty =>
+      'Niente da incollare. Copia prima il copione nell\'altra app.';
+
+  @override
+  String importedNewScripts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count copioni importati',
+      one: '1 copione importato',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String importFreeLimit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          'Il piano gratuito include $count copioni. Non si è perso nulla: la nota o il file è ancora dov\'era. Sblocca per importarne altri.',
+      one: 'Il piano gratuito include 1 copione. Non si è perso nulla: la nota o il file è ancora dov\'era. Sblocca per importarne altri.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get importPdf =>
+      'I PDF non si possono importare. Apri il PDF, copia il testo e usa \"Incolla come nuovo copione\".';
+
+  @override
+  String get importOldFormat =>
+      'I vecchi file Word (.doc) e Pages non si possono leggere. Salvalo come .docx o testo, oppure copia il testo e usa \"Incolla come nuovo copione\".';
+
+  @override
+  String get importUnsupported =>
+      'APrompter non può leggere questo tipo di file. Copia il testo e usa \"Incolla come nuovo copione\".';
+
+  @override
+  String get importEmpty => 'Non c\'è testo da importare.';
+
+  @override
+  String get importTooLarge =>
+      'È troppo lungo per un solo copione. Copia la parte che ti serve e usa \"Incolla come nuovo copione\".';
+
+  @override
+  String get importLinkOnly =>
+      'È arrivato solo un link, non il testo. Aprilo, copia il testo e usa \"Incolla come nuovo copione\".';
+
+  @override
+  String get importUnreadable =>
+      'Impossibile leggerlo. Copia il testo e usa \"Incolla come nuovo copione\".';
+
+  @override
+  String get saveAsTextFile => 'Salva come file di testo';
+
+  @override
+  String get saveTextFileFailed =>
+      'Impossibile creare il file di testo. Riprova.';
 
   @override
   String get mySetup => 'La mia configurazione';
