@@ -723,15 +723,23 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // The shutter sits in the middle, like any camera app,
+                  // with the other buttons shared out on either side.
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _RoundButton(
-                        icon: Icons.close,
-                        tooltip: context.l10n.close,
-                        onPressed: _recording || _saving
-                            ? null
-                            : () => Navigator.maybePop(context),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _RoundButton(
+                              icon: Icons.close,
+                              tooltip: context.l10n.close,
+                              onPressed: _recording || _saving
+                                  ? null
+                                  : () => Navigator.maybePop(context),
+                            ),
+                          ],
+                        ),
                       ),
                       _RecordButton(
                         recording: _recording,
@@ -739,32 +747,39 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                         enabled: camera != null,
                         onPressed: _onRecordPressed,
                       ),
-                      _RoundButton(
-                        icon: Icons.tune,
-                        tooltip: context.l10n.settings,
-                        onPressed: _recording
-                            ? null
-                            : () => showSettingsSheet(
-                                context,
-                                settings: settings,
-                                script: widget.script,
-                                onChanged: (s) async {
-                                  final qualityChanged =
-                                      s.videoQuality !=
-                                      state.settings.videoQuality;
-                                  await state.updateSettings(s);
-                                  _prompter.wpm = s.wpm;
-                                  setBrightScreen(s.brightScreen);
-                                  if (qualityChanged) await _openCamera();
-                                },
-                              ).then((_) => _prompter.focus()),
-                      ),
-                      _RoundButton(
-                        icon: Icons.cameraswitch,
-                        tooltip: context.l10n.switchCamera,
-                        onPressed: _cameras.length > 1 && !_recording
-                            ? _switchCamera
-                            : null,
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _RoundButton(
+                              icon: Icons.tune,
+                              tooltip: context.l10n.settings,
+                              onPressed: _recording
+                                  ? null
+                                  : () => showSettingsSheet(
+                                      context,
+                                      settings: settings,
+                                      script: widget.script,
+                                      onChanged: (s) async {
+                                        final qualityChanged =
+                                            s.videoQuality !=
+                                            state.settings.videoQuality;
+                                        await state.updateSettings(s);
+                                        _prompter.wpm = s.wpm;
+                                        setBrightScreen(s.brightScreen);
+                                        if (qualityChanged) await _openCamera();
+                                      },
+                                    ).then((_) => _prompter.focus()),
+                            ),
+                            _RoundButton(
+                              icon: Icons.cameraswitch,
+                              tooltip: context.l10n.switchCamera,
+                              onPressed: _cameras.length > 1 && !_recording
+                                  ? _switchCamera
+                                  : null,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
