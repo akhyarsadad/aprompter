@@ -75,54 +75,88 @@
     .owl-eye { animation: none; }
   }
 
-  /* App row */
-  .app-card {
+  /* Apps: a grid of compact cards that grows with each new app. */
+  .apps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    gap: 24px;
-    align-items: center;
-    padding: clamp(20px, 3vw, 32px);
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  }
+  .app-card {
+    position: relative;
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    padding: 24px;
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 24px;
+    border-radius: 22px;
+    transition: border-color 0.15s, transform 0.15s;
   }
-  @media (min-width: 760px) {
-    .app-card {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-    }
+  .app-card:not(.next):hover {
+    border-color: var(--violet);
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .app-card { transition: none; }
+    .app-card:not(.next):hover { transform: none; }
   }
   .app-card .icon {
-    width: 96px;
-    height: 96px;
-    border-radius: 22px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+  }
+  .app-card .placeholder {
+    display: block;
+    border: 2px dashed var(--line);
+  }
+  .app-card.next {
+    background: transparent;
+    border-style: dashed;
   }
   .app-body {
     display: grid;
-    gap: 10px;
+    gap: 6px;
     min-width: 0;
   }
   .app-body h3 {
-    font-size: var(--step-2);
+    font-size: var(--step-1);
+  }
+  .app-body h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  /* The whole card opens the app page. */
+  .app-body h3 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .app-body h3 a:focus-visible {
+    outline: none;
+  }
+  .app-card:has(a:focus-visible) {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
   }
   .app-body p {
     color: var(--muted);
-    max-width: 52ch;
   }
   .status {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     font-family: var(--font-mono);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
   }
   .status span {
     padding: 4px 10px;
     border-radius: 999px;
     background: var(--violet-soft);
     color: var(--ink);
-  }
-  .more {
-    margin-top: 20px;
-    color: var(--muted);
   }
 
   .contact {
@@ -209,22 +243,29 @@
       <div class="section-head">
         <p class="kicker">Apps</p>
         <h2 id="apps-title">On the desk right now</h2>
+        <p>Each app has its own page with screenshots, support and its privacy policy.</p>
       </div>
 
-      <article class="app-card">
-        <img class="icon" src="aprompter/img/icon-256.webp" alt="" width="96" height="96">
-        <div class="app-body">
-          <h3>APrompter</h3>
-          <p>A teleprompter for creators. Your script scrolls right under the camera, so you read your lines and keep eye contact. For Reels, TikTok, Shorts and YouTube.</p>
+      <ul class="apps" role="list">
+        <li class="app-card">
+          <img class="icon" src="aprompter/img/icon-256.webp" alt="" width="64" height="64">
+          <div class="app-body">
+            <h3><a href="aprompter/">APrompter</a></h3>
+            <p>A teleprompter for creators. Your script scrolls right under the camera, so you read your lines and keep eye contact.</p>
+          </div>
           <div class="status">
             <span>Android · testing now</span>
             <span>iPhone · later</span>
           </div>
-        </div>
-        <a class="button primary" href="aprompter/">See APrompter</a>
-      </article>
-
-      <p class="more">More apps are on the way. They'll show up here.</p>
+        </li>
+        <li class="app-card next" aria-label="Next app, in the works">
+          <span class="icon placeholder" aria-hidden="true"></span>
+          <div class="app-body">
+            <h3>Next app</h3>
+            <p>In the works. It will show up here when it's ready to try.</p>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 
