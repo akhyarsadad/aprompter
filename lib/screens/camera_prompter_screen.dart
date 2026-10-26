@@ -12,6 +12,7 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
+import '../services/gallery.dart';
 import '../services/storage.dart';
 import '../services/orientation.dart';
 import '../services/system_settings.dart';
@@ -430,10 +431,12 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     String? failure;
     while (mounted) {
       try {
-        if (!await Gal.hasAccess(toAlbum: true)) {
-          await Gal.requestAccess(toAlbum: true);
-        }
-        await Gal.putVideo(file.path, album: 'APrompter');
+        await saveTakeToGallery(file.path);
+        // The gallery has its own copy now; don't leave a second one in
+        // the app's temporary files.
+        try {
+          await File(file.path).delete();
+        } catch (_) {}
         await _countTake(saved: true);
         return;
       } on GalException catch (e) {

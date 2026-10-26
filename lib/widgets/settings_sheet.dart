@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../config/entitlements_config.dart';
 import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../models/script_markup.dart';
 import '../services/app_state.dart';
 import '../services/floating_prompter.dart';
+import '../services/links.dart';
 import 'app_lock.dart';
 import 'prompter_view.dart';
 
@@ -515,6 +517,22 @@ class _SettingsSheetState extends State<_SettingsSheet> {
                       }
                       await state.setAppLock(on);
                     },
+                  ),
+                  // Always reachable, whatever plan the person is on (the
+                  // upgrade screen links them too, but only for free use).
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.privacy_tip_outlined),
+                    title: Text(l.privacyPolicy),
+                    trailing: const Icon(Icons.open_in_new, size: 18),
+                    onTap: () => openLink(EntitlementsConfig.privacyUrl),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.description_outlined),
+                    title: Text(l.termsOfUse),
+                    trailing: const Icon(Icons.open_in_new, size: 18),
+                    onTap: () => openLink(EntitlementsConfig.termsUrl),
                   ),
                   _header(context, l.recording),
                   // Side by side when they fit; with large system text the

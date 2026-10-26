@@ -9,6 +9,7 @@ import '../models/script.dart';
 import 'backup.dart';
 import 'entitlements.dart';
 import 'storage.dart';
+import 'system_settings.dart';
 
 /// App-wide state: the script library and prompter settings.
 class AppState extends ChangeNotifier {
@@ -347,8 +348,25 @@ class AppState extends ChangeNotifier {
   /// Where takes kept in the app are stored.
   Future<Directory> takesDirectory() => _takesDirectory();
 
-  static Future<Directory> _documentsTakes() async =>
-      Directory('${(await getApplicationDocumentsDirectory()).path}/takes');
+  static Future<Directory> _documentsTakes() async {
+    final dir = Directory(
+      '${(await getApplicationDocumentsDirectory()).path}/takes',
+    );
+    // Takes kept in the app stay out of the cloud on both platforms:
+    // Android's backup rules leave this folder out, iOS needs telling.
+    if (Platform.isIOS && !_takesKeptFromICloud) {
+      try {
+        await dir.create(recursive: true);
+        await excludeFromBackup(dir.path);
+        _takesKeptFromICloud = true;
+      } catch (_) {
+        // Phone full: try again next time.
+      }
+    }
+    return dir;
+  }
+
+  static bool _takesKeptFromICloud = false;
 
   /// The video of [take]. Always looked up by its file name in
   /// [takesDirectory]: iOS gives the app a new folder on every App Store

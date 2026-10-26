@@ -1,15 +1,15 @@
 # APrompter — Terms of Use
 
-_Last updated: 24 October 2026_
+_Last updated: 26 October 2026_
 
-These terms cover your use of the APrompter app ("the app"). By using the app you agree to
-them. If you got the app from Apple's App Store, Apple's
+These terms cover your use of the APrompter app ("the app"), made by night owly ("the
+developer"). By using the app you agree to them. If you got the app from Apple's App Store, Apple's
 [Licensed Application End User License Agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/)
 also applies; if the two conflict, Apple's agreement wins for App Store copies.
 
 ## Your content
 
-Your scripts, notes and videos are yours. They stay on your phone — see the
+Your scripts, notes and videos are yours. APrompter never sends them anywhere — see the
 [Privacy Policy](PRIVACY.md). Keep your own backups (*Library → Back up*): the developer never
 receives your content and can't recover it if your phone is lost, reset or the app is deleted.
 
@@ -60,4 +60,6 @@ continuing to use the app after a change means you accept the updated terms.
 
 ## Contact
 
-Questions or problems: open an issue at https://github.com/akhyarsadad/aprompter/issues.
+Questions or problems: email **nightowlyyyy@gmail.com**, or open an issue at
+https://github.com/akhyarsadad/aprompter/issues (that page is public, so don't post personal
+details there).

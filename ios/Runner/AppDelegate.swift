@@ -81,6 +81,22 @@ import UIKit
         result(true)
       case "deviceInfo":
         result(["manufacturer": "Apple", "lowRam": false])
+      // Keeps a folder (takes kept inside the app) out of iCloud Backup,
+      // as Android's backup rules do; this covers everything inside it.
+      case "excludeFromBackup":
+        guard let path = call.arguments as? String else {
+          result(false)
+          return
+        }
+        var url = URL(fileURLWithPath: path, isDirectory: true)
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        do {
+          try url.setResourceValues(values)
+          result(true)
+        } catch {
+          result(false)
+        }
       default:
         result(FlutterMethodNotImplemented)
       }

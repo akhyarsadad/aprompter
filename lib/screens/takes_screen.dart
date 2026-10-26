@@ -9,6 +9,7 @@ import 'package:video_player/video_player.dart';
 import '../l10n/l10n.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
+import '../services/gallery.dart';
 import '../services/storage.dart';
 import '../widgets/confirm_dialog.dart';
 
@@ -223,10 +224,7 @@ class _SavedTakeScreenState extends State<_SavedTakeScreen> {
     final messenger = ScaffoldMessenger.of(context);
     try {
       final file = await _file;
-      if (!await Gal.hasAccess(toAlbum: true)) {
-        await Gal.requestAccess(toAlbum: true);
-      }
-      await Gal.putVideo(file.path, album: 'APrompter');
+      await saveTakeToGallery(file.path);
       messenger.showSnackBar(SnackBar(content: Text(l.savedToGallery)));
     } on GalException catch (e) {
       messenger.showSnackBar(

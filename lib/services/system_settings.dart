@@ -31,6 +31,16 @@ Future<bool> secureOverlay() async {
   return false;
 }
 
+/// Keeps the folder at [path] out of iCloud Backup (iPhone). Android leaves
+/// it out through its backup rules instead, so this does nothing there.
+Future<void> excludeFromBackup(String path) async {
+  try {
+    await _channel.invokeMethod<bool>('excludeFromBackup', path);
+  } on Object {
+    // Not available: the folder is backed up like the rest of the app.
+  }
+}
+
 /// Free space where recordings go, in bytes; null if unknown.
 Future<int?> freeSpaceBytes() async {
   try {

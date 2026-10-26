@@ -76,7 +76,7 @@ countdown, text size, spacing, color, alignment, prompter height, background, gu
   *Settings → Layout → Reset position* puts it back at the top.
 - Video quality 720p / 1080p / 4K, and **auto-stop** 2, 5 or 10 s after the last line.
 - **Review each take** (keep or retake), keep takes in the gallery or **inside the app**
-  (out of Google Photos / iCloud) with a *Takes* list per script.
+  (out of Google Photos / iCloud Photos and cloud backups) with a *Takes* list per script.
 - Warns before recording if storage or battery may not last; tap to focus, long-press to
   lock focus/exposure, pinch to zoom. The preview shows exactly what is recorded.
 - Rehearse and Record work in **landscape** too; tablets rotate everywhere.
@@ -154,7 +154,8 @@ team in Xcode (`ios/Runner.xcworkspace`) for both the *Runner* and *ShareExtensi
 - **Android:** camera, microphone, "Display over other apps" (asked when you first tap
   *Float*), notifications (the floating window runs as a foreground service), internet
   (only to check purchases).
-- **iOS:** camera, microphone, add to photo library — descriptions are in `ios/Runner/Info.plist`.
+- **iOS:** camera, microphone, photo library (to create the "APrompter" album and save
+  takes), Face ID (only for App lock) — descriptions are in `ios/Runner/Info.plist`.
 
 ### Store notes
 
@@ -169,7 +170,7 @@ tax), sold through the App Store / Google Play and checked with RevenueCat.
 
 There is **no sign-in**. A purchase belongs to the store account (Apple ID / Google
 account); **Restore purchases** on the upgrade screen brings it back on a new phone or
-after a reinstall. Scripts never leave the phone.
+after a reinstall. APrompter never sends your scripts anywhere.
 
 To make purchases work, fill the two RevenueCat SDK keys in
 `lib/config/entitlements_config.dart`. Store products, RevenueCat setup, legal pages and

@@ -5,11 +5,11 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../config/entitlements_config.dart';
 import '../l10n/l10n.dart';
 import '../services/entitlements.dart';
+import '../services/links.dart';
 import '../services/purchase_service.dart';
 
 /// How long [showUpgradeFlow] waits for RevenueCat's first answer after
@@ -218,14 +218,6 @@ class _PaywallSheetState extends State<_PaywallSheet> {
     }
   }
 
-  Future<void> _open(String url) async {
-    try {
-      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-    } catch (_) {
-      // No browser available — nothing useful to show in a sheet.
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
@@ -309,11 +301,11 @@ class _PaywallSheetState extends State<_PaywallSheet> {
               alignment: WrapAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () => _open(EntitlementsConfig.termsUrl),
+                  onPressed: () => openLink(EntitlementsConfig.termsUrl),
                   child: Text(l.termsOfUse),
                 ),
                 TextButton(
-                  onPressed: () => _open(EntitlementsConfig.privacyUrl),
+                  onPressed: () => openLink(EntitlementsConfig.privacyUrl),
                   child: Text(l.privacyPolicy),
                 ),
               ],
