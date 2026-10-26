@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import '../l10n/l10n.dart';
 import '../models/prompter_settings.dart';
 import '../models/script.dart';
 import '../services/app_state.dart';
+import '../services/gallery.dart';
 import '../services/storage.dart';
 import '../services/orientation.dart';
 import '../services/system_settings.dart';
@@ -430,10 +432,12 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     String? failure;
     while (mounted) {
       try {
-        if (!await Gal.hasAccess(toAlbum: true)) {
-          await Gal.requestAccess(toAlbum: true);
-        }
-        await Gal.putVideo(file.path, album: 'APrompter');
+        await saveTakeToGallery(file.path);
+        // The gallery has its own copy now; don't leave a second one in
+        // the app's temporary files.
+        try {
+          await File(file.path).delete();
+        } catch (_) {}
         await _countTake(saved: true);
         return;
       } on GalException catch (e) {
@@ -458,7 +462,12 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
         }
         continue; // Share sheet dismissed: ask again rather than lose it.
       }
-      return; // Discarded on purpose.
+      if (choice == _Rescue.discard) {
+        try {
+          await File(file.path).delete();
+        } catch (_) {}
+      }
+      return; // Discarded on purpose (or the sheet was closed with Back).
     }
   }
 
@@ -593,6 +602,22 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
     );
   }
 
+  void _openSettings() {
+    final state = AppScope.read(context);
+    showSettingsSheet(
+      context,
+      settings: state.settings,
+      script: widget.script,
+      onChanged: (s) async {
+        final qualityChanged = s.videoQuality != state.settings.videoQuality;
+        await state.updateSettings(s);
+        _prompter.wpm = s.wpm;
+        setBrightScreen(s.brightScreen);
+        if (qualityChanged) await _openCamera();
+      },
+    ).then((_) => _prompter.focus());
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = AppScope.of(context);
@@ -723,50 +748,66 @@ class _CameraPrompterScreenState extends State<CameraPrompterScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _RoundButton(
-                        icon: Icons.close,
-                        tooltip: context.l10n.close,
-                        onPressed: _recording || _saving
-                            ? null
-                            : () => Navigator.maybePop(context),
+                  // The shutter sits in the middle, like any camera app,
+                  // with the other buttons shared out on either side.
+                  // Below about 268 dp (split screen) the row shrinks as
+                  // a whole rather than clipping a button.
+                  LayoutBuilder(
+                    builder: (context, c) => FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SizedBox(
+                        width: math.max(c.maxWidth, _controlsMinWidth),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _RoundButton(
+                                    icon: Icons.close,
+                                    tooltip: context.l10n.close,
+                                    onPressed: _recording || _saving
+                                        ? null
+                                        : () => Navigator.maybePop(context),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            _RecordButton(
+                              recording: _recording,
+                              busy:
+                                  _saving || (camera == null && _error == null),
+                              enabled: camera != null,
+                              onPressed: _onRecordPressed,
+                            ),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _RoundButton(
+                                    icon: Icons.tune,
+                                    tooltip: context.l10n.settings,
+                                    onPressed: _recording
+                                        ? null
+                                        : _openSettings,
+                                  ),
+                                  _RoundButton(
+                                    icon: Icons.cameraswitch,
+                                    tooltip: context.l10n.switchCamera,
+                                    onPressed:
+                                        _cameras.length > 1 && !_recording
+                                        ? _switchCamera
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      _RecordButton(
-                        recording: _recording,
-                        busy: _saving || (camera == null && _error == null),
-                        enabled: camera != null,
-                        onPressed: _onRecordPressed,
-                      ),
-                      _RoundButton(
-                        icon: Icons.tune,
-                        tooltip: context.l10n.settings,
-                        onPressed: _recording
-                            ? null
-                            : () => showSettingsSheet(
-                                context,
-                                settings: settings,
-                                script: widget.script,
-                                onChanged: (s) async {
-                                  final qualityChanged =
-                                      s.videoQuality !=
-                                      state.settings.videoQuality;
-                                  await state.updateSettings(s);
-                                  _prompter.wpm = s.wpm;
-                                  setBrightScreen(s.brightScreen);
-                                  if (qualityChanged) await _openCamera();
-                                },
-                              ).then((_) => _prompter.focus()),
-                      ),
-                      _RoundButton(
-                        icon: Icons.cameraswitch,
-                        tooltip: context.l10n.switchCamera,
-                        onPressed: _cameras.length > 1 && !_recording
-                            ? _switchCamera
-                            : null,
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -969,6 +1010,10 @@ class _RecordingBadge extends StatelessWidget {
     );
   }
 }
+
+/// Narrowest width at which the bottom row fits as laid out: the shutter
+/// (76) in the middle and two 48 dp buttons on each side's half.
+const _controlsMinWidth = 76.0 + 2 * (2 * 48.0);
 
 class _RecordButton extends StatelessWidget {
   const _RecordButton({

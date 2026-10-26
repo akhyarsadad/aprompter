@@ -1,16 +1,16 @@
 # APrompter — Terms of Use
 
-_Last updated: 24 October 2026_
+_Last updated: 26 October 2026_
 
-These terms cover your use of the APrompter app ("the app"). By using the app you agree to
-them. If you got the app from Apple's App Store, Apple's
+These terms cover your use of the APrompter app ("the app"), made by night owly ("the
+developer"). By using the app you agree to them. If you got the app from Apple's App Store, Apple's
 [Licensed Application End User License Agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/)
 also applies; if the two conflict, Apple's agreement wins for App Store copies.
 
 ## Your content
 
-Your scripts, notes and videos are yours. They stay on your phone — see the
-[Privacy Policy](PRIVACY.md). Keep your own backups (*Library → Back up*): the developer never
+Your scripts, notes and videos are yours. APrompter never sends them anywhere — see the
+[Privacy Policy](PRIVACY.md). Keep your own backups (home screen ⋮ menu → *Back up all scripts*): the developer never
 receives your content and can't recover it if your phone is lost, reset or the app is deleted.
 
 ## Free use and APrompter Unlimited
@@ -27,8 +27,8 @@ receives your content and can't recover it if your phone is lost, reset or the a
 - Purchases are made through, and billed by, the Apple App Store or Google Play, using the
   account you're signed in to there.
 - Monthly and yearly subscriptions **renew automatically** at the same price for the same
-  period until you cancel. On the App Store, cancel at least 24 hours before the end of the
-  current period; on Google Play, cancel any time before the renewal date. You keep Unlimited
+  period until you cancel. To be sure you aren't charged again, cancel at least 24 hours before
+  the end of the current period. You keep Unlimited
   until the end of the period you paid for.
 - Manage or cancel in your store account: iPhone — *Settings → your name → Subscriptions*;
   Android — *Google Play → Profile → Payments & subscriptions → Subscriptions*.
@@ -60,4 +60,6 @@ continuing to use the app after a change means you accept the updated terms.
 
 ## Contact
 
-Questions or problems: open an issue at https://github.com/akhyarsadad/aprompter/issues.
+Questions or problems: email **nightowlyyyy@gmail.com**, or open an issue at
+https://github.com/akhyarsadad/aprompter/issues (that page is public, so don't post personal
+details there).
