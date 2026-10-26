@@ -115,7 +115,11 @@ def render(source: str, title: str, nav: str) -> str:
     for name, href in LINKS.items():
         body = body.replace(f'href="{name}"', f'href="{href}"')
     # Wide tables scroll inside their own box on phones.
-    body = body.replace("<table>", '<div class="table-scroll"><table>')
+    body = body.replace(
+        "<table>",
+        '<div class="table-scroll" tabindex="0" role="region" '
+        'aria-label="Table, scrolls sideways"><table>',
+    )
     body = body.replace("</table>", "</table></div>")
     plain = re.sub(r"<[^>]+>", " ", body)
     first = re.search(r"Short version:(.*?)(?:\.|$)", plain, re.S) or re.search(
@@ -138,6 +142,8 @@ def main() -> None:
     site_url = ""
     if "--url" in args:
         i = args.index("--url")
+        if i + 1 >= len(args):
+            sys.exit("usage: python site/build.py OUTPUT_DIR [--url SITE_URL]")
         site_url = args[i + 1].rstrip("/")
         del args[i : i + 2]
     if len(args) != 1:
@@ -146,6 +152,9 @@ def main() -> None:
     if out == SITE or SITE in out.parents:
         sys.exit("pick an output folder outside site/")
     if out.exists():
+        # Only ever replace a folder this script built (it leaves .nojekyll).
+        if any(out.iterdir()) and not (out / ".nojekyll").exists():
+            sys.exit(f"{out} is not empty and was not built by this script: pick a new folder")
         shutil.rmtree(out)
     shutil.copytree(SITE, out, ignore=shutil.ignore_patterns("build.py", "__pycache__"))
     for source, folder, title, nav in PAGES:

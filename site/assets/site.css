@@ -145,6 +145,11 @@ a:hover {
   outline-offset: 3px;
   border-radius: 4px;
 }
+/* Night bands stay dark in both themes: use the moon color for focus. */
+.night,
+.contact {
+  --focus: #ffd54f;
+}
 
 h1,
 h2,
@@ -253,9 +258,19 @@ p {
   text-decoration: none;
   padding-block: 6px;
 }
-.nav a:hover,
+.nav a:hover {
+  color: var(--ink);
+}
 .nav a[aria-current="page"] {
   color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+@media (max-width: 379px) {
+  .nav {
+    gap: 4px 10px;
+  }
 }
 
 /* The reading line: ▶ ─────── ◀, the prompter's guide. */
@@ -381,7 +396,7 @@ section {
 .doc li + li {
   margin-top: 0.5em;
 }
-.doc em:first-child:only-child {
+.doc h1 + p > em {
   color: var(--muted);
 }
 .table-scroll {

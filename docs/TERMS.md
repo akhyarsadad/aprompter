@@ -10,7 +10,7 @@ also applies; if the two conflict, Apple's agreement wins for App Store copies.
 ## Your content
 
 Your scripts, notes and videos are yours. APrompter never sends them anywhere — see the
-[Privacy Policy](PRIVACY.md). Keep your own backups (home screen ⋮ menu → *Back up all scripts*): the developer never
+[Privacy Policy](PRIVACY.md). Keep your own backups (home screen menu ⋮ / ⋯ → *Back up all scripts*): the developer never
 receives your content and can't recover it if your phone is lost, reset or the app is deleted.
 
 ## Free use and APrompter Unlimited
@@ -19,8 +19,8 @@ receives your content and can't recover it if your phone is lost, reset or the a
   rehearsal and recording feature. Scripts longer than 500 words show a reminder.
 - **APrompter Unlimited** removes the one-script limit and the reminder. It is offered as a
   monthly subscription, a yearly subscription, or a one-time lifetime purchase. Prices are
-  shown in the app before you buy, in your local currency, including any tax your country
-  requires.
+  shown in the app before you buy, in your local currency; depending on your country, tax is
+  included in the price or added at checkout.
 
 ## Payment, renewal and cancellation
 
