@@ -357,8 +357,7 @@ class AppState extends ChangeNotifier {
     if (Platform.isIOS && !_takesKeptFromICloud) {
       try {
         await dir.create(recursive: true);
-        await excludeFromBackup(dir.path);
-        _takesKeptFromICloud = true;
+        _takesKeptFromICloud = await excludeFromBackup(dir.path);
       } catch (_) {
         // Phone full: try again next time.
       }

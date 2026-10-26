@@ -8,6 +8,7 @@ import 'package:aprompter/services/entitlements.dart';
 import 'package:aprompter/services/gallery.dart';
 import 'package:aprompter/services/purchase_service.dart';
 import 'package:aprompter/services/storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,24 +52,53 @@ void main() {
       expect(saves, [takesAlbum]);
     });
 
-    test('limited photo access: saved without the album', () async {
-      // iOS refuses to find or make an album with limited access.
-      phone(
-        (album) =>
-            album == null ? null : PlatformException(code: 'ACCESS_DENIED'),
-      );
-      await saveTakeToGallery('/tmp/take.mp4');
-      expect(saves, [takesAlbum, null]);
+    group('on iPhone', () {
+      setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.iOS);
+      tearDown(() => debugDefaultTargetPlatformOverride = null);
+
+      test('limited photo access: saved without the album', () async {
+        // iOS may refuse an app its own album with limited access.
+        phone(
+          (album) =>
+              album == null ? null : PlatformException(code: 'ACCESS_DENIED'),
+        );
+        await saveTakeToGallery('/tmp/take.mp4');
+        expect(saves, [takesAlbum, null]);
+      });
+
+      test('a refusal is still reported', () async {
+        phone((_) => PlatformException(code: 'ACCESS_DENIED'));
+        await expectLater(
+          saveTakeToGallery('/tmp/take.mp4'),
+          throwsA(isA<GalException>()),
+        );
+        expect(saves, [takesAlbum, null]);
+      });
+
+      test('a full phone is reported without a second try', () async {
+        phone((_) => PlatformException(code: 'NOT_ENOUGH_SPACE'));
+        await expectLater(
+          saveTakeToGallery('/tmp/take.mp4'),
+          throwsA(
+            isA<GalException>().having(
+              (e) => e.type,
+              'type',
+              GalExceptionType.notEnoughSpace,
+            ),
+          ),
+        );
+        expect(saves, [takesAlbum]);
+      });
     });
 
-    test('a refusal or a full phone is still reported', () async {
+    test('Android: no second try (the album is just a folder)', () async {
       for (final code in ['ACCESS_DENIED', 'NOT_ENOUGH_SPACE']) {
         phone((_) => PlatformException(code: code));
         await expectLater(
           saveTakeToGallery('/tmp/take.mp4'),
           throwsA(isA<GalException>().having((e) => e.type.code, 'code', code)),
         );
-        expect(saves, [takesAlbum, null]);
+        expect(saves, [takesAlbum]);
       }
     });
   });

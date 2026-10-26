@@ -7,10 +7,12 @@ developer"), who is responsible for this policy and for the data described in it
 questions and requests: **nightowlyyyy@gmail.com**.
 
 Short version: **APrompter never sends your scripts or videos anywhere. There is no account,
-no sign-in, and no ads, tracking or analytics in the app. The only network traffic is for
-APrompter Unlimited: the app asks RevenueCat whether you have it and which plans are on sale
-(when the app starts, when it comes back on screen, and on the upgrade screen), and sends the
-store's receipt when you buy or restore.** Your phone's own backups and photo sync work
+no sign-in, no ads and no tracking, and the app contains no analytics or crash-reporting tools;
+the only figures the developer gets from it are purchase figures in RevenueCat. The only network
+traffic is for APrompter Unlimited: the app asks RevenueCat whether you have it and which plans
+are on sale (when the app starts, when it comes back on screen, and on the upgrade screen), and
+sends the store's receipts when you buy or restore, or when the store reports a purchase or
+subscription change the app hasn't passed on yet.** Your phone's own backups and photo sync work
 outside the app — see "Things outside APrompter's control".
 
 ## What the app stores, and where
@@ -19,7 +21,7 @@ outside the app — see "Things outside APrompter's control".
 |---|---|---|
 | Your scripts, version history, "Recently deleted" | Inside the app on your phone | You |
 | Prompter settings, app language | Inside the app on your phone | You |
-| Whether you have APrompter Unlimited, RevenueCat's random identifier and a cached copy of your purchase status | Inside the app on your phone (on Android, after a purchase, the identifier is also kept in Google's Block Store — see "Restoring") | You. RevenueCat keeps its own copy — see below |
+| Whether you have APrompter Unlimited, RevenueCat's random identifier and a cached copy of your purchase status | Inside the app on your phone (on Android, once there is a purchase — bought or restored — the identifier is also kept in Google's Block Store; see "Restoring") | You. RevenueCat keeps its own copy — see below |
 | Videos you record | Your phone's gallery (album "APrompter"), or inside the app if you turn off *Save takes to the gallery* | In the gallery: you, other apps you've allowed to see your photos and videos, and any gallery sync you've turned on (Google Photos, iCloud Photos). Inside the app: you |
 | Backup files you export | Wherever you send them (Files, Drive, email, chat) | You decide |
 
@@ -38,14 +40,17 @@ bought.
   country/storefront and IP address, and — when RevenueCat turns on its diagnostics — timings
   and error codes of these purchase checks. On Android, Google Play also receives a scrambled
   (hashed) form of the random identifier with each purchase.
-- **When:** when the app starts, when it comes back on screen after a few minutes away, when
+- **When:** when the app starts and when it comes back on screen (your status and the plans are
+  re-checked if the last check is more than a few minutes old; purchases or subscription changes
+  the store reports, for example after a reinstall or a renewal, are sent straight away), when
   you open the upgrade screen, and when you buy or restore.
 - **What it's used for:** to unlock, restore and keep track of APrompter Unlimited, to catch
   fake receipts, and to show the developer purchase figures (purchases, renewals,
   cancellations) in RevenueCat. Never for ads or tracking, and no decisions about you are made
   automatically.
 - **What's not sent:** your scripts, notes, videos, settings, or anything else in the table
-  above. There is no sign-in, so the developer doesn't know who you are.
+  above apart from the purchase row. There is no sign-in, so the developer doesn't know who you
+  are.
 - **RevenueCat's role:** RevenueCat handles this data only to provide its service to the
   developer, under its data processing terms, and must protect it at least as well as this
   policy describes. Apart from RevenueCat, and Apple or Google as your app store, no company
@@ -62,8 +67,8 @@ bought.
 - **Restoring:** a purchase belongs to your App Store or Google Play account. *Restore
   purchases* asks the store for your purchases and sends the receipts to RevenueCat, which
   links them to this install's random identifier. You don't sign in to APrompter for this.
-  On Android, after a purchase, RevenueCat also saves its random identifier in Google's Block
-  Store, which goes into your Google account backup if backup is on (end-to-end encrypted when
+  On Android, once there is a purchase (bought or restored), RevenueCat also saves its random
+  identifier in Google's Block Store, which goes into your Google account backup if backup is on (end-to-end encrypted when
   your phone has a screen lock). After a reinstall, or on a new phone set up from that backup,
   RevenueCat links the new install to it so your purchase records are found again.
 - **No selling or sharing:** the developer doesn't sell or share personal information (as
@@ -86,9 +91,10 @@ bought.
   sound are recorded only when you tap *Record*. Nothing is streamed or uploaded.
 - **Photos / gallery** — to save your takes into an "APrompter" album. On Android 10 and
   older, Android asks for access to photos, media and files for this; newer Android versions
-  don't ask. On iPhone, full photo access lets the app keep takes in its own album; with
-  limited access they're saved to your library without the album. The app only adds its own
-  takes. It doesn't read, change or upload your other photos or files.
+  don't ask. On iPhone, the app asks for photo access so it can keep takes in its own album; if
+  you allow access to only some photos, iOS may not let it use the album, and takes are then
+  saved to your library without it. The app only adds its own takes. It doesn't read, change or
+  upload your other photos or files.
 - **Display over other apps** (Android) — only for *Float*, the prompter window you put on top
   of other camera apps. The window is marked secure, so screen recordings and live streams
   show it blank.
@@ -98,9 +104,12 @@ bought.
   phone; APrompter never sees your biometric data.
 - **Internet** — only for the APrompter Unlimited checks described above.
 
-You can turn any of these off at any time in your phone's settings (iPhone: *Settings →
-APrompter*; Android: *Settings → Apps → APrompter → Permissions*, with *Display over other
-apps* under *Special app access*). Only the matching feature stops working.
+You can turn camera, microphone, photos, *Display over other apps* and notifications off at
+any time in your phone's settings (iPhone: *Settings → APrompter*; Android: *Settings → Apps →
+APrompter → Permissions*, with *Display over other apps* under *Special app access*). Only the
+matching feature stops working. Face ID / fingerprint is used only while *App lock* is on, which
+you turn off in APrompter's settings. Internet can't be switched off per app on Android; on
+iPhone you can turn off *Cellular Data* for APrompter.
 
 ## Security
 
@@ -116,7 +125,7 @@ apps* under *Special app access*). Only the matching feature stops working.
 - **Device backups.** Depending on your phone settings, your phone's own backup to your Google
   or Apple account may include APrompter's data: your scripts, settings and the purchase
   identifier. Takes kept inside the app are left out of iCloud and Google backups, but a direct
-  phone-to-phone transfer on Android brings them along.
+  phone-to-phone transfer from a phone on Android 12 or later brings them along.
 - **Gallery sync.** Takes saved to the gallery are synced if Google Photos / iCloud Photos sync
   is on. Keep takes inside the app to avoid this.
 - **Clipboard.** The app reads the clipboard only when you tap *Paste*. *Copy as caption* puts
@@ -151,9 +160,12 @@ deleted.
 ## Your rights
 
 **On your phone:** delete scripts in the app (and empty *Recently deleted*), or uninstall the
-app to remove what it stored on the phone. Copies in your phone's backup stay until you delete
-them in your Google or Apple account's backup settings; on Android this includes the purchase
-identifier kept in Block Store. Videos in your gallery are deleted in the gallery app.
+app to remove what it stored on the phone, with one exception on Android: once there is a
+purchase and Google backup is on, the purchase identifier RevenueCat keeps in Google's Block
+Store stays with Google Play services on the phone and in your Google backup after you
+uninstall, so a reinstall picks it up again. Copies in your phone's backup stay until you delete
+them in your Google or Apple account's backup settings. Videos in your gallery are deleted in
+the gallery app.
 
 **Purchase records:** you can ask for a copy of them, or for them to be corrected, deleted or no
 longer used, wherever you live. Email nightowlyyyy@gmail.com with the subject "My APrompter

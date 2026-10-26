@@ -151,9 +151,10 @@ team in Xcode (`ios/Runner.xcworkspace`) for both the *Runner* and *ShareExtensi
 
 ### Permissions
 
-- **Android:** camera, microphone, "Display over other apps" (asked when you first tap
-  *Float*), notifications (the floating window runs as a foreground service), internet
-  (only to check purchases).
+- **Android:** camera, microphone, photos/media/files on Android 10 and older (to save takes
+  to the gallery), "Display over other apps" (asked when you first tap *Float*), notifications
+  (the floating window runs as a foreground service), fingerprint/face (only for App lock),
+  internet (only to check purchases).
 - **iOS:** camera, microphone, photo library (to create the "APrompter" album and save
   takes), Face ID (only for App lock) — descriptions are in `ios/Runner/Info.plist`.
 
@@ -180,5 +181,5 @@ secrets, so the file is tracked with placeholders and the repo always compiles; 
 they're filled in, the upgrade screen says "Couldn't load plans".
 
 Release checklist, Play declarations and review notes: [`docs/STORE_RELEASE.md`](docs/STORE_RELEASE.md).
-Privacy policy and Terms of Use (linked from the upgrade screen and both stores):
+Privacy policy and Terms of Use (linked from Settings → App, the upgrade screen and both stores):
 [`docs/PRIVACY.md`](docs/PRIVACY.md), [`docs/TERMS.md`](docs/TERMS.md).

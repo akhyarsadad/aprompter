@@ -165,6 +165,8 @@ void main() {
     ('portrait phone', const Size(360, 780)),
     ('landscape phone', const Size(780, 360)),
     ('tablet', const Size(800, 1280)),
+    // Split screen: narrower than the row needs, so it shrinks as a whole.
+    ('narrow window', const Size(250, 600)),
   ]) {
     for (final cameras in [
       [_front],

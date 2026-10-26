@@ -162,7 +162,7 @@ open the camera app → the prompter scrolls over it → close it with ✕.
 | Question | Answer |
 |---|---|
 | Does your app collect or share user data? | **Yes** (only for purchases, via RevenueCat) |
-| Data types collected | **Financial info → Purchase history**, **Device or other IDs** (RevenueCat's random install id, which Google Block Store carries over to a reinstall or new phone after a purchase) and **App info and performance → Diagnostics** (RevenueCat's purchase-check timings and store error codes, which RevenueCat can switch on remotely) — nothing else. Re-check RevenueCat's current "Google Play Data safety" guide before submitting |
+| Data types collected | **Financial info → Purchase history**, **Device or other IDs** (RevenueCat's random install id, which Google Block Store carries over to a reinstall or new phone once there is a purchase) and **App info and performance → Diagnostics** (RevenueCat's purchase-check timings and store error codes, which RevenueCat can switch on remotely) — nothing else. Re-check RevenueCat's current "Google Play Data safety" guide before submitting |
 | Purpose | **App functionality** and **Analytics** for all three (Analytics = the purchase figures and charts in RevenueCat) |
 | Shared with third parties? | **No** — RevenueCat is a service provider acting for you, which Play doesn't count as sharing |
 | Processed ephemerally? | No |
@@ -182,13 +182,15 @@ policy requirements). *Content rating* questionnaire → no objectionable conten
 - Data collected: **Purchases → Purchase History** (purposes **App Functionality** and
   **Analytics** — RevenueCat's guide makes both the minimum), **Identifiers → User ID**
   (RevenueCat's random id) and **Identifiers → Device ID** (RevenueCat sends Apple's
-  identifierForVendor), both for **App Functionality**. None is **used for tracking**.
+  identifierForVendor), both for **App Functionality** and **Analytics** (RevenueCat's figures
+  count customers by these ids, matching the Google Play form). None is **used for tracking**.
 - Linked to identity: choose **Linked** — the purchase history sits under RevenueCat's id and
   the device id. Declaring more than you collect is never a rejection reason, declaring less
   is. Re-check RevenueCat's current "Apple App Privacy" guide before submitting.
 - Everything else: not collected. The app ships a privacy manifest
-  (`ios/Runner/PrivacyInfo.xcprivacy`) declaring the one required-reason API it uses
-  (free disk space, checked before recording).
+  (`ios/Runner/PrivacyInfo.xcprivacy`) declaring the two required-reason APIs it uses:
+  free disk space (checked before recording) and UserDefaults (where scripts and settings are
+  stored).
 
 **Review notes** (paste into *App Review Information → Notes*):
 
@@ -229,6 +231,8 @@ The app has no crash reporting. Options, in order of privacy:
       runs on iPad, so App Store Connect needs **iPhone 6.9" and iPad 13"** screenshots. In
       *Pricing and Availability*, untick Apple-silicon Mac / Apple Vision Pro unless you have
       tested there.
+- [ ] Google Play tablet screenshots (optional): 7-inch 1080×1920 and 10-inch 1440×2560, 16:9
+      or 9:16 only. Tablet emulators capture 16:10, which Play rejects, so pad or crop first.
 - [ ] Use **nightowlyyyy@gmail.com** as the support email and **night owly** as the developer
       name on both store listings, matching the privacy policy.
 - [ ] RevenueCat: check that *Customers* search finds a customer by a Google order number
